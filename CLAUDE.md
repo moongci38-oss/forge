@@ -34,46 +34,72 @@
 - 문서 작성 시 한국어 기본, 전문 용어는 영어 병기
 - 파일명은 kebab-case + 날짜 prefix 권장 (`2026-02-13-market-analysis.md`)
 - 민감 자료(재무, 법무)는 `07-operations/` 하위에만 저장
-- 스킬 활성화/비활성화는 `scripts/manage-skills.sh` 사용
+- 스킬 관리는 `scripts/manage-skills.sh`, 기타 컴포넌트는 `scripts/manage-components.sh` 사용
 
 ### Don'ts
 - 이 워크스페이스에서 코드 프로젝트 개발 금지 (개발은 portfolio-project에서)
 - `07-operations/finances/`, `07-operations/legal/` 내용을 외부 공유/출력 금지
 - 검증 없는 시장 데이터를 사실로 단정 금지
 - 스킬 라이브러리 원본 직접 수정 금지 (심링크로 활성화만)
+- 컴포넌트 라이브러리 원본 직접 수정 금지 (enable/disable로 관리)
 
 ---
 
-## Skill System
+## Component System
 
-### 활성 스킬
-`.claude/skills/` 디렉토리의 스킬이 자동 로드됨.
+6가지 컴포넌트 타입으로 AI 기능을 확장한다.
 
-### 스킬 관리
+| 타입 | 위치 (활성) | 관리 방법 |
+|------|------------|----------|
+| **Skills** | `.claude/skills/` | `manage-skills.sh` (심링크) |
+| **Agents** | `.claude/agents/` | `manage-components.sh` (복사) |
+| **Commands** | `.claude/commands/` | `manage-components.sh` (복사) |
+| **Hooks** | `.claude/hooks/` | `manage-components.sh` (복사 + settings.json) |
+| **MCPs** | `.mcp.json` | 수동 병합 |
+| **Settings** | `.claude/settings.json` | 수동 병합 |
+
+### 컴포넌트 관리
 ```bash
-# 전체 스킬 목록 + 활성 상태
+# 전체 컴포넌트 목록 (스킬 포함)
+bash scripts/manage-components.sh list
+
+# 특정 타입만 보기
+bash scripts/manage-components.sh list agents
+
+# 컴포넌트 활성화 (library → .claude/ 복사)
+bash scripts/manage-components.sh enable agents seo-analyzer
+
+# 컴포넌트 비활성화
+bash scripts/manage-components.sh disable agents seo-analyzer
+
+# aitmpl에서 다운로드 + 라이브러리 저장
+bash scripts/manage-components.sh install agents web-tools/seo-analyzer
+
+# 다른 프로젝트에 동기화
+bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
+```
+
+### 스킬 관리 (기존)
+```bash
 bash scripts/manage-skills.sh list
-
-# 스킬 활성화 (skills-library → .claude/skills/ 심링크)
 bash scripts/manage-skills.sh enable aitmpl/business-marketing/product-strategist
-
-# 스킬 비활성화
 bash scripts/manage-skills.sh disable product-strategist
-
-# 다른 프로젝트에 개발 스킬 심링크
 bash scripts/manage-skills.sh sync ~/mywsl_workspace/portfolio-project
 ```
 
-### 스킬 라이브러리 구조
+### 라이브러리 구조
 ```
-06-dev-tools/skills-library/
-├── aitmpl/              ← aitmpl.com 스킬
-│   ├── development/     ← 개발 스킬 (NestJS, Next.js 등)
-│   ├── business-marketing/ ← 비즈니스/마케팅 스킬
-│   ├── security/        ← 보안 스킬
-│   └── ai-research/     ← AI 연구 스킬
-├── marketingskills/     ← coreyhaines31 마케팅 스킬
-└── community/           ← 기타 커뮤니티 스킬
+06-dev-tools/
+├── skills-library/          ← 스킬 전용 (기존)
+│   ├── aitmpl/
+│   ├── marketingskills/
+│   └── community/
+└── components-library/      ← 스킬 외 컴포넌트
+    ├── agents/              ← 에이전트 원본
+    ├── commands/            ← 슬래시 커맨드 원본
+    ├── hooks/               ← 훅 원본
+    ├── mcps/                ← MCP 설정 원본
+    └── settings/            ← 세팅 프리셋 원본
 ```
 
 ---
@@ -119,6 +145,92 @@ bash scripts/manage-skills.sh sync ~/mywsl_workspace/portfolio-project
 
 ---
 
+## MCP Servers
+
+이 워크스페이스는 6개의 MCP 서버로 AI 기능을 확장한다.
+
+### 설치된 MCP 서버
+
+**Project 스코프** (`.mcp.json`):
+- **Filesystem**: Business 워크스페이스 + E:\portfolio_project 접근
+- **Playwright**: 브라우저 자동화, UI 스크린샷, 웹앱 테스트
+- **Sequential Thinking**: 복잡한 전략 계획을 위한 사고 프레임워크
+- **Memory**: 세션 간 컨텍스트 영속 저장 (지식 그래프)
+
+**User 스코프** (`~/.claude.json`):
+- **Context7**: 최신 라이브러리 문서 (React 19, Next.js 15 등)
+- **Brave Search**: 실시간 웹 검색, 시장조사, 경쟁사 분석
+
+### MCP 서버 사용 가이드
+
+#### 기본 원칙
+- 최신 라이브러리 코드 생성 시 **항상 Context7 사용**
+- 시장조사/경쟁사 분석 시 **Brave Search 우선**
+- 포트폴리오 프로젝트 이미지 작업 시 **Playwright 사용**
+- 복잡한 전략 계획은 **Sequential Thinking** 프레임워크 적용
+- 세션 시작 시 **Memory에서 관련 컨텍스트 검색** (`search_nodes`)
+
+#### 사용 예시
+
+**시장조사** (Brave Search):
+```
+"2026년 SaaS 시장 트렌드를 조사해줘"
+→ Brave Search로 최신 웹 검색 결과 수집
+→ 01-research/trends/에 결과 저장
+```
+
+**최신 기술 문서** (Context7):
+```
+"Next.js 15의 Server Actions 사용법을 알려줘"
+→ Context7로 최신 Next.js 15 문서 참조
+→ 정확한 API 사용법 제공
+```
+
+**포트폴리오 작업** (Filesystem + Playwright):
+```
+"E:\portfolio_project의 프로젝트 UI 스크린샷을 캡처해줘"
+→ Filesystem으로 프로젝트 목록 확인
+→ Playwright로 각 프로젝트 스크린샷 자동 캡처
+```
+
+**전략 계획** (Sequential Thinking):
+```
+"신제품 출시 전략을 단계별로 계획해줘"
+→ Sequential Thinking 프레임워크 적용
+→ 논리적 단계별 계획 수립
+→ 02-strategy/launch-plans/에 저장
+```
+
+**지식 보존** (Memory):
+```
+# 세션 시작 시 관련 컨텍스트 검색
+"이전에 조사한 경쟁사 정보를 요약해줘"
+→ Memory에서 search_nodes로 검색
+→ 기존 인사이트 활용
+
+# 중요 정보 저장
+"이 시장 데이터를 기억해줘"
+→ Memory에 entities/relations/observations 저장
+```
+
+#### 보안 주의사항
+
+**Filesystem 접근 제한**:
+- `.env`, `.git/` 디렉토리 접근 금지
+- `07-operations/finances/`, `07-operations/legal/` 민감 정보 보호
+
+**API 키 관리**:
+- Brave API: 무료 2,000쿼리/월 (rate limit 모니터링)
+- Context7 API: 무료 (rate limit 완화 키 적용)
+
+#### 토큰 효율성 최적화
+
+- **MCP Tool Search 활성화**: 환경변수 `ENABLE_TOOL_SEARCH=auto` 설정
+- **서브에이전트 도구 화이트리스팅**: 필요한 도구만 할당
+- **예상 토큰 절감**: 세션당 ~30-40K 토큰 (15-20%)
+
+---
+
 ## Output Preferences
 
 - **문서**: Markdown 기본. 필요 시 DOCX/PDF 변환
@@ -128,4 +240,4 @@ bash scripts/manage-skills.sh sync ~/mywsl_workspace/portfolio-project
 
 ---
 
-*Last Updated: 2026-02-13*
+*Last Updated: 2026-02-16*
