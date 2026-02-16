@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(~/.bashrc)",
+      "Bash(npx -y @modelcontextprotocol/server-filesystem --version)",
+      "Bash(npx:*)",
+      "Bash(node --version:*)",
+      "Bash(where:*)",
+      "Bash(npm --version:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(cmd /c \"for %f in \\(analytics-tracking brainstorming ceo-advisor competitor-alternatives content-research-writer content-strategy copywriting email-sequence launch-strategy marketing-ideas page-cro pricing-strategy product-strategist seo-audit copy-editing free-tool-strategy paid-ads marketing-psychology programmatic-seo referral-program schema-markup social-content\\) do @del /f /q %f 2>nul\")"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "filesystem",
+    "playwright",
+    "sequential-thinking",
+    "memory"
+  ]
+}
