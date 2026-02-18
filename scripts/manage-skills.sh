@@ -5,7 +5,7 @@
 set -euo pipefail
 
 BUSINESS_ROOT="$HOME/business"
-SKILLS_LIBRARY="$BUSINESS_ROOT/06-dev-tools/skills-library"
+SKILLS_LIBRARY="$BUSINESS_ROOT/09-tools/skills-library"
 ACTIVE_SKILLS="$BUSINESS_ROOT/.claude/skills"
 
 # Colors
