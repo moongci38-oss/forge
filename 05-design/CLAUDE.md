@@ -4,12 +4,32 @@
 
 ---
 
+## Cowork Plugin
+
+디자인 전용 플러그인 없음. Figma/Canva 연동이 필요할 경우:
+```bash
+# marketing 플러그인의 Figma, Canva 커넥터 활용
+claude plugin install marketing@knowledge-work-plugins --scope project
+```
+
+---
+
 ## Agent Teams
 
 - **ux-researcher** ✅ — UX 분석 및 개선 제안
 - **screenshot-capturer** ✅ — Playwright 기반 자동 캡처
 - **screenshot-business-analyzer** ✅ — UI 비즈니스 로직 추출
 - **portfolio-analyzer** ✅ — 포트폴리오 프로젝트 분석
+
+---
+
+## 활용 스킬
+
+> 디자인 작업은 외부 도구(v0.dev, Figma AI 등) + 에이전트 중심으로 진행.
+> 코드 구현 스킬(frontend-design 등)은 portfolio-project 워크스페이스에서 사용.
+
+- **game-changing-features** ✅ — 10x 임팩트 기능 발굴 (디자인 방향성 도출 시)
+- **viral-generator-builder** ✅ — 바이럴 UI 생성기 설계 (인터랙티브 도구 기획 시)
 
 ---
 
