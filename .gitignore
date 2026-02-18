@@ -1,6 +1,8 @@
-# Sensitive business data
-07-operations/finances/
-07-operations/legal/
+# Sensitive business data (B. 회사 경영 영역)
+06-finance/
+07-legal/
+08-admin/insurance/
+08-admin/freelancers/
 
 # Credentials & secrets
 .env

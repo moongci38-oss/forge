@@ -6,8 +6,8 @@
 set -euo pipefail
 
 BUSINESS_ROOT="$HOME/business"
-COMPONENTS_LIBRARY="$BUSINESS_ROOT/06-dev-tools/components-library"
-SKILLS_LIBRARY="$BUSINESS_ROOT/06-dev-tools/skills-library"
+COMPONENTS_LIBRARY="$BUSINESS_ROOT/09-tools/components-library"
+SKILLS_LIBRARY="$BUSINESS_ROOT/09-tools/skills-library"
 CLAUDE_DIR="$BUSINESS_ROOT/.claude"
 
 # Component type → library subdir mapping
