@@ -17,13 +17,13 @@ claude plugin marketplace add anthropics/knowledge-work-plugins
 ## Phase 1: 즉시 설치 (4개)
 
 ```bash
-# 06-project-management: 태스크, 캘린더, Notion/Slack 연동
+# 09-tools/project-mgmt: 태스크, 캘린더, Notion/Slack 연동
 claude plugin install productivity@knowledge-work-plugins --scope project
 
-# 03-product-planning: 스펙, 로드맵, Figma/Linear 연동
+# 02-product: 스펙, 로드맵, Figma/Linear 연동
 claude plugin install product-management@knowledge-work-plugins --scope project
 
-# 04-marketing: 콘텐츠, 캠페인, HubSpot/Ahrefs/Canva 연동
+# 03-marketing: 콘텐츠, 캠페인, HubSpot/Ahrefs/Canva 연동
 claude plugin install marketing@knowledge-work-plugins --scope project
 
 # 전체: 크로스 폴더 통합 검색 (Slack, Notion, Jira 등)
@@ -35,13 +35,13 @@ claude plugin install enterprise-search@knowledge-work-plugins --scope project
 ## Phase 2: 데이터/재무/법무 (신중한 검토 후)
 
 ```bash
-# 01-research, 02-business-strategy: SQL, 통계 분석
+# 01-research, 02-product: SQL, 통계 분석
 claude plugin install data@knowledge-work-plugins --scope project
 
-# 07-operations/finances: 재무제표, 분개 (로컬 스코프 권장)
+# 06-finance: 재무제표, 분개 (로컬 스코프 권장)
 claude plugin install finance@knowledge-work-plugins --scope local
 
-# 07-operations/legal: 계약 리뷰, NDA (로컬 스코프 권장)
+# 07-legal: 계약 리뷰, NDA (로컬 스코프 권장)
 claude plugin install legal@knowledge-work-plugins --scope local
 ```
 
@@ -52,10 +52,10 @@ claude plugin install legal@knowledge-work-plugins --scope local
 ## Phase 3: 필요 시
 
 ```bash
-# 04-marketing: 프로스펙트, 파이프라인 관리
+# 03-marketing: 프로스펙트, 파이프라인 관리
 claude plugin install sales@knowledge-work-plugins --scope project
 
-# 04-marketing: 고객 대응, 티켓 분류
+# 03-marketing: 고객 대응, 티켓 분류
 claude plugin install customer-support@knowledge-work-plugins --scope project
 
 # 커스텀 플러그인 생성/편집 도우미
