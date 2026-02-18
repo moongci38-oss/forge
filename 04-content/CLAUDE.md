@@ -8,7 +8,7 @@
 ## Cowork Plugin
 
 ```bash
-claude plugin install product-management@knowledge-work-plugins --scope project
+claude plugin install marketing@knowledge-work-plugins --scope project
 ```
 
 ---
