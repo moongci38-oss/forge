@@ -45,9 +45,9 @@ Coordinate autonomous workflows across multiple specialized agents, ensuring:
 **Every 5 steps**:
 1. Save progress to Memory MCP (add_observations)
 2. Update task status (TaskUpdate)
-3. Checkpoint to file (docs/plan/doing/)
+3. Checkpoint to file (docs/planning/doing/)
 
 **On completion**:
-1. Move plan to docs/plan/completed/
+1. Move plan to docs/planning/done/
 2. Mark all tasks completed
 3. Update Memory entities with final status
