@@ -40,26 +40,5 @@ __pycache__/
 *.pyc
 .venv/
 
-# 깨진 심볼릭 링크 (Windows 호환성)
-.claude/skills/analytics-tracking
-.claude/skills/brainstorming
-.claude/skills/ceo-advisor
-.claude/skills/competitor-alternatives
-.claude/skills/content-research-writer
-.claude/skills/content-strategy
-.claude/skills/copywriting
-.claude/skills/email-sequence
-.claude/skills/launch-strategy
-.claude/skills/marketing-ideas
-.claude/skills/page-cro
-.claude/skills/pricing-strategy
-.claude/skills/product-strategist
-.claude/skills/seo-audit
-.claude/skills/copy-editing
-.claude/skills/free-tool-strategy
-.claude/skills/paid-ads
-.claude/skills/marketing-psychology
-.claude/skills/programmatic-seo
-.claude/skills/referral-program
-.claude/skills/schema-markup
-.claude/skills/social-content
+# MCP server temp files
+.playwright-mcp/
