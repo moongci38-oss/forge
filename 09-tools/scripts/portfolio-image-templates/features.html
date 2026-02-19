@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 0% 100%, rgba(255,255,255,0.015) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 1920px;
+    height: 1080px;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 { font-size: 36px; font-weight: 800; color: #F8FAFC; }
+
+  .tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .tag.mobile { background: #7C3AED; color: #fff; }
+  .tag.web { background: #2563EB; color: #fff; }
+  .tag.infrastructure { background: #059669; color: #fff; }
+  .tag.fullstack { background: #6366F1; color: #fff; }
+  .tag.tool { background: #F59E0B; color: #1E293B; }
+
+  .feature-grid {
+    flex: 1;
+    display: grid;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    opacity: 0.4;
+  }
+
+  .feature-card::before {
+    background: linear-gradient(90deg, var(--primary, #3B82F6), transparent);
+  }
+
+  .feature-number {
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  .feature-number { background: linear-gradient(135deg, var(--gs, #3B82F6), var(--ge, #2563EB)); }
+
+  .feature-content {
+    flex: 1;
+  }
+
+  .feature-content .feature-desc {
+    color: #CBD5E1;
+    line-height: 1.6;
+  }
+
+  .footer-info {
+    padding-top: 20px;
+    border-top: 1px solid #1E293B;
+    font-size: 14px;
+    color: #475569;
+    display: flex;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="title">Key Features</h1>
+    <span class="tag" id="tag"></span>
+  </div>
+  <div class="feature-grid" id="featureGrid"></div>
+  <div class="footer-info">
+    <span id="totalFeatures"></span>
+    <span id="projectType"></span>
+  </div>
+</div>
+
+<script>
+  var data = window.PROJECT_DATA || {};
+  var cat = data.category || 'web';
+  var colors = data.colors || {};
+  var root = document.documentElement;
+  root.style.setProperty('--gs', colors.gradientStart || '#3B82F6');
+  root.style.setProperty('--ge', colors.gradientEnd || '#2563EB');
+  root.style.setProperty('--primary', colors.primary || '#3B82F6');
+  document.getElementById('title').textContent = (data.title || 'Project') + ' Key Features';
+  var tag = document.getElementById('tag');
+  tag.className = 'tag ' + cat;
+  tag.textContent = cat.toUpperCase();
+
+  var features = data.features_ko || [];
+  var grid = document.getElementById('featureGrid');
+  var count = features.length;
+
+  var maxShow, cols, cardPadding, fontSize, numberSize;
+  if (count <= 6) {
+    maxShow = count;
+    cols = 2;
+    cardPadding = '28px 32px';
+    fontSize = '17px';
+    numberSize = 52;
+  } else if (count <= 8) {
+    maxShow = 8;
+    cols = 2;
+    cardPadding = '22px 28px';
+    fontSize = '15px';
+    numberSize = 44;
+  } else if (count <= 10) {
+    maxShow = 10;
+    cols = 2;
+    cardPadding = '18px 24px';
+    fontSize = '14px';
+    numberSize = 40;
+  } else {
+    maxShow = 12;
+    cols = 3;
+    cardPadding = '16px 20px';
+    fontSize = '13px';
+    numberSize = 36;
+  }
+
+  grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+  var rows = Math.ceil(maxShow / cols);
+  grid.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
+
+  features.slice(0, maxShow).forEach(function(f, i) {
+    var card = document.createElement('div');
+    card.className = 'feature-card';
+    card.style.padding = cardPadding;
+
+    var numEl = document.createElement('div');
+    numEl.className = 'feature-number';
+    numEl.style.width = numberSize + 'px';
+    numEl.style.height = numberSize + 'px';
+    numEl.style.fontSize = Math.round(numberSize * 0.38) + 'px';
+    numEl.textContent = String(i + 1).padStart(2, '0');
+
+    var contentEl = document.createElement('div');
+    contentEl.className = 'feature-content';
+    contentEl.innerHTML = '<div class="feature-desc" style="font-size:' + fontSize + '">' + f + '</div>';
+
+    card.appendChild(numEl);
+    card.appendChild(contentEl);
+    grid.appendChild(card);
+  });
+
+  document.getElementById('totalFeatures').textContent = features.length + ' features total';
+  document.getElementById('projectType').textContent = (data.type || cat).toUpperCase() + ' APPLICATION';
+</script>
+</body>
+</html>

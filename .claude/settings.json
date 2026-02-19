@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -39,5 +42,15 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "productivity@knowledge-work-plugins": true,
+    "product-management@knowledge-work-plugins": true,
+    "marketing@knowledge-work-plugins": true,
+    "enterprise-search@knowledge-work-plugins": true,
+    "data@knowledge-work-plugins": true,
+    "sales@knowledge-work-plugins": true,
+    "customer-support@knowledge-work-plugins": true,
+    "cowork-plugin-management@knowledge-work-plugins": true
   }
 }
