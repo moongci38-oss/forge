@@ -1,0 +1,12 @@
+{
+  "project_id": "ncl-source",
+  "thumbnail": "images/ncl-source/ncl-source-thumbnail.png",
+  "images": [
+    "images/ncl-source/ncl-source-thumbnail.png",
+    "images/ncl-source/ncl-source-gallery-01.png",
+    "images/ncl-source/ncl-source-gallery-02.png",
+    "images/ncl-source/ncl-source-gallery-03.png",
+    "images/ncl-source/ncl-source-gallery-04.png"
+  ],
+  "total_count": 5
+}

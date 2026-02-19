@@ -1,0 +1,79 @@
+{
+  "albanow": {
+    "primary": "#A855F7",
+    "gradientStart": "#A855F7",
+    "gradientEnd": "#7C3AED",
+    "accent": "#C084FC",
+    "lightAccent": "#E9D5FF"
+  },
+  "smart-door": {
+    "primary": "#14B8A6",
+    "gradientStart": "#14B8A6",
+    "gradientEnd": "#0891B2",
+    "accent": "#5EEAD4",
+    "lightAccent": "#99F6E4"
+  },
+  "mukja": {
+    "primary": "#F97316",
+    "gradientStart": "#F97316",
+    "gradientEnd": "#EA580C",
+    "accent": "#FDBA74",
+    "lightAccent": "#FED7AA"
+  },
+  "exchange-kodaqs": {
+    "primary": "#F59E0B",
+    "gradientStart": "#F59E0B",
+    "gradientEnd": "#CA8A04",
+    "accent": "#FCD34D",
+    "lightAccent": "#FDE68A"
+  },
+  "clayon-source": {
+    "primary": "#3B82F6",
+    "gradientStart": "#3B82F6",
+    "gradientEnd": "#4F46E5",
+    "accent": "#93C5FD",
+    "lightAccent": "#BFDBFE"
+  },
+  "samsungmall": {
+    "primary": "#06B6D4",
+    "gradientStart": "#06B6D4",
+    "gradientEnd": "#0284C7",
+    "accent": "#67E8F9",
+    "lightAccent": "#A5F3FC"
+  },
+  "pin-key": {
+    "primary": "#EC4899",
+    "gradientStart": "#EC4899",
+    "gradientEnd": "#DB2777",
+    "accent": "#F9A8D4",
+    "lightAccent": "#FBCFE8"
+  },
+  "starmario-develop": {
+    "primary": "#EF4444",
+    "gradientStart": "#EF4444",
+    "gradientEnd": "#DC2626",
+    "accent": "#FCA5A5",
+    "lightAccent": "#FECACA"
+  },
+  "crawling": {
+    "primary": "#22C55E",
+    "gradientStart": "#22C55E",
+    "gradientEnd": "#059669",
+    "accent": "#86EFAC",
+    "lightAccent": "#BBF7D0"
+  },
+  "ncl-source": {
+    "primary": "#6366F1",
+    "gradientStart": "#6366F1",
+    "gradientEnd": "#4338CA",
+    "accent": "#A5B4FC",
+    "lightAccent": "#C7D2FE"
+  },
+  "nice-i": {
+    "primary": "#84CC16",
+    "gradientStart": "#84CC16",
+    "gradientEnd": "#65A30D",
+    "accent": "#BEF264",
+    "lightAccent": "#D9F99D"
+  }
+}

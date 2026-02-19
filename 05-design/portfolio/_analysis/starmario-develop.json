@@ -1,0 +1,60 @@
+{
+  "project_id": "starmario-develop",
+  "project_folder": "starmario-develop",
+  "title_en": "StarMario",
+  "subtitle_en": "Live Streaming Platform Admin & Portal System",
+  "description_ko": "라이브 방송 스트리밍 플랫폼(스타마리오)의 포털 WAS 서버. PHP 7 / CodeIgniter MVC 프레임워크 기반으로 관리자 백오피스, 결제 처리, 방송/미디어 관리, ASP 파트너 연동을 제공한다. Nginx + PHP-FPM + Redis를 Docker Compose로 구성하며, MariaDB(MySQL)를 다중 DB 연결(master/slave)로 사용한다.",
+  "type": "backend",
+  "period": "미상 (업로드 파일 기준 2021년 추정)",
+  "role": "백엔드 개발 (포털 WAS 서버 담당)",
+  "techStack": {
+    "primary": ["PHP 7.0", "CodeIgniter (CI_Controller MVC)", "Nginx"],
+    "database": ["MariaDB (mysqli driver)", "Redis 6.2"],
+    "devops": ["Docker", "Docker Compose"],
+    "tools": ["Composer", "PHPExcel (phpoffice/phpspreadsheet ~1.4)", "PHPMailer ~6.0", "GuzzleHttp ~6.0", "Twilio SDK", "GeoIP", "ffmpeg"],
+    "all": ["PHP 7.0", "CodeIgniter", "Nginx", "MariaDB", "Redis 6.2", "Docker", "Docker Compose", "Composer", "phpoffice/phpspreadsheet", "phpmailer/phpmailer", "guzzlehttp/guzzle", "Twilio SDK", "GeoIP", "ffmpeg"]
+  },
+  "architecture": {
+    "pattern": "MVC (CodeIgniter) + Docker Compose 멀티 서비스",
+    "structure": [
+      "portal/ — 포털 WAS (Nginx + PHP-FPM + Redis, Docker Compose)",
+      "portal/starmario/core/applications/admin/ — 관리자 백오피스 (CodeIgniter MVC)",
+      "portal/starmario/core/applications/asp_common/ — ASP 파트너 공통 모듈",
+      "portal/compose.d/ — Nginx/PHP 설정 및 Dockerfile",
+      "aos/ — Android 앱 (빈 .gitkeep, 별도 관리)"
+    ],
+    "key_modules": [
+      "controllers/ — Admin, User, Broadcast, Payment, Calculate, Report, Asp 등 39개 컨트롤러",
+      "models/ — Programs, Medias, Webtoons, Reports, Systems 등 DB 레이어",
+      "common/pg/ — 다중 PG사 연동 (LG다이렉트, 빌게이트, 판팡, 클라이브, 더쿠)",
+      "libraries/Cache/Cache_redis.php — Redis 캐시 드라이버"
+    ]
+  },
+  "features_ko": [
+    "라이브 방송 관리 (Broadcast, Broadcastinfo, Media 컨트롤러)",
+    "결제 및 정산 처리 — 다중 PG사(LG다이렉트, 빌게이트, 판팡, 클라이브, 더쿠) 연동",
+    "관리자 백오피스 — 사용자, 방송 BJ, ASP 파트너, 에이전시, 운영 관리",
+    "매출/정산 리포트 Excel 다운로드 (PHPExcel/phpspreadsheet)",
+    "웹툰 콘텐츠 관리 (Webtoon 컨트롤러 및 모델)",
+    "이벤트/오디션/퀴즈 관리 (Event_vote, Audition, Quiz 컨트롤러)",
+    "Redis 기반 캐시 및 세션 관리",
+    "마스터/슬레이브 DB 이중화 구성",
+    "GeoIP 기반 지역 접근 제어",
+    "Twilio SDK 연동 (SMS/알림)"
+  ],
+  "quality": {
+    "has_tests": true,
+    "has_linting": false,
+    "has_types": false,
+    "has_docker": true,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "다중 PG사(5개) 결제 모듈을 CodeIgniter common 레이어로 통합 관리",
+    "MariaDB master/slave 다중 연결 구성으로 읽기/쓰기 분리",
+    "Nginx + PHP-FPM + Redis를 Docker Compose로 단일 명령어 배포 환경 구성",
+    "멀티 도메인(www/m/admin/api/player/papi) Nginx 가상 호스트 분리",
+    "GeoIP + Redis를 활용한 실시간 접속 제어 및 세션 캐싱"
+  ],
+  "notes": "portal/starmario-develop 내부에 실제 소스 중첩 구조. README 기준 portal/media/upload/chat 4개 서버로 구성되나 포함된 소스는 portal(WAS)만 존재. aos/ 폴더는 .gitkeep 빈 파일만 있음. 분석은 portal 기준."
+}

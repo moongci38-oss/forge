@@ -1,0 +1,12 @@
+{
+  "project_id": "smart-door",
+  "thumbnail": "images/smart-door/smart-door-thumbnail.png",
+  "images": [
+    "images/smart-door/smart-door-thumbnail.png",
+    "images/smart-door/smart-door-gallery-01.png",
+    "images/smart-door/smart-door-gallery-02.png",
+    "images/smart-door/smart-door-gallery-03.png",
+    "images/smart-door/smart-door-gallery-04.png"
+  ],
+  "total_count": 5
+}

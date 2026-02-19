@@ -1,0 +1,65 @@
+{
+  "project_id": "samsungmall",
+  "project_folder": "samsungmall",
+  "title_en": "Samsung POP Order Management System",
+  "subtitle_en": "Global Display/POP Product Budget & Order Web Platform",
+  "description_ko": "삼성전자 글로벌 법인 대상 POP(Point of Purchase) 디스플레이 제품의 예산 편성 및 주문 관리를 위한 내부 웹 시스템. HQ(본사), RHQ(지역 본부), Subsidiary(계열사), Country(국가) 4단계 조직 구조에 따라 예산을 할당하고, 각 법인 담당자가 제품을 주문하는 B2B 내부 포털이다. Spring MVC 기반 서버사이드 렌더링(JSP) 방식으로 구현되었으며 외부 쇼핑몰 API(smpop.net)와 연동해 상품 카탈로그를 가져온다.",
+  "type": "fullstack",
+  "period": "미상 (2020년 이후 추정)",
+  "role": "개인 프로젝트 (또는 팀 프로젝트)",
+  "techStack": {
+    "primary": ["Java 1.8", "Spring MVC 4.2.4", "MyBatis 3.4.5", "JSP/JSTL"],
+    "database": ["MySQL 5.x (Amazon RDS)"],
+    "devops": ["Apache Commons DBCP", "Maven"],
+    "tools": ["Apache POI 3.11", "SLF4J 1.6.6", "Log4j", "log4jdbc", "Lombok 1.16", "Jackson 2.8.6", "Jsoup 1.10", "JavaMail 1.5.5", "Bootstrap 3", "AdminLTE"],
+    "all": ["Java 1.8", "Spring MVC 4.2.4", "MyBatis 3.4.5", "JSP/JSTL", "MySQL", "Amazon RDS", "Apache Commons DBCP", "Maven", "Apache POI 3.11", "SLF4J", "Log4j", "Lombok", "Jackson 2.8.6", "Jsoup", "JavaMail", "Bootstrap 3", "AdminLTE"]
+  },
+  "architecture": {
+    "pattern": "Spring MVC (Server-Side Rendering) + External REST API 연동",
+    "structure": [
+      "controllers/ — Spring MVC 컨트롤러 (Main, Budget, Order, Notice, User, Dashboard 등)",
+      "service/ — 비즈니스 로직 서비스 레이어",
+      "mapper/ — MyBatis 매퍼 인터페이스",
+      "model/ — 도메인 VO/모델 클래스",
+      "resources/mapper/ — MyBatis XML SQL 매퍼",
+      "WEB-INF/views/ — JSP 뷰 (budget, order, notice, user, dashboard 등)",
+      "resources/ — Bootstrap 3, AdminLTE 프론트엔드 에셋"
+    ],
+    "key_modules": [
+      "BudgetController — HQ/RHQ/Subsidiary/Country 4단계 예산 편성 및 배분 로직",
+      "OrderController — 제품 주문 생성 및 승인 플로우, 파일 업로드",
+      "MainController — 외부 쇼핑몰 API 연동 상품 카탈로그 조회, 장바구니 저장",
+      "MailService — 예산 요청/승인 이메일 자동 발송",
+      "ExcelUtil (Apache POI) — 예산 내역 및 주문 목록 엑셀 다운로드",
+      "apiService — 외부 smpop.net REST API 클라이언트",
+      "LogService — 사용자 액션 로그 기록"
+    ]
+  },
+  "features_ko": [
+    "HQ/RHQ/Subsidiary/Country 4단계 조직 계층별 예산 편성 및 할당",
+    "삼성 POP 제품(POSM, Security, Fixture, GDS 등) 카탈로그 조회 및 장바구니",
+    "국가별 제품 주문서 작성, 수정, 승인 워크플로",
+    "예산 초과 방지 로직 (하위 조직 할당액이 상위 조직 한도를 초과하면 자동 조정)",
+    "예산 증액 요청 및 HQ 승인/거절 + 이메일 알림",
+    "예산 내역 및 주문 목록 엑셀 다운로드 (Apache POI)",
+    "역할 기반 접근 제어 (HQ/RHQ/SUBSIDIARY/COUNTRY/VENDOR)",
+    "공지사항 관리, 일정 관리, 대시보드",
+    "XSS 방지 필터, 사용자 액션 감사 로그",
+    "외부 쇼핑몰(smpop.net) API와 연동해 실시간 상품 데이터 조회"
+  ],
+  "quality": {
+    "has_tests": true,
+    "has_linting": false,
+    "has_types": true,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "4단계 조직 구조(HQ-RHQ-Subsidiary-Country)에 따른 계층적 예산 배분 및 잔액 연동 로직 구현",
+    "예산 편성 시 하위 조직 합계가 상위 한도를 초과하지 않도록 자동 조정하는 복잡한 비즈니스 규칙 처리",
+    "외부 쇼핑몰 REST API(smpop.net)와 연동해 상품 카탈로그를 내부 시스템에 통합",
+    "Apache POI를 활용한 다계층 예산 현황 및 주문 내역 엑셀 리포트 자동 생성",
+    "XSS 방지 Filter 및 역할 기반 접근 제어(Interceptor)로 내부 보안 강화"
+  ],
+  "notes": "groupId: com.samusng (오타), artifactId: smpop. Eclipse 기반 Maven WAR 프로젝트. AWS RDS(MySQL) 사용 확인 (datasource-context.xml 주석에 RDS 엔드포인트 노출). AdminLTE 어드민 템플릿 기반 UI."
+}

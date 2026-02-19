@@ -1,0 +1,70 @@
+{
+  "project_id": "ncl-source",
+  "project_folder": "NCLSource",
+  "title_en": "NCL ServerFrame",
+  "subtitle_en": "C++ Game Server Framework with Multi-Game Support",
+  "description_ko": "온라인 게임 서버 전용 C++ 프레임워크. IOCP 기반 고성능 네트워크 레이어를 직접 구현하고, OneGame/Raon/BuzzerBeater/HandSummoner 등 복수의 게임 서비스에 재사용 가능한 공통 서버 아키텍처를 제공한다. 모니터링 툴은 C# WPF로 별도 구현되어 있다.",
+  "type": "tool",
+  "period": "미상 (SVN trunk 기준, 2014년 이후 브랜치 확인)",
+  "role": "개인/팀 프로젝트 (damools-PC 사용자 커밋 확인)",
+  "techStack": {
+    "primary": ["C++ (Visual Studio 2012/2013, vcxproj v11)", "Windows IOCP (I/O Completion Port)", "Winsock2"],
+    "database": ["MySQL (libMysqlConnector, RsMySql)", "ADO (libAdo, ado2)"],
+    "scripting": ["Lua (libBfLua, LuaState)"],
+    "serialization": ["TinyXML", "JsonCpp (libJason)"],
+    "monitoring_tools": ["C# WPF (appMonitorAgent, appMonitorLogAgent, appMonitorViewControl)"],
+    "crash_reporting": ["BugTrap (BugTrap-x64.dll, BTTrace.h)"],
+    "devops": [],
+    "tools": ["SVN (svnRevision 유틸)", "BugTrap"],
+    "all": ["C++", "Windows IOCP", "Winsock2", "MySQL", "ADO", "Lua", "TinyXML", "JsonCpp", "C# WPF", "BugTrap", "SVN"]
+  },
+  "architecture": {
+    "pattern": "Layered Server Framework (공통 라이브러리 + 게임별 서버 구현)",
+    "structure": [
+      "ServerFrame/trunk/Library/Common/ — 공통 라이브러리 (netBase, netCommon, utilCommon, utilLogger, contentsBase)",
+      "ServerFrame/trunk/Library/Exterior/ — 외부 라이브러리 래퍼 (Lua, libBfLua, LuaState)",
+      "ServerFrame/trunk/Library/Server/  — 서버 전용 라이브러리 (libAdo, libJason, libMysqlConnector, tinyxml)",
+      "ServerFrame/trunk/{Game}/Server/   — 게임별 서버 (appGame, appGameManager) — OneGame, Raon, BuzzerBeater, HandSummoner",
+      "ServerFrame/trunk/{Game}/Client/   — 게임별 더미/스마트 클라이언트 (부하 테스트용)",
+      "ServerFrame/trunk/Tool/            — 운영 도구 (appMonitorHub, appMonitorAgent, appMonitorLogAgent, appMonitorViewControl, C# WPF)"
+    ],
+    "key_modules": [
+      "netBase — IOCP 핸들러(libIOCPHandler), Acceptor(libAcceptor), ServerSocket 풀",
+      "netCommon — 패킷 소켓(netPacketSocket), Actor, JobHandler, IOBuffer",
+      "utilCommon — 스레드, 크리티컬섹션, IOCP 큐, FSM, 스케줄러, 로거, CRC16, CSV/XML/Excel 유틸",
+      "utilLogger — RUDP/RTCP 로그 전송, 링 버퍼, 필터",
+      "appServerBase — 서버 앱 기반 클래스 (모든 게임 서버가 상속)",
+      "appMonitorHub — 모니터링 허브 서버 (Agent ↔ ViewControl 중계)",
+      "ON_EPT_*.cpp — 패킷 엔드포인트별 핸들러 파일 (AUTH, GAME, LOGIN, MONITOR 분리)"
+    ]
+  },
+  "features_ko": [
+    "Windows IOCP 기반 고성능 비동기 TCP 네트워크 엔진 직접 구현",
+    "Acceptor/Connector/ServerSocket 풀 패턴으로 다중 클라이언트 접속 처리",
+    "공통 appServerBase 상속 구조로 OneGame, Raon, BuzzerBeater, HandSummoner 멀티게임 지원",
+    "GameServer ↔ GameManager ↔ Client 3-tier 서버 구조 및 로드밸런싱(appLoadballance)",
+    "MySQL 커넥션 풀 기반 DB 연동 (로그인, 매칭, 전투 보상, 아이템 쿼리 분리)",
+    "Lua 스크립팅 연동으로 게임 로직 핫 업데이트 지원",
+    "RUDP/RTCP 기반 분산 로그 수집 시스템 (MonitorAgent → MonitorHub → MonitorLogAgent)",
+    "C# WPF 실시간 서버 상태 모니터링 뷰어 (appMonitorViewControl)",
+    "BugTrap 크래시 리포터 통합 (덤프 파일 자동 저장 및 XML 리포트 생성)",
+    "CRC16 패킷 무결성 검증 및 인코드/디코드 암호화 레이어",
+    "FSM(유한상태기계) 기반 게임 스테이지 관리 (GameStageRoot, GameStageGame)",
+    "SVN 리비전 자동 임베딩 (utilSvnRevision)"
+  ],
+  "quality": {
+    "has_tests": false,
+    "has_linting": false,
+    "has_types": true,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "Windows IOCP(I/O Completion Port)를 직접 구현하여 수천 동시접속 처리 가능한 비동기 네트워크 엔진 구축",
+    "멀티스레드 환경에서 CriticalSection·SwapLock·IOCPQueue를 조합한 스레드 안전 패킷 처리 파이프라인 설계",
+    "단일 공통 라이브러리(netBase/netCommon/utilCommon)로 4개 이상 이종 게임 서비스를 재사용 가능하게 추상화",
+    "RUDP 기반 비연결형 로그 전송으로 서버 부하를 최소화하는 분산 모니터링 아키텍처 구현",
+    "C++ 서버와 C# WPF 모니터링 클라이언트 간 바이너리 패킷 프로토콜 호환성 유지"
+  ],
+  "notes": "SVN trunk 구조. Visual Studio 2012(v110 플랫폼 툴셋) 기준 vcxproj. Branch/20140526 폴더로 2014년 이후 개발 확인. 게임 클라이언트 코드 없음 — 순수 서버 프레임워크 + 운영 툴 저장소. bin/lib/output 폴더는 컴파일 결과물."
+}

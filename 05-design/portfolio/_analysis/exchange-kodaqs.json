@@ -1,0 +1,70 @@
+{
+  "project_id": "exchange-kodaqs",
+  "project_folder": "exchange_kodaqs",
+  "title_en": "KODAQS Crypto Exchange",
+  "subtitle_en": "Full-Stack Cryptocurrency Exchange Platform",
+  "description_ko": "실제 운영을 목표로 개발된 암호화폐 거래소 플랫폼. Spring MVC 기반의 사용자 프론트엔드(CRYPTO_FRONT), 전자정부프레임워크 기반 관리자(CRYPTO_ADMIN), 지갑 서버(CRYPTO_WALLET), 실시간 체결 데몬(trade-server), 시세 자동매매 도구(market_maker)로 구성된 멀티 모듈 아키텍처.",
+  "type": "fullstack",
+  "period": "2019",
+  "role": "개인 프로젝트 (Copyright 2019. moongci inc.)",
+  "techStack": {
+    "primary": ["Java 1.8", "Spring MVC 4.2.5", "Spring Security 4.2.5", "eGovFramework 3.7.0"],
+    "database": ["MySQL 5.x", "Redis (spring-session-data-redis)"],
+    "messaging": ["RabbitMQ (Spring AMQP 1.6.11)", "Netty-SocketIO 1.7.7"],
+    "blockchain": ["web3j 4.2.0 (Ethereum)", "JSON-RPC (Bitcoin/XRP 노드 연동)"],
+    "orm": ["MyBatis 3.3.0", "mybatis-spring 1.2.3"],
+    "tools": ["Lombok 1.16.8", "Jackson 2.9.5", "Google ZXing 3.2.0 (QR코드)", "Apache POI 3.11 (Excel)", "Apache Velocity 1.7 (이메일 템플릿)", "TradingView Charting Library"],
+    "devops": ["Apache Tomcat 7 (Maven Plugin)", "Eclipse IDE", "Maven"],
+    "market_maker": ["C# (.NET) MarketMaker.exe — Bithumb/Coinone/Poloniex 시세 연동"],
+    "all": ["Java 1.8", "Spring MVC 4.2.5", "Spring Security 4.2.5", "eGovFramework 3.7.0", "MySQL", "Redis", "RabbitMQ", "Netty-SocketIO 1.7.7", "web3j 4.2.0", "MyBatis 3.3.0", "Lombok", "Jackson", "ZXing", "Apache POI", "Apache Velocity", "TradingView Charting Library", "C# MarketMaker"]
+  },
+  "architecture": {
+    "pattern": "Multi-Module Monorepo (Spring MVC + Daemon Server)",
+    "structure": [
+      "CRYPTO_FRONT/ — 사용자 거래소 웹 (Spring MVC 4.2.5, JSP)",
+      "CRYPTO_ADMIN/ — 관리자 백오피스 (eGovFramework 3.7.0)",
+      "CRYPTO_WALLET/ — 지갑 서버 (Spring MVC 4.2.5, web3j)",
+      "daemon-server/trade-server/ — 실시간 체결 엔진 (Java standalone, RabbitMQ)",
+      "daemon-server/notify-server/ — 알림 서버",
+      "daemon-server/cmd-tool/ — 운영 CLI 도구",
+      "market_maker/ — 자동 시세 주입 도구 (C# Windows app)",
+      "db_scripts/ — MySQL DDL 스크립트 (exchange_main.sql, exchange_market.sql)"
+    ],
+    "key_modules": [
+      "exchange/ — 메인 거래 화면 컨트롤러 (MainController, TradeRestController, MarketRestController, ChartRestController)",
+      "trade/ — 주문/체결/차트/잔고 서비스",
+      "wallet/ — 전자지갑 주소 생성 및 입출금 처리 (Bitcoin JSON-RPC, Ethereum web3j, XRP)",
+      "user/ — 회원가입/로그인/인증 (Spring Security)",
+      "mypage/ — 마이페이지, 손익 관리",
+      "bbs/ — 게시판(공지/FAQ/이벤트), 다국어 지원",
+      "daemon/trade-server — Netty-SocketIO + RabbitMQ 기반 실시간 체결 처리"
+    ]
+  },
+  "features_ko": [
+    "실시간 코인 시세 조회 및 TradingView 차트 연동",
+    "매수/매도 주문 접수 및 체결 엔진 (RabbitMQ 메시지 큐 기반)",
+    "Netty-SocketIO 실시간 호가창/체결 내역 푸시",
+    "Bitcoin/Ethereum/XRP 등 다중 코인 전자지갑 자동 생성 및 입출금",
+    "Spring Security 기반 회원 인증 및 역할(Role) 관리",
+    "Google ZXing QR코드 생성 (2FA, 지갑 주소)",
+    "관리자 백오피스 (eGovFramework): 회원/코인/수수료/통계 관리",
+    "C# 마켓메이커 도구: 빗썸/코인원/폴로닉스 시세를 KODAQS 거래소에 자동 주입",
+    "Redis 세션 클러스터링 (spring-session-data-redis)",
+    "다국어 지원 (한국어/영어), 모바일 전용 JSP 뷰 분리"
+  ],
+  "quality": {
+    "has_tests": false,
+    "has_linting": false,
+    "has_types": false,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "RabbitMQ 메시지 큐와 Netty-SocketIO를 결합한 실시간 체결 엔진 설계 (trade-server 데몬)",
+    "Bitcoin JSON-RPC, Ethereum web3j, XRP REST 등 이기종 블록체인 노드를 WalletProxyProviderFactory 패턴으로 통합",
+    "Spring Session + Redis를 이용한 다중 서버 간 세션 공유 및 분산 처리",
+    "C# WinForms 마켓메이커 도구로 외부 거래소(빗썸/코인원) 실시간 시세를 KODAQS 호가창에 자동 주입",
+    "eGovFramework 기반 관리자와 커스텀 Spring MVC 사용자 서버를 동일 MySQL DB로 이중 운영"
+  ],
+  "notes": "Eclipse 워크스페이스 구조. 모듈: CRYPTO_FRONT(사용자), CRYPTO_ADMIN(관리자), CRYPTO_WALLET(지갑), daemon-server(체결/알림/CLI), market_maker(C# 시세주입). DB 스크립트: exchange_main.sql, exchange_market.sql. Copyright 2019 moongci inc."
+}

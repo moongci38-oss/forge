@@ -1,0 +1,12 @@
+{
+  "project_id": "clayon-source",
+  "thumbnail": "images/clayon-source/clayon-source-thumbnail.png",
+  "images": [
+    "images/clayon-source/clayon-source-thumbnail.png",
+    "images/clayon-source/clayon-source-gallery-01.png",
+    "images/clayon-source/clayon-source-gallery-02.png",
+    "images/clayon-source/clayon-source-gallery-03.png",
+    "images/clayon-source/clayon-source-gallery-04.png"
+  ],
+  "total_count": 5
+}

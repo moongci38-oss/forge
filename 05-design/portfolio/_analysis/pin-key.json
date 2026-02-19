@@ -1,0 +1,62 @@
+{
+  "project_id": "pin-key",
+  "project_folder": "pin_key",
+  "title_en": "PinKey",
+  "subtitle_en": "PIN-based Digital Gift Certificate Platform",
+  "description_ko": "PIN 포인트를 충전·전송·쇼핑몰 쿠폰 구매에 사용할 수 있는 디지털 상품권 플랫폼. CodeIgniter 4 기반 REST API 서버(front)와 PHP 레거시 관리자 패널(admin)로 구성된 풀스택 웹 서비스. PC·모바일 반응형 웹과 별도 어드민 패널을 제공한다.",
+  "type": "fullstack",
+  "period": "미상",
+  "role": "개인/팀 프로젝트",
+  "techStack": {
+    "primary": ["PHP 7.3+", "CodeIgniter 4", "MySQL"],
+    "database": ["MySQL (MySQLi)"],
+    "devops": ["Docker", "Nginx", "PHP-FPM"],
+    "tools": ["PHPUnit", "PHP_CodeSniffer", "Composer", "php-amqplib (RabbitMQ)"],
+    "all": ["PHP 7.3+", "CodeIgniter 4", "MySQL", "Docker", "Nginx", "PHP-FPM", "PHPUnit", "PHP_CodeSniffer", "Composer", "RabbitMQ", "kint-php"]
+  },
+  "architecture": {
+    "pattern": "MVC (CodeIgniter 4) + Legacy PHP Admin",
+    "structure": [
+      "front/ — CodeIgniter 4 REST API 서버 (사용자 facing)",
+      "admin/ — 레거시 PHP 어드민 패널 (frameset 기반)",
+      "front/app/Controllers/ — 기능별 컨트롤러",
+      "front/app/Models/ — 데이터베이스 모델",
+      "front/app/Views/web + mobile — PC·모바일 분리 뷰"
+    ],
+    "key_modules": [
+      "MemberController — 회원가입/로그인/인증",
+      "MyPinRecvSendController — PIN 전송·수신",
+      "MyPinChargeExchangeController — 충전·환불",
+      "MyPinShopingController — 쿠폰 쇼핑몰",
+      "FriendController — 친구/그룹 관리",
+      "CustomerServiceController — 공지·이벤트·1:1문의",
+      "admin/ — 회원관리·입출금처리·분배자 관리 어드민"
+    ]
+  },
+  "features_ko": [
+    "PIN 포인트 충전 (가상계좌, 법인계좌, 쿠콘 연동) 및 환불 처리",
+    "회원 간 PIN 전송·수신 및 그룹 전송 기능",
+    "기프티레터 API 연동 디지털 쿠폰 쇼핑몰 (브랜드·상품 조회, 핀 발행·취소·재전송)",
+    "휴대폰 SMS 인증 및 본인인증 연동 회원가입",
+    "PC·모바일 반응형 분리 라우팅 (web/ vs mobile/)",
+    "추천인 코드 기반 친구 초대 및 그룹 관리",
+    "1:1 문의, 공지사항, 이벤트, 쪽지함 고객서비스",
+    "PHP 레거시 기반 어드민 패널 (회원관리, 입출금 승인, 분배자 관리)"
+  ],
+  "quality": {
+    "has_tests": true,
+    "has_linting": true,
+    "has_types": false,
+    "has_docker": true,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "CodeIgniter 4 REST API와 레거시 PHP 어드민 패널을 단일 프로젝트에서 분리 운영하는 이중 구조 설계",
+    "기프티레터 외부 API 연동으로 실시간 쿠폰 상품 조회·PIN 발행 처리",
+    "쿠콘 가상계좌 자동 충전 스케줄러 및 법인계좌 자동충전 API 구현",
+    "RabbitMQ(php-amqplib) 연동을 통한 비동기 메시지 처리",
+    "JWT Access Token 기반 로그인 상태 검증 미들웨어(BaseController) 공통화",
+    "PC/모바일 User-Agent 분기 라우팅 및 이중 뷰 구조 유지"
+  ],
+  "notes": "front/는 CodeIgniter 4 프레임워크 기반 API 서버, admin/은 구형 PHP frameset 어드민. Docker(Nginx+PHP-FPM)로 배포. Database.php에 DB 접속 정보가 하드코딩되어 있음. x_ 접두사 파일은 미사용/비활성 코드로 추정."
+}

@@ -1,0 +1,55 @@
+{
+  "project_id": "crawling",
+  "project_folder": "Crawling",
+  "title_en": "Social Media Crawling Admin",
+  "subtitle_en": "SNS Content Crawler & Admin Dashboard",
+  "description_ko": "트위터, 인스타그램, 페이스북 등 SNS에서 키워드 기반으로 콘텐츠를 자동 수집하고 MySQL DB에 저장하는 크롤러 시스템. Spring MVC 기반 관리자 웹 대시보드를 통해 수집된 콘텐츠를 CRUD 관리한다.",
+  "type": "tool",
+  "period": "미상",
+  "role": "개인 프로젝트",
+  "techStack": {
+    "primary": ["Java 1.8", "Spring MVC 4.1.2", "Selenium 3.141.59", "Jsoup 1.11.3"],
+    "database": ["MySQL 8.0", "MyBatis 3.2.2"],
+    "devops": ["Apache Maven", "Apache Tomcat (WAR)"],
+    "tools": ["Log4j2 2.5", "Twitter4j 4.0.7", "Google YouTube API v3", "Jackson 2.9", "Gson 2.8", "Commons DBCP"],
+    "all": ["Java 1.8", "Spring MVC 4.1.2", "Selenium 3.141.59", "Jsoup 1.11.3", "MySQL 8.0", "MyBatis 3.2.2", "Apache Maven", "Log4j2 2.5", "Twitter4j 4.0.7", "Google YouTube API v3", "Jackson 2.9", "Gson 2.8", "Commons DBCP", "JSTL 1.2"]
+  },
+  "architecture": {
+    "pattern": "Spring MVC (Controller-Service-DAO) + Headless Browser Crawler",
+    "structure": [
+      "src/main/java/admin/ — Spring MVC 컨트롤러/서비스/VO (CRUD 관리 기능)",
+      "src/main/java/common/ — 크롤러 엔진(Crawler.java), 공통 유틸리티",
+      "src/main/resources/sql/ — MyBatis XML 매퍼",
+      "src/main/webapp/WEB-INF/jsp/ — JSP 뷰 (관리자 대시보드)"
+    ],
+    "key_modules": [
+      "Crawler.java — Twitter/Instagram/Facebook Selenium 크롤링 엔진",
+      "ContentsCtr.java — 수집 콘텐츠 CRUD 관리 API",
+      "AppMain1Ctr.java — 앱 메인 데이터 관리 컨트롤러",
+      "applicationContext.xml — Spring/MyBatis/DBCP 설정"
+    ]
+  },
+  "features_ko": [
+    "Twitter 키워드 검색 기반 트윗 자동 수집 (Selenium headless + Twitter4j API 이중 방식)",
+    "Instagram 해시태그 탐색 및 게시물(이미지/동영상) 자동 수집",
+    "Facebook 키워드 검색 결과 포스트 자동 수집",
+    "YouTube Data API v3 연동 콘텐츠 수집",
+    "수집 콘텐츠 MySQL 자동 저장 및 Spring MVC 관리자 대시보드 CRUD",
+    "관리자 대시보드에서 배너, 게시글, 프로젝트, 회원 관리"
+  ],
+  "quality": {
+    "has_tests": false,
+    "has_linting": false,
+    "has_types": false,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "Selenium headless ChromeDriver로 JavaScript 동적 렌더링 SNS 페이지 크롤링 구현",
+    "Twitter, Instagram, Facebook 각 플랫폼별 DOM 구조 차이에 대응하는 CSS Selector/XPath 파싱 전략",
+    "무한 스크롤 페이지에서 동적 콘텐츠 로딩 대기 및 반복 수집 로직 (WebDriverWait + JavaScript scrollTo)",
+    "Twitter4j OAuth API와 Selenium 브라우저 크롤링 이중 방식 병용",
+    "Spring MVC + MyBatis 기반 관리자 대시보드와 크롤러 엔진 통합"
+  ],
+  "notes": "WAR 패키징 배포 구조. groupId: satelite.kr, artifactId: admin. DB명: motiva. 크롤러(Crawler.java)와 Spring MVC 관리자 시스템이 단일 WAR에 통합된 구조."
+}

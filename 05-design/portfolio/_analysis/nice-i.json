@@ -1,0 +1,54 @@
+{
+  "project_id": "nice-i",
+  "project_folder": "nice_i",
+  "title_en": "BizDemoServer",
+  "subtitle_en": "Network Communication Demo Server (TCP/UDP)",
+  "description_ko": "NICE정보통신 재직 중 개발한 C# Windows Forms 기반 네트워크 통신 데모 서버. TCP(포트 5555)와 UDP(포트 9900/9901) 소켓 통신을 동시에 지원하며, GUI 환경에서 메시지 송수신과 실시간 로그 모니터링을 제공한다.",
+  "type": "tool",
+  "period": "미상",
+  "role": "개인/사내 프로젝트",
+  "techStack": {
+    "primary": ["C# .NET Framework 4.6.1", "Windows Forms"],
+    "database": [],
+    "devops": [],
+    "tools": ["Visual Studio 2015/2017"],
+    "all": ["C# .NET Framework 4.6.1", "Windows Forms", "System.Net.Sockets", "Visual Studio 2015/2017"]
+  },
+  "architecture": {
+    "pattern": "Windows Forms + 소켓 통신 (TCP/UDP 듀얼 스택)",
+    "structure": [
+      "BizDemoServer/ — Visual Studio 솔루션 루트",
+      "BizDemoServer/BizDemoServer/ — 메인 프로젝트",
+      "MainForm.cs — UI 및 TCP/UDP 송신 로직",
+      "udp.cs — UDPserver 클래스 및 NetMsg 메시지 큐",
+      "dbg.cs — 디버그 메시지 큐 유틸리티"
+    ],
+    "key_modules": [
+      "MainForm (TCP 서버 리스너 + UDP 브로드캐스트 송신)",
+      "UDPserver (비동기 UDP 수신 서버, 포트 9900)",
+      "NetMsg (수신 메시지 링 버퍼 큐)",
+      "dbg (타임스탬프 기반 로그 링 버퍼 큐)"
+    ]
+  },
+  "features_ko": [
+    "TCP 서버(포트 5555) — 클라이언트 연결 수락 및 텍스트 메시지 양방향 송수신",
+    "UDP 서버(포트 9900) — 비동기 수신 및 브로드캐스트 송신(255.255.255.255:9901)",
+    "GUI 실시간 로그 모니터링 — RichTextBox에 타임스탬프 포함 메시지 출력",
+    "ComboBox 기반 송신 메시지 프리셋 관리 (udp.txt / tcp.txt 파일에서 로드)",
+    "링 버퍼(Ring Buffer) 구조의 스레드 안전 메시지 큐 구현"
+  ],
+  "quality": {
+    "has_tests": false,
+    "has_linting": false,
+    "has_types": true,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "Windows Forms의 단일 스레드 모델에서 TCP 블로킹 Accept 루프와 UI 갱신 분리 (Timer 폴링 방식 채택)",
+    "UDP 소켓의 ReuseAddress 옵션 및 ExclusiveAddressUse=false 설정으로 멀티캐스트/브로드캐스트 환경 대응",
+    "링 버퍼(Ring Buffer) 기반 정적 메시지 큐(NetMsg, dbg)로 스레드 간 안전한 메시지 전달 구현",
+    "UDP 브로드캐스트(255.255.255.255) 송신으로 동일 네트워크 내 다수 클라이언트에 동시 메시지 전파"
+  ],
+  "notes": "NICE정보통신(nice_i) 재직 시 작성한 네트워크 통신 데모 유틸리티. OutputType=WinExe, .NET 4.6.1. 외부 NuGet 패키지 의존성 없음 — .NET BCL(System.Net.Sockets 등)만 사용. 프로젝트명 BizDemoServer."
+}

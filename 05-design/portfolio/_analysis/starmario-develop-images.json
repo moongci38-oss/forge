@@ -1,0 +1,12 @@
+{
+  "project_id": "starmario-develop",
+  "thumbnail": "images/starmario-develop/starmario-develop-thumbnail.png",
+  "images": [
+    "images/starmario-develop/starmario-develop-thumbnail.png",
+    "images/starmario-develop/starmario-develop-gallery-01.png",
+    "images/starmario-develop/starmario-develop-gallery-02.png",
+    "images/starmario-develop/starmario-develop-gallery-03.png",
+    "images/starmario-develop/starmario-develop-gallery-04.png"
+  ],
+  "total_count": 5
+}

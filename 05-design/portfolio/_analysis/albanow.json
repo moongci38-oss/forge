@@ -1,0 +1,63 @@
+{
+  "project_id": "albanow",
+  "project_folder": "albanow",
+  "title_en": "AlbaNow",
+  "subtitle_en": "Part-time Job Matching Mobile App",
+  "description_ko": "알바생(구직자)과 사장님(사업주)을 연결하는 위치 기반 모바일 매칭 플랫폼. React Native 0.63으로 Android/iOS 크로스플랫폼 앱을 구현하고, Node.js/Express 백엔드 API 및 PHP 결제 서버와 REST API로 통신한다. 카카오·구글·네이버 소셜 로그인, 카카오맵 기반 주변 공고 탐색, 나이스 본인인증, FCM 푸시 알림을 지원하며 역할 분리된 두 가지 탭 네비게이터로 구성된다.",
+  "type": "mobile",
+  "period": "미상",
+  "role": "개인 프로젝트",
+  "techStack": {
+    "primary": ["React Native 0.63.3", "Node.js", "Express 4.17", "PHP"],
+    "database": ["MySQL"],
+    "devops": [],
+    "tools": ["ESLint", "Babel", "Sequelize 6", "Jest", "Firebase Admin SDK", "JWT (jsonwebtoken)", "Multer", "Nodemailer"],
+    "all": ["React Native 0.63.3", "Node.js", "Express 4.17", "PHP", "MySQL", "Sequelize 6", "Firebase Cloud Messaging", "JWT (jsonwebtoken)", "Kakao Login (커스텀 네이티브 모듈)", "Kakao Map (커스텀 네이티브 모듈)", "Naver Login (커스텀 네이티브 모듈)", "Google Sign-In", "React Navigation 5", "Lottie React Native", "react-native-geolocation-service", "Multer", "Nodemailer", "node-schedule", "ESLint", "Babel", "Jest"]
+  },
+  "architecture": {
+    "pattern": "Client-Server (REST API) + 별도 PHP 결제 서버",
+    "structure": [
+      "Client/ — React Native 앱 (Android/iOS)",
+      "Server/AlbaNowServer/ — Node.js Express 메인 API 서버",
+      "Server/AlbaNowPaymentServer/ — PHP 결제 처리 서버",
+      "db/ — MySQL 스키마 SQL 파일"
+    ],
+    "key_modules": [
+      "Client/src/general_user/ — 알바생 탭 네비게이터 (home, map, management, mypage)",
+      "Client/src/corporate_user/ — 사장님 탭 네비게이터 (home, map, management, mypage)",
+      "Client/src/auth/ — 로그인 및 회원가입 플로우",
+      "Client/modules/ — 카카오 로그인·맵·네이버 로그인 등 커스텀 네이티브 모듈",
+      "Server/AlbaNowServer/api/ — REST API 라우터 (auth, jobSearch, jobRegistration, attendance, notification 등)",
+      "Server/AlbaNowServer/models/ — Sequelize ORM 모델 (40+ 테이블)",
+      "Server/AlbaNowServer/middleware/auth.js — JWT 인증 미들웨어"
+    ]
+  },
+  "features_ko": [
+    "카카오·구글·네이버 소셜 로그인 및 자체 회원가입",
+    "나이스(NICE) 본인인증 연동",
+    "카카오맵 기반 주변 알바 공고 탐색 (위치 기반 반경 검색)",
+    "알바생/사장님 역할 분리 탭 네비게이터 및 대시보드",
+    "알바 공고 등록·검색·지원 및 지원 관리 플로우",
+    "출퇴근 확인(attendance) 및 근무 관리",
+    "FCM(Firebase Cloud Messaging) 푸시 알림",
+    "쿠폰·바우처·결제 이력 관리 (PHP 결제 서버 연동)",
+    "기업·알바생 상호 리뷰 및 즐겨찾기",
+    "node-schedule 기반 스케줄 작업 (자동 상태 변경 등)"
+  ],
+  "quality": {
+    "has_tests": false,
+    "has_linting": true,
+    "has_types": false,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "카카오 로그인·카카오맵·네이버 로그인을 커스텀 React Native 네이티브 모듈로 직접 구현하여 Android 네이티브 브릿지 연동",
+    "react-native-geolocation-service로 실시간 위치를 획득하고 haversine 공식으로 서버 측 반경 내 공고를 필터링하는 위치 기반 검색 구현",
+    "JWT 기반 인증 미들웨어와 카카오·구글·네이버 OAuth 플로우를 단일 인증 체계로 통합",
+    "나이스 본인인증 C 바이너리 모듈(CPClient_64bit)을 Node.js child_process로 실행하여 암·복호화 처리",
+    "Sequelize ORM으로 40개 이상의 MySQL 테이블 관계 모델링 (공고, 지원, 출결, 리뷰, 쿠폰 등)",
+    "React Native 0.63 기반 Android/iOS 크로스플랫폼 네이티브 모듈 호환성 유지 및 커스텀 모듈 패키지 관리"
+  ],
+  "notes": "Client/Server/db 모노레포 구조. Client는 React Native 앱, Server는 Node.js 메인 API와 PHP 결제 서버로 분리. 커스텀 네이티브 모듈(카카오 로그인, 카카오맵, 네이버 로그인, 이미지 리사이저)은 Client/modules/ 로컬 패키지로 관리. node_modules 및 .idea 제외 후 분석."
+}

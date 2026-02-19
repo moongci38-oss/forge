@@ -1,0 +1,12 @@
+{
+  "project_id": "samsungmall",
+  "thumbnail": "images/samsungmall/samsungmall-thumbnail.png",
+  "images": [
+    "images/samsungmall/samsungmall-thumbnail.png",
+    "images/samsungmall/samsungmall-gallery-01.png",
+    "images/samsungmall/samsungmall-gallery-02.png",
+    "images/samsungmall/samsungmall-gallery-03.png",
+    "images/samsungmall/samsungmall-gallery-04.png"
+  ],
+  "total_count": 5
+}

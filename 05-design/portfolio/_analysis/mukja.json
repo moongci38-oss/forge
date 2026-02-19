@@ -1,0 +1,69 @@
+{
+  "project_id": "mukja",
+  "project_folder": "mukja",
+  "title_en": "Mukja",
+  "subtitle_en": "Food Delivery & Ordering Platform",
+  "description_ko": "'먹자'는 음식 배달 및 주문 플랫폼으로, 사용자용 Android 앱, 점주용 POS Android 앱, Node.js 기반 멀티 서비스 백엔드, 웹 기반 어드민 패널로 구성된 대규모 풀스택 시스템이다. 카카오·네이버·페이스북 소셜 로그인, 포인트/쿠폰/룰렛 게임, 결제(이노페이·카카오페이·페이코), Firebase 푸시 알림, Socket.IO 실시간 주문 처리 등 커머스 전 기능을 갖추고 있다.",
+  "type": "fullstack",
+  "period": "2021",
+  "role": "팀 프로젝트 (개발 참여)",
+  "techStack": {
+    "primary": ["Android (Java)", "Node.js", "Express 4.x"],
+    "database": ["MySQL", "MongoDB", "Redis", "Elasticsearch", "Cassandra"],
+    "devops": ["PM2", "Socket.IO Redis"],
+    "tools": ["Retrofit2", "OkHttp3", "Glide", "Firebase FCM", "Swagger", "ESLint", "Babel", "Webpack", "Sequelize", "Mongoose", "Lombok"],
+    "all": ["Android (Java)", "Node.js", "Express 4.x", "MySQL", "MongoDB", "Redis", "Elasticsearch", "Cassandra", "PM2", "Retrofit2 2.7", "OkHttp3 4.8", "Glide 4.11", "Firebase FCM 21", "Firebase Analytics 18", "Kakao SDK v2", "Naver Login SDK 4.2", "Facebook Android SDK 4.x", "KakaoPay WebView", "PayCo WebView", "InnoPay", "Socket.IO Client 1.0", "Swagger UI Express", "Sequelize 5", "Mongoose 5", "Lottie 3.0", "Airbridge SDK", "Swagger", "ESLint", "Babel", "Webpack", "Lombok"]
+  },
+  "architecture": {
+    "pattern": "Multi-Service Server + Native Android Client",
+    "structure": [
+      "mukja_android/ — Android 앱 2종 (소비자용 app/, 점주 POS pos/)",
+      "mukja_app/ — Android 앱 구버전",
+      "mukja_server/app-api/ — 앱용 REST API 서버 (Node.js/Express)",
+      "mukja_server/admin/ — 웹 어드민 패널 (Express + EJS + Socket.IO)",
+      "mukja_server/bap/ — 점주용 웹 서비스 (Express + EJS)",
+      "mukja_server/pos-api/ — POS 전용 REST API (Node.js)",
+      "mukja_server/roulette-server/ — 룰렛 게임 서버 (Node.js/TypeScript)",
+      "mukja_server/scheduler/ — 배치 스케줄러",
+      "mukja_server/payments/ — 결제 모듈 (이노페이 cashier/manager/waiter)",
+      "mukja_server/owner/ — 점주 서비스",
+      "mukja_server/point-api/ — 포인트 API"
+    ],
+    "key_modules": [
+      "ui/ (home, basket, mymukja, search, ranking, regular, event, family)",
+      "http/ (Retrofit2 HttpService, HttpManager)",
+      "dto/ (50+ DTO 클래스)",
+      "pay/ (InnoPay, KakaoPay, Payco WebView)",
+      "dao/ (MySQL/MongoDB 쿼리 레이어)",
+      "routes/ (Express REST 라우터)",
+      "socket/ (Socket.IO 실시간 주문 처리)"
+    ]
+  },
+  "features_ko": [
+    "카카오·네이버·페이스북 소셜 로그인 및 SMS 본인인증(PASS)",
+    "음식점 검색·카테고리 탐색·메뉴 주문·장바구니 플로우",
+    "이노페이·카카오페이·페이코 결제 연동",
+    "Firebase FCM 기반 실시간 주문 푸시 알림",
+    "Socket.IO를 활용한 주문 상태 실시간 업데이트",
+    "포인트 적립·사용·선물 및 쿠폰 시스템",
+    "룰렛 게임 서버 (Node.js/TypeScript 별도 서비스)",
+    "점주용 POS Android 앱 및 웹 어드민 패널",
+    "리뷰·QnA·공지사항·이벤트 관리",
+    "광고 오퍼월(BuzzAd, TNK, AdPopcorn, Newspick) 통합"
+  ],
+  "quality": {
+    "has_tests": true,
+    "has_linting": true,
+    "has_types": true,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "음식 주문·결제·POS·포인트·룰렛 등 기능별로 독립된 Node.js 마이크로서비스 설계 및 운영",
+    "Socket.IO + Redis Pub/Sub로 점주 POS와 소비자 앱 간 실시간 주문 상태 동기화 구현",
+    "이노페이·카카오페이·페이코 등 복수 PG사 결제 플로우 Android WebView로 통합",
+    "50개 이상의 DTO 클래스와 Retrofit2/OkHttp3로 타입 안전한 REST API 통신 레이어 구축",
+    "TypeScript 기반 룰렛 게임 서버를 별도 서비스로 분리하여 독립 배포"
+  ],
+  "notes": "3개 하위 폴더(mukja_android, mukja_app, mukja_server)로 구성된 모노레포. 서버는 app-api, admin, bap, pos-api, roulette-server, scheduler, payments, owner, point-api 등 10개 이상의 독립 서비스로 구성. node_modules 제외 후 분석."
+}

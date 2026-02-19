@@ -1,0 +1,103 @@
+{
+  "project_id": "clayon-source",
+  "project_folder": "clayon source",
+  "title_en": "Clayon VDI Platform",
+  "subtitle_en": "Cloud-based VDI & Marketplace Management System",
+  "description_ko": "KB금융그룹의 클라우드 기반 VDI(가상 데스크톱 인프라) 및 마켓플레이스 관리 플랫폼. Spring MVC 4.x 기반 멀티 모듈 구조로 관리자 콘솔(admcon), 기업 포털(cmp), 사용자 포털(portal), 배포 모듈(deploy) 4개 웹 애플리케이션으로 구성된다. 인프라 자원 관리, 마켓플레이스 서비스 등재/승인, 조직 관리, 과금(Toast Cloud 연동) 등을 처리하며, Dooray·Devops·PaaS API와 외부 게이트웨이로 통신한다.",
+  "type": "fullstack",
+  "period": "2020-01 ~ 2020-06 (DB Changeset 날짜 기준)",
+  "role": "팀 프로젝트 (기업 SI)",
+  "techStack": {
+    "primary": ["Spring MVC 4.3.5", "Java 1.8", "MyBatis 3.4.1", "JSP/JSTL"],
+    "database": ["MySQL 5.x (mysql-connector-java 5.1.31)", "Redis (Spring Session Data Redis 1.3.1)"],
+    "devops": ["Maven", "Shell Script (SFTP 배포 자동화)", "Spring Cloud CloudFoundry Connector 2.0.6"],
+    "tools": [
+      "Spring Security 3.2.5",
+      "Spring Session",
+      "Lombok 1.16.8",
+      "Jackson 2.9.5",
+      "Apache POI 4.0.1",
+      "Quartz Scheduler 2.1.7",
+      "Apache Tika 1.20",
+      "Apache Velocity 1.7",
+      "Commons DBCP 1.4",
+      "log4jdbc",
+      "ModelMapper 1.1.1",
+      "SimpleCaptcha 1.2.2",
+      "Toast Cloud API",
+      "Dooray API",
+      "Devops API",
+      "PaaS API"
+    ],
+    "all": [
+      "Spring MVC 4.3.5",
+      "Java 1.8",
+      "MyBatis 3.4.1",
+      "JSP/JSTL",
+      "MySQL 5.x",
+      "Redis",
+      "Spring Security 3.2.5",
+      "Spring Session",
+      "Spring Cloud CloudFoundry 2.0.6",
+      "Lombok 1.16.8",
+      "Jackson 2.9.5",
+      "Apache POI 4.0.1",
+      "Quartz Scheduler 2.1.7",
+      "Apache Tika 1.20",
+      "Apache Velocity 1.7",
+      "Toast Cloud API",
+      "Dooray API",
+      "PaaS API",
+      "Maven",
+      "Shell Script"
+    ]
+  },
+  "architecture": {
+    "pattern": "멀티 모듈 Spring MVC (WAR 단위 배포), REST API Gateway 패턴",
+    "structure": [
+      "clayon-admcon/ — 슈퍼 관리자 콘솔 (조직·회원·마켓플레이스·CMS·인프라 전체 관리)",
+      "clayon-cmp/ — 기업 포털 (VDI 인프라 신청/관리, 마켓플레이스, 과금, Dooray/Devops/PaaS 연동)",
+      "clayon-portal/ — 사용자 포털 (마켓플레이스 조회·신청, 회원가입, 서비스 소개, JWT 인증)",
+      "clayon-deploy/ — 배포 전용 모듈 (VDI 인프라·조직 관리 기능 분리)",
+      "DB Changeset/ — MySQL DDL/DML 변경 이력",
+      "shell_script/ — SFTP 기반 파일 전송 배포 스크립트"
+    ],
+    "key_modules": [
+      "com/web/controller/ — Spring MVC 컨트롤러 (MarketPlaceController, InfraVdiController 등)",
+      "com/api/gateway/ — 외부 API 게이트웨이 (RestApi, Devops, Dooray, Pas, Toast, MailApi, SmsApi)",
+      "com/infra/ — VDI 인프라 서비스 레이어",
+      "com/marketplace/ — 마켓플레이스 서비스 레이어",
+      "com/auth/ — Spring Security 기반 인증/인가",
+      "com/jwt/ — JWT 토큰 처리 (portal, console)",
+      "com/billing/ — Toast Cloud 연동 과금 처리 (cmp)",
+      "resources/mapper/ — MyBatis XML 매퍼"
+    ]
+  },
+  "features_ko": [
+    "VDI(가상 데스크톱 인프라) 자원 신청·승인·관리 워크플로우",
+    "클라우드 마켓플레이스 서비스 등재·판매·구독 관리",
+    "조직(기업) 계층 구조 관리 및 회원 권한 분리 (슈퍼관리자/기업관리자/일반사용자)",
+    "Dooray 프로젝트 연동 및 Devops API를 통한 CI/CD 파이프라인 관리",
+    "PaaS(Cloud Foundry) 앱 배포 및 자원 관리",
+    "Toast Cloud API 연동 과금(Billing) 및 사용량 미터링",
+    "Spring Security 기반 폼 로그인 + JWT 토큰 인증 (포털)",
+    "Apache POI 기반 엑셀 다운로드, Quartz 스케줄러 배치 작업",
+    "CMS(공지사항·FAQ·QnA·뉴스) 관리 및 이메일/SMS 알림 발송",
+    "SFTP 기반 배치 파일 자동 전송 쉘 스크립트"
+  ],
+  "quality": {
+    "has_tests": true,
+    "has_linting": false,
+    "has_types": false,
+    "has_docker": false,
+    "has_ci": false
+  },
+  "technical_challenges_ko": [
+    "Spring MVC 4.x + MyBatis 구조에서 다중 DataSource(clayon·adm·kfz 3개 DB) 트랜잭션 관리",
+    "Dooray, Devops, PaaS(Cloud Foundry UAA), Toast Cloud 4개 이기종 외부 API를 단일 게이트웨이 레이어로 추상화",
+    "InfraVdiController(100KB+)와 MarketPlaceController(58KB+) 등 대형 컨트롤러의 복잡한 VDI 라이프사이클 워크플로우 처리",
+    "Spring Security 폼 인증(admcon/cmp)과 JWT 토큰 인증(portal) 혼용 아키텍처 설계",
+    "Redis 세션 클러스터링 및 동시 세션 제어(max-sessions=1) 구성"
+  ],
+  "notes": "groupId가 'kbstar'로 KB금융그룹 계열사 내부 SI 프로젝트로 추정. clayon_vdi 단일 Git 레포 내 4개 Maven WAR 프로젝트 구조. DB Changeset 날짜(20200108~20200625)로 개발 기간 추정. Redis 설정은 주석 처리되어 있어 실제 배포 시 비활성화 상태일 수 있음."
+}
