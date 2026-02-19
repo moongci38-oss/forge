@@ -1,6 +1,6 @@
 # cleanup-images.ps1 — 매니페스트에 없는 이미지 삭제
 param(
-    [string]$PortfolioBase = "Z:\home\damools\business\05-design\portfolio"
+    [string]$PortfolioBase = $(if ($env:BUSINESS_ROOT) { "$($env:BUSINESS_ROOT)\05-design\portfolio" } else { "Z:\home\damools\business\05-design\portfolio" })
 )
 
 $analysisDir = Join-Path $PortfolioBase "_analysis"

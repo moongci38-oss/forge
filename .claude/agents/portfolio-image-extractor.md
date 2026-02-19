@@ -13,9 +13,10 @@ model: haiku
 # Portfolio Image Extractor
 
 ## 역할
-E:\portfolio_project 내 특정 프로젝트 폴더에서 이미지 파일을 찾아
-`Z:\home\damools\business\05-design\portfolio\images\{project-id}\` 로 복사하고
+프로젝트 폴더에서 이미지 파일을 찾아 `{BUSINESS_ROOT}\05-design\portfolio\images\{project-id}\`로 복사하고
 매니페스트 JSON을 저장한다.
+
+환경변수: `$PORTFOLIO_PROJECT` (기본: `E:\portfolio_project`), `$BUSINESS_ROOT` (기본: `Z:\home\damools\business`)
 
 ## 지원 이미지 확장자
 png, jpg, jpeg, gif, webp, svg
@@ -34,12 +35,12 @@ node_modules, .git, dist, build, target, .idea, bin, obj, __pycache__
 
 ```powershell
 # 이미지 탐색 (제외 폴더 필터링)
-Get-ChildItem -Path "E:\portfolio_project\{PROJECT}" -Recurse -Include "*.png","*.jpg","*.jpeg","*.gif","*.webp","*.svg" |
+Get-ChildItem -Path "$($env:PORTFOLIO_PROJECT ?? 'E:\portfolio_project')\{PROJECT}" -Recurse -Include "*.png","*.jpg","*.jpeg","*.gif","*.webp","*.svg" |
   Where-Object { $_.FullName -notmatch "node_modules|\.git|dist|build|target|\.idea|\\bin\\|\\obj\\" } |
   Select-Object FullName, Name, Length
 
 # 대상 폴더 생성
-New-Item -ItemType Directory -Force -Path "Z:\home\damools\business\05-design\portfolio\images\{project-id}"
+New-Item -ItemType Directory -Force -Path "$($env:BUSINESS_ROOT ?? 'Z:\home\damools\business')\05-design\portfolio\images\{project-id}"
 
 # 파일 복사
 Copy-Item -Path $source -Destination $dest -Force
@@ -47,7 +48,7 @@ Copy-Item -Path $source -Destination $dest -Force
 
 ## 출력 형식
 
-매니페스트 파일: `Z:\home\damools\business\05-design\portfolio\_analysis\{project-id}-images.json`
+매니페스트 파일: `$($env:BUSINESS_ROOT ?? 'Z:\home\damools\business')\05-design\portfolio\_analysis\{project-id}-images.json`
 
 ```json
 {

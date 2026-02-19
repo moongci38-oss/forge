@@ -1,7 +1,7 @@
 # extract-top3-images.ps1 — 프로젝트당 대표 이미지 3장 추출
 param(
-    [string]$BaseDir    = "E:\portfolio_project",
-    [string]$OutputBase = "Z:\home\damools\business\05-design\portfolio"
+    [string]$BaseDir    = $(if ($env:PORTFOLIO_PROJECT) { $env:PORTFOLIO_PROJECT } else { "E:\portfolio_project" }),
+    [string]$OutputBase = $(if ($env:BUSINESS_ROOT) { "$($env:BUSINESS_ROOT)\05-design\portfolio" } else { "Z:\home\damools\business\05-design\portfolio" })
 )
 
 $exts    = @("*.png","*.jpg","*.jpeg")
