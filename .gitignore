@@ -40,5 +40,11 @@ __pycache__/
 *.pyc
 .venv/
 
+# MCP config (팀원별 경로 상이)
+.mcp.json
+
 # MCP server temp files
 .playwright-mcp/
+
+# Local settings
+.claude/settings.local.json

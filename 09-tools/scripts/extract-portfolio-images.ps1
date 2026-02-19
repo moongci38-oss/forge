@@ -8,8 +8,8 @@
 param(
     [Parameter(Mandatory=$true)]  [string]$ProjectFolder,
     [Parameter(Mandatory=$true)]  [string]$ProjectId,
-    [Parameter(Mandatory=$false)] [string]$BaseDir    = "E:\portfolio_project",
-    [Parameter(Mandatory=$false)] [string]$OutputBase = "Z:\home\damools\business\05-design\portfolio"
+    [Parameter(Mandatory=$false)] [string]$BaseDir    = $(if ($env:PORTFOLIO_PROJECT) { $env:PORTFOLIO_PROJECT } else { "E:\portfolio_project" }),
+    [Parameter(Mandatory=$false)] [string]$OutputBase = $(if ($env:BUSINESS_ROOT) { "$($env:BUSINESS_ROOT)\05-design\portfolio" } else { "Z:\home\damools\business\05-design\portfolio" })
 )
 
 Add-Type -AssemblyName System.Drawing

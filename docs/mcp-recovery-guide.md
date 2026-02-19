@@ -4,7 +4,7 @@
 
 ## 문제 상황
 
-- `C:\Users\moongci\.claude.json`이 초기화됨
+- `C:\Users\{사용자명}\.claude.json`이 초기화됨
 - Context7, Brave Search 설정 손실
 
 ---
@@ -17,7 +17,7 @@
 
 ### 2단계: 설정 파일 수정
 
-메모장이나 다른 텍스트 에디터로 `C:\Users\moongci\.claude.json` 열기:
+메모장이나 다른 텍스트 에디터로 `C:\Users\{사용자명}\.claude.json` 열기:
 
 ```json
 {
@@ -25,7 +25,7 @@
     "data": {},
     "timestamp": 1771240215735
   },
-  "userID": "ccaef5140afea6cf1f2588591ef424be607492a67eef59269e7947a741cf8002",
+  "userID": "<YOUR_USER_ID>",
   "mcpServers": {
     "context7": {
       "command": "npx",
@@ -34,7 +34,7 @@
         "@upstash/context7-mcp@latest"
       ],
       "env": {
-        "CONTEXT7_API_KEY": "ctx7sk-f04dfb6d-198d-4c19-b800-1c48303b523b"
+        "CONTEXT7_API_KEY": "<YOUR_CONTEXT7_API_KEY>"
       }
     },
     "brave-search": {
@@ -44,7 +44,7 @@
         "@brave/brave-search-mcp-server"
       ],
       "env": {
-        "BRAVE_API_KEY": "BSA2LDyIGFLcCZx34XFVsyZEYtVn9Nc"
+        "BRAVE_API_KEY": "<YOUR_BRAVE_API_KEY>"
       }
     }
   }
@@ -95,14 +95,14 @@ VS Code에서:
 - Command: `npx`
 - Args: `-y`, `@upstash/context7-mcp@latest`
 - Environment Variables:
-  - `CONTEXT7_API_KEY`: `ctx7sk-f04dfb6d-198d-4c19-b800-1c48303b523b`
+  - `CONTEXT7_API_KEY`: `<YOUR_CONTEXT7_API_KEY>`
 
 ### Brave Search 서버 추가
 - Name: `brave-search`
 - Command: `npx`
 - Args: `-y`, `@brave/brave-search-mcp-server`
 - Environment Variables:
-  - `BRAVE_API_KEY`: `BSA2LDyIGFLcCZx34XFVsyZEYtVn9Nc`
+  - `BRAVE_API_KEY`: `<YOUR_BRAVE_API_KEY>`
 
 ---
 

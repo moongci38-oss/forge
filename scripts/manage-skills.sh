@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-BUSINESS_ROOT="$HOME/business"
+BUSINESS_ROOT="${BUSINESS_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/business")}"
 SKILLS_LIBRARY="$BUSINESS_ROOT/09-tools/skills-library"
 ACTIVE_SKILLS="$BUSINESS_ROOT/.claude/skills"
 

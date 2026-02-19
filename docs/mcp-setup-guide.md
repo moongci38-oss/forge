@@ -33,7 +33,7 @@
 
 ### 방법 1: 텍스트 에디터로 직접 추가 (권장)
 
-1. **파일 열기**: `C:\Users\moongci\.claude.json`
+1. **파일 열기**: `C:\Users\{사용자명}\.claude.json` (또는 `~/.claude.json`)
 
 2. **파일 끝부분에 다음 내용 추가**:
 ```json
@@ -42,14 +42,14 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"],
       "env": {
-        "CONTEXT7_API_KEY": "ctx7sk-f04dfb6d-198d-4c19-b800-1c48303b523b"
+        "CONTEXT7_API_KEY": "<YOUR_CONTEXT7_API_KEY>"
       }
     },
     "brave-search": {
       "command": "npx",
       "args": ["-y", "@brave/brave-search-mcp-server"],
       "env": {
-        "BRAVE_API_KEY": "BSA3ah_WXeHKL9nxKYTYvvspaiEXed3"
+        "BRAVE_API_KEY": "<YOUR_BRAVE_API_KEY>"
       }
     }
   }
@@ -68,7 +68,7 @@
 claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp@latest
 
 # Brave Search
-claude mcp add --scope user brave-search -e BRAVE_API_KEY=BSA3ah_WXeHKL9nxKYTYvvspaiEXed3 \
+claude mcp add --scope user brave-search -e BRAVE_API_KEY=<YOUR_BRAVE_API_KEY> \
   -- npx -y @brave/brave-search-mcp-server
 ```
 
@@ -79,7 +79,7 @@ claude mcp add --scope user brave-search -e BRAVE_API_KEY=BSA3ah_WXeHKL9nxKYTYvv
 ### 1. Claude Code 재시작
 
 ```bash
-cd /z/home/damools/business
+cd <YOUR_BUSINESS_ROOT>
 claude
 ```
 
@@ -154,8 +154,8 @@ Claude Code 인터랙티브 세션에서:
    ```
 
 4. **API 키 확인**
-   - Brave API 키: `BSA3ah_WXeHKL9nxKYTYvvspaiEXed3`
-   - Context7 API 키: `ctx7sk-f04dfb6d-198d-4c19-b800-1c48303b523b`
+   - Brave API 키: `<YOUR_BRAVE_API_KEY>`
+   - Context7 API 키: `<YOUR_CONTEXT7_API_KEY>`
 
 ### Brave Search rate limit 초과
 

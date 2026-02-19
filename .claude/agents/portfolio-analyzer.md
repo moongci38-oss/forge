@@ -3,6 +3,7 @@ name: portfolio-analyzer
 description: |
   Portfolio project intelligence specialist. Extracts architecture, tech stack,
   code quality metrics from E:\portfolio_project.
+  경로는 환경변수 $PORTFOLIO_PROJECT, $BUSINESS_ROOT로 오버라이드 가능.
 
   Use for: codebase analysis, dependency extraction, architecture assessment.
 tools: Read, Grep, Glob, Bash, Write
@@ -27,7 +28,7 @@ model: sonnet
 
 ### Step 1: 폴더 구조 파악
 ```powershell
-powershell.exe -Command "Get-ChildItem -Path 'E:\portfolio_project\{PROJECT_FOLDER}' -Recurse -Depth 3 | Where-Object { $_.FullName -notmatch 'node_modules|\.git|dist|build|target|\.idea|\\bin\\|\\obj\\' } | Select-Object FullName, Name | Format-List"
+powershell.exe -Command "Get-ChildItem -Path '$($env:PORTFOLIO_PROJECT ?? 'E:\portfolio_project')\{PROJECT_FOLDER}' -Recurse -Depth 3 | Where-Object { $_.FullName -notmatch 'node_modules|\.git|dist|build|target|\.idea|\\bin\\|\\obj\\' } | Select-Object FullName, Name | Format-List"
 ```
 
 ### Step 2: 의존성 파일 전체 읽기 (있는 것만)
@@ -118,7 +119,7 @@ powershell.exe -Command "Get-ChildItem -Path 'E:\portfolio_project\{PROJECT_FOLD
 
 ## 저장 및 반환
 
-- 기본 OUTPUT_PATH: `Z:\home\damools\business\05-design\portfolio\_analysis`
+- 기본 OUTPUT_PATH: `$BUSINESS_ROOT\05-design\portfolio\_analysis` (환경변수 미설정 시: `Z:\home\damools\business\05-design\portfolio\_analysis`)
 1. Write 도구로 `{OUTPUT_PATH}/{PROJECT_ID}.json` 저장
 2. **반환 메시지는 딱 한 줄**: `DONE: {PROJECT_ID}.json saved`
 
