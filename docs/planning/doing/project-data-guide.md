@@ -225,7 +225,7 @@ await app.listen(3000);
       "team_size": 1,
       "impact": "1인 개발, AI 기반 자동화로 견적 생성 시간 90% 단축"
     },
-    "content": "## 개요\n\nAI를 활용한 포트폴리오 플랫폼입니다.\n\n## 주요 기능\n\n- AI 챗봇: Claude API 기반 대화형 포트폴리오 소개\n- 자동 견적서: 프로젝트 요구사항 분석 후 견적 자동 생성\n- 소스 분석: GitHub 리포지토리 코드 분석 및 시각화\n\n## 기술적 도전\n\n### 스트리밍 응답\n\nClaude API의 스트리밍 응답을 SSE로 클라이언트에 전달하는 구조를 설계했습니다.\n\n```typescript\nasync *streamChat(message: string) {\n  const stream = await this.claude.messages.stream({\n    model: 'claude-sonnet-4-5-20250929',\n    messages: [{ role: 'user', content: message }],\n  });\n  for await (const chunk of stream) {\n    yield chunk.delta?.text ?? '';\n  }\n}\n```\n\n## 성과\n\n- 평균 응답 시간 200ms 이하\n- Lighthouse 성능 점수 95+",
+    "content": "## 개요\n\nAI를 활용한 포트폴리오 플랫폼입니다.\n\n## 주요 기능\n\n- AI 챗봇: Claude API 기반 대화형 포트폴리오 소개\n- 자동 견적서: 프로젝트 요구사항 분석 후 견적 자동 생성\n- 소스 분석: GitHub 리포지토리 코드 분석 및 시각화\n\n## 기술적 도전\n\n### 스트리밍 응답\n\nClaude API의 스트리밍 응답을 SSE로 클라이언트에 전달하는 구조를 설계했습니다.\n\n```typescript\nasync *streamChat(message: string) {\n  const stream = await this.claude.messages.stream({\n    model: 'claude-sonnet-4-6',\n    messages: [{ role: 'user', content: message }],\n  });\n  for await (const chunk of stream) {\n    yield chunk.delta?.text ?? '';\n  }\n}\n```\n\n## 성과\n\n- 평균 응답 시간 200ms 이하\n- Lighthouse 성능 점수 95+",
     "images": [
       { "altText": "메인 페이지 - 벤토 그리드 레이아웃", "orderIndex": 0 },
       { "altText": "AI 챗봇 대화 화면", "orderIndex": 1 },

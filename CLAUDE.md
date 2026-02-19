@@ -99,7 +99,7 @@ business/
 ### 모델 계층화 (비용 60-70% 절감)
 ```
 Lead            → Opus 4.6   (아키텍처 판단, 종합)
-구현 Teammate   → Sonnet 4.5 (코딩 작업)
+구현 Teammate   → Sonnet 4.6 (코딩 작업)
 탐색 Teammate   → Haiku 4.5  (검색, 파일 분석)
 ```
 

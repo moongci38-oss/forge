@@ -68,7 +68,7 @@
 
 ```
 Lead (오케스트레이터)    → Opus 4.6   — 계획·판단·종합
-구현/작성 Teammate      → Sonnet 4.5 — 문서 작성, 분석
+구현/작성 Teammate      → Sonnet 4.6 — 문서 작성, 분석
 탐색/검색 Teammate      → Haiku 4.5  — 검색, 파일 읽기
 ```
 
