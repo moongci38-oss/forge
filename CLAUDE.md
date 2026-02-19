@@ -51,6 +51,7 @@ business/
 - 민감 자료(재무, 법무)는 `06-finance/`, `07-legal/`, `08-admin/` 하위에만 저장
 - 스킬 관리: `bash scripts/manage-skills.sh {list|enable|disable}`
 - 컴포넌트 관리: `bash scripts/manage-components.sh {list|enable|disable}`
+- **병렬 처리 가능한 작업은 무조건 Agent Teams 사용** → 실행 계획 수립 시 항상 먼저 고려
 
 ### Don'ts
 - 이 워크스페이스에서 코드 프로젝트 개발 금지 (개발은 portfolio-project에서)
@@ -70,6 +71,41 @@ business/
 | Agents | `.claude/agents/` | `manage-components.sh` |
 | Commands | `.claude/commands/` | `manage-components.sh` |
 | 라이브러리 원본 | `09-tools/` | 원본 보관 |
+
+---
+
+## Agent Teams (Opus 4.6+)
+
+> 실험적 기능 활성화됨 (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`)
+> 상세 가이드: `docs/tech/Opus_4_6_신기능_심층_가이드_추가_섹션.md`
+
+### 병렬 처리 원칙 (필수)
+
+> **병렬 처리가 가능한 모든 작업은 Agent Teams를 사용한다.**
+> 실행 계획 수립 시 가장 먼저 병렬화 가능 여부를 판단하고, 가능하면 무조건 Agent Teams로 설계한다.
+
+| 상황 | 선택 |
+|------|------|
+| 독립적으로 나눌 수 있는 작업 2개 이상 | **Agent Teams** |
+| 단일 순차 작업 | Task 도구 또는 직접 실행 |
+| 프로덕션 크리티컬 (롤백 필요) | Task 도구 + Watchdog 패턴 |
+
+### 오케스트레이션 패턴 (4가지)
+- **Fan-out/Fan-in**: 독립 병렬 작업 (모듈 분석, 리서치)
+- **Pipeline**: 순차 의존성 (스키마→API→프론트)
+- **Competing Hypotheses**: 최적 해법 탐색 (성능 최적화 전략 비교)
+- **Watchdog**: 프로덕션 변경 안전 모니터링
+
+### 모델 계층화 (비용 60-70% 절감)
+```
+Lead            → Opus 4.6   (아키텍처 판단, 종합)
+구현 Teammate   → Sonnet 4.5 (코딩 작업)
+탐색 Teammate   → Haiku 4.5  (검색, 파일 분석)
+```
+
+### 필수: 실행 환경
+- **tmux 필수** (VS Code 통합 터미널 미지원)
+- Windows Terminal + WSL(`tmux new-session -s agent-team`) 사용
 
 ---
 
@@ -121,7 +157,8 @@ claude plugin disable {plugin-name}
 @.claude/rules/git.md
 @.claude/rules/file-naming.md
 @.claude/rules/security.md
+@.claude/rules/agent-teams.md
 
 ---
 
-*Last Updated: 2026-02-18*
+*Last Updated: 2026-02-18 (Agent Teams 추가)*

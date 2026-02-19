@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.015) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 1920px;
+    height: 1080px;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 { font-size: 36px; font-weight: 800; color: #F8FAFC; }
+
+  .tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .tag.mobile { background: #7C3AED; color: #fff; }
+  .tag.web { background: #2563EB; color: #fff; }
+  .tag.infrastructure { background: #059669; color: #fff; }
+  .tag.fullstack { background: #6366F1; color: #fff; }
+  .tag.tool { background: #F59E0B; color: #1E293B; }
+
+  .grid {
+    flex: 1;
+    display: grid;
+    gap: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .category {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .category-header {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1E293B;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .category-header .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .category-header .icon.frontend { background: #312E81; color: #818CF8; }
+  .category-header .icon.database { background: #14532D; color: #4ADE80; }
+  .category-header .icon.devops { background: #422006; color: #FB923C; }
+  .category-header .icon.tools { background: #1E293B; color: #94A3B8; }
+  .category-header .icon.scripting { background: #1E1B4B; color: #C084FC; }
+  .category-header .icon.serialization { background: #1C1917; color: #FBBF24; }
+  .category-header .icon.monitoring { background: #0C4A6E; color: #38BDF8; }
+  .category-header .icon.crash { background: #450A0A; color: #FB7185; }
+  .category-header .icon.messaging { background: #312E81; color: #A5B4FC; }
+  .category-header .icon.blockchain { background: #0C4A6E; color: #67E8F9; }
+  .category-header .icon.orm { background: #064E3B; color: #6EE7B7; }
+  .category-header .icon.market { background: #78350F; color: #FCD34D; }
+  .category-header .icon.default { background: #1E293B; color: #94A3B8; }
+
+  .tech-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .tech-item {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #CBD5E1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .tech-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .tech-item .dot.frontend { background: #818CF8; }
+  .tech-item .dot.database { background: #4ADE80; }
+  .tech-item .dot.devops { background: #FB923C; }
+  .tech-item .dot.tools { background: #94A3B8; }
+  .tech-item .dot.scripting { background: #C084FC; }
+  .tech-item .dot.serialization { background: #FBBF24; }
+  .tech-item .dot.monitoring { background: #38BDF8; }
+  .tech-item .dot.crash { background: #FB7185; }
+  .tech-item .dot.messaging { background: #A5B4FC; }
+  .tech-item .dot.blockchain { background: #67E8F9; }
+  .tech-item .dot.orm { background: #6EE7B7; }
+  .tech-item .dot.market { background: #FCD34D; }
+  .tech-item .dot.default { background: #94A3B8; }
+
+  .total-badge {
+    position: absolute;
+    bottom: 40px;
+    right: 80px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    color: #64748B;
+    z-index: 1;
+  }
+  .total-badge strong { color: #F1F5F9; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="title">Tech Stack</h1>
+    <span class="tag" id="tag"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+<div class="total-badge" id="totalBadge"></div>
+
+<script>
+  var data = window.PROJECT_DATA || {};
+  var cat = data.category || 'web';
+  document.getElementById('title').textContent = (data.title || 'Project') + ' Tech Stack';
+  var tag = document.getElementById('tag');
+  tag.className = 'tag ' + cat;
+  tag.textContent = cat.toUpperCase();
+
+  var ts = data.techStack || {};
+
+  var CATEGORY_META = {
+    primary:          { label: 'Core / Framework',    iconClass: 'frontend',      emoji: '\u2699\uFE0F' },
+    database:         { label: 'Database',            iconClass: 'database',      emoji: '\uD83D\uDDC4\uFE0F' },
+    devops:           { label: 'DevOps / Infra',      iconClass: 'devops',        emoji: '\uD83D\uDE80' },
+    tools:            { label: 'Tools & Libraries',   iconClass: 'tools',         emoji: '\uD83D\uDD27' },
+    scripting:        { label: 'Scripting',           iconClass: 'scripting',     emoji: '\uD83D\uDCDC' },
+    serialization:    { label: 'Serialization',       iconClass: 'serialization', emoji: '\uD83D\uDD04' },
+    monitoring_tools: { label: 'Monitoring',          iconClass: 'monitoring',    emoji: '\uD83D\uDCCA' },
+    crash_reporting:  { label: 'Crash Reporting',     iconClass: 'crash',         emoji: '\uD83D\uDEA8' },
+    messaging:        { label: 'Messaging',           iconClass: 'messaging',     emoji: '\uD83D\uDCE8' },
+    blockchain:       { label: 'Blockchain',          iconClass: 'blockchain',    emoji: '\u26D3\uFE0F' },
+    orm:              { label: 'ORM',                 iconClass: 'orm',           emoji: '\uD83D\uDCC0' },
+    market_maker:     { label: 'Market Maker',        iconClass: 'market',        emoji: '\uD83D\uDCC8' }
+  };
+
+  var preferredOrder = ['primary', 'database', 'devops', 'tools'];
+  var activeCategories = [];
+
+  preferredOrder.forEach(function(key) {
+    if (Array.isArray(ts[key]) && ts[key].length > 0) {
+      activeCategories.push(key);
+    }
+  });
+
+  Object.keys(ts).forEach(function(key) {
+    if (key === 'all' || preferredOrder.indexOf(key) !== -1) return;
+    if (Array.isArray(ts[key]) && ts[key].length > 0) {
+      activeCategories.push(key);
+    }
+  });
+
+  var colCount = activeCategories.length || 1;
+  var grid = document.getElementById('grid');
+
+  if (colCount <= 2) {
+    grid.style.gridTemplateColumns = 'repeat(' + colCount + ', minmax(300px, 600px))';
+    grid.style.justifyContent = 'center';
+  } else if (colCount <= 4) {
+    grid.style.gridTemplateColumns = 'repeat(' + colCount + ', 1fr)';
+  } else {
+    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
+  }
+
+  activeCategories.forEach(function(key) {
+    var meta = CATEGORY_META[key] || {
+      label: key.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); }),
+      iconClass: 'default',
+      emoji: '\uD83D\uDD35'
+    };
+    var items = ts[key];
+
+    var col = document.createElement('div');
+    col.className = 'category';
+    col.innerHTML = '<div class="category-header"><span class="icon ' + meta.iconClass + '">' + meta.emoji + '</span>' + meta.label + '</div>';
+
+    var list = document.createElement('div');
+    list.className = 'tech-list';
+    items.forEach(function(item) {
+      var el = document.createElement('div');
+      el.className = 'tech-item';
+      el.innerHTML = '<span class="dot ' + meta.iconClass + '"></span>' + item;
+      list.appendChild(el);
+    });
+    col.appendChild(list);
+    grid.appendChild(col);
+  });
+
+  var allCount = (ts.all || []).length;
+  document.getElementById('totalBadge').innerHTML =
+    '<strong>' + allCount + '</strong> technologies across <strong>' + colCount + '</strong> categories';
+</script>
+</body>
+</html>

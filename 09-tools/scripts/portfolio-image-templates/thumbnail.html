@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=800">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+  body {
+    width: 800px;
+    height: 450px;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: #fff;
+  }
+
+  .card {
+    width: 800px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card { background: linear-gradient(135deg, var(--gs, #3B82F6), var(--ge, #2563EB)); }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.18);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+  }
+
+  .title {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tech-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tech-tag {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .monogram {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    font-size: 140px;
+    font-weight: 900;
+    opacity: 0.06;
+    color: #fff;
+    z-index: 0;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="monogram" id="monogram"></div>
+  <span class="badge" id="badge"></span>
+  <h1 class="title" id="title"></h1>
+  <p class="subtitle" id="subtitle"></p>
+  <div class="tech-row" id="techRow"></div>
+  <div class="bottom-bar"></div>
+</div>
+
+<script>
+  var data = window.PROJECT_DATA || {};
+  var colors = data.colors || {};
+  var root = document.documentElement;
+  root.style.setProperty('--gs', colors.gradientStart || '#3B82F6');
+  root.style.setProperty('--ge', colors.gradientEnd || '#2563EB');
+  var card = document.getElementById('card');
+  document.getElementById('badge').textContent = (data.category || 'web').toUpperCase();
+  document.getElementById('title').textContent = data.title || 'Project';
+  document.getElementById('subtitle').textContent = data.subtitle || '';
+  document.getElementById('monogram').textContent = (data.title || 'P')[0].toUpperCase();
+
+  var techs = (data.techStack || []).slice(0, 5);
+  var row = document.getElementById('techRow');
+  techs.forEach(function(t) {
+    var tag = document.createElement('span');
+    tag.className = 'tech-tag';
+    tag.textContent = t;
+    row.appendChild(tag);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.015) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 1920px;
+    height: 1080px;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #F8FAFC;
+  }
+
+  .header .tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tag.mobile { background: #7C3AED; color: #fff; }
+  .tag.web { background: #2563EB; color: #fff; }
+  .tag.infrastructure { background: #059669; color: #fff; }
+  .tag.fullstack { background: #6366F1; color: #fff; }
+  .tag.tool { background: #F59E0B; color: #1E293B; }
+
+  .header .subtitle {
+    font-size: 16px;
+    color: #94A3B8;
+    margin-left: auto;
+  }
+
+  .content {
+    flex: 1;
+    display: flex;
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .structure-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1E293B;
+    flex-shrink: 0;
+  }
+
+  .list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .structure-box {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #CBD5E1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .structure-box .path {
+    font-family: 'Courier New', monospace;
+    color: var(--accent, #60A5FA);
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .structure-box .desc {
+    color: #94A3B8;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .modules-section {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .module-card {
+    background: linear-gradient(135deg, #1E293B 0%, #1a2332 100%);
+    border: 1px solid #334155;
+    border-left: 4px solid;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .module-card { border-left-color: var(--accent, #60A5FA); }
+
+  .module-card .module-path {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--accent, #60A5FA);
+  }
+
+  .module-card .module-desc {
+    color: #94A3B8;
+    font-size: 13px;
+  }
+
+  .pattern-badge {
+    position: absolute;
+    bottom: 40px;
+    right: 80px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    color: #64748B;
+    z-index: 1;
+  }
+
+  .pattern-badge strong {
+    color: #F1F5F9;
+  }
+</style>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="header">
+    <h1 id="title">Architecture</h1>
+    <span class="tag" id="tag"></span>
+    <span class="subtitle" id="pattern"></span>
+  </div>
+  <div class="content">
+    <div class="structure-section">
+      <div class="section-title">Project Structure</div>
+      <div class="list-container" id="structureList"></div>
+    </div>
+    <div class="modules-section">
+      <div class="section-title">Key Modules</div>
+      <div class="list-container" id="moduleList"></div>
+    </div>
+  </div>
+</div>
+<div class="pattern-badge" id="patternBadge"></div>
+
+<script>
+  var data = window.PROJECT_DATA || {};
+  var cat = data.category || 'web';
+  var colors = data.colors || {};
+  document.documentElement.style.setProperty('--accent', colors.accent || '#60A5FA');
+
+  document.getElementById('title').textContent = (data.title || 'Project') + ' Architecture';
+  var tag = document.getElementById('tag');
+  tag.className = 'tag ' + cat;
+  tag.textContent = cat.toUpperCase();
+  document.getElementById('pattern').textContent = data.architecture?.pattern || '';
+  document.getElementById('patternBadge').innerHTML = '<strong>Pattern:</strong> ' + (data.architecture?.pattern || 'N/A');
+
+  var structures = data.architecture?.structure || [];
+  var modules = (data.architecture?.key_modules || []).slice(0, 7);
+  var maxItems = Math.max(structures.length, modules.length);
+
+  var baseGap = maxItems <= 4 ? 20 : maxItems <= 6 ? 14 : 10;
+
+  var structList = document.getElementById('structureList');
+  structList.style.gap = baseGap + 'px';
+  structures.forEach(function(s) {
+    var parts = s.split(' \u2014 ');
+    var box = document.createElement('div');
+    box.className = 'structure-box';
+    if (maxItems >= 7) {
+      box.style.padding = '14px 20px';
+    }
+    box.innerHTML = '<div class="path">' + (parts[0] || s) + '</div>' +
+      (parts[1] ? '<div class="desc">' + parts[1] + '</div>' : '');
+    structList.appendChild(box);
+  });
+
+  var modList = document.getElementById('moduleList');
+  modList.style.gap = baseGap + 'px';
+  modules.forEach(function(m) {
+    var parts = m.split(' \u2014 ');
+    var card = document.createElement('div');
+    card.className = 'module-card ' + cat;
+    if (maxItems >= 7) {
+      card.style.padding = '12px 16px';
+    }
+    card.innerHTML = '<div class="module-path">' + (parts[0] || m) + '</div>' +
+      (parts[1] ? '<div class="module-desc">' + parts[1] + '</div>' : '');
+    modList.appendChild(card);
+  });
+</script>
+</body>
+</html>
