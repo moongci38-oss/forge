@@ -4,6 +4,34 @@
 
 ---
 
+## 사용 환경
+
+이 워크스페이스는 두 가지 환경에서 사용된다:
+
+| 환경 | 사용자 | 주요 작업 |
+|------|--------|----------|
+| **Claude Code (CLI)** | 개발자 | Agent Teams, 스크립트 실행, Git 작업 |
+| **Claude Desktop Cowork** | 비개발자 | 리서치, 문서 작성, 콘텐츠 기획 |
+
+### Cowork 사용자 행동 가이드
+- 기술 용어(Agent Teams, 서브에이전트, MCP) 대신 일반 용어로 설명
+- 병렬 작업 자동 판단 — 사용자에게 "Agent Teams 사용할까요?" 묻지 않음
+- 파일 경로 제안 시 전체 경로 대신 폴더 이름으로 안내
+- 에러 발생 시 기술 로그 대신 문제 요약 + 해결 방안 제시
+
+---
+
+## 행동 원칙
+
+이 워크스페이스는 **비개발자도 사용**하므로, 행동 원칙을 보수적으로 적용한다:
+
+- 외부 서비스 연동, 파일 대량 수정, 데이터 삭제 등은 반드시 확인 후 수행
+- 리서치 결과는 출처와 신뢰도를 반드시 표기
+- 검증 없는 데이터를 사실로 단정하지 않음
+- B 영역(finance/legal/admin) 접근 시 항상 경고
+
+---
+
 ## Workspace Context
 
 **소유자**: 1인 기업 운영자 (풀스택 개발자 겸 사업가)
@@ -51,7 +79,7 @@ business/
 - 민감 자료(재무, 법무)는 `06-finance/`, `07-legal/`, `08-admin/` 하위에만 저장
 - 스킬 관리: `bash scripts/manage-skills.sh {list|enable|disable}`
 - 컴포넌트 관리: `bash scripts/manage-components.sh {list|enable|disable}`
-- **병렬 처리 가능한 작업은 무조건 Agent Teams 사용** → 실행 계획 수립 시 항상 먼저 고려
+- 병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토 → 실행 계획 수립 시 먼저 고려
 
 ### Don'ts
 - 이 워크스페이스에서 코드 프로젝트 개발 금지 (개발은 portfolio-project에서)
@@ -79,14 +107,14 @@ business/
 > 실험적 기능 활성화됨 (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`)
 > 상세 가이드: `docs/tech/Opus_4_6_신기능_심층_가이드_추가_섹션.md`
 
-### 병렬 처리 원칙 (필수)
+### 병렬 처리 원칙
 
-> **병렬 처리가 가능한 모든 작업은 Agent Teams를 사용한다.**
-> 실행 계획 수립 시 가장 먼저 병렬화 가능 여부를 판단하고, 가능하면 무조건 Agent Teams로 설계한다.
+> 병렬 처리가 가능한 작업은 Agent Teams 사용을 우선 검토한다.
+> 실행 계획 수립 시 가장 먼저 병렬화 가능 여부를 판단한다.
 
 | 상황 | 선택 |
 |------|------|
-| 독립적으로 나눌 수 있는 작업 2개 이상 | **Agent Teams** |
+| 독립적으로 나눌 수 있는 작업 2개 이상 | **Agent Teams** (우선 검토) |
 | 단일 순차 작업 | Task 도구 또는 직접 실행 |
 | 프로덕션 크리티컬 (롤백 필요) | Task 도구 + Watchdog 패턴 |
 
@@ -158,7 +186,9 @@ claude plugin disable {plugin-name}
 @.claude/rules/file-naming.md
 @.claude/rules/security.md
 @.claude/rules/agent-teams.md
+@.claude/rules/research-methodology.md
+@.claude/rules/cross-project-pipeline.md
 
 ---
 
-*Last Updated: 2026-02-18 (Agent Teams 추가)*
+*Last Updated: 2026-02-20 (Cowork 비개발자 대응 + 양방향 파이프라인 + 톤 완화)*
