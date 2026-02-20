@@ -19,6 +19,50 @@
 - 파일 경로 제안 시 전체 경로 대신 폴더 이름으로 안내
 - 에러 발생 시 기술 로그 대신 문제 요약 + 해결 방안 제시
 
+### Cowork 환경: MCP 서버 → 내장 도구 매핑
+
+Cowork에서는 `.mcp.json`의 MCP 서버가 직접 실행되지 않는다. 아래 매핑 테이블에 따라 대체 도구를 사용한다.
+
+| Claude Code (MCP 서버) | Cowork (내장 도구) | 비고 |
+|----------------------|-------------------|------|
+| `mcp__filesystem__*` | Read, Write, Edit, Glob, Grep, Bash(ls) | 파일 읽기/쓰기/검색 |
+| `mcp__playwright__*` | WebFetch, WebSearch, Claude in Chrome | 웹 자동화/스크린샷 |
+| `mcp__sequential-thinking__*` | Task(Plan agent) + TodoWrite | 복잡한 전략 수립 시 계획 모드 활용 |
+| `mcp__memory__*` | 대화 컨텍스트 유지 (세션 내) | Cowork는 세션 간 메모리 없음 — 중요 결론은 파일로 저장 |
+| `mcp__notion__*` | Notion 커넥터 플러그인 | 동일하게 사용 가능 |
+
+### Cowork 환경: Hooks → 규칙 기반 대체
+
+Cowork에서는 bash hooks가 실행되지 않으므로, 아래 규칙을 **반드시** 준수한다.
+
+**[block-sensitive-files 대체]** 민감 영역 파일 보호:
+- `06-finance/`, `07-legal/`, `08-admin/insurance/`, `08-admin/freelancers/` 내 파일은 읽기/쓰기/편집 **절대 금지**
+- 해당 경로 접근 요청 시 거부하고, 직접 편집기 사용을 안내
+
+**[require-date-prefix 대체]** 파일명 규칙 강제:
+- `docs/` 하위 새 `.md` 파일 생성 시 반드시 `YYYY-MM-DD-{name}.md` 형식 사용
+- 예외: CLAUDE.md, README.md, index.md, subscriptions.md, domains.md, terms-of-service.md, privacy-policy.md
+
+**[no-force-push 대체]** Git 안전 규칙:
+- `git push --force` 또는 `-f` 명령은 main/master 브랜치 대상으로 절대 실행 금지
+- feature/, fix/ 등 작업 브랜치만 허용
+
+**[session-context 대체]** 세션 시작 체크리스트:
+- 세션 시작 시 Track A(제품사업) 우선, Track B 접근 금지 원칙 상기
+- 새 파일 생성 시 날짜 prefix 규칙 적용
+- Cowork에서는 Memory MCP 불가 → 이전 작업 내용은 관련 폴더의 기존 파일을 참조
+
+### Cowork 환경: Agent Teams → Task 도구 대체
+
+| Claude Code (Agent Teams) | Cowork (Task 도구) |
+|--------------------------|-------------------|
+| Fan-out/Fan-in (tmux 병렬) | Task 도구 다중 호출 (동시 실행) |
+| Pipeline (순차 의존) | Task 도구 순차 호출 |
+| Competing Hypotheses | Task 도구 병렬 → 결과 비교 |
+| Watchdog 모니터링 | 해당 없음 (Cowork에서 프로덕션 변경 금지) |
+
+> Cowork에서 2개 이상 독립 작업 발견 시, Task 도구를 병렬로 호출하여 처리한다.
+
 ---
 
 ## 행동 원칙
