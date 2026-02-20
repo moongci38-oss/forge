@@ -87,7 +87,9 @@
       "Bash(claude mcp:*)",
       "mcp__playwright__browser_run_code",
       "Bash(powershell -File:*)",
-      "mcp__brave-search__brave_web_search"
+      "mcp__brave-search__brave_web_search",
+      "Bash(cmd.exe /c \"dir Z:\\\\home\\\\damools\\\\mywsl_workspace\\\\portfolio-project 2>&1\")",
+      "Bash(cmd.exe /c \"if exist Z:\\\\home\\\\damools\\\\mywsl_workspace\\\\portfolio-project \\(dir /b Z:\\\\home\\\\damools\\\\mywsl_workspace\\\\portfolio-project\\) else \\(echo NOT_FOUND\\)\")"
     ]
   },
   "enableAllProjectMcpServers": true,

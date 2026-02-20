@@ -5,52 +5,101 @@
 <meta name="viewport" content="width=1920">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
   body {
     width: 1920px;
     height: 1080px;
     overflow: hidden;
     font-family: 'Inter', 'Segoe UI', sans-serif;
-    background: #0F172A;
+    background: #09090B;
     color: #E2E8F0;
   }
 
+  /* Matrix-like code rain pattern */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(circle at 50% 100%, rgba(255,255,255,0.012) 0%, transparent 50%);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 24px,
+        rgba(255,255,255,0.008) 24px,
+        rgba(255,255,255,0.008) 25px
+      );
     pointer-events: none;
+  }
+
+  /* Scanline effect */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    opacity: 0.3;
   }
 
   .container {
     width: 1920px;
     height: 1080px;
-    padding: 60px 80px;
+    padding: 56px 80px;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
+  /* Top glow bar */
+  .top-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 10%, var(--accent, #60A5FA) 50%, transparent 90%);
+    box-shadow: 0 0 30px var(--accent, #60A5FA), 0 0 60px var(--accent, #60A5FA);
+    opacity: 0.6;
+    z-index: 5;
+  }
+
+  /* Header */
   .header {
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
     position: relative;
     z-index: 1;
   }
 
-  .header h1 { font-size: 36px; font-weight: 800; color: #F8FAFC; }
+  .header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #F8FAFC;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 .prompt {
+    color: var(--accent, #60A5FA);
+    opacity: 0.7;
+  }
 
   .tag {
     padding: 6px 14px;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
   }
   .tag.mobile { background: #7C3AED; color: #fff; }
   .tag.web { background: #2563EB; color: #fff; }
@@ -58,78 +107,98 @@
   .tag.fullstack { background: #6366F1; color: #fff; }
   .tag.tool { background: #F59E0B; color: #1E293B; }
 
+  /* Timeline */
   .timeline {
     flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
-    padding-left: 40px;
+    padding-left: 44px;
     z-index: 1;
   }
 
+  /* Neon timeline line */
   .timeline::before {
     content: '';
     position: absolute;
     left: 15px;
     top: 0;
     bottom: 0;
-    width: 3px;
+    width: 2px;
     border-radius: 2px;
-  }
-
-  .timeline::before {
-    background: linear-gradient(180deg, var(--gs, #3B82F6), var(--ge, #2563EB));
-    box-shadow: 0 0 20px rgba(255,255,255,0.08);
+    background: var(--accent, #60A5FA);
+    box-shadow:
+      0 0 8px var(--accent, #60A5FA),
+      0 0 20px var(--accent, #60A5FA),
+      0 0 40px rgba(96,165,250,0.3);
+    opacity: 0.7;
   }
 
   .challenge-item {
     position: relative;
-    background: #1E293B;
-    border: 1px solid #334155;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 14px;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
+    backdrop-filter: blur(4px);
   }
 
+  /* Neon glow dot */
   .challenge-item::before {
     content: '';
     position: absolute;
-    left: -33px;
+    left: -37px;
     top: 50%;
     transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    border: 3px solid;
-    background: #0F172A;
+    background: var(--accent, #60A5FA);
+    box-shadow:
+      0 0 6px var(--accent, #60A5FA),
+      0 0 12px var(--accent, #60A5FA),
+      0 0 24px rgba(96,165,250,0.4);
   }
 
-  .challenge-item::before { border-color: var(--accent, #60A5FA); }
+  /* Subtle top border glow */
+  .challenge-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent, #60A5FA), transparent 60%);
+    opacity: 0.3;
+  }
 
   .challenge-watermark {
     position: absolute;
-    top: 12px;
-    right: 20px;
-    font-size: 64px;
+    top: 8px;
+    right: 16px;
+    font-size: 56px;
     font-weight: 900;
-    opacity: 0.03;
+    opacity: 0.04;
     color: #fff;
     pointer-events: none;
     line-height: 1;
+    font-family: 'JetBrains Mono', monospace;
   }
 
   .challenge-number {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    color: var(--accent, #60A5FA);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    text-shadow: 0 0 10px var(--accent, #60A5FA);
   }
-
-  .challenge-number { color: var(--accent, #60A5FA); }
 
   .challenge-text {
     line-height: 1.7;
@@ -137,7 +206,7 @@
   }
 
   .challenge-keywords {
-    margin-top: 12px;
+    margin-top: 10px;
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
@@ -146,21 +215,42 @@
   .keyword {
     padding: 4px 12px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    background: rgba(255,255,255,0.06);
-    color: #94A3B8;
-    border: 1px solid #334155;
+    background: rgba(255,255,255,0.04);
+    color: var(--accent, #60A5FA);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
   }
+
+  /* Decorative code fragments */
+  .deco-code {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 1px;
+  }
+  .deco-code-1 { bottom: 20px; right: 80px; }
+  .deco-code-2 { top: 20px; right: 200px; }
 </style>
 </head>
 <body>
 <div class="container">
+  <div class="top-glow"></div>
+
   <div class="header">
-    <h1 id="title">Technical Challenges</h1>
+    <h1 id="title"><span class="prompt">$</span> Technical Challenges</h1>
     <span class="tag" id="tag"></span>
   </div>
+
   <div class="timeline" id="timeline"></div>
+
+  <div class="deco-code deco-code-1" id="decoCode1"></div>
+  <div class="deco-code deco-code-2" id="decoCode2"></div>
 </div>
 
 <script>
@@ -168,37 +258,28 @@
   var cat = data.category || 'web';
   var colors = data.colors || {};
   var root = document.documentElement;
-  root.style.setProperty('--gs', colors.gradientStart || '#3B82F6');
-  root.style.setProperty('--ge', colors.gradientEnd || '#2563EB');
   root.style.setProperty('--accent', colors.accent || '#60A5FA');
-  document.getElementById('title').textContent = (data.title || 'Project') + ' Technical Challenges';
+  root.style.setProperty('--primary', colors.primary || '#3B82F6');
+
+  document.getElementById('title').innerHTML =
+    '<span class="prompt">$</span> ' + (data.title || 'Project') + ' Technical Challenges';
   var tag = document.getElementById('tag');
   tag.className = 'tag ' + cat;
   tag.textContent = cat.toUpperCase();
 
   var timeline = document.getElementById('timeline');
-  timeline.className = 'timeline';
-
   var challenges = data.technical_challenges_ko || [];
   var count = challenges.length;
 
   var cardPadding, textSize, gap;
   if (count <= 3) {
-    cardPadding = '36px 44px';
-    textSize = '18px';
-    gap = '28px';
+    cardPadding = '32px 40px'; textSize = '17px'; gap = '24px';
   } else if (count <= 4) {
-    cardPadding = '28px 36px';
-    textSize = '17px';
-    gap = '22px';
+    cardPadding = '26px 34px'; textSize = '16px'; gap = '20px';
   } else if (count <= 5) {
-    cardPadding = '24px 32px';
-    textSize = '16px';
-    gap = '18px';
+    cardPadding = '22px 30px'; textSize = '15px'; gap = '16px';
   } else {
-    cardPadding = '20px 28px';
-    textSize = '15px';
-    gap = '14px';
+    cardPadding = '18px 26px'; textSize = '14px'; gap = '12px';
   }
 
   timeline.style.gap = gap;
@@ -215,7 +296,7 @@
 
     item.innerHTML =
       '<div class="challenge-watermark">' + String(i + 1).padStart(2, '0') + '</div>' +
-      '<div class="challenge-number">CHALLENGE #' + (i + 1) + '</div>' +
+      '<div class="challenge-number">CHALLENGE_' + String(i + 1).padStart(2, '0') + '</div>' +
       '<div class="challenge-text" style="font-size:' + textSize + '">' + c + '</div>' +
       (keywords.length > 0 ?
         '<div class="challenge-keywords">' +
@@ -224,6 +305,12 @@
 
     timeline.appendChild(item);
   });
+
+  // Decorative code
+  document.getElementById('decoCode1').textContent =
+    'process.exit(0) // ' + (data.slug || 'app') + ' challenges resolved';
+  document.getElementById('decoCode2').textContent =
+    '// solved: ' + challenges.length + ' technical challenges';
 </script>
 </body>
 </html>
