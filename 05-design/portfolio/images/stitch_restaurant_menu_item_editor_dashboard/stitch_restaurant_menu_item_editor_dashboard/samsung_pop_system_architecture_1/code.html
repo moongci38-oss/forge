@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Samsung POP System Architecture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#00aad2", // Cyan color for primary branding
+                        "background-light": "#f3f4f6",
+                        "background-dark": "#1a1b26",
+                        "card-light": "#ffffff",
+                        "card-dark": "#24283b",
+                        "text-light": "#1f2937",
+                        "text-dark": "#c0caf5",
+                        "section-client": "#00a9d1",
+                        "section-server": "#5b5fcf",
+                        "section-data": "#10a37f", // Using a nice green close to image
+                        "section-infra": "#5d6d7e",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        mono: ["Fira Code", "monospace"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'glow': '0 0 10px rgba(0, 170, 210, 0.2)',
+                    }
+                },
+            },
+        };
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        .arrow-down {
+            width: 0; 
+            height: 0; 
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #cbd5e1;
+        }
+        .dark .arrow-down {
+            border-top-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen p-4 md:p-8 flex justify-center items-start text-text-light dark:text-text-dark transition-colors duration-300">
+<div class="max-w-7xl w-full bg-white dark:bg-card-dark rounded-xl shadow-lg dark:shadow-none p-6 md:p-10 border border-gray-100 dark:border-gray-700 relative overflow-hidden">
+<div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-10 border-l-4 border-primary pl-4">
+<h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                Samsung POP Order Management System Architecture
+            </h1>
+<span class="bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                Fullstack
+            </span>
+</div>
+<div class="flex flex-col gap-6 relative">
+<div class="group relative">
+<div class="w-full bg-section-client text-white p-3 rounded-lg shadow-md flex items-center gap-3 mb-4 z-10 relative">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold">C</div>
+<span class="font-bold tracking-wide text-sm md:text-base">CLIENT</span>
+<span class="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-auto">(1)</span>
+</div>
+<div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700 min-h-[100px] flex items-center">
+<div class="w-full md:w-1/3 lg:w-1/4">
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-client rounded-r shadow-soft p-3 hover:shadow-md transition-shadow">
+<h3 class="text-section-client font-bold text-sm mb-1 code-font">WEB-INF/views/</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">JSP 뷰</p>
+</div>
+</div>
+</div>
+<div class="absolute left-1/2 transform -translate-x-1/2 -bottom-5 z-0 flex flex-col items-center">
+<span class="material-icons text-gray-300 dark:text-gray-600 text-2xl">keyboard_double_arrow_down</span>
+</div>
+</div>
+<div class="group relative mt-2">
+<div class="w-full bg-section-server text-white p-3 rounded-lg shadow-md flex items-center gap-3 mb-4 z-10 relative">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold">S</div>
+<span class="font-bold tracking-wide text-sm md:text-base">SERVER / API</span>
+<span class="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-auto">(9)</span>
+</div>
+<div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-server rounded-r shadow-soft p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">controllers/</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">Spring MVC 컨트롤러 (Main, Budget, Order, Notice, User,...)</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-server rounded-r shadow-soft p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">service/</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">비즈니스 로직 서비스 레이어</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border border-dashed border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">BudgetController</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">HQ/RHQ/Subsidiary/Country 4단계 예산 편성</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-l-2 border-section-server rounded-r shadow-soft p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">OrderController</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">제품 주문 생성 및 승인 플로우</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-dashed border border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">MainController</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">외부 쇼핑몰 API 연동 상품 카탈로그 조회</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-dashed border border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">MailService</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">예산 요청/승인 이메일 자동 발송</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-dashed border border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">ExcelUtil (Apache POI)</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">예산 내역 및 주문 목록 엑셀 다운로드</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-dashed border border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">apiService</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">외부 smpop.net REST API 클라이언트</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-dashed border border-section-server/30 rounded shadow-sm p-3 hover:shadow-md transition-shadow h-full">
+<h3 class="text-section-server font-bold text-xs mb-1 code-font">LogService</h3>
+<p class="text-[10px] leading-tight text-gray-500 dark:text-gray-400">사용자 액션 로그 기록</p>
+</div>
+</div>
+<div class="absolute left-1/2 transform -translate-x-1/2 -bottom-5 z-0 flex flex-col items-center">
+<span class="material-icons text-gray-300 dark:text-gray-600 text-2xl">keyboard_double_arrow_down</span>
+</div>
+</div>
+<div class="group relative mt-2">
+<div class="w-full bg-section-data text-white p-3 rounded-lg shadow-md flex items-center gap-3 mb-4 z-10 relative">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold">D</div>
+<span class="font-bold tracking-wide text-sm md:text-base">DATA</span>
+<span class="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-auto">(3)</span>
+</div>
+<div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-data rounded-r shadow-soft p-3 hover:shadow-md transition-shadow">
+<h3 class="text-section-data font-bold text-sm mb-1 code-font">mapper/</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">MyBatis 매퍼 인터페이스</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-data rounded-r shadow-soft p-3 hover:shadow-md transition-shadow">
+<h3 class="text-section-data font-bold text-sm mb-1 code-font">model/</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">도메인 VO/모델 클래스</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-data rounded-r shadow-soft p-3 hover:shadow-md transition-shadow">
+<h3 class="text-section-data font-bold text-sm mb-1 code-font">resources/mapper/</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">MyBatis XML SQL 매퍼</p>
+</div>
+</div>
+<div class="absolute left-1/2 transform -translate-x-1/2 -bottom-5 z-0 flex flex-col items-center">
+<span class="material-icons text-gray-300 dark:text-gray-600 text-2xl">keyboard_double_arrow_down</span>
+</div>
+</div>
+<div class="group relative mt-2">
+<div class="w-full bg-section-infra text-white p-3 rounded-lg shadow-md flex items-center gap-3 mb-4 z-10 relative">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold">I</div>
+<span class="font-bold tracking-wide text-sm md:text-base">INFRASTRUCTURE</span>
+<span class="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-auto">(1)</span>
+</div>
+<div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700 min-h-[100px] flex items-center">
+<div class="w-full md:w-1/3 lg:w-1/4">
+<div class="bg-white dark:bg-gray-800 border-l-4 border-section-infra rounded-r shadow-soft p-3 hover:shadow-md transition-shadow">
+<h3 class="text-section-infra font-bold text-sm mb-1 code-font">resources/</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">Bootstrap 3, AdminLTE 프론트엔드 에셋</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-end">
+<div class="bg-primary text-white text-xs md:text-sm font-semibold px-6 py-3 rounded-full shadow-glow flex items-center gap-2">
+<span>Spring MVC (Server-Side Rendering) + External REST API 연동</span>
+</div>
+</div>
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#9ca3af 1px, transparent 1px); background-size: 20px 20px;">
+</div>
+</div>
+
+</body></html>

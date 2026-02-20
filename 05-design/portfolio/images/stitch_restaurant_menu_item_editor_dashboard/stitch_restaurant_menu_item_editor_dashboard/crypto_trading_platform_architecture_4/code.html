@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>crypto-gallery-01</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4af37", // Gold
+                        "primary-dim": "#aa8c2c",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#0f0f0f",
+                        "surface-dark": "#1a1a1a",
+                        "surface-darker": "#0a0a0a",
+                        "accent": "#ffd700",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #333 1px, transparent 1px), linear-gradient(to bottom, #333 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37; 
+        }
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .connection-line {
+            stroke-dasharray: 8;
+            animation: dash 60s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+        .glowing-text {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        .node-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+        .node-glow:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display overflow-hidden">
+<div class="relative flex h-screen w-full flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#333] px-6 py-4 bg-background-dark/90 backdrop-blur-md z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary flex items-center justify-center bg-primary/10 rounded-lg border border-primary/20">
+<span class="material-symbols-outlined text-3xl">currency_bitcoin</span>
+</div>
+<div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-tight">CryptoArchitect</h2>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#d4af37]"></span>
+<span class="text-xs text-primary font-medium tracking-widest uppercase">Gallery 01</span>
+</div>
+</div>
+</div>
+<div class="hidden md:flex flex-1 justify-center">
+<div class="flex items-center gap-1 bg-[#1a1a1a] p-1 rounded-full border border-[#333]">
+<a class="px-5 py-2 rounded-full bg-primary text-background-dark text-sm font-bold shadow-[0_0_15px_rgba(212,175,55,0.4)]" href="#">Architecture</a>
+<a class="px-5 py-2 rounded-full text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Topology</a>
+<a class="px-5 py-2 rounded-full text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Logs</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-[#333]">
+<span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Latency</span>
+<span class="text-sm text-white font-mono">12ms</span>
+<span class="material-symbols-outlined text-primary text-sm">trending_down</span>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-[#333] text-white hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-[#333]" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0jBxIAJSIB1gWSfKBYk87BDgAlv5-DlxUrSDnQvaBAFR0iz035AecncBixKvuquzEP1FDk-6ulJ7HL8ZMcbJiIiKi-b_ncPJrpM1t_Ukde1H51vC1-QkyIlDb_0_2pl1lHifHObYSOyi-J6NNyDDl9mASeS6RAI_NyNlvSOSoSZJq6FOPBUoGDIf4ucdxPVOmLbonqYvP4CDx5RUIPM3sly9HtV1FYol5Mbkh8IMJLnFPBeqEfCxlICrYmIa5D936c-bzKBbR');"></div>
+</div>
+</header>
+<main class="flex-1 relative overflow-hidden bg-background-dark flex items-center justify-center">
+<div class="absolute inset-0 bg-[size:40px_40px] bg-grid-pattern opacity-10 pointer-events-none"></div>
+<div class="absolute top-6 left-6 z-20 flex flex-col gap-3">
+<div class="flex flex-col gap-1 mb-4">
+<div class="inline-flex w-fit px-3 py-1 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-bold tracking-widest uppercase mb-1">
+                    HFT ARCHITECTURE
+                </div>
+<h1 class="text-3xl font-bold text-white tracking-tight glowing-text">Trading Platform Architecture</h1>
+<p class="text-slate-400 text-sm max-w-sm">Optimized diagram for high-throughput trading systems.</p>
+</div>
+</div>
+<div class="absolute bottom-6 left-6 z-20 flex gap-2">
+<button class="px-4 py-2 bg-surface-dark border border-[#333] rounded-lg text-white text-sm font-medium hover:border-primary/50 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+<button class="px-4 py-2 bg-surface-dark border border-[#333] rounded-lg text-white text-sm font-medium hover:border-primary/50 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<button class="px-4 py-2 bg-primary text-background-dark rounded-lg text-sm font-bold hover:bg-white transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+<span class="material-symbols-outlined text-lg">download</span> Export PNG
+            </button>
+</div>
+<div class="absolute bottom-6 right-6 z-20 glass-panel p-4 rounded-xl flex flex-col gap-3 min-w-[200px]">
+<h3 class="text-white text-xs font-bold uppercase tracking-wider mb-1">Connections</h3>
+<div class="flex items-center gap-3">
+<div class="w-8 h-0.5 bg-primary shadow-[0_0_8px_#d4af37]"></div>
+<span class="text-slate-300 text-xs">WebSocket (WSS)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-0.5 bg-blue-400 opacity-50"></div>
+<span class="text-slate-300 text-xs">REST HTTPS</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-0.5 border-t border-dashed border-slate-500"></div>
+<span class="text-slate-300 text-xs">Asynchronous</span>
+</div>
+</div>
+<div class="relative w-[95%] max-w-[1800px] h-[75vh] bg-surface-darker rounded-[2rem] border border-[#333] shadow-2xl overflow-hidden flex items-center justify-center p-8">
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-0">
+<defs>
+<filter id="glow">
+<feGaussianBlur result="coloredBlur" stdDeviation="2.5"></feGaussianBlur>
+<feMerge>
+<feMergeNode in="coloredBlur"></feMergeNode>
+<feMergeNode in="SourceGraphic"></feMergeNode>
+</feMerge>
+</filter>
+</defs>
+<path class="connection-line" d="M 15% 25% C 20% 25%, 20% 50%, 25% 50%" fill="none" filter="url(#glow)" opacity="0.8" stroke="#d4af37" stroke-width="2"></path>
+<path class="connection-line" d="M 15% 50% L 25% 50%" fill="none" filter="url(#glow)" opacity="0.8" stroke="#d4af37" stroke-width="2"></path>
+<path class="connection-line" d="M 15% 75% C 20% 75%, 20% 50%, 25% 50%" fill="none" filter="url(#glow)" opacity="0.8" stroke="#d4af37" stroke-width="2"></path>
+<path class="connection-line" d="M 33% 50% L 40% 50%" fill="none" filter="url(#glow)" stroke="#d4af37" stroke-width="2"></path>
+<path class="connection-line" d="M 52% 50% L 60% 50%" fill="none" filter="url(#glow)" stroke="#d4af37" stroke-width="3"></path>
+<path d="M 52% 50% C 55% 50%, 55% 25%, 60% 25%" fill="none" opacity="0.5" stroke="#60a5fa" stroke-dasharray="5,5" stroke-width="1.5"></path>
+<path d="M 52% 50% C 55% 50%, 55% 75%, 60% 75%" fill="none" opacity="0.5" stroke="#60a5fa" stroke-dasharray="5,5" stroke-width="1.5"></path>
+<path class="connection-line" d="M 72% 50% L 80% 50%" fill="none" filter="url(#glow)" stroke="#d4af37" stroke-width="2"></path>
+<path d="M 72% 50% C 75% 50%, 75% 80%, 80% 80%" fill="none" opacity="0.4" stroke="#d4af37" stroke-dasharray="4,4" stroke-width="1"></path>
+<path d="M 72% 25% C 75% 25%, 75% 20%, 80% 20%" fill="none" opacity="0.4" stroke="#60a5fa" stroke-dasharray="4,4" stroke-width="1"></path>
+</svg>
+<div class="relative w-full h-full grid grid-cols-12 gap-6 z-10 px-8 py-4">
+<div class="col-span-2 flex flex-col justify-between h-full py-16 pr-2">
+<div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-4 pl-1 text-center w-full absolute top-8 left-0 col-span-2">Client Access Layer</div>
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-purple-500 hover:bg-white/5 transition-all cursor-pointer node-glow flex items-center gap-3">
+<div class="bg-purple-500/10 p-2 rounded-lg"><span class="material-symbols-outlined text-purple-400 text-xl">laptop_mac</span></div>
+<div>
+<div class="text-white text-sm font-bold">Web App</div>
+<div class="text-[10px] text-slate-400">React / Next.js</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-blue-500 hover:bg-white/5 transition-all cursor-pointer node-glow flex items-center gap-3 my-auto">
+<div class="bg-blue-500/10 p-2 rounded-lg"><span class="material-symbols-outlined text-blue-400 text-xl">smartphone</span></div>
+<div>
+<div class="text-white text-sm font-bold">Mobile iOS</div>
+<div class="text-[10px] text-slate-400">Swift / Native</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-emerald-500 hover:bg-white/5 transition-all cursor-pointer node-glow flex items-center gap-3">
+<div class="bg-emerald-500/10 p-2 rounded-lg"><span class="material-symbols-outlined text-emerald-400 text-xl">api</span></div>
+<div>
+<div class="text-white text-sm font-bold">Trading Bot</div>
+<div class="text-[10px] text-slate-400">Fix Protocol</div>
+</div>
+</div>
+</div>
+<div class="col-span-2 flex flex-col justify-center items-center relative">
+<div class="absolute inset-y-12 left-8 right-8 border-2 border-dashed border-slate-800 rounded-3xl pointer-events-none"></div>
+<div class="glass-panel w-36 h-36 rounded-2xl border-2 border-primary shadow-[0_0_40px_rgba(212,175,55,0.15)] flex flex-col items-center justify-center gap-3 z-20 bg-background-dark/90 node-glow relative">
+<div class="absolute -top-3 px-2 bg-background-dark text-[9px] text-primary uppercase font-bold tracking-widest border border-primary/30 rounded-full">Ingress</div>
+<span class="material-symbols-outlined text-4xl text-primary">dns</span>
+<div class="text-center">
+<div class="text-white text-sm font-bold leading-tight">Load Balancer</div>
+<div class="text-[10px] text-slate-400 mt-1">Nginx / Cloudflare</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 relative flex flex-col justify-center py-4">
+<div class="absolute inset-0 bg-surface-dark/40 rounded-[2.5rem] border border-[#333]/80 -z-10 mx-4 my-6"></div>
+<div class="text-xs text-slate-500 uppercase tracking-widest font-bold absolute top-10 left-12">Microservices Core</div>
+<div class="grid grid-rows-3 h-full gap-6 p-6">
+<div class="flex justify-center items-center gap-8">
+<div class="glass-panel w-64 p-3 rounded-xl flex items-center gap-4 border border-slate-700 node-glow bg-[#1a1a1a]">
+<div class="bg-slate-800 p-2.5 rounded-lg text-slate-300 border border-slate-700">
+<span class="material-symbols-outlined text-xl">verified_user</span>
+</div>
+<div class="flex-1">
+<div class="text-white text-sm font-bold">Authentication</div>
+<div class="text-[10px] text-slate-400">OAuth2 Provider</div>
+</div>
+<div class="h-2 w-2 rounded-full bg-green-500"></div>
+</div>
+</div>
+<div class="flex justify-center items-center relative">
+<div class="relative group w-full max-w-md z-10">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-amber-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+<div class="relative glass-panel p-5 rounded-2xl flex items-center gap-5 border border-primary bg-[#0f0f0f] shadow-2xl">
+<div class="p-3.5 rounded-xl bg-primary/20 text-primary border border-primary/20 shrink-0 relative overflow-hidden">
+<span class="material-symbols-outlined text-3xl relative z-10">memory</span>
+<div class="absolute inset-0 bg-primary/20 animate-pulse"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="text-white text-lg font-bold tracking-tight">Matching Engine</div>
+<div class="flex items-center gap-3 mt-1">
+<div class="text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20 font-mono">L3 Orderbook</div>
+<div class="text-[10px] text-slate-400">Rust / C++</div>
+</div>
+</div>
+<div class="pl-5 border-l border-white/10 flex flex-col items-end">
+<span class="text-[9px] text-slate-500 uppercase font-bold">Latency</span>
+<span class="text-lg font-mono text-primary font-bold">~50µs</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-center items-center">
+<div class="glass-panel w-64 p-3 rounded-xl flex items-center gap-4 border border-slate-700 node-glow bg-[#1a1a1a]">
+<div class="bg-slate-800 p-2.5 rounded-lg text-slate-300 border border-slate-700">
+<span class="material-symbols-outlined text-xl">account_balance</span>
+</div>
+<div class="flex-1">
+<div class="text-white text-sm font-bold">Risk Management</div>
+<div class="text-[10px] text-slate-400">Real-time Check</div>
+</div>
+<div class="h-2 w-2 rounded-full bg-green-500"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 flex flex-col justify-between h-full py-8 pl-4 pr-2 gap-4">
+<div class="glass-panel p-5 rounded-2xl border border-blue-500/20 bg-blue-500/5 h-[30%] flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-blue-500">cloud_queue</span>
+</div>
+<div class="text-[10px] text-blue-300 uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-blue-400 rounded-full"></span> External Data
+                </div>
+<div class="flex flex-col gap-2 mt-auto">
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-dark border border-slate-700/50">
+<span class="text-xs text-slate-300 font-medium">Binance Feed</span>
+<span class="text-[10px] text-green-400 font-mono">Connected</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-dark border border-slate-700/50">
+<span class="text-xs text-slate-300 font-medium">Coinbase Pro</span>
+<span class="text-[10px] text-green-400 font-mono">Connected</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-2xl border border-primary/30 bg-primary/5 flex-1 relative flex flex-col justify-center gap-4 group node-glow">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-surface-darker border border-primary text-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-2xl">database</span>
+</div>
+<div>
+<div class="text-white text-sm font-bold">Primary DB Cluster</div>
+<div class="text-[10px] text-slate-400">PostgreSQL + TimescaleDB</div>
+</div>
+</div>
+<div class="w-full bg-surface-darker rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full w-[45%] animate-[pulse_3s_infinite]"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400 font-mono">
+<span>IOPS: 12.4k</span>
+<span>Storage: 4.2TB</span>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-2xl border border-red-500/20 bg-red-500/5 h-[25%] flex items-center gap-4 node-glow">
+<div class="size-10 rounded-lg bg-surface-darker border border-red-500/40 text-red-400 flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-xl">bolt</span>
+</div>
+<div>
+<div class="text-white text-sm font-bold">Redis Cache</div>
+<div class="text-[10px] text-slate-400">Hot Data Layer</div>
+<div class="text-[9px] text-red-300/80 mt-1">Hit Rate: 99.8%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

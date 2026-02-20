@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Standardized Crypto Challenges v2</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4c025",
+                        "primary-dark": "#b38b1d",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#121212",
+                        "surface-dark": "#1e1e1e",
+                        "border-dark": "#2a2a2a",
+                        "text-muted": "#9ca3af",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans KR", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "radial-gradient(circle, #333333 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", "Noto Sans KR", sans-serif;
+        }
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+            color: transparent;
+        }
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(244, 192, 37, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background-dark min-h-screen flex flex-col font-display text-slate-100 selection:bg-primary selection:text-background-dark overflow-x-hidden">
+<main class="flex-1 w-full relative bg-grid-pattern bg-[length:24px_24px] flex items-center justify-center p-8 lg:p-12">
+<div class="absolute inset-0 bg-gradient-to-b from-background-dark/80 via-transparent to-background-dark pointer-events-none"></div>
+<div class="max-w-[1400px] w-full z-10 flex flex-col gap-8">
+<div class="flex flex-col gap-6 items-start border-b border-border-dark pb-6 mb-4">
+<div class="inline-flex items-center justify-center px-3 py-1 rounded-sm bg-primary text-background-dark text-[10px] font-bold tracking-widest uppercase">
+                Fintech
+            </div>
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white uppercase">
+                    Technical Challenges
+                </h1>
+<p class="text-text-muted text-lg font-light max-w-2xl font-body">
+                    고빈도 매매 시스템 구축을 위한 기술적 난제와 해결 방안
+                </p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-5">
+<div class="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-all duration-300 overflow-hidden glow-gold">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] font-black leading-none text-stroke opacity-5 select-none pointer-events-none font-display z-0 group-hover:opacity-10 transition-opacity">01</div>
+<div class="flex flex-col flex-1 gap-3 relative z-10 w-full">
+<span class="text-primary font-mono text-xs font-bold tracking-widest uppercase mb-1">CHALLENGE_01</span>
+<h3 class="text-xl md:text-2xl font-bold text-white font-body">대용량 트랜잭션 처리</h3>
+<p class="text-gray-400 text-sm md:text-base font-body leading-relaxed max-w-4xl">
+                        초당 수만 건의 매매 주문을 지연 없이 처리하기 위해 Non-blocking I/O 기반의 이벤트 루프 아키텍처를 도입했습니다. 이를 통해 스레드 컨텍스트 스위칭 비용을 최소화하고 CPU 효율을 극대화했습니다.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Spring WebFlux</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Netty</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Reactive</span>
+</div>
+</div>
+</div>
+<div class="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-all duration-300 overflow-hidden glow-gold">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] font-black leading-none text-stroke opacity-5 select-none pointer-events-none font-display z-0 group-hover:opacity-10 transition-opacity">02</div>
+<div class="flex flex-col flex-1 gap-3 relative z-10 w-full">
+<span class="text-primary font-mono text-xs font-bold tracking-widest uppercase mb-1">CHALLENGE_02</span>
+<h3 class="text-xl md:text-2xl font-bold text-white font-body">데이터 정합성 보장</h3>
+<p class="text-gray-400 text-sm md:text-base font-body leading-relaxed max-w-4xl">
+                        분산 환경에서의 데이터 불일치를 방지하기 위해 Kafka 기반의 이벤트 소싱 패턴을 적용했습니다. 모든 체결 데이터는 로그 형태로 순차 기록되며, 장애 발생 시 시점 복구가 가능하도록 설계되었습니다.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Kafka</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">CDC</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Event Sourcing</span>
+</div>
+</div>
+</div>
+<div class="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-all duration-300 overflow-hidden glow-gold">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] font-black leading-none text-stroke opacity-5 select-none pointer-events-none font-display z-0 group-hover:opacity-10 transition-opacity">03</div>
+<div class="flex flex-col flex-1 gap-3 relative z-10 w-full">
+<span class="text-primary font-mono text-xs font-bold tracking-widest uppercase mb-1">CHALLENGE_03</span>
+<h3 class="text-xl md:text-2xl font-bold text-white font-body">실시간 시세 전송</h3>
+<p class="text-gray-400 text-sm md:text-base font-body leading-relaxed max-w-4xl">
+                        수십만 명의 클라이언트에게 실시간 호가창 정보를 전달하기 위해 WebSocket 클러스터를 구축하고, Redis Pub/Sub을 활용하여 서버 간 메시지를 효율적으로 브로드캐스팅했습니다.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">WebSocket</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Redis Cluster</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Socket.io</span>
+</div>
+</div>
+</div>
+<div class="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-all duration-300 overflow-hidden glow-gold">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] font-black leading-none text-stroke opacity-5 select-none pointer-events-none font-display z-0 group-hover:opacity-10 transition-opacity">04</div>
+<div class="flex flex-col flex-1 gap-3 relative z-10 w-full">
+<span class="text-primary font-mono text-xs font-bold tracking-widest uppercase mb-1">CHALLENGE_04</span>
+<h3 class="text-xl md:text-2xl font-bold text-white font-body">저지연 매칭 엔진</h3>
+<p class="text-gray-400 text-sm md:text-base font-body leading-relaxed max-w-4xl">
+                        디스크 I/O 병목을 제거하기 위해 핵심 체결 로직을 인메모리 상에서 수행하도록 C++ 기반의 엔진을 별도로 개발하여 연동했습니다. 마이크로초 단위의 체결 속도를 달성했습니다.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">C++</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">LMAX Disruptor</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">In-Memory</span>
+</div>
+</div>
+</div>
+<div class="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-all duration-300 overflow-hidden glow-gold">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] font-black leading-none text-stroke opacity-5 select-none pointer-events-none font-display z-0 group-hover:opacity-10 transition-opacity">05</div>
+<div class="flex flex-col flex-1 gap-3 relative z-10 w-full">
+<span class="text-primary font-mono text-xs font-bold tracking-widest uppercase mb-1">CHALLENGE_05</span>
+<h3 class="text-xl md:text-2xl font-bold text-white font-body">오토스케일링 인프라</h3>
+<p class="text-gray-400 text-sm md:text-base font-body leading-relaxed max-w-4xl">
+                        급격한 트래픽 변동에 유연하게 대응하기 위해 Kubernetes 기반의 HPA(Horizontal Pod Autoscaling)를 적용하고, 스팟 인스턴스를 활용하여 비용 효율적인 인프라를 구성했습니다.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Kubernetes</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">AWS EKS</span>
+<span class="px-2 py-1 rounded bg-black/30 border border-border-dark text-[10px] font-mono text-primary/80 uppercase">Terraform</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

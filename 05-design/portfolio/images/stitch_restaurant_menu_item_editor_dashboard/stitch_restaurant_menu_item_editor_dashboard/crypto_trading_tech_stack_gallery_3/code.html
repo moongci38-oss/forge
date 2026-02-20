@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>crypto-gallery-02</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f2d00d",
+              "background-light": "#f8f8f5",
+              "background-dark": "#121212", 
+              "surface-dark": "#1e1e1e",
+              "surface-highlight": "#2a2a2a",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "body": ["Space Grotesk", "sans-serif"],
+            },
+            borderRadius: {
+              "DEFAULT": "1rem",
+              "lg": "1.5rem",
+              "xl": "2rem",
+              "2xl": "3rem",
+            },
+            boxShadow: {
+                "neon": "0 0 10px rgba(242, 208, 13, 0.3), 0 0 20px rgba(242, 208, 13, 0.1)",
+                "neon-hover": "0 0 15px rgba(242, 208, 13, 0.5), 0 0 30px rgba(242, 208, 13, 0.2)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .tech-capsule {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tech-capsule:hover {
+            transform: translateY(-2px);
+            border-color: #f2d00d;
+            box-shadow: 0 0 15px rgba(242, 208, 13, 0.25);
+        }
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .gallery-container {
+            width: 1080px; 
+            height: 800px;
+            max-width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .scroll-area {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #2a2a2a #121212;
+        }
+        .scroll-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroll-area::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background-color: #2a2a2a;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 h-screen flex items-center justify-center font-display overflow-hidden selection:bg-primary selection:text-background-dark">
+<div class="fixed inset-0 pointer-events-none bg-grid-pattern opacity-20"></div>
+<div class="gallery-container relative bg-background-dark border border-surface-highlight rounded-xl shadow-2xl flex flex-col z-10">
+<header class="flex-shrink-0 flex items-center justify-between px-8 py-6 border-b border-surface-highlight bg-background-dark/80 backdrop-blur-sm z-20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-yellow-600 flex items-center justify-center text-background-dark shadow-neon">
+<span class="material-symbols-outlined text-2xl">token</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-white">Crypto Trading Tech Stack</h1>
+<p class="text-slate-400 text-xs">High-frequency trading architecture</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full bg-surface-highlight border border-background-dark flex items-center justify-center text-[10px] text-slate-400">JP</div>
+<div class="w-7 h-7 rounded-full bg-surface-highlight border border-background-dark flex items-center justify-center text-[10px] text-slate-400">mk</div>
+</div>
+<div class="h-6 w-[1px] bg-surface-highlight mx-1"></div>
+<span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold tracking-wider uppercase shadow-neon">
+                FINTECH
+            </span>
+</div>
+</header>
+<main class="flex-grow scroll-area px-10 py-10 relative">
+<div class="flex flex-col gap-12">
+<section class="relative group grid grid-cols-[140px_1fr] gap-6">
+<div class="absolute left-[19px] top-[32px] bottom-[-48px] w-[2px] bg-surface-highlight z-0 group-last:hidden"></div>
+<div class="relative z-10 pt-4">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-neon"></div>
+<h2 class="text-primary font-bold text-sm tracking-widest">FRONTEND</h2>
+</div>
+<p class="text-[10px] text-slate-500 pl-5 uppercase tracking-wide">Client Layer</p>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-blue-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">code_blocks</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">React</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">UI Library</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-purple-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">account_tree</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Redux</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">State Mgmt</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-green-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">candlestick_chart</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">TradingView</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Charting Lib</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-orange-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">currency_bitcoin</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Web3.js</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Blockchain</p>
+</div>
+</div>
+</div>
+</section>
+<section class="relative group grid grid-cols-[140px_1fr] gap-6">
+<div class="absolute left-[19px] top-[32px] bottom-[-48px] w-[2px] bg-surface-highlight z-0 group-last:hidden"></div>
+<div class="relative z-10 pt-4">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-highlight border-2 border-primary shadow-neon"></div>
+<h2 class="text-white font-bold text-sm tracking-widest">BACKEND</h2>
+</div>
+<p class="text-[10px] text-slate-500 pl-5 uppercase tracking-wide">Server Layer</p>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-green-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">spa</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Spring Boot</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Microservices</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-slate-200 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">hub</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Kafka</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Event Stream</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-yellow-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">swap_horiz</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">WebSocket</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Real-time</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-green-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">javascript</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Node.js</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Aggregator</p>
+</div>
+</div>
+</div>
+</section>
+<section class="relative group grid grid-cols-[140px_1fr] gap-6">
+<div class="absolute left-[19px] top-[32px] bottom-[-48px] w-[2px] bg-surface-highlight z-0 group-last:hidden"></div>
+<div class="relative z-10 pt-4">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-highlight border-2 border-primary shadow-neon"></div>
+<h2 class="text-white font-bold text-sm tracking-widest">DATABASE</h2>
+</div>
+<p class="text-[10px] text-slate-500 pl-5 uppercase tracking-wide">Storage Layer</p>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-blue-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">database</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">PostgreSQL</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Relational DB</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-red-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">bolt</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Redis</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Caching</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-purple-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">timeline</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">InfluxDB</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Time Series</p>
+</div>
+</div>
+</div>
+</section>
+<section class="relative group grid grid-cols-[140px_1fr] gap-6">
+<div class="relative z-10 pt-4">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-highlight border-2 border-primary shadow-neon"></div>
+<h2 class="text-white font-bold text-sm tracking-widest">INFRA</h2>
+</div>
+<p class="text-[10px] text-slate-500 pl-5 uppercase tracking-wide">DevOps Layer</p>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-blue-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">deployed_code</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Docker</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Containers</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-blue-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">anchor</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">Kubernetes</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Orchestration</p>
+</div>
+</div>
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-xl p-4 flex flex-col justify-between cursor-pointer group/card h-28">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-highlight/50 flex items-center justify-center text-yellow-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">cloud</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200 truncate">AWS</h3>
+<p class="text-[10px] text-slate-500 truncate mt-0.5">Cloud Provider</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="flex-shrink-0 px-8 py-4 border-t border-surface-highlight flex justify-between items-center bg-background-dark/80 backdrop-blur-sm rounded-b-xl">
+<div class="text-[10px] text-slate-500">
+            Showcasing the standardized tech stack for Crypto Exchange v2.0
+        </div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-primary leading-none">15</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest">Technologies</span>
+</div>
+</div>
+<div class="h-6 w-[1px] bg-surface-highlight"></div>
+<div class="flex flex-col items-start">
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold text-white leading-none">04</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest">Layers</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+</body></html>

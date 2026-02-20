@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>clayon-gallery-01</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb", // Using a standard blue as primary, though diagram has specific section colors
+              "background-light": "#f8fafc",
+              "background-dark": "#0f172a",
+              "section-purple": "#6366f1",
+              "section-purple-light": "#eff6ff",
+              "section-green": "#10b981", 
+              "section-green-light": "#f0fdf4",
+              "section-grey": "#4b5563",
+              "section-grey-light": "#f9fafb",
+              "border-purple": "#6366f1",
+              "border-green": "#10b981",
+              "border-grey": "#4b5563"
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }.dotted-line-horizontal {
+            border-top: 2px dotted #3b82f6;
+            height: 1px;
+            width: 100%;
+        }
+        .dotted-line-vertical {
+            border-left: 2px dotted #3b82f6;
+            width: 1px;
+            height: 100%;
+        }.arrow-right {
+            width: 0; 
+            height: 0; 
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid #3b82f6;
+        }
+        .arrow-down {
+            width: 0; 
+            height: 0; 
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen p-8 text-slate-800 dark:text-slate-100 flex justify-center items-start">
+<div class="w-full max-w-7xl mx-auto space-y-8">
+<div class="flex items-center gap-4 mb-8">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white">clayon-gallery-01</h1>
+<span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wide">Fullstack</span>
+</div>
+<div class="border-2 border-border-purple rounded-lg overflow-hidden bg-white dark:bg-slate-800 shadow-sm relative">
+<div class="bg-section-purple text-white px-4 py-2 font-semibold text-sm uppercase tracking-wide">
+                Server / API (10)
+            </div>
+<div class="p-8 relative">
+<div class="grid grid-cols-4 gap-8 mb-16 relative z-10">
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative group">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">clayon-admcon/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(슈퍼 관리자 콘솔)</div>
+<div class="absolute -right-6 top-1/2 transform -translate-y-1/2 flex items-center">
+<div class="w-4 h-0 border-t-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-[8px] border-l-blue-500"></div>
+</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">clayon-cmp/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(기업 포탈(VDI 인프라 신청/관리))</div>
+<div class="absolute -right-6 top-1/2 transform -translate-y-1/2 flex items-center">
+<div class="w-4 h-0 border-t-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-[8px] border-l-blue-500"></div>
+</div>
+<div class="absolute left-1/2 bottom-[-40px] transform -translate-x-1/2 flex flex-col items-center h-10">
+<div class="h-full w-0 border-l-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-blue-500"></div>
+</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">clayon-portal/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(사용자 포탈)</div>
+<div class="absolute -right-6 top-1/2 transform -translate-y-1/2 flex items-center">
+<div class="w-4 h-0 border-t-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-[8px] border-l-blue-500"></div>
+</div>
+<div class="absolute left-1/2 bottom-[-40px] transform -translate-x-1/2 flex flex-col items-center h-10">
+<div class="h-full w-0 border-l-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-blue-500"></div>
+</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">com/web/controller/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(Spring MVC 컨트롤러)</div>
+<div class="absolute left-1/2 bottom-[-40px] transform -translate-x-1/2 flex flex-col items-center h-10">
+<div class="h-full w-0 border-l-2 border-dotted border-blue-500"></div>
+<div class="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-blue-500"></div>
+</div>
+</div>
+</div>
+<div class="absolute top-[135px] left-[15%] text-[10px] text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-800 px-1 z-20">기업 API 포탈(VDI 인프라 신청/관리)</div>
+<div class="absolute top-[135px] right-[15%] text-[10px] text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-800 px-1 z-20 text-right">인증/권한 처리하는 API / Spring Securty 강화 로직</div>
+<div class="grid grid-cols-5 gap-4 relative z-10">
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="absolute left-1/2 -top-10 h-10 border-l-2 border-dotted border-blue-500 transform -translate-x-1/2 hidden"></div>
+<div class="font-bold text-slate-800 dark:text-slate-100 text-base break-words">com/api/gateway/</div>
+<div class="text-slate-500 dark:text-slate-400 text-xs mt-1">외부 API 게이트웨이<br/>(RestApi, Devops, Dooray, Toast)</div>
+<div class="absolute -right-3 top-1/2 transform -translate-y-1/2 flex items-center z-10">
+<div class="w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-[8px] border-l-blue-500"></div>
+</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-base">com/infra/</div>
+<div class="text-slate-500 dark:text-slate-400 text-xs mt-1">(VDI 인프라 서비스 레이어)</div>
+<div class="absolute -right-3 top-1/2 transform -translate-y-1/2 flex items-center z-10">
+<div class="w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-[8px] border-l-blue-500"></div>
+</div>
+<div class="absolute left-1/2 -bottom-10 h-10 w-px border-l-2 border-dotted border-teal-500 z-50"></div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-base">com/marketplace/</div>
+<div class="text-slate-500 dark:text-slate-400 text-xs mt-1">(마켓플레이스 서비스 레이어)</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-base">com/auth/</div>
+<div class="text-slate-500 dark:text-slate-400 text-xs mt-1">(Spring Security 기반 인증/인가)</div>
+</div>
+<div class="border-2 border-blue-500 rounded-lg p-4 text-center bg-white dark:bg-slate-700 relative">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-base">com/jwt/</div>
+<div class="text-slate-500 dark:text-slate-400 text-xs mt-1">(JWT 토큰 처리)</div>
+<div class="absolute left-1/2 -top-8 h-8 w-px border-l-2 border-dotted border-blue-500"></div>
+<div class="absolute left-1/2 -top-2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-blue-500 -translate-x-1/2"></div>
+</div>
+</div>
+<div class="absolute inset-0 pointer-events-none z-0">
+<div class="absolute top-[230px] left-[20%] right-[40%] border-t-2 border-dotted border-blue-500"></div>
+<div class="absolute top-[230px] left-[60%] right-[20%] border-t-2 border-dotted border-blue-500"></div>
+<svg class="absolute w-full h-full top-0 left-0">
+<path d="M 160 145 L 160 180 L 160 200" fill="none" marker-end="url(#arrowhead)" stroke="#3b82f6" stroke-dasharray="4,4" stroke-width="2"></path>
+<defs>
+<marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="0" refY="3.5">
+<polygon fill="#3b82f6" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+</svg>
+</div>
+</div>
+</div>
+<div class="border-2 border-border-green rounded-lg overflow-hidden bg-white dark:bg-slate-800 shadow-sm mt-4 relative">
+<div class="bg-section-green text-white px-4 py-2 font-semibold text-sm uppercase tracking-wide">
+                Data (2)
+            </div>
+<div class="p-8 grid grid-cols-2 gap-8 relative">
+<div class="border-2 border-green-500 rounded-lg p-6 text-center bg-white dark:bg-slate-700 relative z-10">
+<div class="absolute left-1/2 -top-10 h-10 w-px border-l-2 border-dotted border-teal-500 z-50"></div>
+<div class="absolute left-1/2 -top-2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-teal-500 -translate-x-1/2 z-50"></div>
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">DB Changeset/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(MySQL DDL/DML 변경 이력)</div>
+<div class="absolute left-1/2 -bottom-10 h-10 w-px border-l-2 border-dotted border-teal-500 z-50"></div>
+</div>
+<div class="border-2 border-green-500 rounded-lg p-6 text-center bg-white dark:bg-slate-700">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">resources/mapper/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(MyBatis XML 매퍼)</div>
+</div>
+</div>
+</div>
+<div class="border-2 border-border-grey rounded-lg overflow-hidden bg-white dark:bg-slate-800 shadow-sm mt-4">
+<div class="bg-section-grey text-white px-4 py-2 font-semibold text-sm uppercase tracking-wide">
+                Infrastructure (2)
+            </div>
+<div class="p-8 grid grid-cols-2 gap-8 relative">
+<div class="border-2 border-slate-500 rounded-lg p-6 text-center bg-white dark:bg-slate-700 relative z-10">
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">clayon-deploy/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(배포 전용 모듈)</div>
+<div class="absolute left-1/2 -top-10 h-10 w-px border-l-2 border-dotted border-teal-500 z-50"></div>
+<div class="absolute left-1/2 -top-2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-teal-500 -translate-x-1/2 z-50"></div>
+</div>
+<div class="border-2 border-slate-500 rounded-lg p-6 text-center bg-white dark:bg-slate-700 relative">
+<div class="absolute left-1/2 -top-16 h-16 w-px border-l-2 border-dotted border-blue-500 z-0 opacity-50"></div>
+<div class="absolute left-1/2 -top-2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-[8px] border-t-blue-500 -translate-x-1/2 opacity-50"></div>
+<div class="font-bold text-slate-800 dark:text-slate-100 text-lg">shell_script/</div>
+<div class="text-slate-500 dark:text-slate-400 text-sm">(SFTP 기반 파일 전송 배포 스크립트)</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end items-center gap-2 mt-4 text-xs font-semibold text-white">
+<div class="bg-[#1e40af] px-3 py-1 rounded-full">Technical:</div>
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full border border-blue-200">MySQL</div>
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full border border-blue-200">Spring</div>
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full border border-blue-200">Mapper</div>
+<div class="bg-[#1e40af] px-3 py-1 rounded-full ml-2">Stack: 16 ~ 19</div>
+</div>
+</div>
+
+</body></html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=800">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
   body {
     width: 800px;
@@ -13,147 +13,394 @@
     overflow: hidden;
     font-family: 'Inter', 'Segoe UI', sans-serif;
     color: #fff;
+    background: #060810;
   }
 
-  .card {
+  .canvas {
     width: 800px;
     height: 450px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 48px 56px;
     position: relative;
     overflow: hidden;
   }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-
-  .card::after {
-    content: '';
+  /* Layer 1: Richer mesh gradient */
+  .mesh-bg {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-    z-index: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 5% 95%, var(--c1) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 90% at 95% 5%, var(--c2) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 60% at 50% 50%, var(--c3) 0%, transparent 45%),
+      radial-gradient(ellipse 50% 40% at 30% 20%, var(--c1) 0%, transparent 40%),
+      linear-gradient(135deg, #060810 0%, #0C1220 100%);
   }
 
-  .card { background: linear-gradient(135deg, var(--gs, #3B82F6), var(--ge, #2563EB)); }
+  /* Layer 2: Noise texture */
+  .noise {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
 
+  /* Layer 3: Floating orbs — stronger */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+  }
+  .orb-1 {
+    width: 280px; height: 280px;
+    top: -80px; right: -50px;
+    background: var(--c1);
+    opacity: 0.5;
+  }
+  .orb-2 {
+    width: 220px; height: 220px;
+    bottom: -60px; left: -40px;
+    background: var(--c2);
+    opacity: 0.45;
+  }
+  .orb-3 {
+    width: 160px; height: 160px;
+    top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--accent);
+    opacity: 0.25;
+  }
+
+  /* Layer 4: Grid lines */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Top gradient bar — NEW */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+    z-index: 20;
+    box-shadow: 0 0 20px var(--primary), 0 0 40px rgba(0,0,0,0.3);
+  }
+
+  /* Geometric diamond accents — NEW */
+  .geo-accent {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .diamond {
+    position: absolute;
+    border: 2px solid rgba(255,255,255,0.15);
+    transform: rotate(45deg);
+    border-radius: 4px;
+  }
+  .diamond-group {
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+    width: 160px;
+    height: 160px;
+  }
+  .diamond-1 {
+    width: 120px; height: 120px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-color: var(--accent);
+    opacity: 0.35;
+    box-shadow: 0 0 30px var(--accent), inset 0 0 30px rgba(255,255,255,0.02);
+  }
+  .diamond-2 {
+    width: 80px; height: 80px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-color: var(--primary);
+    opacity: 0.25;
+    box-shadow: 0 0 20px var(--primary);
+  }
+  .diamond-3 {
+    width: 40px; height: 40px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-color: var(--accent);
+    opacity: 0.5;
+    background: radial-gradient(circle, var(--accent), transparent);
+    filter: blur(2px);
+  }
+
+  /* Layer 5: Enhanced glass card */
+  .glass-card {
+    position: absolute;
+    top: 50%;
+    left: 44px;
+    transform: translateY(-50%);
+    width: 540px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 18px;
+    padding: 32px 40px;
+    z-index: 10;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.4),
+      0 2px 8px rgba(0,0,0,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* Top accent line on glass card */
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 24px; right: 24px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    box-shadow: 0 0 12px var(--primary);
+  }
+
+  /* Subtle inner highlight */
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  }
+
+  /* Content */
   .badge {
     display: inline-block;
-    padding: 6px 16px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.18);
-    font-size: 13px;
-    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-    width: fit-content;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
   }
+  .badge.mobile { background: rgba(124,58,237,0.6); border-color: rgba(124,58,237,0.4); }
+  .badge.web { background: rgba(37,99,235,0.6); border-color: rgba(37,99,235,0.4); }
+  .badge.infrastructure { background: rgba(5,150,105,0.6); border-color: rgba(5,150,105,0.4); }
+  .badge.fullstack { background: rgba(99,102,241,0.6); border-color: rgba(99,102,241,0.4); }
+  .badge.tool { background: rgba(245,158,11,0.6); border-color: rgba(245,158,11,0.4); }
 
   .title {
-    font-size: 48px;
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 12px;
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 50%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .subtitle {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 400;
-    opacity: 0.85;
-    margin-bottom: 32px;
-    position: relative;
-    z-index: 1;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 18px;
+    line-height: 1.4;
   }
 
   .tech-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
   }
 
   .tech-tag {
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 8px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(4px);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
-    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Decorative elements */
+  .deco-code {
+    position: absolute;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.06);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 1px;
+  }
+  .deco-code-1 { bottom: 24px; left: 40px; }
+  .deco-code-2 { top: 18px; right: 40px; }
+
+  .deco-dots {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+  }
+  .deco-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Corner accent */
+  .corner-accent {
+    position: absolute;
+    top: 6px; left: 0;
+    width: 3px;
+    height: 80px;
+    background: linear-gradient(180deg, var(--primary), transparent);
+    z-index: 15;
+  }
+  .corner-accent-h {
+    position: absolute;
+    top: 6px; left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    z-index: 15;
+  }
+
+  /* Bottom right corner accent */
+  .corner-accent-br {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 3px;
+    height: 60px;
+    background: linear-gradient(0deg, var(--accent), transparent);
+    z-index: 15;
+  }
+  .corner-accent-br-h {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(270deg, var(--accent), transparent);
+    z-index: 15;
   }
 
   .monogram {
     position: absolute;
-    top: 30px;
-    right: 50px;
-    font-size: 140px;
+    bottom: -30px;
+    right: 180px;
+    font-size: 220px;
     font-weight: 900;
-    opacity: 0.06;
+    opacity: 0.03;
     color: #fff;
-    z-index: 0;
+    z-index: 1;
     line-height: 1;
     pointer-events: none;
-  }
-
-  .bottom-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: rgba(255,255,255,0.3);
   }
 </style>
 </head>
 <body>
-<div class="card" id="card">
+<div class="canvas">
+  <div class="mesh-bg"></div>
+  <div class="noise"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="grid-lines"></div>
+  <div class="top-bar"></div>
   <div class="monogram" id="monogram"></div>
-  <span class="badge" id="badge"></span>
-  <h1 class="title" id="title"></h1>
-  <p class="subtitle" id="subtitle"></p>
-  <div class="tech-row" id="techRow"></div>
-  <div class="bottom-bar"></div>
+  <div class="corner-accent"></div>
+  <div class="corner-accent-h"></div>
+  <div class="corner-accent-br"></div>
+  <div class="corner-accent-br-h"></div>
+
+  <div class="diamond-group" id="diamondGroup">
+    <div class="diamond diamond-1"></div>
+    <div class="diamond diamond-2"></div>
+    <div class="diamond diamond-3"></div>
+  </div>
+
+  <div class="glass-card">
+    <div class="badge" id="badge"></div>
+    <h1 class="title" id="title"></h1>
+    <p class="subtitle" id="subtitle"></p>
+    <div class="tech-row" id="techRow"></div>
+  </div>
+
+  <div class="deco-code deco-code-1" id="decoCode1"></div>
+  <div class="deco-code deco-code-2" id="decoCode2"></div>
+  <div class="deco-dots" id="decoDots"></div>
 </div>
 
 <script>
   var data = window.PROJECT_DATA || {};
   var colors = data.colors || {};
   var root = document.documentElement;
-  root.style.setProperty('--gs', colors.gradientStart || '#3B82F6');
-  root.style.setProperty('--ge', colors.gradientEnd || '#2563EB');
-  var card = document.getElementById('card');
-  document.getElementById('badge').textContent = (data.category || 'web').toUpperCase();
+
+  root.style.setProperty('--primary', colors.primary || '#3B82F6');
+  root.style.setProperty('--c1', colors.gradientStart || '#3B82F6');
+  root.style.setProperty('--c2', colors.gradientEnd || '#2563EB');
+  root.style.setProperty('--c3', colors.accent || '#60A5FA');
+  root.style.setProperty('--accent', colors.accent || '#60A5FA');
+
+  var catDisplay = (data.type || data.category || 'web').toLowerCase();
+  var badgeEl = document.getElementById('badge');
+  badgeEl.className = 'badge ' + catDisplay;
+  badgeEl.textContent = catDisplay.toUpperCase();
+
   document.getElementById('title').textContent = data.title || 'Project';
   document.getElementById('subtitle').textContent = data.subtitle || '';
   document.getElementById('monogram').textContent = (data.title || 'P')[0].toUpperCase();
 
-  var techs = (data.techStack || []).slice(0, 5);
+  // Tech tags with project color
+  var primary = colors.primary || '#3B82F6';
+  var lightAccent = colors.lightAccent || '#BFDBFE';
+  var techs = (data.techStack || []).slice(0, 6);
   var row = document.getElementById('techRow');
   techs.forEach(function(t) {
     var tag = document.createElement('span');
     tag.className = 'tech-tag';
     tag.textContent = t;
+    tag.style.background = 'rgba(' + hexToRgb(primary) + ', 0.18)';
+    tag.style.border = '1px solid rgba(' + hexToRgb(primary) + ', 0.35)';
+    tag.style.color = lightAccent;
+    tag.style.boxShadow = '0 0 10px rgba(' + hexToRgb(primary) + ', 0.15)';
     row.appendChild(tag);
   });
+
+  // Decorative code
+  var slug = data.slug || 'project';
+  document.getElementById('decoCode1').textContent =
+    'const server = new ' + (data.title || 'App') + '({ port: 8080 });';
+  document.getElementById('decoCode2').textContent =
+    '// ' + slug + ' v1.0.0';
+
+  // Decorative dots
+  var dotsEl = document.getElementById('decoDots');
+  for (var i = 0; i < 8; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'deco-dot';
+    dot.style.opacity = (0.2 + Math.random() * 0.4).toFixed(2);
+    dotsEl.appendChild(dot);
+  }
+
+  // Hex to RGB helper
+  function hexToRgb(hex) {
+    hex = hex.replace('#', '');
+    var r = parseInt(hex.substring(0, 2), 16);
+    var g = parseInt(hex.substring(2, 4), 16);
+    var b = parseInt(hex.substring(4, 6), 16);
+    return r + ',' + g + ',' + b;
+  }
 </script>
 </body>
 </html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>clayon-thumbnail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#3B82F6",
+                    "background-light": "#0f172a", // Dark background for the thumbnail look by default
+                    "background-dark": "#020617",
+                    "glass-border": "rgba(255, 255, 255, 0.1)",
+                    "glass-bg": "rgba(30, 41, 59, 0.4)",
+                    "chip-bg": "rgba(59, 130, 246, 0.2)",
+                    "chip-border": "rgba(59, 130, 246, 0.4)",
+                    "chip-text": "#93C5FD",
+                },
+                fontFamily: {
+                    display: ["Inter", "sans-serif"],
+                },
+                borderRadius: {
+                    DEFAULT: "1rem",
+                    "xl": "1.5rem",
+                    "2xl": "2rem",
+                },
+                boxShadow: {
+                    'glow': '0 0 20px rgba(59, 130, 246, 0.3)',
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                },
+                backgroundImage: {
+                    'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    'grid-pattern': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40' stroke='%233B82F6' stroke-opacity='0.1' stroke-width='1' fill='none'/%3E%3C/svg%3E\")",
+                }
+            },
+        },
+    };
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(30, 58, 138, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+        }.diamond-container {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 200px;
+        }
+        .diamond {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        }
+        .diamond-1 { width: 180px; height: 180px; opacity: 0.2; }
+        .diamond-2 { width: 140px; height: 140px; opacity: 0.4; }
+        .diamond-3 { width: 100px; height: 100px; opacity: 0.6; }
+        .diamond-center { 
+            width: 60px; 
+            height: 60px; 
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            border: none;
+        }
+        .tech-chip {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.2) 0%, rgba(30, 58, 138, 0.2) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+        .tech-chip:hover {
+            border-color: rgba(96, 165, 250, 0.6);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }.crystal-shape {
+            position: absolute;
+            right: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 240px;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
+        }
+        .crystal-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 100px solid rgba(147, 197, 253, 0.15);
+        }
+        .crystal-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-top: 130px solid rgba(96, 165, 250, 0.2);
+        }
+        .crystal-shine {
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
+            opacity: 0.3;
+            filter: blur(10px);
+        }.spotlight {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4 overflow-hidden relative selection:bg-blue-500 selection:text-white">
+<div class="fixed inset-0 bg-grid z-0 opacity-20 pointer-events-none"></div>
+<div class="spotlight bg-blue-600 w-96 h-96 top-[-10%] left-[-10%]"></div>
+<div class="spotlight bg-indigo-600 w-[500px] h-[500px] bottom-[-10%] right-[-10%]"></div>
+<div class="spotlight bg-blue-400 w-64 h-64 top-[40%] left-[30%] opacity-20"></div>
+<div class="relative z-10 w-full max-w-5xl aspect-video rounded-3xl glass-card overflow-hidden flex flex-col justify-center p-12 md:p-16 border border-white/10 shadow-2xl">
+<div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50"></div>
+<div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-900 to-transparent opacity-30"></div>
+<div class="relative z-20 flex flex-col h-full justify-between max-w-3xl">
+<div>
+<span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-wider text-blue-100 bg-blue-600/30 border border-blue-400/30 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.3)] uppercase mb-6">
+                    Fullstack
+                </span>
+</div>
+<div class="space-y-4">
+<h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight glow-text leading-tight">
+                    Clayon VDI Platform
+                </h1>
+<p class="text-xl md:text-2xl text-blue-200 font-light tracking-wide opacity-90 max-w-2xl">
+                    Cloud-based VDI &amp; Marketplace System
+                </p>
+</div>
+<div class="flex flex-wrap gap-3 mt-12">
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    Spring MVC 4.3
+                </div>
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    Java 1.8
+                </div>
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    MyBatis
+                </div>
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    MySQL
+                </div>
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    Redis
+                </div>
+<div class="tech-chip px-5 py-2.5 rounded-2xl text-white font-medium text-sm md:text-base shadow-lg">
+                    Spring Security
+                </div>
+</div>
+</div>
+<div class="absolute right-12 top-1/2 -translate-y-1/2 w-[300px] h-[300px] pointer-events-none opacity-90">
+<svg class="w-full h-full drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]" viewBox="0 0 200 300">
+<defs>
+<linearGradient id="grad1" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(147, 197, 253, 0.4);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(30, 58, 138, 0.1);stop-opacity:1"></stop>
+</linearGradient>
+<linearGradient id="grad2" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(191, 219, 254, 0.6);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(59, 130, 246, 0.2);stop-opacity:1"></stop>
+</linearGradient>
+</defs>
+<path d="M100 20 L160 120 L100 160 L40 120 Z" fill="url(#grad1)" stroke="rgba(147, 197, 253, 0.6)" stroke-width="1"></path>
+<path d="M100 20 L100 160" stroke="rgba(147, 197, 253, 0.4)" stroke-width="1"></path>
+<path d="M100 280 L160 120 L100 160 L40 120 Z" fill="url(#grad2)" stroke="rgba(96, 165, 250, 0.5)" stroke-width="1"></path>
+<path d="M100 280 L100 160" stroke="rgba(96, 165, 250, 0.3)" stroke-width="1"></path>
+<circle cx="100" cy="140" fill="white" filter="blur(10px)" opacity="0.8" r="10"></circle>
+</svg>
+<div class="absolute top-0 left-0 w-full h-full border border-blue-400/10 rounded-full scale-150 opacity-20 animate-pulse"></div>
+<div class="absolute top-[10%] left-[10%] w-[80%] h-[80%] border border-blue-300/10 rounded-full rotate-45 opacity-30"></div>
+</div>
+<div class="absolute -bottom-10 -right-10 text-[20rem] font-black text-white opacity-[0.02] select-none pointer-events-none leading-none">
+            C
+        </div>
+</div>
+
+</body></html>

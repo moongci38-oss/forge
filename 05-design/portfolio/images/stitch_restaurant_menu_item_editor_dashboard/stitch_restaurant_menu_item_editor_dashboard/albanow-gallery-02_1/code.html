@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>albanow-gallery-02</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#A855F7", // Purple color from the screenshot border/glow
+                        "background-light": "#121212", // Dark background based on screenshot
+                        "background-dark": "#0A0A0A",
+                        "card-dark": "#1E1E1E",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            background-color: #0F1014;background-image: 
+                radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+        }
+        .glass-card {
+            background: rgba(30, 30, 35, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .tech-icon-container {
+            background: linear-gradient(145deg, #2a2a35, #1a1a20);
+            box-shadow: 5px 5px 10px #15151a, -5px -5px 10px #2f2f3a;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white font-sans antialiased p-8 flex flex-col items-center justify-center">
+<div class="text-center mb-16 max-w-2xl mx-auto">
+<h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white dark:text-white">
+            AlbaNow Tech Stack Gallery
+        </h1>
+<p class="text-gray-400 text-lg md:text-xl font-light">
+            Tech stack visualization for the AlbaNow portfolio project.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full">
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<img alt="React Logo" class="w-14 h-14 object-contain animate-[spin_10s_linear_infinite]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkJr6nFoRj34ApDbKM0TsWI2ZQcIs6hX85llX4X-aFb0NSlg9kk8udbXaadaJmXt1Q-cAmX6SfrGcHc1Eq_9LKYV-PBcDhYPPhdtm2mr3jnOFb7u2Yga6RFxyXw7prgsiLqJkyWrhCMntAxhX6yxCOUt69eYDqHQ4EmR9z9tyXxEnsKEO11rMh3whJTJLqI9R0IIhSzGPS76WD6kN5En-ebnxIE2mbfVBPG1zK4raJoiig6zJJbh_MrdM4blR7ugOp3Gs6DHJm"/>
+</div>
+<h3 class="text-2xl font-semibold mb-2">React</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">Front-end Library for dynamic UIs.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Advanced Level</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<svg class="w-14 h-14 fill-white" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+<mask height="180" id="mask0" maskUnits="userSpaceOnUse" style="mask-type:alpha" width="180" x="0" y="0"><circle cx="90" cy="90" fill="black" r="90"></circle></mask>
+<g mask="url(#mask0)"><circle cx="90" cy="90" data-circle="true" fill="black" r="90"></circle><path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z" fill="white"></path><rect fill="white" height="72" width="12" x="115" y="54"></rect><rect fill="white" height="12" width="12" x="115" y="54"></rect></g>
+</svg>
+</div>
+<h3 class="text-2xl font-semibold mb-2">Next.js</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">React Framework for production, SSR &amp; SSG.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 80%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Advanced Level</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<img alt="Node.js Logo" class="w-14 h-14 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6AziHLvzhbeu6_FcKPLZ487z4BLftNTFHYepvsYAGpjxY_xEitx5-l35tLBfgjsAM9lY-8-9ZWigFD0pDy_X6ibaLX-e2-fUgnyMUZ4lF3t7wvsYxveJd_ORIwDP4FuEiRHGlR2fdo_trVdZzrg2kfNi5aehUl3Wn24sac3K5bA1CPbAk-mCKq9AdduiIE0OpYnhwbsHSMj1kpabCiR_i28STujdVUfQnLlXT4OFO-ASLgj0mnqlgUwYXP_sTxufibDR6YhiM"/>
+</div>
+<h3 class="text-2xl font-semibold mb-2">Node.js</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">JavaScript Runtime for server-side logic.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-orange-500 h-2 rounded-full" style="width: 70%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Proficient Level</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<img alt="PostgreSQL Logo" class="w-14 h-14 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzta7sj_9scV4oN_MqWlOyJ38dBDMJaAMQQE8M04VvMaKnIfvX271lrRe9YvTNzsSeJpz4gs8HrjbFcyZ0IUfdwOl7XHyU-aHiJF_qWDfKtc13iENDk9bziQiqz3s6m_NoQslLSbAStmtftZ6dkB-cLmtWIXeLDR4rBtanznl9svuLxUxgdB2wZbzL2fHHUp4qjYTmqp6cVXv2sm7AmI7YgJcrUEK98j_g6jZ6ViK2vifscjDPL1AvSzB5trWn7RWlpWKr-9Nl"/>
+</div>
+<h3 class="text-2xl font-semibold mb-2">PostgreSQL</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">Powerful, open source object-relational database.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Advanced Level</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<div class="flex items-center justify-center w-full h-full">
+<svg class="w-14 h-14 fill-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.665 19.782l-1.096-1.045c-.244.204-.51.385-.794.536-1.127.6-2.502.507-3.649-.136l-.601.328a2.59 2.59 0 0 1 .465 1.05c-.002.046-.008.093-.008.14 0 1.256.91 2.302 2.112 2.509 1.487.256 2.87-.775 3.571-2.126zm-1.74-7.514c-.958-.335-1.554-.087-1.77.74-.202.772.062 1.474 1.14 1.838.749.253 1.285.105 1.637-.419l1.107.56c-.63 1.156-1.725 1.442-2.924 1.037-1.92-.647-2.61-2.222-2.007-3.957.653-1.876 2.457-2.73 4.296-2.11 1.765.596 2.658 2.067 2.213 3.86l-1.29-.272c.197-.738-.205-1.124-.403-1.277zm-3.83-2.308c.504-2.637-2.887-1.375-1.828-4.17 1.229.176 1.761.968 1.956 1.644l1.378-.363c-.328-1.574-1.622-2.458-3.327-2.583-1.463-.108-2.623.755-2.878 2.086-.296 1.547 1.01 1.875 1.55 2.158-.696.152-1.298-.016-1.537-.52l-1.196.536c.642 1.354 1.815 1.61 2.978 1.492 1.21-.122 1.762-.77 1.876-1.365.23-.746-1.297-.565-1.697-.718l.055-.285c.677.218 2.073.34 2.67.088zm-5.632 7.749c-.218.63-.647.933-1.178.752-.53-.18-1.018-.707-.8-1.336l1.978-5.713 1.503.51-2.723 7.868-1.423-.483 1.055-3.048-2.302-.776-.732 2.113-1.422-.482 2.723-7.868 1.503.51-1.182 3.414 2.301.777.699-2.022 1.344.457c.367-1.06 1.83-1.292 2.385-2.895l.132-.382 1.442.49c-.643 1.855-.845 2.289-1.328 3.682-.488 1.41-1.334 3.854-1.977 5.712l-1.442-.49.444-1.282zm14.654 3.99c-1.312 1.04-3.13 1.276-4.66.452l-.638 1.187c2.257 1.215 4.881.659 6.643-.728l-.348-.13c.099-.074.197-.152.292-.234l-1.289-.547z"></path></svg>
+</div>
+</div>
+<h3 class="text-2xl font-semibold mb-2">AWS</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">Cloud Computing Services for scalability and hosting.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-orange-500 h-2 rounded-full" style="width: 75%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Proficient Level</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-[1.02] duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] border border-white/10 hover:border-primary/50">
+<div class="w-24 h-24 rounded-2xl tech-icon-container flex items-center justify-center mb-6 border border-white/5">
+<img alt="Redis Logo" class="w-14 h-14 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs2jwY-tTmxo8cakVi6iSVsTcopccK9QIxmetN8s4J_BEluHeftLXsybwiFqfnJWyTccQvuI7-b_MwP3etsLa88y44-UPmIK0IT_D-_J8awYuQuJA0gN8aeZnbMOnqy_xPgeD-QGKGvb6Z0nXCZzOXLLPtc5x6TyN1YrPqN-oFx38a8h8yLHhmCI94JajWXqMcHlL7q7_dB2xy964v4GncAQfXGbfQ2EMm3qkMmyp-owUGKS0SAUZqSHDvWKN7yxwjCgVhvKRC"/>
+</div>
+<h3 class="text-2xl font-semibold mb-2">Redis</h3>
+<p class="text-gray-400 text-sm mb-6 text-center">In-memory data structure store, used as a database, cache, and message broker.</p>
+<div class="w-full mt-auto">
+<div class="w-full bg-gray-700 rounded-full h-2 mb-2">
+<div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+</div>
+<div class="text-xs text-gray-400 text-center w-full">Intermediate Level</div>
+</div>
+</div>
+</div>
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/5 rounded-full blur-[100px]"></div>
+<div class="absolute top-[20%] right-[20%] w-[20%] h-[20%] bg-purple-900/10 rounded-full blur-[80px]"></div>
+</div>
+
+</body></html>

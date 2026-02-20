@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>clayon-gallery-01</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#5460D1",
+                        "primary-dark": "#3f4cb5",
+                        "background-light": "#f3f5f9",
+                        "background-dark": "#1a1b26",
+                        "card-light": "#ffffff",
+                        "card-dark": "#24283b",
+                        "text-light": "#1f2937",
+                        "text-dark": "#c0caf5",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#414868",
+                        "success": "#10b981",
+                        "gray-bg": "#525C6F", 
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .dotted-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .dark .dotted-pattern {
+            background-image: radial-gradient(#2f334d 1px, transparent 1px);
+        }.connector-h-blue {
+            position: absolute;
+            height: 2px;
+            background-image: linear-gradient(to right, #3b82f6 50%, transparent 50%);
+            background-size: 8px 100%;
+            z-index: 0;
+        }
+        .connector-v-blue {
+            position: absolute;
+            width: 2px;
+            background-image: linear-gradient(to bottom, #3b82f6 50%, transparent 50%);
+            background-size: 100% 8px;
+            z-index: 0;
+        }
+        .connector-h-green {
+            position: absolute;
+            height: 2px;
+            background-image: linear-gradient(to right, #10b981 50%, transparent 50%);
+            background-size: 8px 100%;
+            z-index: 0;
+        }
+        .connector-v-green {
+            position: absolute;
+            width: 2px;
+            background-image: linear-gradient(to bottom, #10b981 50%, transparent 50%);
+            background-size: 100% 8px;
+            z-index: 0;
+        }
+        .connector-v-gray {
+            position: absolute;
+            width: 2px;
+            background-image: linear-gradient(to bottom, #9ca3af 50%, transparent 50%);
+            background-size: 100% 8px;
+            z-index: 0;
+        }
+        .arrow-down-blue {
+             width: 0; 
+             height: 0; 
+             border-left: 5px solid transparent;
+             border-right: 5px solid transparent;
+             border-top: 5px solid #3b82f6;
+             position: absolute;
+             transform: translateX(-50%);
+        }
+        .arrow-down-green {
+             width: 0; 
+             height: 0; 
+             border-left: 5px solid transparent;
+             border-right: 5px solid transparent;
+             border-top: 5px solid #10b981;
+             position: absolute;
+             transform: translateX(-50%);
+        }
+        .arrow-down-gray {
+             width: 0; 
+             height: 0; 
+             border-left: 5px solid transparent;
+             border-right: 5px solid transparent;
+             border-top: 5px solid #9ca3af;
+             position: absolute;
+             transform: translateX(-50%);
+        }
+        .diamond-blue::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            transform: rotate(45deg) translateX(-50%);
+            left: 50%;
+            bottom: -4px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen p-4 md:p-8 dotted-pattern">
+<div class="max-w-7xl mx-auto bg-card-light dark:bg-card-dark rounded-xl shadow-lg p-6 md:p-10 relative overflow-hidden">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-1.5 h-10 bg-primary rounded-full"></div>
+<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Clayon VDI Platform Architecture
+            </h1>
+<span class="px-3 py-1 bg-primary text-white text-xs font-bold rounded uppercase tracking-wider">Fullstack</span>
+</div>
+<div class="mb-12 relative">
+<div class="flex items-center gap-3 bg-primary text-white p-3 rounded-lg mb-8 shadow-md z-10 relative">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-sm">S</div>
+<span class="font-bold tracking-wide">SERVER / API</span>
+<span class="text-xs opacity-80">(10)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 relative z-10">
+<div class="hidden md:block connector-h-blue top-1/2 left-[12%] right-[12%] -translate-y-1/2"></div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">clayon-admcon/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(슈퍼 관리자 콘솔)</p>
+<div class="hidden md:block connector-v-blue h-8 left-1/2 -bottom-8"></div>
+<div class="hidden md:block arrow-down-blue left-1/2 -bottom-9"></div>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">clayon-cmp/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(기업 포털(VDI 인프라 신청/관리))</p>
+<div class="hidden md:block connector-v-blue h-8 left-1/2 -bottom-8"></div>
+<div class="hidden md:block arrow-down-blue left-1/2 -bottom-9"></div>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">clayon-portal/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(사용자 포털)</p>
+<div class="hidden md:block connector-v-blue h-8 left-1/2 -bottom-8"></div>
+<div class="hidden md:block arrow-down-blue left-1/2 -bottom-9"></div>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">com/web/controller/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(Spring MVC 컨트롤러)</p>
+<div class="hidden md:block connector-v-blue h-8 left-1/2 -bottom-8"></div>
+<div class="hidden md:block arrow-down-blue left-1/2 -bottom-9"></div>
+</div>
+</div>
+<div class="hidden md:flex justify-between px-16 mb-4 text-[10px] text-gray-500 dark:text-gray-400 relative z-0">
+<span class="relative -left-8 bg-card-light dark:bg-card-dark px-2">기업 API 포털(VDI 인프라 신청/관리)</span>
+<span class="relative -right-8 bg-card-light dark:bg-card-dark px-2">인증/권한 적용 API / Spring Security 필터 체인</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
+<div class="hidden md:block connector-h-blue top-1/2 left-[12%] right-[12%] -translate-y-1/2"></div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">com/api/gateway/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">외부 API 게이트웨이<br/>(RestApi, Devops, Dooray, Toast)</p>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">com/infra/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(VDI 인프라 서비스 레이어)</p>
+<div class="hidden md:block connector-v-green h-24 left-1/2 -bottom-24 z-0 opacity-60"></div>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-sm mb-1">com/marketplace/</h3>
+<p class="text-xs text-gray-600 dark:text-gray-400">(마켓플레이스 서비스 레이어)</p>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-xs mb-1">com/auth/</h3>
+<p class="text-[10px] text-gray-600 dark:text-gray-400">(Spring Security 기반 인증/인가)</p>
+</div>
+<div class="bg-white dark:bg-gray-800 border-2 border-primary/30 dark:border-primary/50 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-primary dark:text-blue-400 font-bold text-xs mb-1">com/jwt/</h3>
+<p class="text-[10px] text-gray-600 dark:text-gray-400">(JWT 토큰 처리)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-center -mt-6 mb-6">
+<span class="bg-card-light dark:bg-card-dark p-1 rounded-full z-20">
+<span class="material-icons-round text-success opacity-50 text-sm">change_history</span>
+</span>
+</div>
+<div class="mb-12">
+<div class="flex items-center gap-3 bg-success text-white p-3 rounded-lg mb-8 shadow-md relative z-10">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-sm">D</div>
+<span class="font-bold tracking-wide">DATA</span>
+<span class="text-xs opacity-80">(2)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+<div class="hidden md:block connector-h-green top-1/2 left-[25%] right-[25%] -translate-y-1/2"></div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-success/30 dark:border-success/50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-gray-900 dark:text-white font-bold text-base mb-1">DB Changeset/</h3>
+<p class="text-sm text-gray-600 dark:text-gray-400">(MySQL DDL/DML 변경 이력)</p>
+<div class="hidden md:block connector-v-green h-24 left-1/2 -bottom-24 opacity-60"></div>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-success/30 dark:border-success/50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-gray-900 dark:text-white font-bold text-base mb-1">resources/mapper/</h3>
+<p class="text-sm text-gray-600 dark:text-gray-400">(MyBatis XML 매퍼)</p>
+<div class="hidden md:block connector-v-blue h-24 left-1/2 -bottom-24 opacity-40"></div>
+<div class="hidden md:block arrow-down-blue left-1/2 -bottom-[92px] opacity-40"></div>
+</div>
+</div>
+</div>
+<div class="flex justify-center -mt-6 mb-6">
+<span class="bg-card-light dark:bg-card-dark p-1 rounded-full z-20">
+<span class="material-icons-round text-gray-400 text-sm">expand_more</span>
+</span>
+</div>
+<div class="mb-12">
+<div class="flex items-center gap-3 bg-gray-bg text-white p-3 rounded-lg mb-8 shadow-md relative z-10">
+<div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-sm">I</div>
+<span class="font-bold tracking-wide">INFRASTRUCTURE</span>
+<span class="text-xs opacity-80">(2)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="relative bg-white dark:bg-gray-800 border-2 border-gray-400/30 dark:border-gray-500/50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-gray-900 dark:text-white font-bold text-base mb-1">clayon-deploy/</h3>
+<p class="text-sm text-gray-600 dark:text-gray-400">(배포 전용 모듈)</p>
+</div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-gray-400/30 dark:border-gray-500/50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<h3 class="text-gray-900 dark:text-white font-bold text-base mb-1">shell_script/</h3>
+<p class="text-sm text-gray-600 dark:text-gray-400">(SFTP 기반 파일 전송 배포 스크립트)</p>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-2 mt-8">
+<div class="bg-blue-600 text-white rounded-full px-4 py-1.5 text-xs font-bold shadow-sm flex items-center gap-2">
+<span class="font-normal opacity-80">Technical:</span>
+<span class="bg-blue-700/50 px-2 py-0.5 rounded text-[10px]">MySQL</span>
+<span class="bg-blue-700/50 px-2 py-0.5 rounded text-[10px]">Spring</span>
+<span class="bg-blue-700/50 px-2 py-0.5 rounded text-[10px]">Mapper</span>
+<span class="opacity-80 ml-1">Stack: 16 layers</span>
+</div>
+</div>
+</div>
+<script>
+        // Simple dark mode toggle for demonstration if needed, though tailwind config is class-based
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+</body></html>

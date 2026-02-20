@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KODAQS Exchange Technical Challenges</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for a tech/developer look -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-theme">
+    body {
+      background-color: #0d0d0d;
+      color: #e5e5e5;
+      font-family: 'Inter', sans-serif;
+    }
+    .mono-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .accent-gold {
+      color: #d4af37;
+    }
+    .bg-accent-gold {
+      background-color: #d4af37;
+    }
+    .border-accent-gold {
+      border-color: #d4af37;
+    }
+    /* Card depth effect similar to image */
+    .challenge-card {
+      background: linear-gradient(145deg, #161616, #0f0f0f);
+      border: 1px solid #222;
+      transition: all 0.3s ease;
+    }
+    .challenge-card:hover {
+      border-color: #333;
+      transform: translateX(4px);
+    }
+    /* Background watermark numbers */
+    .watermark-number {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 6rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.03);
+      user-select: none;
+      pointer-events: none;
+    }
+    /* Vertical line decoration */
+    .gold-vertical-line {
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, #d4af37, transparent);
+    }
+  </style>
+</head>
+<body class="min-h-screen py-12 px-4 md:px-12 lg:px-24">
+<!-- BEGIN: Page Header -->
+<header class="max-w-6xl mx-auto mb-16 flex flex-col md:flex-row md:items-center justify-between gap-4" data-purpose="header-section">
+<div class="flex items-center gap-4">
+<span class="text-3xl font-bold accent-gold">$</span>
+<h1 class="text-2xl md:text-3xl font-bold tracking-tight uppercase mono-font">
+        KODAQS Exchange Technical Challenges
+      </h1>
+<span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold mono-font mt-1">
+        FULLSTACK
+      </span>
+</div>
+<div class="text-xs opacity-30 mono-font text-right">
+      // solved: 5 technical challenges
+    </div>
+</header>
+<!-- END: Page Header -->
+<!-- BEGIN: Challenges Container -->
+<main class="max-w-6xl mx-auto flex gap-8">
+<!-- LEFT DECORATION LINE -->
+<div class="hidden md:block gold-vertical-line h-auto self-stretch opacity-60" data-purpose="visual-accent"></div>
+<!-- CHALLENGE LIST -->
+<section class="flex-1 space-y-6" data-purpose="challenges-list">
+<!-- CHALLENGE 01 -->
+<article class="challenge-card relative p-8 rounded-lg overflow-hidden group" data-purpose="challenge-item">
+<span class="watermark-number mono-font">01</span>
+<div class="relative z-10">
+<header class="mb-2">
+<span class="accent-gold mono-font text-xs font-bold tracking-widest uppercase">CHALLENGE_01</span>
+</header>
+<p class="text-lg md:text-xl font-medium mb-6 text-gray-200">
+            RabbitMQ 메시지 큐와 Netty-SocketIO를 결합한 실시간 체결 엔진 설계
+          </p>
+<footer class="flex flex-wrap gap-2">
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">RabbitMQ</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Netty</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">SocketIO</span>
+</footer>
+</div>
+</article>
+<!-- CHALLENGE 02 -->
+<article class="challenge-card relative p-8 rounded-lg overflow-hidden group" data-purpose="challenge-item">
+<span class="watermark-number mono-font">02</span>
+<div class="relative z-10">
+<header class="mb-2">
+<span class="accent-gold mono-font text-xs font-bold tracking-widest uppercase">CHALLENGE_02</span>
+</header>
+<p class="text-lg md:text-xl font-medium mb-6 text-gray-200">
+            Bitcoin JSON-RPC, Ethereum web3j, XRP REST 등 이기종 블록체인 노드를 WalletProxyProviderFactory 패턴으로 통합
+          </p>
+<footer class="flex flex-wrap gap-2">
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Bitcoin</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">JSON</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">RPC</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Ethereum</span>
+</footer>
+</div>
+</article>
+<!-- CHALLENGE 03 -->
+<article class="challenge-card relative p-8 rounded-lg overflow-hidden group" data-purpose="challenge-item">
+<span class="watermark-number mono-font">03</span>
+<div class="relative z-10">
+<header class="mb-2">
+<span class="accent-gold mono-font text-xs font-bold tracking-widest uppercase">CHALLENGE_03</span>
+</header>
+<p class="text-lg md:text-xl font-medium mb-6 text-gray-200">
+            Spring Session + Redis를 이용한 다중 서버 간 세션 공유 및 분산 처리
+          </p>
+<footer class="flex flex-wrap gap-2">
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Spring</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Session</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Redis</span>
+</footer>
+</div>
+</article>
+<!-- CHALLENGE 04 -->
+<article class="challenge-card relative p-8 rounded-lg overflow-hidden group" data-purpose="challenge-item">
+<span class="watermark-number mono-font">04</span>
+<div class="relative z-10">
+<header class="mb-2">
+<span class="accent-gold mono-font text-xs font-bold tracking-widest uppercase">CHALLENGE_04</span>
+</header>
+<p class="text-lg md:text-xl font-medium mb-6 text-gray-200">
+            C# WinForms 마켓메이커 도구로 외부 거래소 실시간 시세를 KODAQS 호가창에 자동 주입
+          </p>
+<footer class="flex flex-wrap gap-2">
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">WinForms</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">KODAQS</span>
+</footer>
+</div>
+</article>
+<!-- CHALLENGE 05 -->
+<article class="challenge-card relative p-8 rounded-lg overflow-hidden group" data-purpose="challenge-item">
+<span class="watermark-number mono-font">05</span>
+<div class="relative z-10">
+<header class="mb-2">
+<span class="accent-gold mono-font text-xs font-bold tracking-widest uppercase">CHALLENGE_05</span>
+</header>
+<p class="text-lg md:text-xl font-medium mb-6 text-gray-200">
+            eGovFramework 기반 관리자와 커스텀 Spring MVC 사용자 서버를 동일 MySQL DB로 이중 운영
+          </p>
+<footer class="flex flex-wrap gap-2">
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">GovFramework</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">Spring</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">MVC</span>
+<span class="text-[10px] px-2 py-1 border border-gray-700 rounded bg-black/40 text-gray-400 mono-font">MySQL</span>
+</footer>
+</div>
+</article>
+</section>
+</main>
+<!-- END: Challenges Container -->
+<!-- BEGIN: Page Footer -->
+<footer class="max-w-6xl mx-auto mt-16 flex justify-end" data-purpose="site-footer">
+<div class="mono-font text-[10px] opacity-20 italic">
+      process.exit(0) // exchange-kodaqs-challenges-resolved
+    </div>
+</footer>
+<!-- END: Page Footer -->
+</body></html>

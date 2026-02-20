@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Media Crawling Admin Architecture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#34D399", // Greenish tint similar to client section
+              "background-light": "#F3F4F6", // Light gray background
+              "background-dark": "#111827", // Dark gray background
+              "card-light": "#FFFFFF",
+              "card-dark": "#1F2937",
+              "border-light": "#E5E7EB",
+              "border-dark": "#374151",
+              "accent-green": "#229F55", // For the client header
+              "accent-purple": "#6B52BC", // For the server header
+              "box-green-bg": "#E6F4EA", // Light green for boxes
+              "box-purple-bg": "#F0EBF8", // Light purple for boxes
+              "text-main": "#1F2937",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              "xl": "1rem",
+              "2xl": "1.5rem",
+            },
+            boxShadow: {
+              'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              'elevated': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            }
+          },
+        },
+      };
+    </script>
+<style>.grid-pattern {
+            background-color: transparent;
+            background-image: linear-gradient(#E5E7EB 1px, transparent 1px), linear-gradient(90deg, #E5E7EB 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .dark .grid-pattern {
+            background-image: linear-gradient(#374151 1px, transparent 1px), linear-gradient(90deg, #374151 1px, transparent 1px);
+        }.connector-vertical {
+            width: 2px;
+            background-color: #D1D5DB;
+        }
+        .dark .connector-vertical {
+            background-color: #4B5563;
+        }
+        .connector-horizontal {
+            height: 2px;
+            background-color: #D1D5DB;
+        }
+        .dark .connector-horizontal {
+            background-color: #4B5563;
+        }
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #D1D5DB;
+        }
+        .dark .arrow-down::after {
+            border-top-color: #4B5563;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-100 min-h-screen grid-pattern p-4 md:p-10 flex flex-col items-center justify-center">
+<div class="bg-card-light dark:bg-card-dark w-full max-w-6xl rounded-2xl shadow-elevated p-8 md:p-12 relative border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-center gap-4 mb-10 relative">
+<h1 class="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white tracking-tight">crawler-gallery-01</h1>
+<span class="bg-orange-400 text-white text-xs font-bold px-3 py-1 rounded-full absolute -right-4 md:right-auto md:static translate-x-full md:translate-x-0 top-1">TOOL</span>
+</div>
+<div class="space-y-6">
+<div class="border border-accent-green rounded-xl overflow-hidden shadow-soft">
+<div class="bg-accent-green text-white py-2 text-center font-semibold text-lg tracking-wide uppercase">
+                    CLIENT (1)
+                </div>
+<div class="p-8 flex justify-center bg-white dark:bg-gray-800">
+<div class="bg-box-green-bg dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-6 text-center w-full max-w-lg shadow-sm">
+<div class="font-bold text-gray-800 dark:text-gray-200 mb-1">src/main/webapp/WEB-INF/jsp/</div>
+<div class="text-gray-600 dark:text-gray-400">JSP 뷰 (관리자 대시보드)</div>
+</div>
+</div>
+</div>
+<div class="relative h-8 w-full flex justify-center items-center">
+<div class="connector-vertical h-full arrow-down relative"></div>
+</div>
+<div class="border border-accent-purple rounded-xl overflow-hidden shadow-soft">
+<div class="bg-accent-purple text-white py-2 text-center font-semibold text-lg tracking-wide uppercase">
+                    SERVER / API (7)
+                </div>
+<div class="p-8 bg-white dark:bg-gray-800">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-box-purple-bg dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-lg p-6 text-center flex flex-col justify-center items-center shadow-sm min-h-[100px]">
+<div class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm md:text-base break-all">src/main/java/admin/</div>
+<div class="text-gray-600 dark:text-gray-400 text-sm">Spring MVC 컨트롤러/서비스/VO<br/>(CRUD 관리 기능)</div>
+</div>
+<div class="bg-box-purple-bg dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-lg p-6 text-center flex flex-col justify-center items-center shadow-sm min-h-[100px]">
+<div class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm md:text-base break-all">src/main/java/common/</div>
+<div class="text-gray-600 dark:text-gray-400 text-sm">크롤러 엔진 (Crawler.java),<br/>공통 유틸리티</div>
+</div>
+<div class="bg-box-purple-bg dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-lg p-6 text-center flex flex-col justify-center items-center shadow-sm min-h-[100px]">
+<div class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm md:text-base break-all">src/main/resources/sql/</div>
+<div class="text-gray-600 dark:text-gray-400 text-sm">MyBatis XML 매퍼</div>
+</div>
+</div>
+<div class="relative h-8 mb-4 w-full flex justify-center">
+<div class="absolute top-0 w-3/4 h-4 border-t-2 border-l-2 border-r-2 border-gray-300 dark:border-gray-600 rounded-t-lg"></div>
+<div class="absolute top-0 h-4 border-l-2 border-gray-300 dark:border-gray-600 left-[12.5%] translate-y-full"></div> 
+<div class="absolute top-0 h-4 border-l-2 border-gray-300 dark:border-gray-600 left-[37.5%] translate-y-full"></div> 
+<div class="absolute top-0 h-4 border-l-2 border-gray-300 dark:border-gray-600 right-[37.5%] translate-y-full"></div> 
+<div class="absolute top-0 h-4 border-l-2 border-gray-300 dark:border-gray-600 right-[12.5%] translate-y-full"></div> 
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+<h3 class="font-bold text-gray-900 dark:text-white mb-2">Crawler.java</h3>
+<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                Twitter/Instagram/Facebook<br/>
+                                Selenium 크롤링 엔진
+                            </p>
+</div>
+<div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+<h3 class="font-bold text-gray-900 dark:text-white mb-2">ContentsCtr.java</h3>
+<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                수집 콘텐츠<br/>
+                                CRUD 관리 API
+                            </p>
+</div>
+<div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+<h3 class="font-bold text-gray-900 dark:text-white mb-2">AppMainCtr.java</h3>
+<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                앱 메인 데이터 관리 컨트롤러
+                            </p>
+</div>
+<div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+<h3 class="font-bold text-gray-900 dark:text-white mb-2">applicationContext.xml</h3>
+<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                Spring/MyBatis/DBCP 설정
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 bg-accent-green text-white px-6 py-3 rounded-full shadow-lg text-sm md:text-base font-medium flex items-center gap-2 max-w-4xl text-center">
+<span class="material-icons text-sm">info</span>
+        Spring MVC (Controller-Service-DAO) + Headless Browser Crawler
+    </div>
+
+</body></html>

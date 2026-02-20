@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crypto Trading Project Thumbnail</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "accent-gold": "#FFD700",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f1115",
+                        "surface-dark": "#181b21",
+                        "card-dark": "#13161c",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #232f48 1px, transparent 1px), linear-gradient(to bottom, #232f48 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(19, 91, 236, 0.5), 0 0 20px rgba(19, 91, 236, 0.3);
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-[#050505] font-display min-h-screen flex items-center justify-center p-4 sm:p-8">
+<div class="relative w-[1200px] h-[800px] bg-[#0B0E14] rounded-none overflow-hidden shadow-2xl flex flex-col group/design-root border border-slate-800/50">
+<div class="absolute inset-0 bg-[#0B0E14]">
+<div class="absolute inset-0 opacity-[0.03]" style="background-size: 40px 40px; background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px);"></div>
+<div class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#135bec]/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-accent-gold/5 rounded-full blur-[100px] pointer-events-none"></div>
+</div>
+<div class="relative z-10 w-full h-full flex flex-col p-16">
+<div class="flex flex-col gap-6 mb-12">
+<div class="flex items-start">
+<div class="inline-flex h-8 items-center justify-center gap-x-2 rounded-full bg-[#135bec]/10 border border-[#135bec]/30 px-4 backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-accent-gold shadow-[0_0_8px_rgba(255,215,0,0.8)]"></span>
+<p class="text-[#135bec] text-xs font-bold tracking-[0.2em] uppercase">FINTECH</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<h1 class="text-white text-7xl font-bold leading-[0.9] tracking-tighter">
+                        Crypto <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#135bec] via-[#60a5fa] to-white">Trade Pro</span>
+</h1>
+</div>
+<p class="text-slate-400 text-xl font-light max-w-lg leading-relaxed mt-2">
+                    Real-time trading &amp; asset management platform designed for high-frequency data.
+                </p>
+</div>
+<div class="flex-1 flex justify-between items-end pb-8">
+<div class="flex flex-col gap-3">
+<div class="text-slate-500 text-xs uppercase tracking-widest font-semibold mb-2 ml-1">Tech Stack</div>
+<div class="flex flex-wrap gap-2 max-w-sm">
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#181b21] border border-slate-800/60">
+<span class="material-symbols-outlined text-[#6DB33F] text-[20px]">eco</span>
+<span class="text-slate-300 text-sm font-medium">Spring Boot</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#181b21] border border-slate-800/60">
+<span class="material-symbols-outlined text-[#61DAFB] text-[20px]">code</span>
+<span class="text-slate-300 text-sm font-medium">React</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#181b21] border border-slate-800/60">
+<span class="material-symbols-outlined text-white text-[20px]">sync_alt</span>
+<span class="text-slate-300 text-sm font-medium">WebSocket</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#181b21] border border-slate-800/60">
+<span class="material-symbols-outlined text-[#DC382D] text-[20px]">database</span>
+<span class="text-slate-300 text-sm font-medium">Redis</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#181b21] border border-slate-800/60">
+<span class="material-symbols-outlined text-slate-100 text-[20px]">hub</span>
+<span class="text-slate-300 text-sm font-medium">Kafka</span>
+</div>
+</div>
+</div>
+<div class="absolute right-0 top-0 bottom-0 w-[60%] flex items-center justify-center pointer-events-none">
+<svg class="absolute right-0 top-[20%] w-[90%] h-[80%] text-slate-800 opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="chartGradientNew" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#135bec;stop-opacity:0.3"></stop>
+<stop offset="100%" style="stop-color:#135bec;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+<path d="M0,300 Q150,200 300,400 T600,250 T900,100 L900,600 L0,600 Z" fill="url(#chartGradientNew)"></path>
+</svg>
+<div class="relative w-[540px] h-[540px] mt-16 mr-16">
+<div class="absolute top-10 left-10 z-20 w-80 h-80 drop-shadow-[0_20px_60px_rgba(19,91,236,0.25)] transform hover:scale-105 transition-transform duration-700 ease-in-out">
+<div class="w-full h-full rounded-full bg-gradient-to-br from-[#2a2a2a] via-[#111] to-black relative border border-white/5 shadow-2xl flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.05),transparent)]"></div>
+<span class="material-symbols-outlined text-accent-gold text-[180px] drop-shadow-[0_0_25px_rgba(255,215,0,0.4)]">currency_bitcoin</span>
+<div class="absolute top-0 right-0 bottom-0 left-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-12"></div>
+</div>
+</div>
+<div class="glass-card absolute z-30 bottom-16 right-0 w-72 p-6 rounded-2xl border-t border-l border-white/10 transform rotate-[-4deg] shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-center mb-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#F7931A]/20 flex items-center justify-center border border-[#F7931A]/30">
+<span class="material-symbols-outlined text-[#F7931A] text-lg">currency_bitcoin</span>
+</div>
+<div>
+<p class="text-white text-base font-bold">Bitcoin</p>
+<p class="text-slate-400 text-xs font-medium">BTC/USD</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-white text-base font-bold font-mono">$42,350</p>
+<p class="text-emerald-400 text-xs font-bold flex items-center justify-end gap-0.5 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                                        +2.4%
+                                    </p>
+</div>
+</div>
+<div class="h-20 w-full mb-5 flex items-end justify-between gap-1 px-1">
+<div class="w-1/6 bg-emerald-500/30 h-[40%] rounded-[2px]"></div>
+<div class="w-1/6 bg-emerald-500/50 h-[60%] rounded-[2px]"></div>
+<div class="w-1/6 bg-red-500/40 h-[30%] rounded-[2px]"></div>
+<div class="w-1/6 bg-emerald-500/60 h-[70%] rounded-[2px]"></div>
+<div class="w-1/6 bg-emerald-500/80 h-[85%] rounded-[2px]"></div>
+<div class="w-1/6 bg-emerald-500 h-[50%] rounded-[2px] shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/20">Buy</button>
+<button class="flex-1 bg-[#2A303C] hover:bg-[#343b49] text-white text-xs font-bold py-2.5 rounded-lg transition-colors border border-white/5">Sell</button>
+</div>
+</div>
+<div class="glass-card absolute z-10 top-0 left-[-20px] w-56 p-5 rounded-2xl border-t border-l border-white/10 transform rotate-[6deg]">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-slate-400 text-sm">account_balance_wallet</span>
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wide">Total Balance</p>
+</div>
+<p class="text-white text-2xl font-bold tracking-tight mb-3 font-mono">$12,450.00</p>
+<div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-blue-400 w-[75%] rounded-full shadow-[0_0_10px_rgba(19,91,236,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#135bec] to-transparent opacity-50"></div>
+</div>
+
+</body></html>

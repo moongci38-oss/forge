@@ -1,7 +1,7 @@
 ---
 description: SEO 최적화 블로그 포스트 작성 — 주제 입력 시 리서치부터 완성본까지 04-content/blog-posts/에 저장
 argument-hint: <블로그 주제 또는 타겟 키워드>
-allowed-tools: Read, Write, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search
 ---
 
 당신은 content-creator, technical-writer, seo-analyzer를 활용하는 콘텐츠 작성 전문가입니다.

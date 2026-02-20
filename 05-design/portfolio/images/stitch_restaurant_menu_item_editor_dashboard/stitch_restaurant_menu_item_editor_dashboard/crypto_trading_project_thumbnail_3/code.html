@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>crypto-thumbnail</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "accent-gold": "#FFD700",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f1115",
+                        "surface-dark": "#181b21",
+                        "card-dark": "#13161c",
+                        "glass-border": "rgba(255, 255, 255, 0.15)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #232f48 1px, transparent 1px), linear-gradient(to bottom, #232f48 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card-strong {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }.info-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .neon-glow-gold {
+             box-shadow: 0 0 20px rgba(255, 215, 0, 0.15), inset 0 0 10px rgba(255, 215, 0, 0.05);
+        }
+        .code-bg-glow {
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+        }
+        .diamond-grid {
+             background-image: linear-gradient(45deg, #1e293b 25%, transparent 25%), 
+             linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
+             linear-gradient(45deg, transparent 75%, #1e293b 75%), 
+             linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        .top-highlight-bar {
+            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.8) 50%, rgba(255,215,0,0) 100%);
+            height: 2px;
+            width: 80%;
+            position: absolute;
+            top: 0;
+            left: 10%;
+            opacity: 0.7;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+    </style>
+</head>
+<body class="bg-[#050505] font-display min-h-screen flex items-center justify-center p-0 m-0">
+<div class="relative w-[800px] h-[450px] bg-[#0B0E14] overflow-hidden shadow-2xl flex flex-col group/design-root border border-slate-800/50 m-auto selection:bg-accent-gold/30">
+<div class="absolute inset-0 bg-[#080a0f]">
+<div class="absolute inset-0 opacity-[0.05]" style="background-size: 30px 30px; background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px);"></div>
+<div class="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-accent-gold/10 rounded-full blur-[100px] pointer-events-none opacity-40"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#135bec]/10 rounded-full blur-[80px] pointer-events-none opacity-30"></div>
+<div class="absolute top-1/2 right-[10%] -translate-y-1/2 w-64 h-64 border border-white/5 rotate-45 flex items-center justify-center opacity-30 pointer-events-none">
+<div class="w-48 h-48 border border-white/5 flex items-center justify-center">
+<div class="w-32 h-32 border border-white/10 flex items-center justify-center bg-accent-gold/5 blur-xl"></div>
+</div>
+</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center z-10 p-12">
+<div class="relative w-full h-full max-w-[650px] max-h-[320px] info-card rounded-2xl p-10 flex flex-col justify-between overflow-hidden neon-glow-gold">
+<div class="top-highlight-bar"></div>
+<div class="relative z-20 flex flex-col h-full justify-center">
+<div class="mb-4">
+<span class="inline-flex items-center justify-center px-3 py-1 rounded bg-[#F7931A] text-black text-[10px] font-bold tracking-widest uppercase shadow-[0_0_10px_rgba(247,147,26,0.4)]">
+                        FINTECH
+                    </span>
+</div>
+<div class="flex flex-col gap-1 mb-3">
+<h1 class="text-white text-5xl font-bold tracking-tight leading-[1.1]">
+                        KODAQS Crypto <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#e2e2e2] to-[#999]">Exchange</span>
+</h1>
+</div>
+<p class="text-slate-400 text-sm font-medium tracking-wide mb-8 opacity-80">
+                    Full-Stack Cryptocurrency Exchange Platform
+                </p>
+<div class="flex flex-wrap gap-2 mt-auto">
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        Java 1.8
+                    </div>
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        Spring MVC
+                    </div>
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        MySQL
+                    </div>
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        Redis
+                    </div>
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        RabbitMQ
+                    </div>
+<div class="px-3 py-1.5 rounded bg-white/10 border border-white/5 backdrop-blur-sm text-slate-200 text-xs font-semibold shadow-sm">
+                        web3j
+                    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/80 to-transparent z-0 pointer-events-none flex items-end pb-4 px-6">
+<code class="text-[10px] text-white/20 font-mono">const server = new KODAQS Crypto Exchange({ port: 8080 });</code>
+</div>
+</div>
+
+</body></html>

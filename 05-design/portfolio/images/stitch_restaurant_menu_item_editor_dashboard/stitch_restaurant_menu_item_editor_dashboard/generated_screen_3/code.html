@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KODAQS Exchange Key Features</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- BEGIN: Custom Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kodaqs-orange': '#F59E0B',
+            'kodaqs-purple': '#7C3AED',
+            'card-bg': '#FFFFFF',
+            'page-bg': '#F9FAFB',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Custom Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="card-effects">
+    /* Subtle border on the left to match the orange accent in the image */
+    .feature-card {
+      position: relative;
+      border-left: 4px solid #F59E0B;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+    /* Large background numbering styling */
+    .bg-number {
+      position: absolute;
+      right: 20px;
+      bottom: 5px;
+      font-size: 5rem;
+      font-weight: 800;
+      color: rgba(0, 0, 0, 0.03);
+      pointer-events: none;
+      user-select: none;
+    }
+    /* Background dot pattern to mimic the canvas feel */
+    body {
+      background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-page-bg min-h-screen p-8 md:p-16">
+<main class="max-w-7xl mx-auto">
+<!-- BEGIN: Header Section -->
+<header class="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-4">
+<div class="flex items-center gap-4">
+<!-- Vertical orange bar decoration -->
+<div class="w-1.5 h-8 bg-kodaqs-orange rounded-full"></div>
+<h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+          KODAQS Exchange Key Features
+        </h1>
+<span class="bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+          Fullstack
+        </span>
+</div>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Features Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-6" data-purpose="features-grid">
+<!-- Feature 01 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          01
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            실시간 코인 시세 조회 및 TradingView 차트 연동
+          </p>
+</div>
+<span class="bg-number">01</span>
+</article>
+<!-- Feature 02 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          02
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            매수/매도 주문 접수 및 체결 엔진 (RabbitMQ 기반)
+          </p>
+</div>
+<span class="bg-number">02</span>
+</article>
+<!-- Feature 03 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          03
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            Netty-SocketIO 실시간 호가창/체결 내역 푸시
+          </p>
+</div>
+<span class="bg-number">03</span>
+</article>
+<!-- Feature 04 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          04
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            Bitcoin/Ethereum/XRP 다중 코인 전자지갑 자동 생성
+          </p>
+</div>
+<span class="bg-number">04</span>
+</article>
+<!-- Feature 05 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          05
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            Spring Security 기반 회원 인증 및 역할 관리
+          </p>
+</div>
+<span class="bg-number">05</span>
+</article>
+<!-- Feature 06 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          06
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            Google ZXing QR코드 생성 (2FA, 지갑 주소)
+          </p>
+</div>
+<span class="bg-number">06</span>
+</article>
+<!-- Feature 07 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          07
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            관리자 백오피스: 회원/코인/수수료/통계 관리
+          </p>
+</div>
+<span class="bg-number">07</span>
+</article>
+<!-- Feature 08 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          08
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            C# 마켓메이커: 빗썸/코인원 시세 자동 주입
+          </p>
+</div>
+<span class="bg-number">08</span>
+</article>
+<!-- Feature 09 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          09
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            Redis 세션 클러스터링
+          </p>
+</div>
+<span class="bg-number">09</span>
+</article>
+<!-- Feature 10 -->
+<article class="feature-card bg-white p-8 rounded-xl shadow-sm flex items-center gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-kodaqs-orange rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          10
+        </div>
+<div class="flex-grow">
+<p class="text-slate-700 font-medium text-lg leading-snug">
+            다국어 지원 (한국어/영어), 모바일 전용 뷰
+          </p>
+</div>
+<span class="bg-number">10</span>
+</article>
+</section>
+<!-- END: Features Grid -->
+<!-- BEGIN: Footer Labels -->
+<footer class="mt-16 flex flex-col md:flex-row justify-between text-[10px] font-bold tracking-widest text-slate-400 uppercase">
+<div>10 Features Total</div>
+<div>Fullstack Application</div>
+</footer>
+<!-- END: Footer Labels -->
+</main>
+</body></html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KODAQS Crypto Exchange Architecture</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f1f5f9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    /* Vertical connecting lines between sections */
+    .connector {
+      width: 2px;
+      height: 24px;
+      background-color: #cbd5e1;
+      margin: 0 auto;
+      position: relative;
+    }
+    .connector::after {
+      content: '◆';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #94a3b8;
+      font-size: 10px;
+      background: #f1f5f9;
+      padding: 0 4px;
+    }
+  </style>
+<style data-purpose="component-styles">
+    /* Module Card Styles */
+    .module-card {
+      @apply bg-white border rounded-lg p-3 shadow-sm min-h-[80px] flex flex-col justify-start transition-all hover:shadow-md;
+    }
+    .module-title {
+      @apply text-[11px] font-bold uppercase tracking-wide mb-1;
+    }
+    .module-desc {
+      @apply text-[10px] text-gray-500 leading-tight;
+    }
+    
+    /* Specific Colors for Module Card Borders */
+    .border-orange-subtle { border-top: 3px solid #f59e0b; }
+    .border-blue-subtle { border-top: 3px solid #6366f1; }
+    .border-green-subtle { border-top: 3px solid #10b981; }
+  </style>
+</head>
+<body class="p-8">
+<!-- BEGIN: MainContainer -->
+<div class="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl p-10 border border-gray-100 min-h-screen flex flex-col">
+<!-- BEGIN: HeaderSection -->
+<header class="flex items-center gap-3 mb-8 border-b pb-6">
+<div class="w-2 h-8 bg-orange-500 rounded-full"></div>
+<h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">
+        KODAQS Crypto Exchange Architecture
+      </h1>
+<span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider ml-2">
+        Fullstack
+      </span>
+</header>
+<!-- END: HeaderSection -->
+<main class="flex-grow space-y-4">
+<!-- BEGIN: ClientLayer -->
+<section data-purpose="client-layer">
+<div class="bg-amber-600 text-white px-4 py-2 rounded-t-lg flex items-center gap-2">
+<span class="bg-white/20 w-6 h-6 rounded flex items-center justify-center font-bold text-xs">C</span>
+<h2 class="font-bold text-sm tracking-widest uppercase">Client <span class="opacity-70 text-[10px] ml-1">(1)</span></h2>
+</div>
+<div class="bg-slate-50 border-x border-b p-6 rounded-b-lg grid grid-cols-12 gap-4">
+<div class="col-span-3 module-card border-orange-subtle">
+<span class="module-title text-orange-600">CRYPTO_FRONT/</span>
+<p class="module-desc italic font-medium mb-1">사용자 거래소 웹 (Spring MVC 4.2.5, JSP)</p>
+</div>
+</div>
+</section>
+<!-- END: ClientLayer -->
+<div class="connector"></div>
+<!-- BEGIN: ServerApiLayer -->
+<section data-purpose="server-api-layer">
+<div class="bg-indigo-600 text-white px-4 py-2 rounded-t-lg flex items-center gap-2">
+<span class="bg-white/20 w-6 h-6 rounded flex items-center justify-center font-bold text-xs">S</span>
+<h2 class="font-bold text-sm tracking-widest uppercase">Server / API <span class="opacity-70 text-[10px] ml-1">(12)</span></h2>
+</div>
+<div class="bg-slate-50 border-x border-b p-6 rounded-b-lg space-y-4">
+<!-- Row 1 -->
+<div class="grid grid-cols-10 gap-3">
+<div class="col-span-2 module-card border-blue-subtle">
+<span class="module-title text-indigo-600">CRYPTO_ADMIN/</span>
+<p class="module-desc">관리자 백오피스 (eGovFramework 3.7.0)</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600">CRYPTO_WALLET/</span>
+<p class="module-desc text-[9px]">지갑 서버 (Spring MVC 4.2.5, web3j)</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">daemon-server/trade-s...</span>
+<p class="module-desc text-[9px]">실시간 체결 엔진 (Java standalone, RabbitMQ)</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">daemon-server/notify-...</span>
+<p class="module-desc text-[9px]">알림 서버</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">daemon-server/cmd-too...</span>
+<p class="module-desc text-[9px]">운영 CLI 도구</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">exchange/</span>
+<p class="module-desc text-[9px]">메인 거래 화면 컨트롤러</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">trade/</span>
+<p class="module-desc text-[9px]">주문/체결/차트/잔고 서비스</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">wallet/</span>
+<p class="module-desc text-[9px]">전자지갑 주소 생성 및 입출금 처리</p>
+</div>
+<div class="col-span-1 module-card border-blue-subtle">
+<span class="module-title text-indigo-600 text-[9px]">user/</span>
+<p class="module-desc text-[9px]">회원가입/로그인/인증 (Spring Security)</p>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 gap-3">
+<div class="col-span-3 module-card border-blue-subtle">
+<span class="module-title text-indigo-600">mypage/</span>
+<p class="module-desc">마이페이지, 손익 관리</p>
+</div>
+<div class="col-span-3 module-card border-blue-subtle">
+<span class="module-title text-indigo-600">bbs/</span>
+<p class="module-desc">게시판(공지/FAQ/이벤트), 다국어 지원</p>
+</div>
+<div class="col-span-3 module-card border-blue-subtle">
+<span class="module-title text-indigo-600">daemon/trade-server</span>
+<p class="module-desc">Netty-SocketIO + RabbitMQ 기반 실시간 체결 처리</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ServerApiLayer -->
+<div class="connector"></div>
+<!-- BEGIN: ServicesLayer -->
+<section data-purpose="services-layer">
+<div class="bg-orange-500 text-white px-4 py-2 rounded-t-lg flex items-center gap-2">
+<span class="bg-white/20 w-6 h-6 rounded flex items-center justify-center font-bold text-xs">V</span>
+<h2 class="font-bold text-sm tracking-widest uppercase">Services <span class="opacity-70 text-[10px] ml-1">(1)</span></h2>
+</div>
+<div class="bg-slate-50 border-x border-b p-6 rounded-b-lg grid grid-cols-12 gap-4">
+<div class="col-span-3 module-card border-orange-subtle">
+<span class="module-title text-orange-600">market_maker/</span>
+<p class="module-desc">자동 시세 주입 도구 (C# Windows app)</p>
+</div>
+</div>
+</section>
+<!-- END: ServicesLayer -->
+<div class="connector"></div>
+<!-- BEGIN: DataLayer -->
+<section data-purpose="data-layer">
+<div class="bg-emerald-600 text-white px-4 py-2 rounded-t-lg flex items-center gap-2">
+<span class="bg-white/20 w-6 h-6 rounded flex items-center justify-center font-bold text-xs">D</span>
+<h2 class="font-bold text-sm tracking-widest uppercase">Data <span class="opacity-70 text-[10px] ml-1">(1)</span></h2>
+</div>
+<div class="bg-slate-50 border-x border-b p-6 rounded-b-lg grid grid-cols-12 gap-4">
+<div class="col-span-3 module-card border-green-subtle">
+<span class="module-title text-emerald-600">db_scripts/</span>
+<p class="module-desc">MySQL DDL 스크립트</p>
+</div>
+</div>
+</section>
+<!-- END: DataLayer -->
+</main>
+<!-- BEGIN: FooterSection -->
+<footer class="mt-12 flex justify-end">
+<div class="bg-orange-600 text-white px-5 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        Multi-Module Monorepo (Spring MVC + Daemon Server)
+      </div>
+</footer>
+<!-- END: FooterSection -->
+</div>
+<!-- END: MainContainer -->
+</body></html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AlbaNow Thumbnail</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#8B5CF6", // Violet-500 equivalent for the neon purple feel
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#0F0F1A", // Dark navy/black background
+                        "card-dark": "rgba(30, 30, 46, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)",
+                    }
+                },
+            },
+        };
+    </script>
+<style>.bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        .glow-purple {
+            box-shadow: 0 0 150px 20px rgba(139, 92, 246, 0.25);
+        }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .diamond-shape {
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            transform: rotate(45deg);
+            position: absolute;
+        }
+        .diamond-inner {
+            width: 140px;
+            height: 140px;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            transform: rotate(45deg);
+            position: absolute;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+        .diamond-core {
+            width: 60px;
+            height: 60px;
+            background: rgba(139, 92, 246, 0.8);
+            transform: rotate(45deg);
+            position: absolute;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.8);
+            filter: blur(10px);
+        }.big-letter {
+            font-size: 400px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.02);
+            position: absolute;
+            bottom: -100px;
+            right: 100px;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+        }.code-snippet {
+            font-family: 'Courier New', Courier, monospace;
+            color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        .top-right-tag {
+            font-family: 'Courier New', Courier, monospace;
+            color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white h-screen w-full overflow-hidden flex items-center justify-center relative dark">
+<div class="absolute inset-0 bg-grid z-0"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-900 rounded-full blur-[120px] opacity-40 z-0"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-800 rounded-full blur-[120px] opacity-30 z-0"></div>
+<div class="absolute right-[10%] top-1/2 transform -translate-y-1/2 flex items-center justify-center z-0 hidden lg:flex">
+<div class="diamond-shape"></div>
+<div class="diamond-inner"></div>
+<div class="diamond-core"></div>
+</div>
+<div class="big-letter select-none">A</div>
+<div class="glass-card relative z-10 w-full max-w-4xl p-12 rounded-3xl mx-4 lg:mx-0 overflow-hidden min-h-[500px] flex flex-col justify-center">
+<div class="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-70"></div>
+<div class="relative z-20 space-y-8">
+<div>
+<span class="bg-primary/90 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-wider shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                    Mobile
+                </span>
+</div>
+<div class="space-y-2">
+<h1 class="text-6xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg">
+                    AlbaNow
+                </h1>
+<p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide">
+                    Part-time Job Matching Mobile App
+                </p>
+</div>
+<div class="flex flex-wrap gap-3 mt-8">
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    React Native 0.63
+                </div>
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    Node.js
+                </div>
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    Express 4.17
+                </div>
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    PHP
+                </div>
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    MySQL
+                </div>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="bg-white/10 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-sm text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                    Sequelize 6
+                </div>
+</div>
+</div>
+<div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
+</div>
+<div class="code-snippet hidden md:block">
+        const server = new AlbaNow({ port: 8080 });
+    </div>
+<div class="top-right-tag hidden md:block">
+        // albanow.v1.0.0
+    </div>
+
+</body></html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>albanow-gallery-01</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#8b5cf6", // Violet-500 from the AlbaNow branding
+                        "background-light": "#f3f4f6", // Gray-100
+                        "background-dark": "#0f172a", // Slate-900, deep dark blue
+                        "card-dark": "#1e293b", // Slate-800
+                        "neon-blue": "#0ea5e9", // Sky-500
+                        "neon-purple": "#a855f7", // Purple-500
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px rgba(14, 165, 233, 0.5), 0 0 20px rgba(168, 85, 247, 0.3)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>.glow-box {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.1);
+            backdrop-filter: blur(4px);
+        }
+        .glow-connection {
+            filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.6));
+        }
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+            linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen p-4 flex flex-col items-center justify-center dark">
+<header class="w-full max-w-7xl mb-6 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1">
+<span class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" style="-webkit-text-stroke: 1px rgba(255,255,255,0.1);">A</span>
+<h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">AlbaNow</h1>
+</div>
+<div class="h-6 w-px bg-gray-600 mx-2"></div>
+<h2 class="text-xl font-medium text-gray-200">AlbaNow System Architecture</h2>
+</div>
+</header>
+<main class="w-full max-w-7xl relative bg-[#0B1120] rounded-3xl border border-gray-800 p-8 overflow-hidden shadow-2xl">
+<div class="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+<div class="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="text-center mb-16 relative z-10">
+<h3 class="text-3xl font-bold text-white mb-2">AlbaNow <span class="text-cyan-400">System Architecture Diagram</span></h3>
+</div>
+<div class="relative z-10 grid grid-cols-12 gap-8 text-white text-sm">
+<div class="col-span-2 flex flex-col gap-8 items-center justify-start pt-10">
+<div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Clients</div>
+<div class="w-full p-4 rounded-xl border border-cyan-500/50 bg-slate-800/50 glow-box flex flex-col items-center gap-2 group hover:bg-slate-800 transition-colors">
+<span class="material-icons text-cyan-400 text-3xl">language</span>
+<div class="font-bold text-center">WEB APPLICATION<br/><span class="text-xs text-gray-400 font-normal">(React.js)</span></div>
+<div class="absolute right-0 top-1/2 -mr-8 w-8 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent"></div>
+</div>
+<div class="w-full p-4 rounded-xl border border-purple-500/50 bg-slate-800/50 glow-box flex flex-col items-center gap-2 mt-4 group hover:bg-slate-800 transition-colors">
+<span class="material-icons text-purple-400 text-3xl">smartphone</span>
+<div class="font-bold text-center">MOBILE APPLICATION<br/><span class="text-xs text-gray-400 font-normal">(React Native)</span></div>
+<div class="absolute right-0 top-1/2 -mr-8 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-transparent"></div>
+</div>
+</div>
+<div class="col-span-7 relative">
+<div class="absolute left-0 top-[80px] w-48 p-6 rounded-2xl border-2 border-cyan-400 bg-slate-900 shadow-[0_0_15px_rgba(34,211,238,0.3)] flex flex-col items-center z-20">
+<span class="material-icons text-cyan-400 text-4xl mb-2">security</span>
+<div class="font-bold text-lg text-center">API GATEWAY</div>
+<div class="text-xs text-gray-400">(Nginx / GraphQL)</div>
+</div>
+<div class="absolute right-0 top-0 text-xs font-bold text-gray-400 uppercase tracking-widest text-right w-full pr-12">Microservices (Node.js / Go)</div>
+<div class="absolute right-0 top-8 w-[400px] h-[350px]">
+<div class="absolute top-0 left-0">
+<div class="relative w-32 h-28 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full text-slate-800 fill-current drop-shadow-lg" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M25 5 L75 5 L95 50 L75 95 L25 95 L5 50 Z" fill="rgba(30, 41, 59, 0.8)" stroke="#38bdf8" stroke-width="2"></path>
+</svg>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-icons text-cyan-300">vpn_key</span>
+<div class="text-[10px] font-bold mt-1 text-center leading-tight">AUTH SERVICE<br/><span class="text-gray-400 font-normal">(JWT)</span></div>
+</div>
+</div>
+</div>
+<div class="absolute top-0 right-0">
+<div class="relative w-32 h-28 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full text-slate-800 fill-current drop-shadow-lg" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M25 5 L75 5 L95 50 L75 95 L25 95 L5 50 Z" fill="rgba(30, 41, 59, 0.8)" stroke="#818cf8" stroke-width="2"></path>
+</svg>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-icons text-indigo-300">work</span>
+<div class="text-[10px] font-bold mt-1 text-center leading-tight">JOB<br/>SERVICE</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0">
+<div class="relative w-32 h-28 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full text-slate-800 fill-current drop-shadow-lg" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M25 5 L75 5 L95 50 L75 95 L25 95 L5 50 Z" fill="rgba(30, 41, 59, 0.8)" stroke="#38bdf8" stroke-width="2"></path>
+</svg>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-icons text-cyan-300">chat</span>
+<div class="text-[10px] font-bold mt-1 text-center leading-tight">CHAT SERVICE<br/><span class="text-gray-400 font-normal">(WebSocket)</span></div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 right-0">
+<div class="relative w-32 h-28 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full text-slate-800 fill-current drop-shadow-lg" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M25 5 L75 5 L95 50 L75 95 L25 95 L5 50 Z" fill="rgba(30, 41, 59, 0.8)" stroke="#818cf8" stroke-width="2"></path>
+</svg>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-icons text-indigo-300">notifications_active</span>
+<div class="text-[10px] font-bold mt-1 text-center leading-tight">NOTIFICATION<br/>SERVICE</div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-[-150px] left-0 w-full flex gap-6">
+<div class="text-xs font-bold text-gray-400 uppercase tracking-widest absolute -top-8 left-20">Databases</div>
+<div class="w-48 p-4 rounded-xl border border-cyan-500/50 bg-slate-900/80 glow-box flex items-center gap-3">
+<span class="material-icons text-cyan-400 text-3xl">storage</span>
+<div>
+<div class="font-bold text-sm">PostgreSQL</div>
+<div class="text-[10px] text-gray-400">(Relational DB)</div>
+</div>
+</div>
+<div class="w-40 p-4 rounded-xl border border-purple-500/50 bg-slate-900/80 glow-box flex items-center gap-3">
+<span class="material-icons text-purple-400 text-3xl">layers</span>
+<div>
+<div class="font-bold text-sm">Redis</div>
+<div class="text-[10px] text-gray-400">(Caching)</div>
+</div>
+</div>
+</div>
+<svg class="absolute inset-0 w-full h-[600px] pointer-events-none -z-10 overflow-visible">
+<defs>
+<linearGradient id="grad1" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"></stop>
+</linearGradient>
+</defs>
+<path class="opacity-50" d="M-50 100 L 0 100 L 0 140" fill="none" stroke="url(#grad1)" stroke-width="2"></path>
+<path class="opacity-50" d="M-50 250 L 0 250 L 0 180" fill="none" stroke="url(#grad1)" stroke-width="2"></path>
+<path d="M192 140 L 250 140 L 250 80 L 320 80" fill="none" stroke="#38bdf8" stroke-width="2"></path>
+<path d="M192 140 L 250 140 L 250 300 L 320 300" fill="none" stroke="#38bdf8" stroke-width="2"></path>
+<path d="M400 110 L 480 110" fill="none" stroke="#a855f7" stroke-dasharray="4" stroke-width="2"></path>
+<path d="M400 320 L 480 320" fill="none" stroke="#a855f7" stroke-dasharray="4" stroke-width="2"></path>
+<path d="M360 130 L 440 280" fill="none" stroke="#a855f7" stroke-opacity="0.5" stroke-width="2"></path>
+<path class="glow-connection" d="M350 360 L 350 480 L 220 480" fill="none" stroke="#38bdf8" stroke-width="4"></path>
+<path class="glow-connection" d="M520 360 L 520 420 L 300 420 L 300 480" fill="none" stroke="#a855f7" stroke-width="4"></path>
+</svg>
+</div>
+<div class="col-span-3 flex flex-col justify-end items-end relative h-[500px]">
+<div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 w-full text-center">Cloud Infrastructure (AWS)</div>
+<div class="w-full p-6 rounded-2xl border border-blue-500/30 bg-slate-900/50 backdrop-blur-sm relative mt-auto">
+<div class="flex justify-between gap-4">
+<div class="flex flex-col items-center gap-2">
+<span class="material-icons text-orange-400 text-4xl">cloud_queue</span>
+<div class="text-center">
+<div class="font-bold text-sm text-white">AWS S3</div>
+<div class="text-[10px] text-gray-400">(Object Storage)</div>
+</div>
+</div>
+<div class="w-px bg-gray-700"></div>
+<div class="flex flex-col items-center gap-2">
+<span class="material-icons text-orange-400 text-4xl">dns</span>
+<div class="text-center">
+<div class="font-bold text-sm text-white">AWS EC2</div>
+<div class="text-[10px] text-gray-400">(Compute Engine)</div>
+</div>
+</div>
+</div>
+<svg class="absolute top-[-150px] left-0 w-full h-[150px] pointer-events-none overflow-visible">
+<path d="M-50 -50 L 50 -50 L 50 150" fill="none" stroke="#38bdf8" stroke-width="2"></path>
+<path d="M-50 100 L 150 100 L 150 150" fill="none" stroke="#38bdf8" stroke-width="2"></path>
+<polygon fill="#38bdf8" points="45,145 55,145 50,155"></polygon>
+<polygon fill="#38bdf8" points="145,145 155,145 150,155"></polygon>
+</svg>
+</div>
+</div>
+</div>
+<div class="mt-20 text-center border-t border-gray-800 pt-6">
+<p class="text-gray-500 text-xs">© 2024 AlbaNow Portfolio Project. Designed by [Designer's Name].</p>
+</div>
+</main>
+
+</body></html>

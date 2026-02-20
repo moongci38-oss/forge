@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KODAQS Crypto Exchange Portfolio Thumbnail</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'gold-glow': '#f0b90b',
+            'glass-border': 'rgba(255, 255, 255, 0.1)',
+            'glass-bg': 'rgba(255, 255, 255, 0.05)',
+          },
+          backgroundImage: {
+            'dark-grid': "radial-gradient(circle at center, transparent 0%, #0a0a0a 100%), linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
+          },
+          backgroundSize: {
+            'grid-size': '100% 100%, 40px 40px, 40px 40px',
+          },
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="background-effects">
+    .glow-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+    }
+    .bg-main {
+      background-color: #0c0c0c;
+    }
+  </style>
+<style data-purpose="glassmorphism">
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    }
+    
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(240, 185, 11, 0.4), transparent);
+    }
+  </style>
+<style data-purpose="geometric-accents">
+    .diamond-shape {
+      width: 280px;
+      height: 280px;
+      border: 2px solid rgba(240, 185, 11, 0.2);
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .diamond-inner {
+      width: 180px;
+      height: 180px;
+      border: 4px solid rgba(240, 185, 11, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .diamond-center {
+      width: 80px;
+      height: 80px;
+      border: 6px solid rgba(240, 185, 11, 0.6);
+      background: radial-gradient(circle, rgba(240, 185, 11, 0.2) 0%, transparent 70%);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-main text-white flex items-center justify-center min-h-screen overflow-hidden font-sans">
+<!-- BEGIN: Main Container -->
+<!-- This container mimics the 800x450 aspect ratio and serves as the canvas -->
+<main class="relative w-[800px] h-[450px] bg-dark-grid bg-grid-size overflow-hidden flex items-center justify-start px-12 border border-white/5" data-purpose="thumbnail-container">
+<!-- Background Accents -->
+<div class="glow-sphere w-64 h-64 bg-gold-glow/20 -top-20 -right-20"></div>
+<div class="glow-sphere w-96 h-96 bg-gold-glow/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+<!-- Decorative Text -->
+<div class="absolute top-4 right-6 opacity-10 font-mono text-xs tracking-widest">
+      .// exchange-kodaqs v1.0.0
+    </div>
+<div class="absolute bottom-4 left-6 opacity-10 font-mono text-xs tracking-tight">
+      const server = new KODAQS Crypto Exchange({ port: 8080 });
+    </div>
+<!-- Geometric Symbol (Right Side) -->
+<div class="absolute right-[-60px] top-1/2 -translate-y-1/2 opacity-40">
+<div class="diamond-shape">
+<div class="diamond-inner">
+<div class="diamond-center"></div>
+</div>
+</div>
+</div>
+<!-- BEGIN: Glassmorphic Content Card -->
+<section class="glass-card relative z-10 w-full max-w-2xl rounded-3xl p-10 flex flex-col gap-6" data-purpose="content-card">
+<!-- Project Category Badge -->
+<div>
+<span class="inline-block bg-[#635BFF] text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-md shadow-lg shadow-purple-900/20">
+          Fullstack
+        </span>
+</div>
+<!-- Main Heading and Subheading -->
+<div class="space-y-2">
+<h1 class="text-6xl font-extrabold tracking-tight leading-none drop-shadow-sm">
+          KODAQS Crypto <br/> <span class="text-white">Exchange</span>
+</h1>
+<p class="text-white/60 text-lg font-medium">
+          Full-Stack Cryptocurrency Exchange Platform
+        </p>
+</div>
+<!-- BEGIN: Tech Stack Badges -->
+<div class="flex flex-wrap gap-2 pt-2">
+<!-- Badge Template -->
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          Java 1.8
+        </span>
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          Spring MVC
+        </span>
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          MySQL
+        </span>
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          Redis
+        </span>
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          RabbitMQ
+        </span>
+<span class="px-4 py-2 bg-white/5 border border-gold-glow/30 rounded-xl text-gold-glow/90 text-sm font-semibold hover:bg-gold-glow/10 transition-colors">
+          web3j
+        </span>
+</div>
+<!-- END: Tech Stack Badges -->
+</section>
+<!-- END: Glassmorphic Content Card -->
+</main>
+<!-- END: Main Container -->
+</body></html>

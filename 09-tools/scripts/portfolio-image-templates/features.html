@@ -5,52 +5,68 @@
 <meta name="viewport" content="width=1920">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
   body {
     width: 1920px;
     height: 1080px;
     overflow: hidden;
     font-family: 'Inter', 'Segoe UI', sans-serif;
-    background: #0F172A;
-    color: #E2E8F0;
+    background: #FAFAF9;
+    color: #1E293B;
   }
 
+  /* Subtle dot pattern */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(circle at 0% 100%, rgba(255,255,255,0.015) 0%, transparent 50%);
+    background-image: radial-gradient(circle, #CBD5E1 0.8px, transparent 0.8px);
+    background-size: 32px 32px;
+    opacity: 0.3;
     pointer-events: none;
   }
 
   .container {
     width: 1920px;
     height: 1080px;
-    padding: 60px 80px;
+    padding: 56px 80px;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
+  /* Header */
   .header {
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
     position: relative;
     z-index: 1;
   }
 
-  .header h1 { font-size: 36px; font-weight: 800; color: #F8FAFC; }
+  .header-accent {
+    width: 5px;
+    height: 44px;
+    border-radius: 3px;
+    background: var(--primary, #3B82F6);
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #0F172A;
+  }
 
   .tag {
     padding: 6px 14px;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
   }
   .tag.mobile { background: #7C3AED; color: #fff; }
   .tag.web { background: #2563EB; color: #fff; }
@@ -58,37 +74,38 @@
   .tag.fullstack { background: #6366F1; color: #fff; }
   .tag.tool { background: #F59E0B; color: #1E293B; }
 
+  /* Feature grid */
   .feature-grid {
     flex: 1;
     display: grid;
-    gap: 20px;
+    gap: 16px;
     position: relative;
     z-index: 1;
   }
 
   .feature-card {
-    background: #1E293B;
-    border: 1px solid #334155;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
     border-radius: 14px;
     display: flex;
     gap: 20px;
     align-items: center;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
   }
 
+  /* Left accent bar */
   .feature-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 2px;
-    opacity: 0.4;
-  }
-
-  .feature-card::before {
-    background: linear-gradient(90deg, var(--primary, #3B82F6), transparent);
+    width: 4px;
+    height: 100%;
+    background: var(--primary, #3B82F6);
+    opacity: 0.6;
+    border-radius: 4px 0 0 4px;
   }
 
   .feature-number {
@@ -96,43 +113,87 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
+    font-weight: 900;
     flex-shrink: 0;
     color: #fff;
+    background: var(--primary, #3B82F6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-left: 8px;
   }
-
-  .feature-number { background: linear-gradient(135deg, var(--gs, #3B82F6), var(--ge, #2563EB)); }
 
   .feature-content {
     flex: 1;
   }
 
   .feature-content .feature-desc {
-    color: #CBD5E1;
-    line-height: 1.6;
+    color: #334155;
+    line-height: 1.7;
   }
 
+  /* Watermark number */
+  .feature-watermark {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--primary, #3B82F6);
+    opacity: 0.04;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* Footer */
   .footer-info {
-    padding-top: 20px;
-    border-top: 1px solid #1E293B;
-    font-size: 14px;
-    color: #475569;
+    padding-top: 16px;
+    border-top: 2px solid #E5E7EB;
+    font-size: 13px;
+    color: #94A3B8;
     display: flex;
     justify-content: space-between;
     flex-shrink: 0;
     position: relative;
     z-index: 1;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
+
+  .footer-info .accent-line {
+    width: 60px;
+    height: 2px;
+    background: var(--primary, #3B82F6);
+    position: absolute;
+    top: -2px;
+    left: 0;
+  }
+
+  /* Decorative */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--primary, #3B82F6);
+    opacity: 0.04;
+    pointer-events: none;
+  }
+  .deco-circle-1 { width: 400px; height: 400px; bottom: -150px; right: -100px; }
 </style>
 </head>
 <body>
 <div class="container">
+  <div class="deco-circle deco-circle-1"></div>
+
   <div class="header">
+    <div class="header-accent"></div>
     <h1 id="title">Key Features</h1>
     <span class="tag" id="tag"></span>
   </div>
+
   <div class="feature-grid" id="featureGrid"></div>
+
   <div class="footer-info">
+    <div class="accent-line"></div>
     <span id="totalFeatures"></span>
     <span id="projectType"></span>
   </div>
@@ -143,9 +204,8 @@
   var cat = data.category || 'web';
   var colors = data.colors || {};
   var root = document.documentElement;
-  root.style.setProperty('--gs', colors.gradientStart || '#3B82F6');
-  root.style.setProperty('--ge', colors.gradientEnd || '#2563EB');
   root.style.setProperty('--primary', colors.primary || '#3B82F6');
+
   document.getElementById('title').textContent = (data.title || 'Project') + ' Key Features';
   var tag = document.getElementById('tag');
   tag.className = 'tag ' + cat;
@@ -157,29 +217,17 @@
 
   var maxShow, cols, cardPadding, fontSize, numberSize;
   if (count <= 6) {
-    maxShow = count;
-    cols = 2;
-    cardPadding = '28px 32px';
-    fontSize = '17px';
-    numberSize = 52;
+    maxShow = count; cols = 2;
+    cardPadding = '24px 28px'; fontSize = '16px'; numberSize = 48;
   } else if (count <= 8) {
-    maxShow = 8;
-    cols = 2;
-    cardPadding = '22px 28px';
-    fontSize = '15px';
-    numberSize = 44;
+    maxShow = 8; cols = 2;
+    cardPadding = '20px 24px'; fontSize = '15px'; numberSize = 42;
   } else if (count <= 10) {
-    maxShow = 10;
-    cols = 2;
-    cardPadding = '18px 24px';
-    fontSize = '14px';
-    numberSize = 40;
+    maxShow = 10; cols = 2;
+    cardPadding = '16px 22px'; fontSize = '14px'; numberSize = 38;
   } else {
-    maxShow = 12;
-    cols = 3;
-    cardPadding = '16px 20px';
-    fontSize = '13px';
-    numberSize = 36;
+    maxShow = 12; cols = 3;
+    cardPadding = '14px 18px'; fontSize = '13px'; numberSize = 34;
   }
 
   grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
@@ -198,16 +246,21 @@
     numEl.style.fontSize = Math.round(numberSize * 0.38) + 'px';
     numEl.textContent = String(i + 1).padStart(2, '0');
 
+    var watermark = document.createElement('div');
+    watermark.className = 'feature-watermark';
+    watermark.textContent = String(i + 1).padStart(2, '0');
+
     var contentEl = document.createElement('div');
     contentEl.className = 'feature-content';
     contentEl.innerHTML = '<div class="feature-desc" style="font-size:' + fontSize + '">' + f + '</div>';
 
     card.appendChild(numEl);
     card.appendChild(contentEl);
+    card.appendChild(watermark);
     grid.appendChild(card);
   });
 
-  document.getElementById('totalFeatures').textContent = features.length + ' features total';
+  document.getElementById('totalFeatures').textContent = features.length + ' FEATURES TOTAL';
   document.getElementById('projectType').textContent = (data.type || cat).toUpperCase() + ' APPLICATION';
 </script>
 </body>

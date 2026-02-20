@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KODAQS Crypto Exchange Tech Stack</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-gradients">
+    /* Custom background and subtle borders to match the dark UI aesthetic */
+    body {
+      background-color: #0b0e14;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .layer-card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.5) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      position: relative;
+    }
+    .connector-diamond {
+      width: 12px;
+      height: 12px;
+      transform: rotate(45deg);
+      border: 2px solid;
+      background: transparent;
+      margin: -6px auto;
+      z-index: 10;
+    }
+    .tech-pill {
+      background-color: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+    .tech-pill:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="p-8 md:p-12 lg:p-16 min-h-screen flex items-center justify-center">
+<!-- BEGIN: MainContainer -->
+<main class="w-full max-w-6xl mx-auto space-y-4" data-purpose="tech-stack-gallery">
+<!-- BEGIN: HeaderSection -->
+<header class="flex items-center space-x-4 mb-8">
+<h1 class="text-3xl font-bold tracking-tight text-white uppercase">
+        KODAQS Crypto Exchange Tech Stack
+      </h1>
+<span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded uppercase">
+        Fullstack
+      </span>
+</header>
+<!-- END: HeaderSection -->
+<!-- BEGIN: StackLayers -->
+<div class="space-y-3 relative">
+<!-- LAYER 1: Core / Framework -->
+<section class="layer-card p-4 border-l-4 border-l-indigo-500" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-indigo-400 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Core / Framework <span class="ml-1 text-slate-500">4</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>Java 1.8</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>Spring MVC 4.2.5</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>Spring Security 4.2.5</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>eGovFramework 3.7.0</span>
+</div>
+</section>
+<div class="connector-diamond border-indigo-900"></div>
+<!-- LAYER 2: Database -->
+<section class="layer-card p-4 border-l-4 border-l-green-500" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-green-400 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Database <span class="ml-1 text-slate-500">2</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>MySQL 5.x</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>Redis (spring-session-data-redis)</span>
+</div>
+</section>
+<div class="connector-diamond border-orange-900"></div>
+<!-- LAYER 3: DevOps / Infra -->
+<section class="layer-card p-4 border-l-4 border-l-orange-500" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-orange-400 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>DevOps / Infra <span class="ml-1 text-slate-500">3</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Apache Tomcat 7</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Eclipse IDE</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Maven</span>
+</div>
+</section>
+<div class="connector-diamond border-blue-900"></div>
+<!-- LAYER 4: Messaging -->
+<section class="layer-card p-4 border-l-4 border-l-blue-400" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-blue-300 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Messaging <span class="ml-1 text-slate-500">2</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-2"></span>RabbitMQ (Spring AMQP 1.6.11)</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-2"></span>Netty-SocketIO 1.7.7</span>
+</div>
+</section>
+<div class="connector-diamond border-cyan-900"></div>
+<!-- LAYER 5: Blockchain -->
+<section class="layer-card p-4 border-l-4 border-l-cyan-500" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-cyan-400 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Blockchain <span class="ml-1 text-slate-500">2</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-cyan-500 mr-2"></span>web3j 4.2.0 (Ethereum)</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-cyan-500 mr-2"></span>JSON-RPC (Bitcoin/XRP)</span>
+</div>
+</section>
+<div class="connector-diamond border-emerald-900"></div>
+<!-- LAYER 6: ORM -->
+<section class="layer-card p-4 border-l-4 border-l-emerald-500" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-emerald-400 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.642.321a2 2 0 01-1.589 0l-.642-.321a6 6 0 00-3.86-.517l-2.387.477a2 2 0 00-1.022.547l-1.159 1.159a2 2 0 000 2.828l1.159 1.159a2 2 0 001.022.547l2.387.477a6 6 0 003.86-.517l.642-.321a2 2 0 011.589 0l.642.321a6 6 0 003.86.517l2.387-.477a2 2 0 001.022-.547l1.159-1.159a2 2 0 000-2.828l-1.159-1.159z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>ORM <span class="ml-1 text-slate-500">2</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>MyBatis 3.3.0</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>mybatis-spring 1.2.3</span>
+</div>
+</section>
+<div class="connector-diamond border-yellow-900"></div>
+<!-- LAYER 7: Market Maker -->
+<section class="layer-card p-4 border-l-4 border-l-yellow-600" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-yellow-500 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Market Maker <span class="ml-1 text-slate-500">1</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-yellow-600 mr-2"></span>C# (.NET) MarketMaker.exe</span>
+</div>
+</section>
+<div class="connector-diamond border-slate-700"></div>
+<!-- LAYER 8: Tools & Libraries -->
+<section class="layer-card p-4 border-l-4 border-l-slate-400" data-purpose="tech-layer">
+<div class="flex items-center space-x-2 mb-3 text-slate-300 font-bold text-xs tracking-widest uppercase">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Tools &amp; Libraries <span class="ml-1 text-slate-500">6</span></span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>Lombok 1.16.8</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>Jackson 2.9.5</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>Google ZXing 3.2.0</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>Apache POI 3.11</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>Apache Velocity 1.7</span>
+<span class="tech-pill px-3 py-1.5 rounded-full text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>TradingView Charting Library</span>
+</div>
+</section>
+</div>
+<!-- END: StackLayers -->
+<!-- BEGIN: Footer -->
+<footer class="flex justify-end pt-4">
+<div class="bg-slate-800/50 px-4 py-1.5 rounded-full border border-slate-700/50">
+<p class="text-[10px] text-slate-400 uppercase tracking-widest">
+<span class="text-white font-bold">17</span> technologies across <span class="text-white font-bold">8</span> layers
+        </p>
+</div>
+</footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContainer -->
+</body></html>

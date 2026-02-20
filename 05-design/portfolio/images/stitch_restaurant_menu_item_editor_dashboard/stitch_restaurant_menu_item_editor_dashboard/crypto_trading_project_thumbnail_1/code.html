@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crypto Trading Project Thumbnail</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "accent-gold": "#FFD700",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f1115",
+                        "surface-dark": "#181b21",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #232f48 1px, transparent 1px), linear-gradient(to bottom, #232f48 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(19, 91, 236, 0.5), 0 0 20px rgba(19, 91, 236, 0.3);
+        }
+
+        .chart-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 5s linear forwards;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4 sm:p-8">
+<!-- Main Thumbnail Container -->
+<div class="relative w-full max-w-[1200px] h-auto min-h-[600px] rounded-2xl overflow-hidden bg-[#0B0E14] shadow-2xl border border-slate-800 flex flex-col lg:flex-row group/design-root">
+<!-- Background Elements -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-size: 40px 40px; background-image: linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px);"></div>
+<!-- Glowing Diamond/Orb Backdrop -->
+<div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+<div class="absolute bottom-[-10%] left-[10%] w-[400px] h-[400px] bg-accent-gold/5 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
+<!-- Left Content Section -->
+<div class="relative z-10 flex flex-col justify-center p-8 lg:p-12 lg:w-1/2 gap-8">
+<!-- Badge -->
+<div class="flex items-start">
+<div class="inline-flex h-8 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/30 px-4">
+<span class="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse"></span>
+<p class="text-primary dark:text-blue-300 text-xs font-bold tracking-wider">FINTECH</p>
+</div>
+</div>
+<!-- Typography -->
+<div class="flex flex-col gap-4">
+<h1 class="text-slate-900 dark:text-white text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
+                    Crypto <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Trade Pro</span>
+</h1>
+<h2 class="text-slate-500 dark:text-slate-400 text-lg lg:text-xl font-normal leading-relaxed max-w-md">
+                    Next-generation real-time trading &amp; asset management platform for the modern investor.
+                </h2>
+</div>
+<!-- Tech Stack Badges -->
+<div class="flex flex-wrap gap-3 mt-4">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-slate-800 hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-[#6DB33F] text-[18px]">eco</span>
+<span class="text-slate-300 text-sm font-medium">Spring Boot</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-slate-800 hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-[#61DAFB] text-[18px]">code</span>
+<span class="text-slate-300 text-sm font-medium">React</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-slate-800 hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-white text-[18px]">sync_alt</span>
+<span class="text-slate-300 text-sm font-medium">WebSocket</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-slate-800 hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-[#DC382D] text-[18px]">database</span>
+<span class="text-slate-300 text-sm font-medium">Redis</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-dark border border-slate-800 hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-slate-100 text-[18px]">hub</span>
+<span class="text-slate-300 text-sm font-medium">Kafka</span>
+</div>
+</div>
+<!-- Call to Action / Interactive Hint -->
+<div class="flex gap-4 mt-2">
+<button class="flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold rounded-lg transition-all shadow-lg shadow-blue-900/20 group">
+<span>View Project</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="flex items-center justify-center gap-2 h-12 px-6 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-lg border border-slate-700 transition-all">
+<span>Live Demo</span>
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+</button>
+</div>
+</div>
+<!-- Right Visual Section -->
+<div class="relative w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-0 overflow-hidden">
+<!-- Abstract Chart Background Pattern -->
+<svg class="absolute inset-0 w-full h-full text-slate-800 opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#135bec;stop-opacity:0.5"></stop>
+<stop offset="100%" style="stop-color:#135bec;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,300 Q150,250 300,400 T600,350 T900,200 L900,600 L0,600 Z" fill="url(#chartGradient)"></path>
+<path class="chart-line" d="M0,300 Q150,250 300,400 T600,350 T900,200" fill="none" stroke="#135bec" stroke-width="2"></path>
+</svg>
+<!-- 3D Composition Container -->
+<div class="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
+<!-- Floating 3D Coin Image -->
+<div class="absolute z-20 w-64 h-64 lg:w-80 lg:h-80 animate-[bounce_6s_infinite] drop-shadow-[0_20px_50px_rgba(19,91,236,0.3)]">
+<!-- Placeholder for 3D Coin -->
+<div class="w-full h-full rounded-full bg-gradient-to-tr from-[#1a1a1a] via-[#2a2a2a] to-[#000] relative border border-slate-700/50 shadow-2xl flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent)]"></div>
+<span class="material-symbols-outlined text-accent-gold text-[120px] lg:text-[160px] drop-shadow-[0_0_15px_rgba(255,215,0,0.6)]">currency_bitcoin</span>
+<!-- Shine effect -->
+<div class="absolute top-0 right-0 bottom-0 left-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-12"></div>
+</div>
+</div>
+<!-- Glassmorphic Card (Behind/Side) -->
+<div class="glass-card absolute z-30 bottom-10 -right-4 lg:-right-8 w-64 p-5 rounded-xl border-t border-l border-white/20 transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-500 text-sm">currency_bitcoin</span>
+</div>
+<div>
+<p class="text-white text-sm font-bold">Bitcoin</p>
+<p class="text-slate-400 text-xs">BTC/USD</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">$42,350.20</p>
+<p class="text-emerald-400 text-xs flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[10px]">trending_up</span>
+                                +2.4%
+                            </p>
+</div>
+</div>
+<!-- Mini Chart -->
+<div class="h-16 w-full mb-4 flex items-end justify-between gap-1">
+<div class="w-1/6 bg-emerald-500/30 h-[40%] rounded-sm"></div>
+<div class="w-1/6 bg-emerald-500/50 h-[60%] rounded-sm"></div>
+<div class="w-1/6 bg-red-500/40 h-[30%] rounded-sm"></div>
+<div class="w-1/6 bg-emerald-500/60 h-[70%] rounded-sm"></div>
+<div class="w-1/6 bg-emerald-500/80 h-[85%] rounded-sm"></div>
+<div class="w-1/6 bg-emerald-500 h-[50%] rounded-sm"></div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 rounded transition-colors">Buy</button>
+<button class="flex-1 bg-surface-dark hover:bg-slate-700 text-white text-xs font-bold py-2 rounded transition-colors">Sell</button>
+</div>
+</div>
+<!-- Secondary Glass Card (Small stats) -->
+<div class="glass-card absolute z-10 top-20 -left-4 lg:-left-12 w-48 p-4 rounded-xl border-t border-l border-white/10 transform rotate-[6deg]">
+<p class="text-slate-400 text-xs mb-1">Total Balance</p>
+<p class="text-white text-xl font-bold tracking-tight mb-2">$12,450.00</p>
+<div class="h-1 w-full bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[75%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

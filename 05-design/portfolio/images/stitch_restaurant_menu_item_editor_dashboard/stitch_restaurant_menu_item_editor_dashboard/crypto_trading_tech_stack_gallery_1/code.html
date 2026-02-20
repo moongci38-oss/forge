@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crypto Trading Tech Stack Gallery</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f2d00d",
+              "background-light": "#f8f8f5",
+              "background-dark": "#121212", 
+              "surface-dark": "#1e1e1e",
+              "surface-highlight": "#2a2a2a",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "body": ["Space Grotesk", "sans-serif"],
+            },
+            borderRadius: {
+              "DEFAULT": "1rem",
+              "lg": "1.5rem",
+              "xl": "2rem",
+              "2xl": "3rem",
+            },
+            boxShadow: {
+                "neon": "0 0 10px rgba(242, 208, 13, 0.3), 0 0 20px rgba(242, 208, 13, 0.1)",
+                "neon-hover": "0 0 15px rgba(242, 208, 13, 0.5), 0 0 30px rgba(242, 208, 13, 0.2)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .tech-capsule {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tech-capsule:hover {
+            transform: translateY(-2px);
+            border-color: #f2d00d;
+            box-shadow: 0 0 15px rgba(242, 208, 13, 0.25);
+        }
+
+        .layer-connector {
+            position: absolute;
+            left: 2rem;
+            top: 100%;
+            height: 2rem;
+            width: 2px;
+            background: linear-gradient(to bottom, #f2d00d 0%, rgba(242, 208, 13, 0.1) 100%);
+            z-index: 0;
+        }
+
+        /* Subtle grid background pattern */
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display overflow-x-hidden selection:bg-primary selection:text-background-dark">
+<div class="fixed inset-0 pointer-events-none bg-grid-pattern opacity-20"></div>
+<!-- Main Layout -->
+<div class="relative flex flex-col min-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
+<!-- Header -->
+<header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12 border-b border-surface-highlight pb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-yellow-600 flex items-center justify-center text-background-dark shadow-neon">
+<span class="material-symbols-outlined text-3xl">token</span>
+</div>
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-white">Crypto Trading Tech Stack</h1>
+<p class="text-slate-400 text-sm mt-1">High-frequency trading architecture visualization</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-surface-highlight border border-background-dark flex items-center justify-center text-xs text-slate-400" title="Collaborator 1">JP</div>
+<div class="w-8 h-8 rounded-full bg-surface-highlight border border-background-dark flex items-center justify-center text-xs text-slate-400" title="Collaborator 2">mk</div>
+<div class="w-8 h-8 rounded-full bg-surface-highlight border border-background-dark flex items-center justify-center text-xs text-slate-400" title="Collaborator 3">+4</div>
+</div>
+<div class="h-8 w-[1px] bg-surface-highlight mx-2"></div>
+<span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold tracking-wider uppercase shadow-neon">
+                    FINTECH
+                </span>
+</div>
+</header>
+<!-- Tech Stack Content -->
+<main class="flex-grow flex flex-col gap-8 relative">
+<!-- Layer 1: Frontend -->
+<section class="relative group">
+<div class="absolute left-8 top-full h-8 w-0.5 bg-gradient-to-b from-surface-highlight to-transparent z-0 group-last:hidden"></div>
+<div class="flex flex-col md:flex-row gap-6 md:gap-10">
+<!-- Layer Label -->
+<div class="w-full md:w-48 flex-shrink-0 flex md:flex-col items-center md:items-start justify-between md:justify-center py-4">
+<h2 class="text-primary font-bold text-xl tracking-wider">01 FRONTEND</h2>
+<span class="text-xs text-slate-500 mt-1 uppercase tracking-widest">Client Layer</span>
+</div>
+<!-- Tech Cards -->
+<div class="flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+<!-- React -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-blue-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">code_blocks</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">React</h3>
+<p class="text-[10px] text-slate-500">UI Library</p>
+</div>
+</div>
+<!-- Redux -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-purple-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Redux</h3>
+<p class="text-[10px] text-slate-500">State Mgmt</p>
+</div>
+</div>
+<!-- TradingView -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-green-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">candlestick_chart</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">TradingView</h3>
+<p class="text-[10px] text-slate-500">Charting Lib</p>
+</div>
+</div>
+<!-- Web3.js -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-orange-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">currency_bitcoin</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Web3.js</h3>
+<p class="text-[10px] text-slate-500">Blockchain Connect</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Layer 2: Backend -->
+<section class="relative group mt-4">
+<div class="absolute left-8 -top-8 h-8 w-0.5 bg-gradient-to-b from-transparent to-surface-highlight z-0"></div>
+<div class="absolute left-8 top-full h-8 w-0.5 bg-gradient-to-b from-surface-highlight to-transparent z-0 group-last:hidden"></div>
+<div class="flex flex-col md:flex-row gap-6 md:gap-10">
+<div class="w-full md:w-48 flex-shrink-0 flex md:flex-col items-center md:items-start justify-between md:justify-center py-4">
+<h2 class="text-primary font-bold text-xl tracking-wider">02 BACKEND</h2>
+<span class="text-xs text-slate-500 mt-1 uppercase tracking-widest">Server Layer</span>
+</div>
+<div class="flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+<!-- Spring Boot -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-green-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">spa</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Spring Boot</h3>
+<p class="text-[10px] text-slate-500">Microservices</p>
+</div>
+</div>
+<!-- Kafka -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-slate-200 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Kafka</h3>
+<p class="text-[10px] text-slate-500">Event Stream</p>
+</div>
+</div>
+<!-- WebSocket -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-yellow-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">swap_horiz</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">WebSocket</h3>
+<p class="text-[10px] text-slate-500">Real-time Data</p>
+</div>
+</div>
+<!-- Node.js -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-green-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">javascript</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Node.js</h3>
+<p class="text-[10px] text-slate-500">Aggregator</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Layer 3: Database -->
+<section class="relative group mt-4">
+<div class="absolute left-8 -top-8 h-8 w-0.5 bg-gradient-to-b from-transparent to-surface-highlight z-0"></div>
+<div class="absolute left-8 top-full h-8 w-0.5 bg-gradient-to-b from-surface-highlight to-transparent z-0 group-last:hidden"></div>
+<div class="flex flex-col md:flex-row gap-6 md:gap-10">
+<div class="w-full md:w-48 flex-shrink-0 flex md:flex-col items-center md:items-start justify-between md:justify-center py-4">
+<h2 class="text-primary font-bold text-xl tracking-wider">03 DATABASE</h2>
+<span class="text-xs text-slate-500 mt-1 uppercase tracking-widest">Storage Layer</span>
+</div>
+<div class="flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+<!-- PostgreSQL -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-blue-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">database</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">PostgreSQL</h3>
+<p class="text-[10px] text-slate-500">Relational DB</p>
+</div>
+</div>
+<!-- Redis -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-red-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Redis</h3>
+<p class="text-[10px] text-slate-500">Caching</p>
+</div>
+</div>
+<!-- InfluxDB -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-purple-500 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">timeline</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">InfluxDB</h3>
+<p class="text-[10px] text-slate-500">Time Series</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Layer 4: Infrastructure -->
+<section class="relative group mt-4">
+<div class="absolute left-8 -top-8 h-8 w-0.5 bg-gradient-to-b from-transparent to-surface-highlight z-0"></div>
+<div class="flex flex-col md:flex-row gap-6 md:gap-10">
+<div class="w-full md:w-48 flex-shrink-0 flex md:flex-col items-center md:items-start justify-between md:justify-center py-4">
+<h2 class="text-primary font-bold text-xl tracking-wider">04 INFRA</h2>
+<span class="text-xs text-slate-500 mt-1 uppercase tracking-widest">DevOps Layer</span>
+</div>
+<div class="flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+<!-- Docker -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-blue-400 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">deployed_code</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Docker</h3>
+<p class="text-[10px] text-slate-500">Containerization</p>
+</div>
+</div>
+<!-- Kubernetes -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-blue-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">anchor</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">Kubernetes</h3>
+<p class="text-[10px] text-slate-500">Orchestration</p>
+</div>
+</div>
+<!-- AWS -->
+<div class="tech-capsule bg-surface-dark border border-surface-highlight rounded-2xl p-4 flex items-center gap-3 cursor-pointer group/card">
+<div class="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-yellow-600 group-hover/card:text-primary transition-colors">
+<span class="material-symbols-outlined">cloud</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-200">AWS</h3>
+<p class="text-[10px] text-slate-500">Cloud Provider</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Stats -->
+<footer class="mt-12 md:mt-16 flex justify-end">
+<div class="inline-flex items-center gap-3 bg-surface-dark border border-surface-highlight px-6 py-3 rounded-xl shadow-lg">
+<div class="flex flex-col items-end">
+<span class="text-2xl font-bold text-primary leading-none">15</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest">Technologies</span>
+</div>
+<div class="h-8 w-[1px] bg-surface-highlight"></div>
+<div class="flex flex-col items-start">
+<span class="text-2xl font-bold text-white leading-none">04</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest">Layers</span>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>samsungmall-thumbnail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#074EE8", // Samsung Blue
+                        "background-light": "#f3f4f6", 
+                        "background-dark": "#0B0C10", 
+                        "card-dark": "#131419", 
+                        "card-border-dark": "#1f2937", 
+                        "accent-blue": "#074EE8", // Replaced cyan with Samsung Blue
+                        "accent-secondary": "#3b82f6", // Lighter blue for gradients
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-300 min-h-screen p-8 transition-colors duration-300">
+<div class="max-w-6xl mx-auto">
+<header class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-12">
+<div class="flex items-center gap-3">
+<span class="text-primary text-4xl font-bold dark:text-primary">$</span>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+                    Samsung POP Technical Challenges
+                </h1>
+</div>
+<span class="bg-primary/10 text-primary border border-primary/30 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ml-0 md:ml-4 self-start md:self-center">
+                Fullstack
+            </span>
+<div class="flex-grow text-right hidden md:block opacity-30 text-xs font-mono dark:text-gray-400 text-gray-500">
+                // solved: 5 technical challenges
+            </div>
+</header>
+<div class="relative pl-8 md:pl-0">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent-secondary to-transparent rounded-full hidden md:block h-full opacity-60"></div>
+<div class="space-y-6 md:pl-12">
+<div class="group relative bg-white dark:bg-card-dark border border-gray-200 dark:border-card-border-dark rounded-xl p-6 md:p-8 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-8">
+<h3 class="font-mono text-sm text-primary dark:text-primary font-bold mb-3 uppercase tracking-wider">
+                                Challenge_01
+                            </h3>
+<p class="text-lg md:text-xl text-gray-800 dark:text-gray-100 mb-6 font-medium leading-relaxed">
+                                4단계 조직 구조(HQ-RHQ-Subsidiary-Country)에 따른 계층적 예산 배분 및 잔액 연동 로직
+                            </p>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">HQ</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">RHQ</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">Subsidiary</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">Country</span>
+</div>
+</div>
+<div class="text-6xl font-bold text-gray-200 dark:text-white/5 font-mono select-none pointer-events-none absolute top-4 right-6 md:static group-hover:text-primary/10 transition-colors">
+                            01
+                        </div>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-card-dark border border-gray-200 dark:border-card-border-dark rounded-xl p-6 md:p-8 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-8">
+<h3 class="font-mono text-sm text-primary dark:text-primary font-bold mb-3 uppercase tracking-wider">
+                                Challenge_02
+                            </h3>
+<p class="text-lg md:text-xl text-gray-800 dark:text-gray-100 mb-6 font-medium leading-relaxed">
+                                예산 편성 시 하위 조직 합계가 상위 한도를 초과하지 않도록 자동 조정하는 비즈니스 규칙
+                            </p>
+</div>
+<div class="text-6xl font-bold text-gray-200 dark:text-white/5 font-mono select-none pointer-events-none absolute top-4 right-6 md:static group-hover:text-primary/10 transition-colors">
+                            02
+                        </div>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-card-dark border border-gray-200 dark:border-card-border-dark rounded-xl p-6 md:p-8 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-8">
+<h3 class="font-mono text-sm text-primary dark:text-primary font-bold mb-3 uppercase tracking-wider">
+                                Challenge_03
+                            </h3>
+<p class="text-lg md:text-xl text-gray-800 dark:text-gray-100 mb-6 font-medium leading-relaxed">
+                                외부 쇼핑몰 REST API(smpop.net)와 연동해 상품 카탈로그를 내부 시스템에 통합
+                            </p>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">REST</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">API</span>
+</div>
+</div>
+<div class="text-6xl font-bold text-gray-200 dark:text-white/5 font-mono select-none pointer-events-none absolute top-4 right-6 md:static group-hover:text-primary/10 transition-colors">
+                            03
+                        </div>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-card-dark border border-gray-200 dark:border-card-border-dark rounded-xl p-6 md:p-8 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-8">
+<h3 class="font-mono text-sm text-primary dark:text-primary font-bold mb-3 uppercase tracking-wider">
+                                Challenge_04
+                            </h3>
+<p class="text-lg md:text-xl text-gray-800 dark:text-gray-100 mb-6 font-medium leading-relaxed">
+                                Apache POI를 활용한 다계층 예산 현황 및 주문 내역 엑셀 리포트 자동 생성
+                            </p>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">Apache</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">POI</span>
+</div>
+</div>
+<div class="text-6xl font-bold text-gray-200 dark:text-white/5 font-mono select-none pointer-events-none absolute top-4 right-6 md:static group-hover:text-primary/10 transition-colors">
+                            04
+                        </div>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-card-dark border border-gray-200 dark:border-card-border-dark rounded-xl p-6 md:p-8 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-8">
+<h3 class="font-mono text-sm text-primary dark:text-primary font-bold mb-3 uppercase tracking-wider">
+                                Challenge_05
+                            </h3>
+<p class="text-lg md:text-xl text-gray-800 dark:text-gray-100 mb-6 font-medium leading-relaxed">
+                                XSS 방지 Filter 및 역할 기반 접근 제어(Interceptor)로 내부 보안 강화
+                            </p>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">XSS</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">Filter</span>
+<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">Interceptor</span>
+</div>
+</div>
+<div class="text-6xl font-bold text-gray-200 dark:text-white/5 font-mono select-none pointer-events-none absolute top-4 right-6 md:static group-hover:text-primary/10 transition-colors">
+                            05
+                        </div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 text-right opacity-20 hover:opacity-40 transition-opacity">
+<p class="font-mono text-xs dark:text-gray-400 text-gray-600">
+                process.exit(0) // samsungmall challenges resolved
+            </p>
+</div>
+</div>
+<script>
+        // Force dark mode initially as per the primary screenshot reference
+        document.documentElement.classList.add('dark');
+    </script>
+</body></html>
