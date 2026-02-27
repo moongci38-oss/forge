@@ -240,7 +240,53 @@ claude plugin disable {plugin-name}
 @.claude/rules/agent-teams.md
 @.claude/rules/research-methodology.md
 @.claude/rules/cross-project-pipeline.md
+@.claude/rules/superpowers-workflow.md
 
 ---
 
-*Last Updated: 2026-02-21 (멀티 프로젝트 워크스페이스 참조 추가 + 크로스 프로젝트 개발 허용)*
+## superpowers 플러그인 (v4.3.1, 전역 설치)
+
+> 기존보다 좋은 기능은 교체, 없던 기능은 추가. 조건 충족 시 묻지 않고 즉시 적용한다.
+
+### 기존 기능 교체/추가 매핑
+
+| # | superpowers 기능 | 기존 상태 | 기존 호출 | 교체 후 호출 | 결정 | sigil | trine |
+|---|----------------|----------|----------|------------|:----:|:-----:|:-----:|
+| 1 | **Brainstorming** | sequentialthinking MCP | `mcp__sequential-thinking__sequentialthinking()` | `Skill("superpowers:brainstorming")` | **교체** | ✓ | ✓ |
+| 2 | **Writing Plans** | concise-planning | 수동 | `Skill("superpowers:writing-plans")` | **교체** | ✓ | ✓ |
+| 3 | **TDD** | 없음 | — | `Skill("superpowers:test-driven-development")` | **추가** | - | ✓ |
+| 4 | **Systematic Debugging** | 없음 | — | `Skill("superpowers:systematic-debugging")` | **추가** | ✓ | ✓ |
+| 5 | **Verification** | 없음 | — | `Skill("superpowers:verification-before-completion")` | **추가** | ✓ | ✓ |
+| 6 | **Code Review** | code-reviewer 에이전트 (단일 리뷰) | `Task(subagent_type="superpowers:code-reviewer")` | `Skill("superpowers:requesting-code-review")` | **교체** | - | ✓ |
+| 7 | **Git Worktrees** | 브랜치 전략만 | `git checkout -b feature/x` | `Skill("superpowers:using-git-worktrees")` | **교체** | - | ✓ |
+| 8 | **Finishing Branch** | 없음 | — | `Skill("superpowers:finishing-a-development-branch")` | **추가** | - | ✓ |
+
+> **sigil** = Business 프로젝트 시스템 (리서치, 기획, 마케팅, 콘텐츠)
+> **trine** = 개발 프로젝트 SDD 워크플로우 (Portfolio, GodBlade)
+
+### 자동 체인
+
+**trine (개발)**:
+```
+① brainstorming → ② writing-plans → ③ git-worktrees → [per task: ④ TDD → ⑤ debugging(에러시) → ⑥ verification] → ⑦ code-review → ⑧ verification → ⑨ finishing-branch
+```
+
+**sigil (Business)**:
+```
+① brainstorming → ② requirements-clarity(유지) → ③ writing-plans → [실행: 기존 도메인 스킬] → ④ debugging(에러시) → ⑤ verification
+```
+
+### 유지되는 기존 기능 (superpowers 미대체)
+
+- **Agent Teams**: 모델 계층화 (Opus→Sonnet→Haiku) + 4대 오케스트레이션 패턴 (superpowers 미지원)
+- **Research Methodology**: 리서치 방법론 (superpowers 미지원)
+- **Security/File-naming**: 보안 + 파일명 규칙 (superpowers 미지원, 항상 우선)
+- **v3 수동 복사 스킬**: frontend-design, docx, pdf 등 (v4.3.1에서 제거됨, 유지 필수)
+- **requirements-clarity**: brainstorming 전처리로 유지 (superpowers 미지원)
+- **game-changing-features**: brainstorming 보조 도구로 유지 (superpowers 미지원)
+
+> 상세 트리거 조건, 파이프라인 단계별 호출 구문: `.claude/rules/superpowers-workflow.md`
+
+---
+
+*Last Updated: 2026-02-27 (superpowers v4.3.1 교체/추가 매핑 — 단계별 호출 구문 명시)*
