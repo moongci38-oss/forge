@@ -9,7 +9,12 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Dry run (콘솔 출력만, 텔레그램 발송 안 함)"
+        description: "Dry run (콘솔 출력만, 발송 안 함)"
+        required: false
+        type: boolean
+        default: false
+      telegram:
+        description: "텔레그램에도 동시 발송"
         required: false
         type: boolean
         default: false
@@ -32,16 +37,20 @@ jobs:
 
       - name: Run AI News Bot
         env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           ARCHIVE_DIR: ${{ github.workspace }}/01-research/weekly
         working-directory: 09-tools/ai-news-bot
         run: |
+          FLAGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            python main.py --dry-run
-          else
-            python main.py
+            FLAGS="--dry-run"
+          elif [ "${{ github.event.inputs.telegram }}" = "true" ]; then
+            FLAGS="--telegram"
           fi
+          python main.py $FLAGS
 
       - name: Commit archive report
         if: ${{ github.event.inputs.dry_run != 'true' }}

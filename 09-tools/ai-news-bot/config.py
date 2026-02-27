@@ -3,9 +3,14 @@
 import os
 from datetime import datetime, timedelta, timezone
 
-# Telegram
+# Telegram (선택)
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+
+# Notion (기본 발송 채널)
+NOTION_API_KEY = os.environ.get("NOTION_API_KEY", "")
+NOTION_DATABASE_ID = os.environ.get("NOTION_DATABASE_ID", "")
+NOTION_PARENT_PAGE_ID = os.environ.get("NOTION_PARENT_PAGE_ID", "")
 
 # Timezone: KST (UTC+9)
 KST = timezone(timedelta(hours=9))

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""AI News Telegram Bot — 주간 AI 뉴스 수집 및 텔레그램 발송
+"""AI News Bot — 주간 AI 뉴스 수집 및 Notion/텔레그램 발송
 
 매주 월요일 10시(KST) 자동 실행.
-기술/비즈니스 2개 리포트를 텔레그램 메시지로 발송하고,
+기술+비즈니스 통합 리포트를 Notion 데이터베이스에 추가하고,
 01-research/weekly/에 아카이브를 저장한다.
 
 사용법:
-    python main.py              # 수집 + 텔레그램 발송 + 아카이브 저장
-    python main.py --dry-run    # 수집 + 콘솔 출력만 (발송 안 함)
-    python main.py --archive-only  # 수집 + 아카이브 저장만 (발송 안 함)
+    python main.py                    # Notion 발송 + 아카이브 저장 (기본)
+    python main.py --dry-run          # 수집 + 콘솔 출력만
+    python main.py --telegram         # Notion + 텔레그램 동시 발송
+    python main.py --telegram-only    # 텔레그램만 발송
+    python main.py --archive-only     # 아카이브 저장만
+    python main.py --setup-db         # Notion 데이터베이스 최초 생성
 """
 
-import os
 import sys
 import argparse
 from pathlib import Path
@@ -33,8 +35,7 @@ from collectors import (
     collect_reddit,
 )
 from formatter import format_tech_report, format_business_report, format_archive_report
-from sender import send_reports
-from config import ARCHIVE_DIR, get_report_period
+from config import ARCHIVE_DIR, NOTION_DATABASE_ID, get_report_period
 
 
 def collect_all() -> dict:
@@ -64,7 +65,6 @@ def collect_all() -> dict:
             print(f"[{name}] 실패: {e}")
             data[key] = {"tech": [], "business": []}
 
-    # 총 수집량 요약
     total_tech = sum(len(v.get("tech", [])) for v in data.values())
     total_biz = sum(len(v.get("business", [])) for v in data.values())
     print(f"\n📊 총 수집: Tech {total_tech}건, Business {total_biz}건")
@@ -87,57 +87,103 @@ def save_archive(collected_data: dict) -> str:
     return str(filepath)
 
 
+def send_to_notion(collected_data: dict) -> str:
+    """Notion 데이터베이스에 리포트 추가"""
+    from notion_sender import add_report_to_database
+
+    db_id = NOTION_DATABASE_ID
+    if not db_id:
+        print("❌ NOTION_DATABASE_ID가 설정되지 않았습니다.")
+        print("   먼저 `python main.py --setup-db`를 실행하세요.")
+        sys.exit(1)
+
+    print("\n📤 Notion 발송 중...")
+    page_url = add_report_to_database(db_id, collected_data)
+    print(f"✅ Notion 페이지 생성: {page_url}")
+    return page_url
+
+
+def send_to_telegram(collected_data: dict):
+    """텔레그램으로 리포트 발송"""
+    from sender import send_reports
+
+    print("\n📤 텔레그램 발송 중...")
+    tech_msg = format_tech_report(collected_data)
+    biz_msg = format_business_report(collected_data)
+    send_reports(tech_msg, biz_msg)
+    print("✅ 텔레그램 발송 완료!")
+
+
+def setup_notion_db():
+    """Notion 데이터베이스 최초 생성"""
+    from notion_sender import setup_database
+    setup_database()
+
+
 def main():
-    parser = argparse.ArgumentParser(description="AI News Telegram Bot")
+    parser = argparse.ArgumentParser(description="AI News Bot")
     parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="수집 + 콘솔 출력만 (텔레그램 발송 안 함)",
+        "--dry-run", action="store_true",
+        help="수집 + 콘솔 출력만 (발송 안 함)",
     )
     parser.add_argument(
-        "--archive-only",
-        action="store_true",
-        help="수집 + 아카이브 저장만 (텔레그램 발송 안 함)",
+        "--archive-only", action="store_true",
+        help="수집 + 아카이브 저장만",
+    )
+    parser.add_argument(
+        "--telegram", action="store_true",
+        help="Notion + 텔레그램 동시 발송",
+    )
+    parser.add_argument(
+        "--telegram-only", action="store_true",
+        help="텔레그램만 발송 (Notion 생략)",
+    )
+    parser.add_argument(
+        "--setup-db", action="store_true",
+        help="Notion 데이터베이스 최초 생성",
     )
     args = parser.parse_args()
+
+    # DB 설정 모드
+    if args.setup_db:
+        setup_notion_db()
+        return
 
     # 1. 뉴스 수집
     collected_data = collect_all()
 
-    # 2. 리포트 포맷팅
-    print("\n📝 리포트 생성 중...")
-    tech_msg = format_tech_report(collected_data)
-    biz_msg = format_business_report(collected_data)
-
-    # 3. 아카이브 저장
+    # 2. 아카이브 저장
     save_archive(collected_data)
 
-    # 4. dry-run 모드
+    # 3. dry-run 모드
     if args.dry_run:
+        archive_report = format_archive_report(collected_data)
         print("\n" + "=" * 50)
-        print("🔬 기술 리포트 (미리보기)")
+        print("📰 통합 리포트 미리보기")
         print("=" * 50)
-        # 이스케이프 제거해서 가독성 확보
-        print(tech_msg.replace("\\", ""))
-        print("\n" + "=" * 50)
-        print("💼 비즈니스 리포트 (미리보기)")
-        print("=" * 50)
-        print(biz_msg.replace("\\", ""))
-        print(f"\n✅ dry-run 완료 (텔레그램 발송 생략)")
+        print(archive_report)
+        print(f"\n✅ dry-run 완료 (발송 생략)")
         return
 
     if args.archive_only:
-        print(f"\n✅ archive-only 완료 (텔레그램 발송 생략)")
+        print(f"\n✅ archive-only 완료 (발송 생략)")
         return
 
-    # 5. 텔레그램 발송
-    print("\n📤 텔레그램 발송 중...")
+    # 4. 발송
     try:
-        tech_resp, biz_resp = send_reports(tech_msg, biz_msg)
-        print("\n✅ 모든 리포트 발송 완료!")
+        if args.telegram_only:
+            send_to_telegram(collected_data)
+        else:
+            # 기본: Notion 발송
+            send_to_notion(collected_data)
+            # --telegram 플래그 있으면 텔레그램도
+            if args.telegram:
+                send_to_telegram(collected_data)
     except Exception as e:
-        print(f"\n❌ 텔레그램 발송 실패: {e}")
+        print(f"\n❌ 발송 실패: {e}")
         sys.exit(1)
+
+    print("\n✅ 모든 작업 완료!")
 
 
 if __name__ == "__main__":
