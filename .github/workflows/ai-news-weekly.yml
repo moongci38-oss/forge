@@ -1,0 +1,59 @@
+name: AI News Weekly Digest
+
+on:
+  schedule:
+    # 매주 월요일 01:00 UTC = 10:00 KST
+    - cron: "0 1 * * 1"
+
+  # 수동 실행 지원
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (콘솔 출력만, 텔레그램 발송 안 함)"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  send-weekly-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r 09-tools/ai-news-bot/requirements.txt
+
+      - name: Run AI News Bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ARCHIVE_DIR: ${{ github.workspace }}/01-research/weekly
+        working-directory: 09-tools/ai-news-bot
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python main.py --dry-run
+          else
+            python main.py
+          fi
+
+      - name: Commit archive report
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "AI News Bot"
+          git config user.email "bot@ai-news.local"
+          git add 01-research/weekly/ || true
+          if git diff --cached --quiet; then
+            echo "No new archive files to commit"
+          else
+            git commit -m "docs: add weekly AI news archive $(date +%Y-W%V)
+
+          Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+            git push
+          fi
