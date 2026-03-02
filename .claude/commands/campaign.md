@@ -21,7 +21,8 @@ $ARGUMENTS
    - 이메일: 시퀀스, 뉴스레터
 5. **크리에이티브 제안**: 각 채널별 A/B/C 카피 초안
 6. **예산 & 일정**: 채널별 예산 배분 + 주별 실행 일정
-7. **저장**: `03-marketing/campaigns/YYYY-MM-DD-{campaign-name}.md`에 저장
+7. **리스크 분석**: 캠페인 리스크 2~3개 식별 + 미티게이션 전략 (`marketing:campaign-planning` 플러그인의 리스크 섹션 패턴 활용)
+8. **저장**: `03-marketing/campaigns/YYYY-MM-DD-{campaign-name}.md`에 저장
 
 ## 출력 형식
 
@@ -53,6 +54,9 @@ $ARGUMENTS
 
 ## 6. 성과 측정
 | KPI | 목표치 | 측정 방법 |
+
+## 7. 리스크 & 미티게이션
+| # | 리스크 | 영향도 | 확률 | 미티게이션 |
 
 ## Sources
 ```

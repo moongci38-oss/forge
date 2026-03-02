@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "files": {
+    "docs/shared/setup-reports/ai-setup-work-summary.md": "f5877dd6e1bc",
+    "docs/shared/setup-reports/aitmpl-analysis.md": "3b8eb9b8f29f",
+    "docs/shared/setup-reports/aitmpl-skills-recommendation.md": "6530375bfdaa",
+    "docs/shared/setup-reports/component-installation-report.md": "346ce75ad4ee",
+    "docs/shared/setup-reports/solo-entrepreneur-ai-toolkit.md": "bbc4e29c77f1",
+    "docs/shared/tech/claude-code-best-practices-report.md": "2e84367db66e",
+    "docs/shared/tech/Claude_Code_고급_기능_종합_가이드__멀티_에이전트_자동화_워크플로_구축을_위한_아키텍트_레.md": "e9c2adea4d1a",
+    "docs/shared/tech/context_eg_report.md": "a0bba5b9e17a",
+    "docs/shared/tech/github_action_report.md": "1bfec3afea9e",
+    "docs/shared/tech/Opus_4_6_신기능_심층_가이드_추가_섹션.md": "9e6b5cd40f0c"
+  }
+}

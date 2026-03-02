@@ -15,6 +15,7 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+*Zone.Identifier
 
 # Large binary files
 *.zip
@@ -48,3 +49,6 @@ __pycache__/
 
 # Local settings
 .claude/settings.local.json
+
+# Trine sync state (per-user)
+.claude/trine-sync-state.json

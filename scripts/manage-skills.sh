@@ -41,16 +41,20 @@ cmd_list() {
     echo -e "${CYAN}=== Skill Library ===${NC}"
     echo ""
 
-    # Collect active skill targets for comparison
+    # Collect active skill names (symlinks OR real directories)
     declare -A active_targets
     if [ -d "$ACTIVE_SKILLS" ]; then
-        for link in "$ACTIVE_SKILLS"/*/; do
-            [ -L "${link%/}" ] || continue
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
             local name
-            name=$(basename "${link%/}")
-            local target
-            target=$(readlink -f "${link%/}" 2>/dev/null || echo "broken")
-            active_targets["$name"]="$target"
+            name=$(basename "${item%/}")
+            if [ -L "${item%/}" ]; then
+                local target
+                target=$(readlink -f "${item%/}" 2>/dev/null || echo "broken")
+                active_targets["$name"]="symlink:$target"
+            else
+                active_targets["$name"]="directory"
+            fi
         done
     fi
 
@@ -84,7 +88,7 @@ cmd_list() {
                     skill_name=$(basename "$sub")
                     total=$((total + 1))
 
-                    if [ -L "$ACTIVE_SKILLS/$skill_name" ]; then
+                    if [ -d "$ACTIVE_SKILLS/$skill_name" ]; then
                         echo -e "    ${GREEN}* $skill_name${NC} (active)"
                         active=$((active + 1))
                     else
@@ -94,7 +98,7 @@ cmd_list() {
             elif [ -f "$item/SKILL.md" ]; then
                 # Direct skill (no category nesting)
                 total=$((total + 1))
-                if [ -L "$ACTIVE_SKILLS/$item_name" ]; then
+                if [ -d "$ACTIVE_SKILLS/$item_name" ]; then
                     echo -e "  ${GREEN}* $item_name${NC} (active)"
                     active=$((active + 1))
                 else
@@ -105,7 +109,45 @@ cmd_list() {
         echo ""
     done
 
-    echo -e "${CYAN}Total: $total skills, $active active${NC}"
+    # Show active skills not in library
+    local extra=0
+    if [ -d "$ACTIVE_SKILLS" ]; then
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
+            local name
+            name=$(basename "${item%/}")
+            # Check if this skill was already counted from library
+            local found_in_lib=false
+            while IFS= read -r -d '' skill_md; do
+                local dir
+                dir=$(dirname "$skill_md")
+                local lib_name
+                lib_name=$(basename "$dir")
+                if [ "$lib_name" = "$name" ]; then
+                    found_in_lib=true
+                    break
+                fi
+            done < <(find "$SKILLS_LIBRARY" -name "SKILL.md" -print0 2>/dev/null)
+
+            if [ "$found_in_lib" = false ]; then
+                if [ "$extra" -eq 0 ]; then
+                    echo ""
+                    echo -e "${BLUE}[active — not in library]${NC}"
+                fi
+                local kind="dir"
+                [ -L "${item%/}" ] && kind="symlink"
+                echo -e "  ${GREEN}* $name${NC} ($kind)"
+                extra=$((extra + 1))
+            fi
+        done
+    fi
+
+    echo ""
+    echo -e "${CYAN}Library: $total skills, $active linked to active${NC}"
+    if [ "$extra" -gt 0 ]; then
+        echo -e "${CYAN}Active (outside library): $extra skills${NC}"
+    fi
+    echo -e "${CYAN}Total active: $((active + extra))${NC}"
 }
 
 # ─── ENABLE ────────────────────────────────────────────────────────────────
@@ -144,13 +186,23 @@ cmd_disable() {
     local skill_name="$1"
     local target="$ACTIVE_SKILLS/$skill_name"
 
-    if [ ! -L "$target" ]; then
-        echo -e "${RED}Error: '$skill_name' is not an active skill (no symlink found)${NC}"
+    if [ -L "$target" ]; then
+        rm "$target"
+        echo -e "${GREEN}Disabled (symlink removed): $skill_name${NC}"
+    elif [ -d "$target" ]; then
+        echo -e "${YELLOW}Warning: '$skill_name' is a real directory (not a symlink).${NC}"
+        echo -e "This will permanently delete the skill directory."
+        read -p "Continue? [y/N] " confirm
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
+            rm -rf "$target"
+            echo -e "${GREEN}Disabled (directory removed): $skill_name${NC}"
+        else
+            echo -e "${YELLOW}Cancelled.${NC}"
+        fi
+    else
+        echo -e "${RED}Error: '$skill_name' is not an active skill${NC}"
         exit 1
     fi
-
-    rm "$target"
-    echo -e "${GREEN}Disabled: $skill_name${NC}"
 }
 
 # ─── INSTALL-AITMPL ───────────────────────────────────────────────────────

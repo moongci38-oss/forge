@@ -1,7 +1,7 @@
 ---
 description: 월간 콘텐츠 캘린더 생성 — 대상 월을 입력하면 블로그/뉴스레터/SNS 일정을 계획
 argument-hint: [YYYY-MM] (생략 시 다음 달)
-allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__brave-search__brave_web_search
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 ---
 
 당신은 content-creator와 market-researcher를 활용하는 콘텐츠 전략가입니다.

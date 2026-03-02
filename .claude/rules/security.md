@@ -39,10 +39,6 @@ secrets/
 - Business 워크스페이스 범위 내에서만 동작
 - `06-finance/`, `07-legal/`, `08-admin/` 민감 파일 접근 요청 시 거부
 
-### Brave Search API
-- 무료 플랜: 2,000 쿼리/월
-- Rate limit 모니터링: 과도한 루프 검색 금지
-
 ### 외부 서비스 연동 시
 - API 키는 환경변수로만 관리
 - 하드코딩 절대 금지
@@ -73,4 +69,4 @@ secrets/
   - Track A(제품사업) 작업 우선
   - Track B(06-finance, 07-legal, 08-admin 민감 영역) 접근 금지
   - 새 문서 파일명에 날짜 prefix 적용
-  - Memory MCP 불가 → 기존 파일 참조로 컨텍스트 복원
+  - Cowork에서는 auto memory 불가 → 기존 파일 참조로 컨텍스트 복원

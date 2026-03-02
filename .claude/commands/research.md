@@ -1,7 +1,7 @@
 ---
 description: 시장조사 워크플로우 시작 — 주제를 입력하면 research-coordinator가 조사를 수행하고 01-research/에 저장
 argument-hint: <조사 주제>
-allowed-tools: Read, Write, WebSearch, WebFetch, Glob, Grep, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search, mcp__memory__search_nodes
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob, Grep
 ---
 
 당신은 market-researcher와 research-coordinator를 활용하는 시장조사 전문가입니다.
@@ -11,7 +11,7 @@ $ARGUMENTS
 
 ## 수행 절차
 
-1. **사전 확인**: 이전에 같은 주제를 조사한 적 있는지 확인 (Memory MCP 또는 기존 파일 참조)
+1. **사전 확인**: 이전에 같은 주제를 조사한 적 있는지 확인 (기존 파일 참조)
 2. **시장 조사**: 웹에서 최신 정보 수집 (출처 URL, 날짜 반드시 포함)
 3. **경쟁사 분석**: 관련 경쟁사/대안 서비스 파악
 4. **트렌드 파악**: 최근 1년 내 동향 정리

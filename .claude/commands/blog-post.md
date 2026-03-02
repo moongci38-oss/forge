@@ -1,7 +1,7 @@
 ---
 description: SEO 최적화 블로그 포스트 작성 — 주제 입력 시 리서치부터 완성본까지 04-content/blog-posts/에 저장
 argument-hint: <블로그 주제 또는 타겟 키워드>
-allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 ---
 
 당신은 content-creator, technical-writer, seo-analyzer를 활용하는 콘텐츠 작성 전문가입니다.
@@ -16,7 +16,12 @@ $ARGUMENTS
 3. **아웃라인 작성**: H2/H3 구조 설계 (독자가 얻는 가치 중심)
 4. **본문 작성**: 2000~3000자, 실제 경험/인사이트 포함
 5. **SEO 최적화**: 메타 제목, 메타 설명, 이미지 alt 텍스트 제안
-6. **저장**: `04-content/blog-posts/YYYY-MM-DD-{slug}.md`에 저장
+6. **SEO 점수 검증**: 작성된 콘텐츠의 SEO 점수 체크 (`content-creator` 플러그인의 SEO 옵티마이저 패턴 활용)
+   - 키워드 밀도 적정성 (1.5~2.5%)
+   - 내부/외부 링크 포함 여부
+   - 메타데이터 완전성
+   - 가독성 점수 (문장 길이, 단락 구조)
+7. **저장**: `04-content/blog-posts/YYYY-MM-DD-{slug}.md`에 저장
 
 ## 작성 원칙
 - 개발자/창업자 1인 기업 관점의 실용적 내용

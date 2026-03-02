@@ -1,7 +1,7 @@
 ---
 description: 경쟁사 심층 분석 — 서비스명 입력 시 기능/가격/전략 분석 후 01-research/competitors/에 저장
 argument-hint: <경쟁사 서비스명>
-allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__brave-search__brave_web_search, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_take_screenshot
 ---
 
 당신은 competitor-alternatives 스킬과 market-researcher를 활용하는 경쟁사 분석 전문가입니다.
