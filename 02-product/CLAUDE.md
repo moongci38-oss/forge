@@ -80,6 +80,8 @@ claude plugin install sales@knowledge-work-plugins --scope project
 
 ```
 02-product/
+├── projects/          SIGIL 프로젝트별 산출물
+│   └── {project}/     YYYY-MM-DD-s{N}-{topic}.md
 ├── lean-canvas/       YYYY-MM-DD-{product}-canvas.md
 ├── business-plans/    YYYY-MM-DD-{product}-plan.md
 ├── pricing-models/    YYYY-MM-DD-{model}-comparison.md
@@ -87,6 +89,12 @@ claude plugin install sales@knowledge-work-plugins --scope project
 ├── roadmap/           YYYY-MM-DD-{product}-roadmap.md
 └── gtm-strategy/      YYYY-MM-DD-{product}-gtm.md
 ```
+
+### projects/ 규칙
+
+- SIGIL S2 컨셉, S3 PRD/GDD 산출물은 `projects/{project}/` 하위에 저장
+- 파일명에서 프로젝트명 제거 (폴더가 이미 프로젝트를 나타냄)
+- 예: `projects/baduki/2026-02-26-s2-concept.md`, `projects/baduki/2026-02-26-s3-gdd.md`
 
 ---
 
@@ -123,4 +131,12 @@ claude plugin install sales@knowledge-work-plugins --scope project
 
 ---
 
-*Last Updated: 2026-02-18*
+## 에이전트 행동 규칙
+
+1. SIGIL S2/S3 산출물은 `projects/{project}/` 하위에 프로젝트 폴더를 생성하고 저장한다
+2. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
+3. 일반 기획(특정 프로젝트와 무관)은 기존 폴더(lean-canvas/, pricing-models/ 등)에 저장한다
+
+---
+
+*Last Updated: 2026-02-26*

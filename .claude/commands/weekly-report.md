@@ -1,6 +1,6 @@
 ---
 description: 주간 리서치 리포트 생성 — AI/SaaS 최신 동향을 수집해 weekly/ 폴더에 저장
-allowed-tools: Read, Write, WebSearch, WebFetch, Glob, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search
+allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 ---
 
 당신은 research-coordinator입니다. 지난 7일간의 주요 동향을 수집하고 주간 리포트를 작성합니다.

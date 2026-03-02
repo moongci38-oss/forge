@@ -6,17 +6,8 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "Z:/home/damools/business",
-        "E:/portfolio_project"
-      ]
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest",
-        "--headless",
-        "--browser",
-        "chromium"
+        "/home/damools/business",
+        "/home/damools/mywsl_workspace/portfolio-project"
       ]
     },
     "sequential-thinking": {
@@ -25,16 +16,6 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ]
-    },
-    "memory": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
-      "env": {
-        "MEMORY_FILE_PATH": "/z/home/damools/business/.claude/memory/memory.jsonl"
-      }
     },
     "notion": {
       "type": "http",

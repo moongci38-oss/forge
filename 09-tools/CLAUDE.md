@@ -59,7 +59,7 @@ bash scripts/manage-components.sh list
 bash scripts/manage-components.sh list agents
 
 # 에이전트 활성화
-bash scripts/manage-components.sh enable agents seo-analyzer
+bash scripts/manage-components.sh enable agents search-ai-optimization-expert
 
 # portfolio-project에 동기화
 bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
@@ -87,7 +87,7 @@ bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
 
 ## Agent Teams
 
-- **orchestrator** ✅ — 워크플로우 전체 조정
+- **pipeline-orchestrator** ✅ — SIGIL S1-S4 파이프라인 오케스트레이션
 - **technical-writer** ✅ — 프로세스 문서화
 
 ---

@@ -47,10 +47,10 @@ claude plugin install data@knowledge-work-plugins --scope project
 | 타입 | 담당 에이전트 | 출처 | 주기 |
 |------|------------|------|------|
 | 논문 | academic-researcher | arXiv, Semantic Scholar | 월간 |
-| 기사 | market-researcher | Brave Search, HN, TechCrunch | 매일 |
+| 기사 | market-researcher | WebSearch, HN, TechCrunch | 매일 |
 | 공식문서 | (Context7 직접 사용) | Context7 | 주간 |
 | 백서 | academic-researcher | Gartner, McKinsey | 분기 |
-| 오픈소스 | (Brave Search + GitHub) | GitHub Trending | 주간 |
+| 오픈소스 | (WebSearch + GitHub) | GitHub Trending | 주간 |
 | 영상 | (수동 + 요약 요청) | YouTube 컨퍼런스 | 월간 |
 | 커뮤니티 | market-researcher | Reddit, HN | 주간 |
 | SNS/트렌드 | market-researcher | Product Hunt, X | 매일 |
@@ -62,7 +62,7 @@ claude plugin install data@knowledge-work-plugins --scope project
 
 ### 매일 (일일 트렌드 수집)
 ```
-"market-researcher로 AI, SaaS, Micro SaaS 최신 동향을 Brave Search로 조사하여
+"market-researcher로 AI, SaaS, Micro SaaS 최신 동향을 WebSearch로 조사하여
 trends/YYYY-MM-DD-daily.md에 저장. 출처(URL, 날짜) 반드시 포함"
 ```
 
@@ -84,12 +84,20 @@ monthly/YYYY-MM-comprehensive-report.md 생성"
 
 ```
 01-research/
+├── projects/        SIGIL 프로젝트별 리서치
+│   └── {project}/   YYYY-MM-DD-s{N}-{topic}.md
 ├── trends/          YYYY-MM-DD-{topic}-trend.md
 ├── competitors/     YYYY-MM-DD-{company}-analysis.md
 ├── market-data/     YYYY-MM-DD-{market}-report.md
 ├── templates/       리서치 템플릿
 └── weekly/          YYYY-WW-report.md
 ```
+
+### projects/ 규칙
+
+- SIGIL S1 리서치 산출물은 `projects/{project}/` 하위에 저장
+- 파일명에서 프로젝트명 제거 (폴더가 이미 프로젝트를 나타냄)
+- 예: `projects/baduki/2026-02-26-s1-tech-stack-analysis.md`
 
 ---
 
@@ -99,7 +107,7 @@ monthly/YYYY-MM-comprehensive-report.md 생성"
 ```
 "Notion 경쟁사 분석해줘"
 → research-coordinator
-  ├─ market-researcher: Brave Search로 경쟁사 수집
+  ├─ market-researcher: WebSearch로 경쟁사 수집
   ├─ competitor-alternatives: 비교표 생성
   ├─ seo-audit: 키워드 전략 분석
   └─ fact-checker: 데이터 검증
@@ -108,4 +116,12 @@ monthly/YYYY-MM-comprehensive-report.md 생성"
 
 ---
 
-*Last Updated: 2026-02-18*
+## 에이전트 행동 규칙
+
+1. SIGIL S1 리서치 시 `projects/{project}/` 하위에 프로젝트 폴더를 생성하고 산출물을 저장한다
+2. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
+3. 일반 리서치(트렌드, 경쟁사, 시장 데이터)는 기존 폴더(trends/, competitors/, market-data/)에 저장한다
+
+---
+
+*Last Updated: 2026-02-26*

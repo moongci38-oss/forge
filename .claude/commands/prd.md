@@ -18,7 +18,10 @@ $ARGUMENTS
 4. **시장 검증**: 웹에서 유사 제품/경쟁사 조사 (출처 URL, 날짜 포함)
 5. **PRD 작성**: 명확도 90점 이상 달성 후 완전한 PRD 생성
 6. **RICE 평가**: Reach, Impact, Confidence, Effort 점수 산정
-7. **저장**: `02-product/product-specs/YYYY-MM-DD-{product}-prd.md`에 저장
+7. **(선택적) 외부 도구 참조**: Notion/Linear MCP 연결 시 기존 스펙/리서치 문서를 자동으로 pull하여 참조
+   - `product-management:write-spec` 플러그인의 외부 도구 pull 패턴 활용
+   - MCP 미연결 시 이 단계 스킵
+8. **저장**: `02-product/product-specs/YYYY-MM-DD-{product}-prd.md`에 저장
 
 ## 출력 형식
 
