@@ -51,6 +51,9 @@
     "data@knowledge-work-plugins": true,
     "sales@knowledge-work-plugins": true,
     "customer-support@knowledge-work-plugins": true,
-    "cowork-plugin-management@knowledge-work-plugins": true
+    "playground@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   }
 }

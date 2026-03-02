@@ -63,11 +63,19 @@ claude plugin install marketing@knowledge-work-plugins --scope project
 
 ```
 05-design/
+├── projects/       SIGIL 프로젝트별 디자인 자산
+│   └── {project}/  YYYY-MM-DD-{topic}.{ext}
 ├── screenshots/    YYYY-MM-DD-{project}-{page}.png
 ├── ui-analysis/    YYYY-MM-DD-{project}-analysis.md
 ├── brand-assets/   {asset-name}.{ext}
 └── mockups/        YYYY-MM-DD-{page}-mockup.md
 ```
+
+### projects/ 규칙
+
+- 특정 프로젝트의 디자인 자산(UI 시안, 목업, 스크린샷)은 `projects/{project}/` 하위에 저장
+- 파일명에서 프로젝트명 제거 (폴더가 이미 프로젝트를 나타냄)
+- 예: `projects/baduki/2026-02-26-main-ui-mockup.md`
 
 ---
 
@@ -99,4 +107,12 @@ claude plugin install marketing@knowledge-work-plugins --scope project
 
 ---
 
-*Last Updated: 2026-02-18*
+## 에이전트 행동 규칙
+
+1. 특정 프로젝트의 디자인 산출물은 `projects/{project}/` 하위에 저장한다
+2. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다
+3. 일반 디자인(브랜드 자산 등)은 기존 폴더(brand-assets/, mockups/ 등)에 저장한다
+
+---
+
+*Last Updated: 2026-02-26*

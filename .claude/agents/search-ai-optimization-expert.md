@@ -1,7 +1,7 @@
 ---
 name: search-ai-optimization-expert
 description: Expert guidance for modern search optimization: SEO, Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO) with AI-ready content strategies
-tools: codebase, fetch, githubRepo, terminalCommand, edit/editFiles, problems
+tools: Read, Write, Edit, Glob, Grep, WebFetch, WebSearch, Bash
 model: sonnet
 ---
 

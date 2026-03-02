@@ -11,7 +11,7 @@
 - **technical-writer** ✅ — 릴리즈 노트, 운영 문서 작성
 - **ux-researcher** ✅ — 고객 피드백 분석, UX 개선 제안
 - **fact-checker** ✅ — 지표 데이터 검증
-- **orchestrator** ✅ — 복잡한 운영 워크플로우 조정
+- **pipeline-orchestrator** ✅ — 복잡한 운영 워크플로우 조정
 
 ---
 

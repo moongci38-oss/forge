@@ -58,9 +58,9 @@ Component Types:
 Examples:
   manage-components.sh list
   manage-components.sh list agents
-  manage-components.sh enable agents seo-analyzer
-  manage-components.sh disable agents seo-analyzer
-  manage-components.sh install agents web-tools/seo-analyzer
+  manage-components.sh enable agents search-ai-optimization-expert
+  manage-components.sh disable agents search-ai-optimization-expert
+  manage-components.sh install agents web-tools/search-ai-optimization-expert
   manage-components.sh info agents academic-researcher
   manage-components.sh sync ~/mywsl_workspace/portfolio-project
 EOF
@@ -136,7 +136,7 @@ cmd_list() {
             skill_count=$(find "$SKILLS_LIBRARY" -name "SKILL.md" 2>/dev/null | wc -l)
         fi
         if [ -d "$CLAUDE_DIR/skills" ]; then
-            skill_active=$(find "$CLAUDE_DIR/skills" -maxdepth 1 -type l 2>/dev/null | wc -l)
+            skill_active=$(find "$CLAUDE_DIR/skills" -maxdepth 1 -mindepth 1 -type d -o -type l 2>/dev/null | wc -l)
         fi
         echo -e "  ${CYAN}$skill_count skills, $skill_active active (use manage-skills.sh)${NC}"
         echo ""

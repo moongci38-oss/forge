@@ -3,6 +3,7 @@
 BUSINESS 환경에서 개발 프로젝트로 전달하는 문서를 보관한다.
 
 ## 대상 프로젝트
+- `baduki/` — 로우 바둑이 게임 프로젝트 전달 문서 (GDD, 기획 패키지)
 - `portfolio/` — Portfolio 프로젝트 전달 문서 (기획서, PRD, 디자인 시안)
 - `godblade/` — GodBlade 프로젝트 전달 문서
 

@@ -27,7 +27,7 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 
 ## Agent Teams
 
-- **seo-analyzer** ✅ — SEO 분석 및 최적화
+- **search-ai-optimization-expert** ✅ — SEO 분석 및 최적화
 - **market-researcher** ✅ — 타겟 및 경쟁사 분석
 - **technical-writer** ✅ — 마케팅 콘텐츠 작성
 - **fact-checker** ✅ — 데이터 검증
@@ -68,7 +68,7 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 
 ### SEO 자동화
 ```
-1. seo-analyzer              → 키워드 리서치
+1. search-ai-optimization-expert              → 키워드 리서치
 2. programmatic-seo          → 대량 페이지 생성
 3. schema-markup             → 구조화 데이터
 4. seo-audit                 → 전체 감사
@@ -94,7 +94,7 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 
 ## 자동화 스케줄
 
-- **매일**: SEO 순위 모니터링 (Brave Search)
+- **매일**: SEO 순위 모니터링 (WebSearch)
 - **주간**: 캠페인 최적화 제안
 - **월간**: 마케팅 성과 분석 리포트
 
@@ -104,12 +104,20 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 
 ```
 03-marketing/
+├── projects/         SIGIL 프로젝트별 마케팅 전략
+│   └── {project}/    YYYY-MM-DD-{topic}.md
 ├── seo/              YYYY-MM-DD-keyword-analysis.md
 ├── campaigns/        YYYY-MM-DD-{campaign-name}.md
 ├── email-sequences/  YYYY-MM-DD-{sequence-name}.md
 ├── ads/              YYYY-MM-DD-{platform}-ads.md
 └── analytics/        YYYY-MM-{month}-marketing-report.md
 ```
+
+### projects/ 규칙
+
+- 특정 프로젝트의 마케팅 전략/캠페인은 `projects/{project}/` 하위에 저장
+- 파일명에서 프로젝트명 제거 (폴더가 이미 프로젝트를 나타냄)
+- 예: `projects/baduki/2026-02-26-gtm-campaign.md`
 
 ---
 
@@ -126,7 +134,7 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 **SEO 감사**:
 ```
 "사이트 SEO 전체 감사해줘"
-→ seo-analyzer: 현재 SEO 상태 분석
+→ search-ai-optimization-expert: 현재 SEO 상태 분석
 → seo-audit: 개선사항 리스트
 → schema-markup: 구조화 데이터 추가 제안
 → 출력: seo/2026-02-18-seo-audit.md
@@ -142,4 +150,12 @@ claude plugin install customer-support@knowledge-work-plugins --scope project
 
 ---
 
-*Last Updated: 2026-02-18*
+## 에이전트 행동 규칙
+
+1. 특정 프로젝트의 마케팅 산출물은 `projects/{project}/` 하위에 저장한다
+2. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다
+3. 일반 마케팅(특정 프로젝트와 무관)은 기존 폴더(seo/, campaigns/ 등)에 저장한다
+
+---
+
+*Last Updated: 2026-02-26*
