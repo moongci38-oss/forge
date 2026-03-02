@@ -33,6 +33,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
+BOLD='\033[1m'
 NC='\033[0m'
 
 usage() {
@@ -46,6 +47,7 @@ Usage:
   manage-components.sh install <type> <slug>[,slug,...]     Download from aitmpl.com
   manage-components.sh info <type> <name>                   Show component details
   manage-components.sh sync <target-project-path>           Sync components to a project
+  manage-components.sh token-estimate                       Estimate session start tokens
 
 Component Types:
   agents      Agent definitions (.md files)
@@ -426,6 +428,97 @@ validate_type() {
 
 # ─── MAIN ──────────────────────────────────────────────────────────────────
 
+# ─── TOKEN ESTIMATE ─────────────────────────────────────────────────────
+cmd_token_estimate() {
+    echo -e "${CYAN}=== Session Start Token Estimate ===${NC}"
+    echo ""
+
+    local total=0
+
+    # 1. Project rules (.claude/rules/)
+    local rules_bytes=0
+    local rules_files=0
+    for f in "$CLAUDE_DIR/rules"/*.md; do
+        [ -f "$f" ] || continue
+        local size
+        size=$(wc -c < "$f")
+        rules_bytes=$((rules_bytes + size))
+        rules_files=$((rules_files + 1))
+    done
+    local rules_tokens=$((rules_bytes / 4))
+    printf "  %-35s %3d files  ~%'6d tokens\n" "Project rules" "$rules_files" "$rules_tokens"
+    total=$((total + rules_tokens))
+
+    # 2. Global rules
+    local global_bytes=0
+    local global_files=0
+    local global_dir
+    global_dir="$(eval echo '~/.claude/rules')"
+    if [ -d "$global_dir" ]; then
+        for f in "$global_dir"/*.md; do
+            [ -f "$f" ] || continue
+            local size
+            size=$(wc -c < "$f")
+            global_bytes=$((global_bytes + size))
+            global_files=$((global_files + 1))
+        done
+    fi
+    local global_tokens=$((global_bytes / 4))
+    printf "  %-35s %3d files  ~%'6d tokens\n" "Global rules" "$global_files" "$global_tokens"
+    total=$((total + global_tokens))
+
+    # 3. CLAUDE.md files
+    local claude_bytes=0
+    local claude_files=0
+    for f in "$BUSINESS_ROOT/CLAUDE.md" "$HOME/CLAUDE.md"; do
+        [ -f "$f" ] || continue
+        local size
+        size=$(wc -c < "$f")
+        claude_bytes=$((claude_bytes + size))
+        claude_files=$((claude_files + 1))
+    done
+    local claude_tokens=$((claude_bytes / 4))
+    printf "  %-35s %3d files  ~%'6d tokens\n" "CLAUDE.md" "$claude_files" "$claude_tokens"
+    total=$((total + claude_tokens))
+
+    # 4. Skills metadata (estimate ~80 tokens per active skill)
+    local skill_count=0
+    if [ -d "$CLAUDE_DIR/skills" ]; then
+        skill_count=$(find "$CLAUDE_DIR/skills" -maxdepth 1 -type d -o -type l | tail -n +2 | wc -l)
+    fi
+    local skill_tokens=$((skill_count * 80))
+    printf "  %-35s %3d skills ~%'6d tokens\n" "Skills metadata" "$skill_count" "$skill_tokens"
+    total=$((total + skill_tokens))
+
+    # 5. Agents metadata
+    local agent_count=0
+    if [ -d "$CLAUDE_DIR/agents" ]; then
+        agent_count=$(find "$CLAUDE_DIR/agents" -maxdepth 1 -type f -name "*.md" -o -type l | wc -l)
+    fi
+    local agent_tokens=$((agent_count * 80))
+    printf "  %-35s %3d agents ~%'6d tokens\n" "Agents metadata" "$agent_count" "$agent_tokens"
+    total=$((total + agent_tokens))
+
+    # 6. Commands metadata
+    local cmd_count=0
+    if [ -d "$CLAUDE_DIR/commands" ]; then
+        cmd_count=$(find "$CLAUDE_DIR/commands" -maxdepth 1 -type f -name "*.md" -o -type l | wc -l)
+    fi
+    local cmd_tokens=$((cmd_count * 40))
+    printf "  %-35s %3d cmds   ~%'6d tokens\n" "Commands metadata" "$cmd_count" "$cmd_tokens"
+    total=$((total + cmd_tokens))
+
+    # 7. System prompt + MCP tools (fixed estimate)
+    local system_tokens=15000
+    printf "  %-35s           ~%'6d tokens\n" "System prompt + MCP tools" "$system_tokens"
+    total=$((total + system_tokens))
+
+    echo ""
+    local pct=$((total * 100 / 200000))
+    echo -e "${BOLD}Estimated total: ~$total tokens (${pct}% of 200K context)${NC}"
+    echo -e "${BOLD}Available for work: ~$((200000 - total)) tokens${NC}"
+}
+
 main() {
     if [ $# -eq 0 ]; then
         usage
@@ -458,6 +551,9 @@ main() {
         sync)
             [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-components.sh sync <target-project-path>${NC}"; exit 1; }
             cmd_sync "$1"
+            ;;
+        token-estimate)
+            cmd_token_estimate
             ;;
         help|--help|-h)
             usage

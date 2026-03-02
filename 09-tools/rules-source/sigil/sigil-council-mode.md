@@ -1,3 +1,16 @@
+---
+title: "Agent Council 모드"
+id: sigil-council-mode
+impact: MEDIUM
+scope: [sigil]
+tags: [pipeline, council, tournament]
+requires: [sigil-structure]
+section: sigil-pipeline
+audience: all
+impactDescription: "Council 모드 무단 활성화 시 토큰 비용 500%+ 증가. Human 미승인 토너먼트는 리소스 낭비"
+enforcement: flexible
+---
+
 # SIGIL Agent Council 모드 (5+2 토너먼트)
 
 > sigil-pipeline.md의 선택적 확장. Human이 파이프라인 시작 시 **명시적으로 선택**해야 활성화된다.
@@ -6,7 +19,7 @@
 
 - Human이 파이프라인 시작 시 **명시적으로 선택**
 - **권장 상황**: 신규 시장 진입 / 방향이 불확실 / 기존 경험 없는 도메인
-- 기본 모드와 양자택일 — S1+S3를 통합하여 각 Councilor가 리서치부터 기획까지 독립 수행
+- 기본 모드와 양자택일 -- S1+S3를 통합하여 각 Councilor가 리서치부터 기획까지 독립 수행
 
 ## 토너먼트 구조
 

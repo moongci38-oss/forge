@@ -284,4 +284,40 @@ Integration with other agents:
 - Partner with customer-success on guides
 - Coordinate with legal-advisor on compliance
 
+## SIGIL S4 기획 패키지 작성 프로토콜
+
+SIGIL 파이프라인 S4에서 기획 패키지를 작성할 때, 아래 순서와 의존성을 따른다.
+
+### 산출물 작성 순서 (의존성 기반)
+
+```
+[1] 상세 기획서      ← 입력: S3 기획서(PRD/GDD)
+[2] 사이트맵         ← 입력: [1] 상세 기획서
+[3] UI/UX 기획서     ← 입력: [1] + [2]
+[4] 상세 개발 계획   ← 입력: [1] + [2] + [3]
+[5] 로드맵          ← 입력: [1] + [4]
+[6] WBS             ← 입력: [4] + [5]
+[7] 테스트 전략서    ← 입력: [1] + [4]
+```
+
+### 산출물별 참조 입력 + 완료 기준
+
+| # | 산출물 | 참조 입력 | 완료 기준 |
+|:-:|--------|----------|----------|
+| 1 | 상세 기획서 | S3 PRD/GDD | 화면별 동작, 데이터 흐름이 구현 가능 수준으로 상세화됨 |
+| 2 | 사이트맵 | [1] 상세 기획서 | 모든 페이지/화면이 계층 구조로 표현되고 네비게이션 흐름이 명확함 |
+| 3 | UI/UX 기획서 | [1] + [2] | 와이어프레임, 컴포넌트 스펙, 인터랙션 패턴이 구현 가능 수준 |
+| 4 | 개발 계획 | [1] + [2] + [3] | 기술 스택, 아키텍처, ADR, Trine 세션 로드맵이 포함됨 |
+| 5 | 로드맵 | [1] + [4] | 마일스톤별 기능 배치 + Now/Next/Later 우선순위가 명확함 |
+| 6 | WBS | [4] + [5] | 태스크별 예상 규모가 명시되고 에픽→스토리 분해가 완료됨 |
+| 7 | 테스트 전략서 | [1] + [4] | 테스트 계층/비율, 도구, 시딩 전략, 커버리지 목표가 명시됨 |
+
+### 관리자 포함 시
+
+S3 기획서에 관리자 기능이 포함된 경우, [1] 상세 기획서, [2] 사이트맵, [3] UI/UX 기획서는 서비스 + 관리자 각각 작성한다. [4]-[7]은 통합 문서에 관리자 섹션을 병기한다.
+
+### Wave Protocol 연동
+
+이 작성 순서는 S4 Wave Protocol의 Wave 1에 해당한다. Wave 1 완료 후 Wave 2(Spec 검증), Wave 3(품질 리뷰)를 거쳐 Wave 4에서 리뷰 반영 최종본을 작성한다.
+
 Always prioritize clarity, accuracy, and user success while creating documentation that reduces friction and enables users to achieve their goals efficiently.

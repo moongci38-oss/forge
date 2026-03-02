@@ -289,6 +289,47 @@ graph TD
 
 ---
 
+## 9. 기술 품질 기준 (개발 트랙)
+
+### 9.1 성능 목표
+| 지표 | 목표값 | 측정 도구 |
+|------|:------:|---------|
+| LCP (Largest Contentful Paint) | < 2.5s | Lighthouse / Web Vitals |
+| FID (First Input Delay) | < 100ms | Lighthouse / Web Vitals |
+| CLS (Cumulative Layout Shift) | < 0.1 | Lighthouse / Web Vitals |
+| TTFB (Time to First Byte) | < 800ms | Lighthouse |
+| INP (Interaction to Next Paint) | < 200ms | Web Vitals |
+
+### 9.2 번들 사이즈 예산
+| 대상 | 예산 | 비고 |
+|------|:----:|------|
+| 초기 로드 JS | {목표값} | First Load 기준 |
+| 개별 라우트 JS | {목표값} | 라우트별 상한 |
+| CSS 합계 | {목표값} | 전체 스타일시트 |
+| 이미지 (LCP 요소) | {목표값} | 최적화 필수 |
+
+### 9.3 아키텍처 품질 원칙
+| 원칙 | 설명 | 기획 수준 기준 |
+|------|------|:-------------:|
+| Server-First | RSC 기본, 클라이언트 최소화 | "use client" 사용 화면 목록 명시 |
+| Waterfall 제거 | 독립 데이터 소스 병렬 fetch | 데이터 의존 관계도에서 병렬 가능 항목 식별 |
+| 번들 최적화 | dynamic import, tree shaking | 대형 라이브러리 사용 시 번들 영향도 명시 |
+| 접근성 | WCAG 2.1 AA 준수 | 접근성 필수 화면/컴포넌트 목록 명시 |
+
+### 9.4 SIGIL ↔ Trine 역할 분리
+
+> 이 섹션은 **기획 수준 기준**(목표 설정)만 포함한다.
+> **구현 검증 기준**(코드가 룰을 따르는지 Check)은 Trine 영역이다.
+
+| 항목 | SIGIL S4 (기획 기준) | Trine Check (검증 기준) |
+|------|---------------------|----------------------|
+| 성능 | "LCP < 2.5s 달성" (목표 설정) | "async-parallel 룰 준수 여부 코드 검사" |
+| 번들 | "초기 JS < 200KB 예산" (예산 설정) | "barrel import 사용 여부, dynamic import 적용 검사" |
+| 아키텍처 | "RSC 우선, 클라이언트 최소화" (방향 설정) | "use client 개수, server action 인증 패턴 검사" |
+| 접근성 | "WCAG 2.1 AA 준수" (기준 설정) | "aria-label, focus trap, 키보드 탐색 코드 검사" |
+
+---
+
 ## 검증 체크리스트 (S4 DoD)
 
 - [ ] 상세 기획서 완성 (화면별 동작, 데이터 흐름)
@@ -301,6 +342,8 @@ graph TD
 - [ ] **모바일 네비게이션 패턴 결정** + 근거 명시 (UI/UX 기획서 내)
 - [ ] **주요 화면 모바일 와이어프레임 포함** (데스크톱+모바일 병기)
 - [ ] **테스트 전략서 완성** (테스트 계층, 시딩, 환경, FE/BE 도구)
+- [ ] **기술 품질 기준 정의** (성능 목표, 번들 예산, 아키텍처 원칙)
+- [ ] **SIGIL ↔ Trine 역할 분리 확인** (기획 기준만 포함, 코드 검증은 Trine)
 - [ ] 관리자 산출물 완성 (해당 시)
 
 ## Trine 연동 확인
@@ -309,6 +352,7 @@ graph TD
 - [ ] S3 기획서 (PRD/GDD) → Trine Phase 1.5/2 입력
 - [ ] S1 리서치 → Trine Phase 1 컨텍스트
 - [ ] Trine 세션 로드맵 → 세션별 실행 가이드
+- [ ] S4 기술 품질 기준 → Trine Check 검증 기준의 입력
 
 ---
 

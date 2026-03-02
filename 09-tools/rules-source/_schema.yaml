@@ -1,0 +1,84 @@
+# Rules-as-Code Frontmatter Schema
+# 모든 규칙 원본 파일의 YAML Frontmatter가 이 스키마를 따라야 한다.
+
+required:
+  title:
+    type: string
+    description: "규칙 제목 (한국어)"
+
+  id:
+    type: string
+    pattern: "^[a-z][a-z0-9-]*$"
+    description: "고유 식별자 (kebab-case)"
+
+  impact:
+    type: enum
+    values: [CRITICAL, HIGH, MEDIUM, LOW]
+    description: |
+      CRITICAL: 위반 시 보안/데이터 손실 위험
+      HIGH: 위반 시 워크플로우 실패 가능
+      MEDIUM: 위반 시 품질 저하
+      LOW: 권장 사항
+
+  scope:
+    type: array
+    items:
+      type: enum
+      values: [always, sigil, trine, cowork]
+    description: |
+      always: 모든 세션에 로드
+      sigil: SIGIL 파이프라인 세션
+      trine: Trine 개발 세션
+      cowork: Cowork (비개발자) 세션
+
+optional:
+  tags:
+    type: array
+    items:
+      type: string
+    description: "검색/분류용 태그"
+
+  requires:
+    type: array
+    items:
+      type: string
+    description: "의존하는 규칙 ID 목록"
+
+  section:
+    type: string
+    description: "빌드 시 그룹핑 키"
+
+  audience:
+    type: enum
+    values: [dev, non-dev, all]
+    default: all
+    description: "대상 사용자"
+
+  impactDescription:
+    type: string
+    description: "정량적 영향도 기술 (예: '미준수 시 데이터 유출/계정 탈취 위험')"
+
+  enforcement:
+    type: enum
+    values: [rigid, flexible]
+    default: flexible
+    description: |
+      rigid: 예외 없는 절대 규칙 (CRITICAL/HIGH 권장)
+      flexible: 원칙 적용, 상황에 따라 조정 가능 (MEDIUM/LOW 기본)
+
+content_sections:
+  recommended:
+    - "## Do"
+    - "## Don't"
+    - "## AI 행동 규칙"
+  description: |
+    Do: 올바른 행동 패턴
+    Don't: 잘못된 행동 패턴
+    AI 행동 규칙: AI 에이전트 지시사항
+
+compilation:
+  progressive_disclosure:
+    CRITICAL: "전문 포함 (Do/Don't + AI 행동 규칙)"
+    HIGH: "전문 포함 (Do/Don't + AI 행동 규칙)"
+    MEDIUM: "제목 + 1줄 요약 + 참조 링크"
+    LOW: "제목 + 참조 링크"

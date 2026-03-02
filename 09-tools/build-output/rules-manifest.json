@@ -1,0 +1,369 @@
+{
+  "version": "1.0.0",
+  "buildDate": "2026-03-02",
+  "stats": {
+    "totalRules": 16,
+    "byScope": {
+      "always": 6,
+      "cowork": 2,
+      "sigil": 9,
+      "trine": 1
+    },
+    "byImpact": {
+      "MEDIUM": 6,
+      "HIGH": 8,
+      "CRITICAL": 2
+    },
+    "totalTokens": 10057
+  },
+  "rules": [
+    {
+      "id": "file-naming",
+      "title": "파일명 규칙",
+      "file": "09-tools/rules-source/always/file-naming.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "always"
+      ],
+      "tags": [
+        "naming",
+        "convention",
+        "files"
+      ],
+      "requires": [],
+      "audience": "all",
+      "tokens": 658,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "git-rules",
+      "title": "Git 규칙",
+      "file": "09-tools/rules-source/always/git.md",
+      "impact": "HIGH",
+      "scope": [
+        "always"
+      ],
+      "tags": [
+        "git",
+        "commit",
+        "branch"
+      ],
+      "requires": [],
+      "audience": "all",
+      "tokens": 301,
+      "doCount": 6,
+      "dontCount": 5,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "research-methodology",
+      "title": "리서치 방법론",
+      "file": "09-tools/rules-source/always/research-methodology.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "always"
+      ],
+      "tags": [
+        "research",
+        "methodology",
+        "sources"
+      ],
+      "requires": [],
+      "audience": "all",
+      "tokens": 413,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "security-rules",
+      "title": "보안 체크리스트",
+      "file": "09-tools/rules-source/always/security.md",
+      "impact": "CRITICAL",
+      "scope": [
+        "always",
+        "cowork"
+      ],
+      "tags": [
+        "security",
+        "sensitive",
+        "access-control"
+      ],
+      "requires": [],
+      "audience": "all",
+      "tokens": 260,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "cowork-safety",
+      "title": "Cowork 환경 보안",
+      "file": "09-tools/rules-source/cowork/cowork-safety.md",
+      "impact": "CRITICAL",
+      "scope": [
+        "cowork"
+      ],
+      "tags": [
+        "cowork",
+        "security",
+        "hooks-alternative"
+      ],
+      "requires": [
+        "security-rules"
+      ],
+      "audience": "non-dev",
+      "tokens": 358,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "agent-teams",
+      "title": "Agent Teams 규칙",
+      "file": "09-tools/rules-source/cross-project/agent-teams.md",
+      "impact": "HIGH",
+      "scope": [
+        "always"
+      ],
+      "tags": [
+        "agent-teams",
+        "parallel",
+        "orchestration"
+      ],
+      "requires": [],
+      "audience": "dev",
+      "tokens": 812,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "cross-project-pipeline",
+      "title": "크로스 프로젝트 파이프라인",
+      "file": "09-tools/rules-source/cross-project/cross-project-pipeline.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "always"
+      ],
+      "tags": [
+        "cross-project",
+        "pipeline",
+        "handoff"
+      ],
+      "requires": [],
+      "audience": "dev",
+      "tokens": 575,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-council-mode",
+      "title": "Agent Council 모드",
+      "file": "09-tools/rules-source/sigil/sigil-council-mode.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "council",
+        "tournament"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 404,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-governance",
+      "title": "SIGIL 거버넌스",
+      "file": "09-tools/rules-source/sigil/sigil-governance.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "gate",
+        "governance",
+        "model",
+        "pm"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 1151,
+      "doCount": 4,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-outputs",
+      "title": "SIGIL 산출물 경로",
+      "file": "09-tools/rules-source/sigil/sigil-outputs.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "outputs",
+        "templates",
+        "paths"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 1036,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-s1-research",
+      "title": "S1 리서치",
+      "file": "09-tools/rules-source/sigil/sigil-s1-research.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "research",
+        "s1"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 429,
+      "doCount": 3,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-s2-concept",
+      "title": "S2 컨셉 확정",
+      "file": "09-tools/rules-source/sigil/sigil-s2-concept.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "concept",
+        "s2",
+        "go-no-go"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 592,
+      "doCount": 3,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-s3-design",
+      "title": "S3 기획서",
+      "file": "09-tools/rules-source/sigil/sigil-s3-design.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "design",
+        "s3",
+        "prd",
+        "gdd"
+      ],
+      "requires": [
+        "sigil-structure"
+      ],
+      "audience": "all",
+      "tokens": 526,
+      "doCount": 3,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-s4-planning",
+      "title": "S4 기획 패키지",
+      "file": "09-tools/rules-source/sigil/sigil-s4-planning.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "planning",
+        "s4",
+        "admin"
+      ],
+      "requires": [
+        "sigil-structure",
+        "sigil-s3-design"
+      ],
+      "audience": "all",
+      "tokens": 1100,
+      "doCount": 4,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "sigil-structure",
+      "title": "SIGIL 파이프라인 구조",
+      "file": "09-tools/rules-source/sigil/sigil-structure.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil"
+      ],
+      "tags": [
+        "pipeline",
+        "structure",
+        "entry"
+      ],
+      "requires": [],
+      "audience": "all",
+      "tokens": 830,
+      "doCount": 3,
+      "dontCount": 3,
+      "aiRuleCount": 0
+    },
+    {
+      "id": "trine-handoff",
+      "title": "SIGIL → Trine 전환",
+      "file": "09-tools/rules-source/sigil/trine-handoff.md",
+      "impact": "HIGH",
+      "scope": [
+        "sigil",
+        "trine"
+      ],
+      "tags": [
+        "handoff",
+        "transition",
+        "trine"
+      ],
+      "requires": [
+        "sigil-s4-planning"
+      ],
+      "audience": "dev",
+      "tokens": 612,
+      "doCount": 0,
+      "dontCount": 0,
+      "aiRuleCount": 0
+    }
+  ]
+}

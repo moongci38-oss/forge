@@ -1,3 +1,15 @@
+---
+title: "Agent Teams 규칙"
+id: agent-teams
+impact: HIGH
+scope: [always]
+tags: [agent-teams, parallel, orchestration]
+section: cross-project
+audience: dev
+impactDescription: "파일 소유권 미선언 시 동시 편집 충돌 → 작업 소실. 의존성 있는 태스크 동시 스폰 시 빌드 실패"
+enforcement: rigid
+---
+
 # Agent Teams 규칙
 
 > Opus 4.6+ 실험적 기능. `settings.json`의 `env`에 활성화됨.
@@ -13,14 +25,14 @@
 1. 이 작업을 독립적인 서브태스크 2개 이상으로 나눌 수 있는가?
 2. 그렇다면 → Agent Teams 설계
 3. 그렇지 않다면 → 단일 순차 실행
-4. 스폰 전 재확인: 의존성 없는 태스크만 동시 스폰 (Wave 기반 — 선행 완료 후 다음 Wave 스폰)
+4. 스폰 전 재확인: 의존성 없는 태스크만 동시 스폰 (Wave 기반 -- 선행 완료 후 다음 Wave 스폰)
 
 ---
 
 ## 활성화 요건
 
 - **환경변수**: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (settings.json env에 설정됨)
-- **터미널**: tmux 필수 — VS Code 통합 터미널 미지원
+- **터미널**: tmux 필수 -- VS Code 통합 터미널 미지원
   ```bash
   # WSL Ubuntu-22.04 (tmux 3.2a 설치됨)
   wsl -d Ubuntu-22.04
@@ -57,8 +69,8 @@ Teammate 스폰 시 프롬프트를 아래 4원칙으로 구성한다:
 
 | 원칙 | 설명 |
 |------|------|
-| **Focused** | 하나의 명확한 목표만 부여 — 복합 목표 금지 |
-| **Self-contained** | 필요한 컨텍스트를 프롬프트에 모두 포함 — 외부 참조 최소화 |
+| **Focused** | 하나의 명확한 목표만 부여 -- 복합 목표 금지 |
+| **Self-contained** | 필요한 컨텍스트를 프롬프트에 모두 포함 -- 외부 참조 최소화 |
 | **Specific scope** | 작업 범위(파일, 모듈, 영역)를 명시적으로 한정 |
 | **Specific output** | 기대 산출물의 형식과 저장 위치를 명시 |
 
@@ -96,3 +108,39 @@ Lead (오케스트레이터)    → Opus 4.6   — 계획·판단·종합
 | VS Code 터미널 미지원 | Windows Terminal + WSL tmux |
 | 팀 중첩 불가 | SDK 외부 오케스트레이션 |
 | 동일 파일 동시 편집 충돌 | 파일 소유권 규칙 필수 선언 |
+
+## Do
+
+- 병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토한다
+- 태스크 시작 전 파일 소유권을 반드시 선언한다
+- 의존성 없는 태스크만 동시 스폰한다 (Wave 기반)
+- 모델 계층화를 적용한다 (Opus/Sonnet/Haiku)
+
+## Don't
+
+- 파일 소유권 선언 없이 병렬 작업을 시작하지 않는다
+- 의존성 있는 태스크를 동시 스폰하지 않는다
+- 공유 파일(CLAUDE.md, settings.*)을 Teammate이 수정하지 않는다
+
+## AI 행동 규칙
+
+1. 실행 계획 수립 시 병렬 분해 가능성을 가장 먼저 판단한다
+2. 스폰 전 파일 소유권을 선언하고, 의존성 없는 태스크만 동시 스폰한다
+3. 모델 계층화를 적용한다 (Lead→Opus, 구현→Sonnet, 탐색→Haiku)
+
+## Iron Laws
+
+- **IRON-1**: 파일 소유권 미선언 상태로 병렬 작업을 시작하지 않는다
+- **IRON-2**: 의존성 있는 태스크를 동시 스폰하지 않는다
+
+## Rationalization Table
+
+| 합리화 (Thought) | 현실 (Reality) |
+|-------------------|---------------|
+| "간단한 작업이라 소유권 선언 없이 해도 충돌 안 날 것" | 간단한 작업에서도 동일 파일 동시 편집 충돌이 발생한다. 선언은 5초, 충돌 복구는 30분이다 |
+| "이 두 태스크는 거의 독립적이니 같이 돌려도 될 것" | "거의" 독립적은 독립적이 아니다. 의존성이 0%일 때만 동시 스폰한다 |
+
+## Red Flags
+
+- "파일 하나만 수정하는 거라..." → STOP. 파일 소유권을 선언한다
+- "선행 작업이 금방 끝나니까 같이 시작해도..." → STOP. Wave 기반으로 선행 완료 후 다음 스폰한다

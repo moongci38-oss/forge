@@ -1,3 +1,15 @@
+---
+title: "크로스 프로젝트 파이프라인"
+id: cross-project-pipeline
+impact: MEDIUM
+scope: [always]
+tags: [cross-project, pipeline, handoff]
+section: cross-project
+audience: dev
+impactDescription: "핸드오프 문서 미작성 시 개발팀이 기획 의도 파악 불가. 역할 분리 위반 시 BUSINESS에서 코드 변경 → 충돌"
+enforcement: flexible
+---
+
 # 크로스 프로젝트 파이프라인
 
 ## 개요

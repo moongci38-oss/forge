@@ -1,3 +1,15 @@
+---
+title: "리서치 방법론"
+id: research-methodology
+impact: MEDIUM
+scope: [always]
+tags: [research, methodology, sources]
+section: core
+audience: all
+impactDescription: "단일 소스 의존 시 신뢰도 40-60% 하락. 검증 없는 데이터로 잘못된 비즈니스 결정 위험"
+enforcement: flexible
+---
+
 # 리서치 방법론
 
 ## 구조화된 리서치 접근

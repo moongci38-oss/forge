@@ -1,3 +1,15 @@
+---
+title: "파일명 규칙"
+id: file-naming
+impact: MEDIUM
+scope: [always]
+tags: [naming, convention, files]
+section: core
+audience: all
+impactDescription: "비일관적 파일명으로 검색 효율 30-50% 저하. SIGIL 산출물 자동 관리 불가"
+enforcement: flexible
+---
+
 # 파일명 규칙
 
 ## 기본 형식
@@ -7,13 +19,13 @@
 
 ## 예시
 ```
-✅ 2026-02-16-market-analysis-saas.md
-✅ 2026-02-16-pricing-model-v2.xlsx
-✅ 2026-Q1-marketing-report.md
+2026-02-16-market-analysis-saas.md
+2026-02-16-pricing-model-v2.xlsx
+2026-Q1-marketing-report.md
 
-❌ marketAnalysis.md        (날짜 없음)
-❌ 2026_02_16_report.md    (언더스코어 사용)
-❌ analysis-02-16.md       (연도 누락)
+marketAnalysis.md        (날짜 없음)
+2026_02_16_report.md    (언더스코어 사용)
+analysis-02-16.md       (연도 누락)
 ```
 
 ## 폴더별 규칙
@@ -56,12 +68,12 @@
 - `brand-assets/YYYY-MM-DD-{asset-name}.{ext}`
 - `mockups/YYYY-MM-DD-{page}-mockup.md`
 
-### 06-finance/ ⛔
+### 06-finance/
 - `invoices/YYYY-MM-DD-{client}.pdf`
 - `expenses/YYYY-MM-expenses.xlsx`
 - `tax-reports/YYYY-부가세-신고.pdf`
 
-### 07-legal/ ⛔
+### 07-legal/
 - `contracts/YYYY-MM-DD-{client}-contract.pdf`
 - `policies/terms-of-service.md`
 - `nda/YYYY-MM-DD-{party}-nda.pdf`
@@ -77,5 +89,5 @@
 - `planning/done/YYYY-MM-DD-{plan-name}.md`
 - `reviews/YYYY-MM-DD-{review-name}.md`
 - `infrastructure/YYYY-MM-DD-{topic}.md`
-- `shared/` — trine-sync 자동 배포, 수동 편집 금지
-- `trine/` — trine-sync 자동 배포, 수동 편집 금지
+- `shared/` -- trine-sync 자동 배포, 수동 편집 금지
+- `trine/` -- trine-sync 자동 배포, 수동 편집 금지

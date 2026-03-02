@@ -42,4 +42,17 @@ else
   echo "║  📋 이전 세션 없음 (신규 시작)                    ║"
 fi
 
+# SIGIL 파이프라인 상태 감지
+GATE_LOGS=$(find . -name "gate-log.md" -not -path "*/node_modules/*" 2>/dev/null)
+if [ -n "$GATE_LOGS" ]; then
+  echo "╠══════════════════════════════════════════════════╣"
+  echo "║  📊 SIGIL 프로젝트 감지:                          ║"
+  while IFS= read -r gl; do
+    PROJECT=$(basename "$(dirname "$gl")")
+    LAST_PASS=$(grep "✅ PASS" "$gl" 2>/dev/null | tail -1 | awk -F'|' '{print $2}' | tr -d ' ')
+    printf "║     %-15s 마지막 Gate: %s\n" "$PROJECT" "${LAST_PASS:-없음}  ║"
+  done <<< "$GATE_LOGS"
+  echo "║     → /research /prd /trine 커맨드 사용 가능      ║"
+fi
+
 echo "╚══════════════════════════════════════════════════╝"

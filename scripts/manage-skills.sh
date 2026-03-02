@@ -7,6 +7,7 @@ set -euo pipefail
 BUSINESS_ROOT="${BUSINESS_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/business")}"
 SKILLS_LIBRARY="$BUSINESS_ROOT/09-tools/skills-library"
 ACTIVE_SKILLS="$BUSINESS_ROOT/.claude/skills"
+ACTIVE_RULES="$BUSINESS_ROOT/.claude/rules"
 
 # Colors
 RED='\033[0;31m'
@@ -14,6 +15,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
 usage() {
@@ -27,12 +29,20 @@ Usage:
   manage-skills.sh install-aitmpl <skill-slug>       Download skill from aitmpl.com
   manage-skills.sh sync <target-project-path>        Sync dev skills to a project
   manage-skills.sh info <skill-name>                 Show skill details
+  manage-skills.sh audit                             Find unreferenced skills (disable candidates)
+  manage-skills.sh validate [skill-name]             Validate SKILL.md frontmatter fields
+  manage-skills.sh build <skill-name>                Generate AGENTS.md from rules/ subdirectory
+  manage-skills.sh test <skill-name>                 Run subagent scenario test (placeholder)
 
 Examples:
   manage-skills.sh enable aitmpl/business-marketing/product-strategist
   manage-skills.sh disable product-strategist
   manage-skills.sh install-aitmpl product-strategist
   manage-skills.sh sync ~/mywsl_workspace/portfolio-project
+  manage-skills.sh validate
+  manage-skills.sh validate nextjs-best-practices
+  manage-skills.sh build my-skill
+  manage-skills.sh test my-skill
 EOF
 }
 
@@ -344,6 +354,302 @@ cmd_info() {
     fi
 }
 
+# ─── AUDIT ─────────────────────────────────────────────────────────────────
+cmd_audit() {
+    echo -e "${CYAN}=== Skill Audit: Unreferenced Skills ===${NC}"
+    echo ""
+
+    if [ ! -d "$ACTIVE_SKILLS" ]; then
+        echo -e "${YELLOW}No active skills directory${NC}"
+        return
+    fi
+
+    local total=0
+    local unreferenced=0
+    local referenced_by_pipeline=()
+    local unreferenced_skills=()
+
+    # Collect all active skill names
+    for item in "$ACTIVE_SKILLS"/*/; do
+        [ -d "${item%/}" ] || continue
+        local name
+        name=$(basename "${item%/}")
+        total=$((total + 1))
+
+        # Check if skill is referenced in commands, agents, or pipeline rules
+        local found=false
+
+        # Check .claude/commands/
+        if [ -d "$BUSINESS_ROOT/.claude/commands" ]; then
+            if grep -rql "$name" "$BUSINESS_ROOT/.claude/commands/" 2>/dev/null; then
+                found=true
+            fi
+        fi
+
+        # Check .claude/agents/
+        if [ -d "$BUSINESS_ROOT/.claude/agents" ] && [ "$found" = "false" ]; then
+            if grep -rql "$name" "$BUSINESS_ROOT/.claude/agents/" 2>/dev/null; then
+                found=true
+            fi
+        fi
+
+        # Check rules-source for pipeline references
+        if [ -d "$BUSINESS_ROOT/09-tools/rules-source" ] && [ "$found" = "false" ]; then
+            if grep -rql "$name" "$BUSINESS_ROOT/09-tools/rules-source/" 2>/dev/null; then
+                found=true
+            fi
+        fi
+
+        # Check active rules
+        if [ "$found" = "false" ]; then
+            if grep -rql "$name" "$ACTIVE_RULES/" 2>/dev/null; then
+                found=true
+            fi
+        fi
+
+        if [ "$found" = "true" ]; then
+            referenced_by_pipeline+=("$name")
+        else
+            unreferenced_skills+=("$name")
+            unreferenced=$((unreferenced + 1))
+        fi
+    done
+
+    echo -e "${GREEN}Referenced by pipeline/commands/agents: ${#referenced_by_pipeline[@]}${NC}"
+    for s in "${referenced_by_pipeline[@]}"; do
+        echo "  [ok] $s"
+    done
+
+    echo ""
+    if [ "$unreferenced" -gt 0 ]; then
+        echo -e "${YELLOW}Unreferenced (disable candidates): $unreferenced${NC}"
+        for s in "${unreferenced_skills[@]}"; do
+            echo "  [?] $s"
+        done
+        echo ""
+        echo -e "${YELLOW}Run 'manage-skills.sh disable <name>' to deactivate${NC}"
+    else
+        echo -e "${GREEN}All skills are referenced. No disable candidates.${NC}"
+    fi
+
+    echo ""
+    echo -e "${BOLD}Total: $total active | $((total - unreferenced)) referenced | $unreferenced unreferenced${NC}"
+}
+
+# ─── VALIDATE ──────────────────────────────────────────────────────────────
+cmd_validate() {
+    local skill_filter="${1:-}"
+
+    local required_fields=("name" "description")
+    local recommended_fields=("version" "category" "domain" "enforcement")
+
+    validate_one_skill() {
+        local skill_dir="$1"
+        local skill_name
+        skill_name=$(basename "$skill_dir")
+        local skill_md="$skill_dir/SKILL.md"
+
+        if [ ! -f "$skill_md" ]; then
+            echo -e "  ${RED}[ERROR]${NC} $skill_name: SKILL.md not found"
+            return 1
+        fi
+
+        # Extract frontmatter (between --- markers)
+        local frontmatter
+        frontmatter=$(awk '/^---$/{if(++n==1){found=1; next} if(n==2){exit}} found{print}' "$skill_md")
+
+        local errors=0
+        local warnings=0
+
+        # Check required fields
+        for field in "${required_fields[@]}"; do
+            if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo -e "  ${RED}[ERROR]${NC} $skill_name: missing required field '$field'"
+                errors=$((errors + 1))
+            fi
+        done
+
+        # Check recommended fields
+        for field in "${recommended_fields[@]}"; do
+            if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo -e "  ${YELLOW}[WARN]${NC}  $skill_name: missing recommended field '$field'"
+                warnings=$((warnings + 1))
+            fi
+        done
+
+        if [ "$errors" -eq 0 ] && [ "$warnings" -eq 0 ]; then
+            echo -e "  ${GREEN}[OK]${NC}   $skill_name"
+        elif [ "$errors" -eq 0 ]; then
+            echo -e "  ${YELLOW}[WARN]${NC}  $skill_name ($warnings warning(s))"
+        fi
+
+        return "$errors"
+    }
+
+    echo -e "${CYAN}=== Skill Frontmatter Validation ===${NC}"
+    echo ""
+
+    local total=0
+    local passed=0
+    local failed=0
+
+    if [ -n "$skill_filter" ]; then
+        # Validate single skill — search in library and active
+        local found_dir=""
+        while IFS= read -r -d '' skill_md; do
+            local dir
+            dir=$(dirname "$skill_md")
+            if [ "$(basename "$dir")" = "$skill_filter" ]; then
+                found_dir="$dir"
+                break
+            fi
+        done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+        if [ -z "$found_dir" ]; then
+            echo -e "${RED}Skill '$skill_filter' not found.${NC}"
+            exit 1
+        fi
+
+        total=1
+        if validate_one_skill "$found_dir"; then
+            passed=1
+        else
+            failed=1
+        fi
+    else
+        # Validate all active skills
+        if [ ! -d "$ACTIVE_SKILLS" ]; then
+            echo -e "${YELLOW}No active skills directory${NC}"
+            return
+        fi
+
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
+            total=$((total + 1))
+            if validate_one_skill "${item%/}"; then
+                passed=$((passed + 1))
+            else
+                failed=$((failed + 1))
+            fi
+        done
+    fi
+
+    echo ""
+    echo -e "${BOLD}Total: $total | ${GREEN}Passed: $passed${NC}${BOLD} | ${RED}Failed: $failed${NC}"
+    [ "$failed" -eq 0 ] || exit 1
+}
+
+# ─── BUILD ──────────────────────────────────────────────────────────────────
+cmd_build() {
+    local skill_name="${1:-}"
+    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh build <skill-name>${NC}"; exit 1; }
+
+    # Find skill directory in library or active
+    local found_dir=""
+    while IFS= read -r -d '' skill_md; do
+        local dir
+        dir=$(dirname "$skill_md")
+        if [ "$(basename "$dir")" = "$skill_name" ]; then
+            found_dir="$dir"
+            break
+        fi
+    done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+    if [ -z "$found_dir" ]; then
+        echo -e "${RED}Skill '$skill_name' not found.${NC}"
+        exit 1
+    fi
+
+    local rules_dir="$found_dir/rules"
+    if [ ! -d "$rules_dir" ]; then
+        echo -e "${YELLOW}No rules/ directory found in $found_dir${NC}"
+        echo "Skipping AGENTS.md generation (no rule files to concatenate)."
+        return 0
+    fi
+
+    local rule_files=()
+    while IFS= read -r -d '' f; do
+        rule_files+=("$f")
+    done < <(find "$rules_dir" -name "*.md" -print0 2>/dev/null | sort -z)
+
+    if [ "${#rule_files[@]}" -eq 0 ]; then
+        echo -e "${YELLOW}rules/ directory is empty. No AGENTS.md generated.${NC}"
+        return 0
+    fi
+
+    local agents_md="$found_dir/AGENTS.md"
+    {
+        echo "# AGENTS.md — $skill_name"
+        echo ""
+        echo "> Auto-generated by manage-skills.sh build. Do not edit directly."
+        echo "> Source: rules/"
+        echo ""
+        echo "---"
+        echo ""
+        for rule_file in "${rule_files[@]}"; do
+            local rule_name
+            rule_name=$(basename "$rule_file" .md)
+            echo "## $rule_name"
+            echo ""
+            cat "$rule_file"
+            echo ""
+            echo "---"
+            echo ""
+        done
+    } > "$agents_md"
+
+    echo -e "${GREEN}Built AGENTS.md for '$skill_name'${NC}"
+    echo "  Source: $rules_dir (${#rule_files[@]} file(s))"
+    echo "  Output: $agents_md"
+}
+
+# ─── TEST ───────────────────────────────────────────────────────────────────
+cmd_test() {
+    local skill_name="${1:-}"
+    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
+
+    # Find skill directory
+    local found_dir=""
+    while IFS= read -r -d '' skill_md; do
+        local dir
+        dir=$(dirname "$skill_md")
+        if [ "$(basename "$dir")" = "$skill_name" ]; then
+            found_dir="$dir"
+            break
+        fi
+    done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+    if [ -z "$found_dir" ]; then
+        echo -e "${RED}Skill '$skill_name' not found.${NC}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}=== Skill Test: $skill_name ===${NC}"
+    echo ""
+
+    # Extract name and description from frontmatter for display
+    local skill_md="$found_dir/SKILL.md"
+    local frontmatter
+    frontmatter=$(awk '/^---$/{if(++n==1){found=1; next} if(n==2){exit}} found{print}' "$skill_md")
+
+    local name_val description_val
+    name_val=$(echo "$frontmatter" | grep "^name:" | sed 's/^name:[[:space:]]*//' | tr -d '"')
+    description_val=$(echo "$frontmatter" | grep "^description:" | sed 's/^description:[[:space:]]*//' | tr -d '"')
+
+    echo -e "  ${BOLD}Name:${NC}        $name_val"
+    echo -e "  ${BOLD}Description:${NC} $description_val"
+    echo ""
+    echo -e "${YELLOW}Subagent testing will be available in a future update.${NC}"
+    echo ""
+    echo "Planned behavior:"
+    echo "  1. Load skill into a subagent context"
+    echo "  2. Run TDD scenarios defined in the skill's test suite"
+    echo "  3. Report pass/fail for each scenario"
+    echo ""
+    echo "For now, test manually by loading the skill in a Claude Code subagent"
+    echo "and running the scenarios from the Rationalization Table / Red Flags sections."
+}
+
 # ─── MAIN ──────────────────────────────────────────────────────────────────
 main() {
     if [ $# -eq 0 ]; then
@@ -377,6 +683,20 @@ main() {
         info)
             [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh info <skill-name>${NC}"; exit 1; }
             cmd_info "$1"
+            ;;
+        audit)
+            cmd_audit
+            ;;
+        validate)
+            cmd_validate "${1:-}"
+            ;;
+        build)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh build <skill-name>${NC}"; exit 1; }
+            cmd_build "$1"
+            ;;
+        test)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
+            cmd_test "$1"
             ;;
         help|--help|-h)
             usage

@@ -1,0 +1,298 @@
+{
+  "testCases": [
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "Conventional Commits 형식으로 커밋 메시지를 작성한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "Squash merge를 사용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "PR을 통해 머지한다 (1인이라도 검토 프로세스 유지)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "AI 생성 커밋에 Co-Authored-By를 추가한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "`git reset --hard` 사용 전 백업한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "do",
+      "description": "`feature/*`, `fix/*` 브랜치 전략을 따른다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "dont",
+      "description": "`git push --force` 금지 (main/master)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "dont",
+      "description": "`.env`, `credentials` 커밋 금지",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "dont",
+      "description": "`--no-verify` 사용 금지 (pre-commit hook 우회 금지)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "dont",
+      "description": "main 브랜치에 직접 커밋 금지",
+      "verifiable": true
+    },
+    {
+      "ruleId": "git-rules",
+      "type": "dont",
+      "description": "백업 없이 `git reset --hard` 실행 금지",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "do",
+      "description": "Stage별 DoD 체크리스트를 게이트 판단 전 확인한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "do",
+      "description": "게이트 통과 시 gate-log.md를 자동 업데이트한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "do",
+      "description": "PM 도구 Tier를 파이프라인 시작 시 자동 판단하고, 게이트 통과 시 태스크를 등록한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "do",
+      "description": "모델 계층화(Opus/Sonnet/Haiku)를 작업 성격에 맞게 적용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "dont",
+      "description": "Agent Council 모드를 Human 명시 선택 없이 활성화하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "dont",
+      "description": "게이트 통과 시 gate-log.md 업데이트를 생략하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "dont",
+      "description": "DoD 체크리스트 검증 없이 게이트를 통과하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "do",
+      "description": "리서치 에이전트를 독립 분석 후 비교하는 Competing Hypotheses 패턴을 사용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "do",
+      "description": "필수 방법론(AI-augmented Research, JTBD, Competitive Intelligence, Evidence-Based Management)을 적용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "do",
+      "description": "산출물을 `01-research/projects/{project}/` 하위에 저장한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "dont",
+      "description": "단일 소스에만 의존하여 리서치를 완료하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "dont",
+      "description": "검증 없는 시장 데이터를 사실로 단정하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s1-research",
+      "type": "dont",
+      "description": "[STOP] 게이트 없이 S2로 진행하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "do",
+      "description": "필수 방법론(Pretotyping, Mom Test, Lean Validation, TAM/SAM/SOM, OKR)을 적용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "do",
+      "description": "Go/No-Go 스코어링은 Kill Criteria 검토 후 실행한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "do",
+      "description": "개발 트랙은 `02-product/projects/{project}/`에, 콘텐츠 트랙은 `04-content/projects/{project}/`에 산출물을 저장한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "dont",
+      "description": "Kill Criteria에 해당하는 프로젝트를 Go로 판정하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "dont",
+      "description": "Go/No-Go 스코어링 없이 S3로 진행하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s2-concept",
+      "type": "dont",
+      "description": "비전/타겟/차별점 승인 없이 [STOP] 게이트를 통과하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": "개발 트랙 S3 기획서는 **.md + .pptx** 모두 생성한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": "기획 에이전트 2~3명의 독립 초안을 Competing Hypotheses로 비교한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": "필수 방법론(Shape Up Pitch, User Story Mapping, Modern PRD)을 적용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "dont",
+      "description": "개발 트랙에서 .pptx 없이 기획서 승인을 진행하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "dont",
+      "description": "단일 에이전트 초안만으로 기획서를 확정하지 않는다 (에이전트 회의 필수)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "dont",
+      "description": "[STOP] 게이트 없이 S4로 진행하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "do",
+      "description": "S3 기획서에 관리자 기능이 포함되면 S4 모든 산출물에 관리자 섹션을 반영한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "do",
+      "description": "개발 트랙 S4 완료 후 Trine Handoff 문서를 자동 생성하고 진입을 안내한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "do",
+      "description": "콘텐츠 트랙 S4 완료 후 제작 체크리스트를 제공한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "do",
+      "description": "필수 산출물 7종을 모두 작성한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "dont",
+      "description": "S3에 관리자 기능이 포함되었는데 S4에서 관리자 산출물을 누락하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "dont",
+      "description": "필수 산출물 7종 중 하나라도 빠진 상태로 게이트를 통과하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s4-planning",
+      "type": "dont",
+      "description": "관리자/운영툴의 모바일 화면 기획을 생략하지 않는다 (Desktop-only는 명시 선언 필요)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "do",
+      "description": "파이프라인 시작 시 프로젝트 유형을 먼저 식별한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "do",
+      "description": "진입 경로를 판단하여 기존 자료에 따른 Stage 스킵을 제안한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "do",
+      "description": "Hard 의존성(S3→S4→Trine)은 반드시 순서를 유지한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "dont",
+      "description": "S3 기획서 없이 S4에 진입하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "dont",
+      "description": "S4 개발 계획 없이 Trine에 진입하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-structure",
+      "type": "dont",
+      "description": "S3에 관리자 페이지가 포함되었는데 S4에서 누락하지 않는다",
+      "verifiable": true
+    }
+  ]
+}
