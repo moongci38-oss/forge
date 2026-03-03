@@ -47,6 +47,23 @@ secrets/
 
 ## MCP 보안
 
+### MCP 서버 설정 경로
+
+Claude Code가 인식하는 MCP 설정 파일은 **2곳뿐**이다:
+
+| 경로 | Scope | 설정 방법 |
+|------|-------|----------|
+| `프로젝트루트/.mcp.json` | project | `claude mcp add {name} --scope project` |
+| `~/.claude.json` 내 mcpServers | user (전역) | `claude mcp add {name} --scope user` |
+
+**Claude Code가 무시하는 경로:**
+- `~/.claude/.mcp.json` — 이 경로는 인식되지 않는다
+- `~/.claude/settings.json` — MCP 서버를 지원하지 않는다
+
+**Scope 결정 기준:**
+- 특정 프로젝트 전용 (DB, Redis 등) → `--scope project`
+- 멀티 프로젝트 공용 (stitch, nanobanana 등) → `--scope user`
+
 ### Filesystem MCP
 - Business 워크스페이스 범위 내에서만 동작
 - `06-finance/`, `07-legal/`, `08-admin/` 민감 파일 접근 요청 시 거부
@@ -67,6 +84,7 @@ secrets/
 - `.env`, `credentials.json` 등 민감 파일을 커밋하지 않는다
 - 코드에 API 키, 토큰, 패스워드를 하드코딩하지 않는다
 - 로그 파일에 민감 정보를 포함하지 않는다
+- `~/.claude/.mcp.json`에 MCP 서버를 설정하지 않는다 (Claude Code 미인식 경로)
 
 ## AI 행동 규칙
 
@@ -93,3 +111,4 @@ secrets/
 - "임시로만 이 키를 여기에..." → STOP. 환경변수로 이동한다
 - "이 폴더는 괜찮겠지..." → STOP. 06-08 폴더인지 확인한다
 - "로그에 잠깐 찍어보고 지우면..." → STOP. 로그에 민감 정보를 절대 포함하지 않는다
+- "~/.claude/ 안에 .mcp.json 넣으면..." → STOP. 프로젝트루트/.mcp.json 또는 `claude mcp add --scope user`를 사용한다
