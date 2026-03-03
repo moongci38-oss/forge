@@ -1,5 +1,5 @@
 ---
-description: 주간 리서치 리포트 생성 — AI/SaaS 최신 동향을 수집해 weekly/ 폴더에 저장
+description: 주간 리서치 리포트 생성 — AI/게임/웹 개발 + 비즈니스 동향 + 사업 아이템 제안
 allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 ---
 
@@ -7,18 +7,50 @@ allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 
 ## 수행 절차
 
-1. **뉴스 수집**: 웹에서 아래 키워드 검색 (최근 7일 필터)
-   - "AI SaaS" / "Micro SaaS" / "solo founder" / "indie hacker"
-   - "Claude" / "AI agent" / "LLM product"
+### 1. 기술 뉴스 수집 (최근 7일)
 
-2. **트렌드 분석**: 반복되는 주제 패턴 파악
+아래 영역별로 웹 검색합니다:
 
-3. **Product Hunt**: 이번 주 주목할 만한 제품 확인
+**AI 개발:**
+- "AI agent" / "LLM" / "Claude" / "prompt engineering" / "RAG" / "MCP"
+- AI SaaS 신제품, 오픈소스 AI 도구
 
-4. **인사이트**: 1인 기업/SaaS 창업자 관점에서 액션 가능한 인사이트 3개
+**게임 개발:**
+- "Unity" / "Unreal" / "indie game" / "게임 AI" / "프로시저럴 생성"
+- 게임 엔진 업데이트, 인디 게임 트렌드
 
-5. **저장**: `01-research/weekly/YYYY-WW-report.md` 형식으로 저장
-   (예: 2026-W08-report.md)
+**웹 개발:**
+- "Next.js" / "NestJS" / "React" / "TypeScript" 생태계
+- 프레임워크 업데이트, 새 라이브러리
+
+### 2. 비즈니스 뉴스 수집
+
+- SaaS/스타트업 동향, 투자 라운드, M&A
+- "Micro SaaS" / "solo founder" / "indie hacker" / "1인 기업"
+- Product Hunt 이번 주 주목 제품
+
+### 3. 사업 아이템 제안 (SIGIL S1 방식)
+
+SIGIL S1 리서치 방법론을 적용합니다:
+1. **경쟁 가설 3개** 수립 — 각각 웹 검색으로 근거 수집
+2. **TAM/SAM/SOM 간이 추정** — 시장 규모 범위 제시
+3. **최종 1개 선정** — 선정 기준: **1인 개발자가 내달 1,000만원+ 수익 달성 가능성**
+4. **JTBD + Lean Validation** 관점 분석
+5. **구체적 실행 로드맵** 포함 (MVP 범위, 기술 스택, 타임라인)
+
+모든 데이터에 **신뢰도 등급** 표기:
+- [High] = 다중 소스 일치 확인
+- [Medium] = 단일 신뢰 소스
+- [Low] = AI 추정 또는 비공식 소스
+
+### 4. 액션 아이템
+
+이번 주 동향 기반 다음 주 행동 3~5개 도출
+
+### 5. 저장
+
+`01-research/weekly/YYYY-WW-report.md` 형식으로 저장합니다.
+(예: 2026-W10-report.md)
 
 ## 출력 형식
 
@@ -26,9 +58,22 @@ allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 # YYYY-WW 주간 리서치 리포트
 기간: YYYY-MM-DD ~ YYYY-MM-DD
 
-## 이번 주 핵심 트렌드 (Top 3)
-## AI/SaaS 주요 뉴스
-## 주목할 제품/서비스
-## 액션 아이템
+## 1. 기술 뉴스
+### 1.1 AI 개발
+### 1.2 게임 개발
+### 1.3 웹 개발
+
+## 2. 비즈니스 뉴스
+### 2.1 SaaS/스타트업
+### 2.2 인디해커/1인기업
+### 2.3 Product Hunt 주목 제품
+
+## 3. 사업 아이템 제안
+### 3.1 후보 3개 (경쟁 가설)
+### 3.2 최종 선정 및 분석
+### 3.3 실행 로드맵
+
+## 4. 액션 아이템
+
 ## Sources
 ```
