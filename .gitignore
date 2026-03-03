@@ -50,5 +50,8 @@ __pycache__/
 # Local settings
 .claude/settings.local.json
 
+# Weekly report temp files
+scripts/weekly-report/.report-meta.json
+
 # Trine sync state (per-user)
 .claude/trine-sync-state.json
