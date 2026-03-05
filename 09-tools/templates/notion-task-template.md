@@ -122,17 +122,25 @@ Human이 수동으로 Tier를 지정할 수도 있음.
 ## S4 Planning Package
 (Stage 진입 시 자동 생성)
 
-## Trine Sessions
-(S4 완료 후 자동 생성)
+## Trine 개발 진행
+(S4 완료 후 자동 생성 — 스펙 단위 칸반)
+
+| # | Spec | Session | SP | Status | PR | 완료일 |
+|:-:|------|:-------:|:--:|:------:|:--:|:------:|
+| 1 | {Spec 이름} | S{N} | {SP} | ⬜ Todo | — | — |
+| ... | ... | ... | ... | ... | ... | ... |
+
+**상태 흐름**: ⬜ Todo → 🔄 Doing → 🧪 QA → ✅ Done
 ```
 
 ### 3.3 상태 표기
 
 | 표기 | 의미 |
 |:----:|------|
-| ⬜ | pending (미시작) |
-| 🔄 | in-progress (진행 중) |
-| ✅ | done (완료) |
+| ⬜ / ⬜ Todo | pending (미시작) |
+| 🔄 / 🔄 Doing | in-progress (브랜치 생성 후) |
+| 🧪 QA | Check 3 진입 (품질 검수 중) |
+| ✅ / ✅ Done | done (완료 / PR Merge) |
 | ❌ | blocked (차단됨) |
 | ⏭️ | skipped (스킵) |
 
@@ -140,22 +148,21 @@ Human이 수동으로 Tier를 지정할 수도 있음.
 
 ## 4. Trine 세션 Todo 연동
 
-S4 상세 개발 계획서의 "Trine 세션 로드맵"이 확정되면, 각 세션별 Todo를 동일 문서(Tier 2) 또는 Notion(Tier 1)에 자동 등록한다.
+S4 상세 개발 계획서의 "Trine 세션 로드맵"이 확정되면, 스펙 단위 칸반 테이블을 동일 문서(Tier 2) 또는 Notion(Tier 1)에 자동 등록한다.
 
-### 세션별 Todo 항목
+### 스펙 단위 칸반 생성 기준
 
-```markdown
-## Trine Session {N}: {기능명}
-| # | 태스크 | 담당 | 상태 | 비고 |
-|:-:|--------|:----:|:----:|------|
-| 1 | Spec 작성 | AI | ⬜ | `.specify/specs/{project}-{feature}-spec.md` |
-| 2 | Plan 작성 | AI | ⬜ | `.specify/plans/{project}-{feature}-plan.md` |
-| 3 | Task 분배 | AI | ⬜ | `.specify/plans/{project}-{feature}-task.md` |
-| 4 | 구현 + Check 3 | AI | ⬜ | |
-| 5 | Walkthrough | AI | ⬜ | |
-| 6 | PR 생성 | AI | ⬜ | |
-| 7 | PR 리뷰 + Merge | Human | ⬜ | |
-```
+S4 개발 계획의 Trine 세션 로드맵에서 추출:
+- **Standard 세션**: 세션 = Spec 1개 = 행 1개
+- **Multi-Spec 세션**: 도메인별 Spec = 행 N개 (SP는 마지막 행에 세션 합계 표기)
+
+### 상태 전환 (AI 자동 감지)
+
+| 이벤트 | Status 변경 | 감지 주체 |
+|--------|:----------:|:---------:|
+| 브랜치 생성 | ⬜ Todo → 🔄 Doing | AI (직접 실행) |
+| Check 3 진입 | 🔄 Doing → 🧪 QA | AI (직접 실행) |
+| PR Merge 완료 | 🧪 QA → ✅ Done + PR 번호 + 완료일 | AI (감지) |
 
 ---
 

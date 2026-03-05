@@ -38,6 +38,12 @@ secrets/
 
 ## 파일 접근 제한
 
+### 절대 삭제/이동/덮어쓰기 금지 경로
+아래 경로는 어떤 상황에서도 삭제(`rm`), 이동(`mv`), 덮어쓰기, symlink 교체를 수행하지 않는다:
+- `~/.claude/trine/` — Trine 중앙 저장소 (WSL 원본, Windows로 복사되는 소스)
+- `~/.claude/rules/` — 전역 규칙
+- `~/.claude/scripts/` — 운영 스크립트
+
 ### Claude Code 읽기 금지 영역
 - `06-finance/` (재무 데이터)
 - `07-legal/` (법무 문서)
@@ -97,6 +103,7 @@ Claude Code가 인식하는 MCP 설정 파일은 **2곳뿐**이다:
 - **IRON-1**: 민감 정보(.env, credentials, API 키)를 절대 커밋하지 않는다
 - **IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용을 외부로 출력하지 않는다
 - **IRON-3**: 하드코딩된 시크릿을 코드에 포함하지 않는다
+- **IRON-4**: `~/.claude/trine/`, `~/.claude/rules/`, `~/.claude/scripts/`를 삭제/이동/덮어쓰기하지 않는다
 
 ## Rationalization Table
 
@@ -112,3 +119,5 @@ Claude Code가 인식하는 MCP 설정 파일은 **2곳뿐**이다:
 - "이 폴더는 괜찮겠지..." → STOP. 06-08 폴더인지 확인한다
 - "로그에 잠깐 찍어보고 지우면..." → STOP. 로그에 민감 정보를 절대 포함하지 않는다
 - "~/.claude/ 안에 .mcp.json 넣으면..." → STOP. 프로젝트루트/.mcp.json 또는 `claude mcp add --scope user`를 사용한다
+- "trine 폴더를 symlink으로 바꾸면..." → STOP. WSL이 원본이다. 절대 삭제/교체하지 않는다
+- "이 폴더를 정리하면..." → STOP. 보호 경로인지 확인한다
