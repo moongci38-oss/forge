@@ -110,6 +110,28 @@ Wave 4: technical-writer → Wave 2-3 리뷰 반영 최종본 작성
 3. 콘텐츠 트랙 S4 완료 후 제작 체크리스트를 제공한다
 4. 각 Stage 산출물은 해당 폴더의 `projects/{project}/` 하위에 저장한다
 5. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
+6. **개발 트랙 S4 Gate 통과 시 Tier 2 Todo Tracker를 자동 생성한다** (아래 참조)
+
+## Tier 2 Todo 자동 생성 (S4 Gate 통과 시)
+
+S4 [STOP] Gate 통과 시 `02-product/projects/{project}/YYYY-MM-DD-todo.md`를 자동 생성한다.
+
+### 생성 조건
+- 개발 트랙 프로젝트 (Trine 진입 대상)
+- S4 Gate PASS 확인 후
+- Notion MCP 미연결 시 (Tier 2 Fallback)
+
+### 문서 구조
+`09-tools/templates/notion-task-template.md`의 Tier 2 구조를 따른다:
+- S1~S4 각 Stage의 태스크와 Gate 상태 기록
+- Trine 세션별 Todo (Spec 문서 단위): Spec 작성 → Plan 작성 → Task 분배 → 구현 + Check 3 → Walkthrough → PR 생성 → PR 리뷰 + Merge
+- 참조 문서 인덱스
+
+### Trine 세션 Todo 생성 기준
+S4 개발 계획의 "Trine 세션 로드맵"에서 스펙 단위 칸반 행을 추출:
+- **Standard 세션**: 세션 = Spec 1개 = 행 1개 (세션 이름, SP 표기)
+- **Multi-Spec 세션**: 도메인별 Spec = 행 N개 (SP는 마지막 행에 세션 합계 표기)
+- 상태 흐름: ⬜ Todo → 🔄 Doing (브랜치 생성) → 🧪 QA (Check 3 진입) → ✅ Done (PR Merge)
 
 ## Iron Laws
 
