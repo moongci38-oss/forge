@@ -2,7 +2,7 @@
 
 **작성일**: YYYY-MM-DD
 **프로젝트 유형**: {앱/웹/게임} (SIGIL S4 — 개발 트랙)
-**입력 문서**: S3 기획서 `02-product/projects/{project}/YYYY-MM-DD-s3-{prd|gdd}.md`
+**입력 문서**: S3 기획서 `{folderMap.product}/{project}/YYYY-MM-DD-s3-{prd|gdd}.md`
 
 ---
 
@@ -16,21 +16,21 @@
 
 | # | 산출물 | 파일 경로 | 상태 |
 |:-:|--------|---------|:----:|
-| 1 | 상세 기획서 | `02-product/projects/{project}/YYYY-MM-DD-s4-detailed-plan.md` | ⬜ |
-| 2 | 사이트맵 | `02-product/projects/{project}/YYYY-MM-DD-s4-sitemap.md` | ⬜ |
-| 3 | 로드맵 | `02-product/projects/{project}/YYYY-MM-DD-s4-roadmap.md` | ⬜ |
-| 4 | 상세 개발 계획 | `02-product/projects/{project}/YYYY-MM-DD-s4-development-plan.md` | ⬜ |
-| 5 | WBS | `02-product/projects/{project}/YYYY-MM-DD-s4-wbs.md` | ⬜ |
-| 6 | UI/UX 기획서 | `05-design/projects/{project}/YYYY-MM-DD-s4-uiux-spec.md` | ⬜ |
-| 7 | 테스트 전략서 | `02-product/projects/{project}/YYYY-MM-DD-s4-test-strategy.md` | ⬜ |
+| 1 | 상세 기획서 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-detailed-plan.md` | ⬜ |
+| 2 | 사이트맵 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-sitemap.md` | ⬜ |
+| 3 | 로드맵 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-roadmap.md` | ⬜ |
+| 4 | 상세 개발 계획 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-development-plan.md` | ⬜ |
+| 5 | WBS | `{folderMap.product}/{project}/YYYY-MM-DD-s4-wbs.md` | ⬜ |
+| 6 | UI/UX 기획서 | `{folderMap.design}/{project}/YYYY-MM-DD-s4-uiux-spec.md` | ⬜ |
+| 7 | 테스트 전략서 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-test-strategy.md` | ⬜ |
 
 ### 관리자 산출물 (해당 시)
 
 | # | 산출물 | 파일 경로 | 상태 |
 |:-:|--------|---------|:----:|
-| 8 | 관리자 상세 기획서 | `02-product/projects/{project}/YYYY-MM-DD-s4-admin-detailed-plan.md` | ⬜ |
-| 9 | 관리자 사이트맵 | `02-product/projects/{project}/YYYY-MM-DD-s4-admin-sitemap.md` | ⬜ |
-| 10 | 관리자 UI/UX 기획서 | `05-design/projects/{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` | ⬜ |
+| 8 | 관리자 상세 기획서 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-admin-detailed-plan.md` | ⬜ |
+| 9 | 관리자 사이트맵 | `{folderMap.product}/{project}/YYYY-MM-DD-s4-admin-sitemap.md` | ⬜ |
+| 10 | 관리자 UI/UX 기획서 | `{folderMap.design}/{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` | ⬜ |
 
 > 로드맵(#3), 개발 계획(#4), WBS(#5), 테스트 전략서(#7)는 서비스+관리자 통합 문서로 작성한다.
 
@@ -209,8 +209,8 @@ graph TD
 
 ## 6. UI/UX 기획서
 
-> 별도 파일 `05-design/projects/{project}/YYYY-MM-DD-s4-uiux-spec.md` 참조
-> 구조는 `09-tools/templates/uiux-spec-template.md` 참조
+> 별도 파일 `{folderMap.design}/{project}/YYYY-MM-DD-s4-uiux-spec.md` 참조
+> 구조는 `{folderMap.templates}/uiux-spec-template.md` 참조
 > **모바일 와이어프레임 필수 포함** — 주요 화면에 데스크톱+모바일 와이어프레임을 모두 작성한다
 
 ---
@@ -278,7 +278,7 @@ graph TD
 
 ## 8. 관리자 UI/UX 기획서 (해당 시)
 
-> 별도 파일 `05-design/projects/{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` 참조
+> 별도 파일 `{folderMap.design}/{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` 참조
 
 ### 관리자 UI/UX 필수 내용
 - 디자인 원칙 + 디자인 토큰 (서비스와 공유 or 별도)

@@ -42,7 +42,7 @@ enforcement: flexible
 
 ## 평가 기록
 
-평가 결과는 `09-tools/templates/council-evaluation-template.md` 기반으로 기록하여 프로젝트 폴더에 저장.
+평가 결과는 `{folderMap.templates}/council-evaluation-template.md` 기반으로 기록하여 프로젝트 폴더에 저장.
 
 ## Agent Teams 패턴
 
@@ -55,4 +55,4 @@ enforcement: flexible
 
 | 유형 | 경로 |
 |------|------|
-| Council 평가 기록 | `02-product/projects/{project}/YYYY-MM-DD-council-evaluation.md` |
+| Council 평가 기록 | `{folderMap.product}/{project}/YYYY-MM-DD-council-evaluation.md` |

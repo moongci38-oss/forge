@@ -23,14 +23,14 @@ enforcement: flexible
 - **플러그인 보강** (선택적):
   - `enterprise-search` — 크로스 소스 통합 검색 (Slack/이메일/위키 등 내부 데이터 소스 연결 시)
   - `data:data-exploration` + `data:statistical-analysis` — 시장 데이터 정량 분석이 필요할 때
-- **산출물**: `01-research/projects/{project}/YYYY-MM-DD-s{N}-{topic}.md`
+- **산출물**: `{folderMap.research}/{project}/YYYY-MM-DD-s{N}-{topic}.md`
 - **게이트**: **[STOP]** 리서치 결과 리뷰 + 방향 확정
 
 ## Do
 
 - 리서치 에이전트를 독립 분석 후 비교하는 Competing Hypotheses 패턴을 사용한다
 - 필수 방법론(AI-augmented Research, JTBD, Competitive Intelligence, Evidence-Based Management)을 적용한다
-- 산출물을 `01-research/projects/{project}/` 하위에 저장한다
+- 산출물을 `{folderMap.research}/{project}/` 하위에 저장한다
 
 ## Don't
 

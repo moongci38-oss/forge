@@ -21,8 +21,8 @@ enforcement: rigid
 - **선택 방법론**: OST (Opportunity Solution Tree), PR/FAQ
 - **플러그인 보강** (선택적):
   - `product-management:roadmap-management` — 로드맵 우선순위 결정 시 RICE/ICE 자동 스코어링 보조
-- **산출물 (개발)**: `02-product/projects/{project}/YYYY-MM-DD-s2-concept.md`
-- **산출물 (콘텐츠)**: `04-content/projects/{project}/YYYY-MM-DD-s2-channel-strategy.md`
+- **산출물 (개발)**: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
+- **산출물 (콘텐츠)**: `{folderMap.content}/{project}/YYYY-MM-DD-s2-channel-strategy.md`
 - **게이트**: **[STOP]** 비전/타겟/차별점 승인
 
 ## S2 Gate: Go/No-Go 스코어링
@@ -51,7 +51,7 @@ S2 [STOP] 게이트에서 프로젝트 진행 여부를 정량 평가한다.
 
 - 필수 방법론(Pretotyping, Mom Test, Lean Validation, TAM/SAM/SOM, OKR)을 적용한다
 - Go/No-Go 스코어링은 Kill Criteria 검토 후 실행한다
-- 개발 트랙은 `02-product/projects/{project}/`에, 콘텐츠 트랙은 `04-content/projects/{project}/`에 산출물을 저장한다
+- 개발 트랙은 `{folderMap.product}/{project}/`에, 콘텐츠 트랙은 `{folderMap.content}/{project}/`에 산출물을 저장한다
 
 ## Don't
 

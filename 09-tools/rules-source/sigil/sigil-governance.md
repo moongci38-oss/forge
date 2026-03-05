@@ -46,14 +46,14 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 
 - pipeline-orchestrator가 파이프라인 시작 시 Tier 자동 선택
 - 각 [STOP] 게이트 통과 시 다음 Stage 태스크를 자동 등록
-- 상세 구조: `09-tools/templates/notion-task-template.md` 참조
+- 상세 구조: `{folderMap.templates}/notion-task-template.md` 참조
 
 ## Trine 연동 (개발 트랙)
 
 ### S4 완료 시 자동 액션
 
 1. 기획 패키지 산출물 존재 확인
-2. **Handoff 요약 문서 자동 생성**: `10-operations/handoff-to-dev/{target-project}/YYYY-MM-DD-sigil-handoff.md`
+2. **Handoff 요약 문서 자동 생성**: `{folderMap.handoff}/{target-project}/YYYY-MM-DD-sigil-handoff.md`
 3. Trine 진입 안내 메시지 Human에게 제공
 4. **실제 Trine 세션 시작은 Human 승인 후 수동 실행** (`/trine` 커맨드)
 
@@ -84,7 +84,7 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 ## Stage별 DoD (Definition of Done)
 
 각 [STOP] 게이트 통과 전 DoD 체크리스트를 검증한다.
-상세 체크리스트: `09-tools/templates/dod-checklist.md`
+상세 체크리스트: `{folderMap.templates}/dod-checklist.md`
 
 ## Stage별 방법론 참조
 

@@ -2,7 +2,7 @@
 
 **작성일**: YYYY-MM-DD
 **프로젝트 유형**: {유튜브 롱폼 / 쇼폼 / 라이브} (SIGIL S4 — 콘텐츠 트랙)
-**입력 문서**: S3 대본/구성안 `04-content/projects/{project}/YYYY-MM-DD-s3-script.md`
+**입력 문서**: S3 대본/구성안 `{folderMap.content}/{project}/YYYY-MM-DD-s3-script.md`
 
 ---
 

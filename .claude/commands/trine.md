@@ -9,11 +9,25 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 ## 대상 프로젝트
 $ARGUMENTS
 
+## 경로 해석
+
+**반드시 `sigil-workspace.json`을 먼저 읽는다.** 워크스페이스 루트에서 이 파일을 찾아 `folderMap`으로 경로를 해석한다.
+
+```
+sigil-workspace.json의 folderMap 예시:
+  product  → 02-product/projects (또는 사용자 설정 경로)
+  design   → 05-design/projects
+  handoff  → 10-operations/handoff-to-dev
+  templates → 09-tools/templates
+```
+
+`sigil-workspace.json`이 없으면 → "sigil-workspace.json이 없습니다. `sigil-init`을 먼저 실행하세요." 안내 후 중단.
+
 ## 수행 절차
 
 ### 1단계: S4 Gate 통과 확인
 
-1. `02-product/projects/{project}/gate-log.md` 읽기
+1. `{folderMap.product}/{project}/gate-log.md` 읽기
 2. S4 항목이 `✅ PASS`인지 확인
 3. PASS가 아니면 → "S4가 아직 완료되지 않았습니다. SIGIL S4를 먼저 완료하세요." 안내 후 중단
 
@@ -23,24 +37,24 @@ $ARGUMENTS
 
 | 필수 산출물 | 경로 |
 |-----------|------|
-| 상세 기획서 | `02-product/projects/{project}/*-s4-detailed-plan.md` |
-| 사이트맵 | `02-product/projects/{project}/*-s4-sitemap.md` |
-| 로드맵 | `02-product/projects/{project}/*-s4-roadmap.md` |
-| 개발 계획 | `02-product/projects/{project}/*-s4-development-plan.md` |
-| WBS | `02-product/projects/{project}/*-s4-wbs.md` |
-| UI/UX 기획서 | `05-design/projects/{project}/*-s4-uiux-spec.md` |
-| 테스트 전략서 | `02-product/projects/{project}/*-s4-test-strategy.md` |
+| 상세 기획서 | `{folderMap.product}/{project}/*-s4-detailed-plan.md` |
+| 사이트맵 | `{folderMap.product}/{project}/*-s4-sitemap.md` |
+| 로드맵 | `{folderMap.product}/{project}/*-s4-roadmap.md` |
+| 개발 계획 | `{folderMap.product}/{project}/*-s4-development-plan.md` |
+| WBS | `{folderMap.product}/{project}/*-s4-wbs.md` |
+| UI/UX 기획서 | `{folderMap.design}/{project}/*-s4-uiux-spec.md` |
+| 테스트 전략서 | `{folderMap.product}/{project}/*-s4-test-strategy.md` |
 
 관리자 산출물이 있다면 추가 확인:
-- `02-product/projects/{project}/*-s4-admin-detailed-plan.md`
-- `02-product/projects/{project}/*-s4-admin-sitemap.md`
-- `05-design/projects/{project}/*-s4-admin-uiux-spec.md`
+- `{folderMap.product}/{project}/*-s4-admin-detailed-plan.md`
+- `{folderMap.product}/{project}/*-s4-admin-sitemap.md`
+- `{folderMap.design}/{project}/*-s4-admin-uiux-spec.md`
 
 누락된 산출물이 있으면 목록을 표시하고 계속할지 사용자에게 확인.
 
 ### 3단계: Handoff 문서 생성
 
-`10-operations/handoff-to-dev/{project}/YYYY-MM-DD-sigil-handoff.md` 생성.
+`{folderMap.handoff}/{project}/YYYY-MM-DD-sigil-handoff.md` 생성.
 
 아래 구조로 작성:
 
@@ -87,7 +101,17 @@ $ARGUMENTS
 - [ ] Trine Session 1 Spec 작성 시작
 ```
 
-### 4단계: Trine 진입 안내
+### 4단계: Symlink 생성
+
+`sigil-workspace.json`의 `projects.{project}` 설정을 읽어 개발 프로젝트에 symlink를 생성한다.
+
+1. `devTarget` 경로 존재 확인
+2. `{devTarget}/{symlinkBase}/` 디렉토리 생성
+3. 모든 S3~S4 산출물 + todo.md + handoff.md에 대해 symlink 생성
+   - 원본의 날짜 prefix를 제거한 이름으로 symlink
+   - 예: `2026-03-03-s4-roadmap.md` → `s4-roadmap.md`
+
+### 5단계: Trine 진입 안내
 
 생성 완료 후 아래 메시지를 사용자에게 제공:
 
@@ -95,7 +119,8 @@ $ARGUMENTS
 ---
 ## Trine 진입 준비 완료
 
-Handoff 문서: 10-operations/handoff-to-dev/{project}/YYYY-MM-DD-sigil-handoff.md
+Handoff 문서: {folderMap.handoff}/{project}/YYYY-MM-DD-sigil-handoff.md
+Symlink 생성: {devTarget}/{symlinkBase}/ (N개 파일)
 
 ### 다음 단계
 1. 개발 프로젝트 환경으로 이동

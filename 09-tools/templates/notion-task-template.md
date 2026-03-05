@@ -30,7 +30,7 @@ Human이 수동으로 Tier를 지정할 수도 있음.
 | Priority | Select | P0 / P1 / P2 / P3 | **필수** |
 | 기한 | Date | 2026-03-01 | 선택 |
 | 프로젝트 | Select | {project name} | **필수** |
-| 산출물 경로 | URL/Text | `01-research/projects/{project}/...` | 선택 |
+| 산출물 경로 | URL/Text | `{folderMap.research}/{project}/...` | 선택 |
 | DoD 항목 | Checkbox | 연동된 DoD 체크리스트 항목 | 선택 |
 | 비고 | Rich Text | 추가 메모 | 선택 |
 
@@ -84,7 +84,7 @@ Human이 수동으로 Tier를 지정할 수도 있음.
 ### 3.1 파일 경로
 
 ```
-02-product/projects/{project}/YYYY-MM-DD-todo.md
+{folderMap.product}/{project}/YYYY-MM-DD-todo.md
 ```
 
 ### 3.2 문서 구조

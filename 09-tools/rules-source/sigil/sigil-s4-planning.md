@@ -114,7 +114,7 @@ Wave 4: technical-writer → Wave 2-3 리뷰 반영 최종본 작성
 
 ## Tier 2 Todo 자동 생성 (S4 Gate 통과 시)
 
-S4 [STOP] Gate 통과 시 `02-product/projects/{project}/YYYY-MM-DD-todo.md`를 자동 생성한다.
+S4 [STOP] Gate 통과 시 `{folderMap.product}/{project}/YYYY-MM-DD-todo.md`를 자동 생성한다.
 
 ### 생성 조건
 - 개발 트랙 프로젝트 (Trine 진입 대상)
@@ -122,7 +122,7 @@ S4 [STOP] Gate 통과 시 `02-product/projects/{project}/YYYY-MM-DD-todo.md`를 
 - Notion MCP 미연결 시 (Tier 2 Fallback)
 
 ### 문서 구조
-`09-tools/templates/notion-task-template.md`의 Tier 2 구조를 따른다:
+`{folderMap.templates}/notion-task-template.md`의 Tier 2 구조를 따른다:
 - S1~S4 각 Stage의 태스크와 Gate 상태 기록
 - Trine 세션별 Todo (Spec 문서 단위): Spec 작성 → Plan 작성 → Task 분배 → 구현 + Check 3 → Walkthrough → PR 생성 → PR 리뷰 + Merge
 - 참조 문서 인덱스

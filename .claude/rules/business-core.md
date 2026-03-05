@@ -511,18 +511,18 @@ BUSINESS(비개발 리서치/콘텐츠) ↔ 개발 프로젝트(Portfolio/GodBla
 ### BUSINESS → 개발 (비개발자 → 개발자)
 | 산출물 | 출발 | 도착 | 형식 |
 |--------|------|------|------|
-| 시장조사 결과 | `01-research/` | `10-operations/handoff-to-dev/` | Markdown |
-| 제품 기획서 (PRD) | `02-product/` | `10-operations/handoff-to-dev/` | Markdown |
-| 디자인 시안 | `05-design/` | `10-operations/handoff-to-dev/` | PNG/Figma URL |
-| 콘텐츠 원고 | `04-content/` | `10-operations/handoff-to-dev/` | Markdown |
+| 시장조사 결과 | `{folderMap.research}/` | `{folderMap.handoff}/` | Markdown |
+| 제품 기획서 (PRD) | `{folderMap.product}/` | `{folderMap.handoff}/` | Markdown |
+| 디자인 시안 | `{folderMap.design}/` | `{folderMap.handoff}/` | PNG/Figma URL |
+| 콘텐츠 원고 | `{folderMap.content}/` | `{folderMap.handoff}/` | Markdown |
 
 ### 개발 → BUSINESS (개발자 → 비개발자)
 | 산출물 | 출발 | 도착 | 형식 |
 |--------|------|------|------|
-| 릴리즈 노트 | 개발 프로젝트 | `10-operations/handoff-from-dev/` | Markdown |
-| 기술 제약사항 | 개발 프로젝트 | `10-operations/handoff-from-dev/` | Markdown |
-| 데모 스크린샷 | 개발 프로젝트 | `10-operations/handoff-from-dev/` | PNG |
-| API 문서 (비기술 요약) | 개발 프로젝트 | `10-operations/handoff-from-dev/` | Markdown |
+| 릴리즈 노트 | 개발 프로젝트 | `{folderMap.operations}/handoff-from-dev/` | Markdown |
+| 기술 제약사항 | 개발 프로젝트 | `{folderMap.operations}/handoff-from-dev/` | Markdown |
+| 데모 스크린샷 | 개발 프로젝트 | `{folderMap.operations}/handoff-from-dev/` | PNG |
+| API 문서 (비기술 요약) | 개발 프로젝트 | `{folderMap.operations}/handoff-from-dev/` | Markdown |
 
 ## MCP 연결
 - Filesystem MCP가 `Z:/home/damools/business/` + `E:/portfolio_project` 접근 가능

@@ -15,7 +15,7 @@
 - [ ] `[AI]` 출처 3개 이상 다중 검증 + 신뢰도 등급 표기 (High/Medium/Low)
 - [ ] `[AI]` 경쟁 가설 3개 이상 수립
 - [ ] `[AI]` JTBD (Jobs To Be Done) 분석 완료
-- [ ] `[AI]` 산출물 경로: `01-research/projects/{project}/YYYY-MM-DD-s1-*.md`
+- [ ] `[AI]` 산출물 경로: `{folderMap.research}/{project}/YYYY-MM-DD-s1-*.md`
 
 ### 개발 트랙 추가
 - [ ] `[AI]` 기술 스택 조사 (엔진/프레임워크/인프라)
@@ -54,7 +54,7 @@
 ### 개발 트랙 추가
 - [ ] `[AI]` 제품 컨셉 문서 (핵심 기능, 타겟, 차별점)
 - [ ] `[AI]` 관리자 우선순위 결정 (서비스 > 관리자 / 관리자 ≥ 서비스 / 동등)
-- [ ] `[AI]` 산출물: `02-product/projects/{project}/YYYY-MM-DD-s2-concept.md`
+- [ ] `[AI]` 산출물: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
 
 ### Human 검증 항목 (AI는 계획서 작성까지)
 - [ ] `[Human]` Mom Test 인터뷰 15명+ (과거 행동만 기록) — AI가 인터뷰 가이드/질문지 작성
@@ -62,7 +62,7 @@
 
 ### 콘텐츠 트랙 추가
 - [ ] `[AI]` 채널 전략 (플랫폼, 형식, 주기)
-- [ ] `[AI]` 산출물: `04-content/projects/{project}/YYYY-MM-DD-s2-channel-strategy.md`
+- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s2-channel-strategy.md`
 
 ---
 
@@ -79,19 +79,19 @@
 - [ ] `[AI]` 기술 스택 선정 + 정당화
 - [ ] `[AI]` **PPT 버전 생성** (`.pptx` 파일)
 - [ ] `[AI]` 관리자 기능 포함 여부 확인 + 포함 시 관리자 섹션 작성
-- [ ] `[AI]` 산출물: `02-product/projects/{project}/YYYY-MM-DD-s3-prd.md` + `.pptx`
+- [ ] `[AI]` 산출물: `{folderMap.product}/{project}/YYYY-MM-DD-s3-prd.md` + `.pptx`
 
 ### 게임 (GDD)
 - [ ] `[AI]` GDD 10개 섹션 완성 (gdd-template.md 기준)
 - [ ] `[AI]` 코어 루프 + 밸런싱 수치 명시
 - [ ] `[AI]` **PPT 버전 생성** (`.pptx` 파일)
 - [ ] `[AI]` 관리자/운영 도구 기능 포함 여부 확인
-- [ ] `[AI]` 산출물: `02-product/projects/{project}/YYYY-MM-DD-s3-gdd.md` + `.pptx`
+- [ ] `[AI]` 산출물: `{folderMap.product}/{project}/YYYY-MM-DD-s3-gdd.md` + `.pptx`
 
 ### 콘텐츠 (대본/구성안)
 - [ ] `[AI]` 콘텐츠 유형별 대본 완성
 - [ ] `[AI]` SEO 메타데이터 포함
-- [ ] `[AI]` 산출물: `04-content/projects/{project}/YYYY-MM-DD-s3-script.md`
+- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s3-script.md`
 
 ---
 
@@ -139,12 +139,12 @@
 - [ ] `[AI]` SEO 전략 완성 (키워드 + 메타데이터)
 - [ ] `[AI]` 썸네일 가이드 완성
 - [ ] `[AI]` 배포 캘린더 완성
-- [ ] `[AI]` 산출물: `04-content/projects/{project}/YYYY-MM-DD-s4-production-guide.md`
+- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s4-production-guide.md`
 
 ### 쇼폼
 - [ ] `[AI]` 배포 캘린더 완성
 - [ ] `[AI]` 해시태그 전략 완성
-- [ ] `[AI]` 산출물: `04-content/projects/{project}/YYYY-MM-DD-s4-deployment-calendar.md`
+- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s4-deployment-calendar.md`
 
 ---
 
