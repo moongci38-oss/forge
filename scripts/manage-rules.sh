@@ -31,6 +31,7 @@ Usage:
   manage-rules.sh stats                         Token estimates + scope statistics
   manage-rules.sh sync <project-path>           Deploy scope-filtered rules to project
   manage-rules.sh manifest                      Generate rules-manifest.json + test-cases.json
+  manage-rules.sh audit                         Detect duplicates, contradictions, stale dates
 
 Scopes: always, sigil, trine, cowork
 
@@ -388,6 +389,121 @@ cmd_manifest() {
     fi
 }
 
+# ─── AUDIT ─────────────────────────────────────────────────────────────
+cmd_audit() {
+    echo -e "${CYAN}=== Rules Audit ===${NC}"
+    echo ""
+    local issues=0
+
+    # 1. Duplicate detection — same title across files
+    echo -e "${BLUE}[1/4] Duplicate title detection${NC}"
+    local titles_file
+    titles_file=$(mktemp)
+    for scope_dir in "$RULES_SOURCE"/*/; do
+        [ -d "$scope_dir" ] || continue
+        for md_file in "$scope_dir"*.md; do
+            [ -f "$md_file" ] || continue
+            local t
+            t=$(sed -n '/^---$/,/^---$/{ /^title:/{ s/^title: *"*//; s/"*$//; p; } }' "$md_file")
+            [ -n "$t" ] && echo "$t|$md_file" >> "$titles_file"
+        done
+    done
+    local dup_titles
+    dup_titles=$(cut -d'|' -f1 "$titles_file" | sort | uniq -d || true)
+    if [ -n "$dup_titles" ]; then
+        echo "$dup_titles" | while read -r title; do
+            echo -e "  ${RED}DUPLICATE:${NC} \"$title\""
+            grep "^${title}|" "$titles_file" | cut -d'|' -f2 | sed 's/^/    → /'
+            issues=$((issues + 1))
+        done
+    else
+        echo -e "  ${GREEN}No duplicates found${NC}"
+    fi
+    rm -f "$titles_file"
+
+    # 2. Iron Law contradiction scan — same IRON-N across files
+    echo ""
+    echo -e "${BLUE}[2/4] Iron Law contradiction scan${NC}"
+    local iron_file
+    iron_file=$(mktemp)
+    for scope_dir in "$RULES_SOURCE"/*/; do
+        [ -d "$scope_dir" ] || continue
+        for md_file in "$scope_dir"*.md; do
+            [ -f "$md_file" ] || continue
+            grep -oE 'IRON-[0-9]+' "$md_file" 2>/dev/null | while read -r iron; do
+                echo "$iron|$(basename "$md_file")" >> "$iron_file"
+            done || true
+        done
+    done
+    if [ -s "$iron_file" ]; then
+        local dup_irons
+        dup_irons=$(cut -d'|' -f1 "$iron_file" | sort | uniq -d || true)
+        if [ -n "$dup_irons" ]; then
+            echo "$dup_irons" | while read -r iron; do
+                local files
+                files=$(grep "^${iron}|" "$iron_file" | cut -d'|' -f2 | sort -u | tr '\n' ', ' | sed 's/,$//')
+                echo -e "  ${YELLOW}SHARED:${NC} $iron in [$files] — verify definitions are consistent"
+            done
+        else
+            echo -e "  ${GREEN}No Iron Law ID conflicts${NC}"
+        fi
+    else
+        echo -e "  ${GREEN}No Iron Laws found${NC}"
+    fi
+    rm -f "$iron_file"
+
+    # 3. Last Updated staleness check (>90 days)
+    echo ""
+    echo -e "${BLUE}[3/4] Stale 'Last Updated' check (>90 days)${NC}"
+    local today_epoch
+    today_epoch=$(date +%s)
+    local stale_threshold=$((90 * 86400))
+    local stale_found=0
+    for scope_dir in "$RULES_SOURCE"/*/; do
+        [ -d "$scope_dir" ] || continue
+        for md_file in "$scope_dir"*.md; do
+            [ -f "$md_file" ] || continue
+            local last_updated
+            last_updated=$(grep -oE 'Last Updated: [0-9]{4}-[0-9]{2}-[0-9]{2}' "$md_file" 2>/dev/null | tail -1 | sed 's/Last Updated: //' || true)
+            if [ -n "$last_updated" ]; then
+                local file_epoch
+                file_epoch=$(date -d "$last_updated" +%s 2>/dev/null || echo "0")
+                if [ "$file_epoch" -gt 0 ]; then
+                    local age=$(( today_epoch - file_epoch ))
+                    if [ "$age" -gt "$stale_threshold" ]; then
+                        local days=$((age / 86400))
+                        echo -e "  ${YELLOW}STALE:${NC} $(basename "$md_file") — last updated $last_updated (${days}d ago)"
+                        stale_found=$((stale_found + 1))
+                    fi
+                fi
+            fi
+        done
+    done
+    [ "$stale_found" -eq 0 ] && echo -e "  ${GREEN}All files updated within 90 days${NC}"
+
+    # 4. MEMORY.md size check (≤200 lines)
+    echo ""
+    echo -e "${BLUE}[4/4] MEMORY.md size check${NC}"
+    local memory_dir="$HOME/.claude/projects"
+    if [ -d "$memory_dir" ]; then
+        while IFS= read -r -d '' mem_file; do
+            local lines
+            lines=$(wc -l < "$mem_file")
+            if [ "$lines" -gt 200 ]; then
+                echo -e "  ${RED}OVER:${NC} $mem_file — $lines lines (limit: 200)"
+                issues=$((issues + 1))
+            else
+                echo -e "  ${GREEN}OK:${NC} $(basename "$(dirname "$mem_file")")/MEMORY.md — $lines lines"
+            fi
+        done < <(find "$memory_dir" -name "MEMORY.md" -print0 2>/dev/null)
+    else
+        echo -e "  ${YELLOW}No memory directory found${NC}"
+    fi
+
+    echo ""
+    echo -e "${BOLD}Audit complete.${NC}"
+}
+
 # ─── MAIN ──────────────────────────────────────────────────────────────────
 main() {
     local cmd="${1:-help}"
@@ -414,6 +530,9 @@ main() {
             ;;
         manifest)
             cmd_manifest
+            ;;
+        audit)
+            cmd_audit
             ;;
         help|--help|-h)
             usage

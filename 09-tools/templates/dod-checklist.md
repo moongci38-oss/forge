@@ -1,7 +1,7 @@
 # SIGIL 파이프라인 — Stage별 DoD (Definition of Done) 체크리스트
 
 **용도**: 각 [STOP] 게이트에서 산출물 완성도를 검증하는 체크리스트
-**적용**: 모든 SIGIL 프로젝트 (개발 트랙 + 콘텐츠 트랙)
+**적용**: 모든 SIGIL 프로젝트
 
 > `[AI]` = AI가 자동 완료 가능 / `[Human]` = Human이 직접 실행 필수 (AI는 계획서 작성까지)
 
@@ -17,13 +17,9 @@
 - [ ] `[AI]` JTBD (Jobs To Be Done) 분석 완료
 - [ ] `[AI]` 산출물 경로: `{folderMap.research}/{project}/YYYY-MM-DD-s1-*.md`
 
-### 개발 트랙 추가
+### 추가 항목
 - [ ] `[AI]` 기술 스택 조사 (엔진/프레임워크/인프라)
 - [ ] `[AI]` 법률/규제 조사 (해당 시장)
-
-### 콘텐츠 트랙 추가
-- [ ] `[AI]` 트렌드 키워드 분석
-- [ ] `[AI]` 채널 벤치마크 (상위 10개 채널)
 
 ---
 
@@ -51,7 +47,7 @@
 - [ ] 핵심 기술 불가 (현재 기술로 구현 불가) → ❌ Kill
 - [ ] 규제 장벽 (법적으로 출시 불가) → ❌ Kill
 
-### 개발 트랙 추가
+### 추가 항목
 - [ ] `[AI]` 제품 컨셉 문서 (핵심 기능, 타겟, 차별점)
 - [ ] `[AI]` 관리자 우선순위 결정 (서비스 > 관리자 / 관리자 ≥ 서비스 / 동등)
 - [ ] `[AI]` 산출물: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
@@ -60,13 +56,15 @@
 - [ ] `[Human]` Mom Test 인터뷰 15명+ (과거 행동만 기록) — AI가 인터뷰 가이드/질문지 작성
 - [ ] `[Human]` Pretotype 실행 (50명+, 20%+ 전환) — AI가 실행 계획서 작성
 
-### 콘텐츠 트랙 추가
-- [ ] `[AI]` 채널 전략 (플랫폼, 형식, 주기)
-- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s2-channel-strategy.md`
-
 ---
 
 ## S3 Design Document DoD
+
+### 에이전트 회의 (Competing Hypotheses)
+- [ ] `[AI]` 독립 초안 2개 이상 작성 (Draft A / Draft B)
+- [ ] `[AI]` 비교표 작성 (최소 5개 비교 항목)
+- [ ] `[AI]` 최적안 선택 + 선택 근거 명시
+- [ ] `[AI]` 기획서 내 "에이전트 회의 결과" 섹션 포함
 
 ### 공통
 - [ ] `[AI]` User Story 10개+ (Acceptance Criteria 포함)
@@ -83,26 +81,20 @@
 
 ### 게임 (GDD)
 - [ ] `[AI]` GDD 10개 섹션 완성 (gdd-template.md 기준)
-- [ ] `[AI]` 코어 루프 + 밸런싱 수치 명시
+- [ ] `[AI]` Core Loop 검증 (플레이어 행동→보상→성장 루프 명시)
+- [ ] `[AI]` 밸런싱 수치 테이블 포함 (레벨/스탯/확률/경제 최소 1개)
+- [ ] `[AI]` 에이전트 회의에서 Core Loop 관점 포함 (S3 기본 회의 활용)
 - [ ] `[AI]` **PPT 버전 생성** (`.pptx` 파일)
 - [ ] `[AI]` 관리자/운영 도구 기능 포함 여부 확인
 - [ ] `[AI]` 산출물: `{folderMap.product}/{project}/YYYY-MM-DD-s3-gdd.md` + `.pptx`
 
-### 콘텐츠 (대본/구성안)
-- [ ] `[AI]` 콘텐츠 유형별 대본 완성
-- [ ] `[AI]` SEO 메타데이터 포함
-- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s3-script.md`
-
 ---
 
-## S4 Planning Package DoD (개발 트랙)
+## S4 Planning Package DoD
 
-### 7대 산출물 완성 확인
-- [ ] `[AI]` **상세 기획서**: 화면별 동작 + 데이터 흐름 완성
-- [ ] `[AI]` **사이트맵**: 계층 구조 + 네비게이션 흐름 완성
-- [ ] `[AI]` **로드맵**: Now/Next/Later + RICE 우선순위 완성
-- [ ] `[AI]` **상세 개발 계획**: 기술 스택 + C4 아키텍처 + ADR + **Trine 세션 로드맵** 완성
-- [ ] `[AI]` **WBS**: Story Point 기반 작업 분해 완성
+### 4대 산출물 완성 확인
+- [ ] `[AI]` **상세 기획서**: 화면별 동작 + 데이터 흐름 + 사이트맵(네비게이션 계층) 완성
+- [ ] `[AI]` **개발 계획**: 기술 스택 + C4 아키텍처 + ADR + 로드맵 + WBS + **Trine 세션 로드맵** 완성
 - [ ] `[AI]` **UI/UX 기획서**: 와이어프레임 + 컴포넌트 스펙 + 인터랙션 패턴 완성
 - [ ] `[AI]` **테스트 전략서**: 테스트 계층/비율, FE/BE 도구, 시딩 전략, 커버리지 목표 완성
 
@@ -116,35 +108,24 @@
 
 ### 관리자 산출물 (해당 시)
 - [ ] `[AI]` 관리자 상세 기획서 완성
-- [ ] `[AI]` 관리자 사이트맵 완성
 - [ ] `[AI]` 관리자 UI/UX 기획서 완성
-- [ ] `[AI]` 로드맵/개발 계획/WBS에 관리자 기능 통합 반영
+- [ ] `[AI]` 개발 계획에 관리자 기능 통합 반영
 
 ### Trine 세션 로드맵 확인
 - [ ] `[AI]` 세션별 범위 정의 (기능 단위)
 - [ ] `[AI]` 세션별 Spec/Plan/Task 문서명 명시 (프로젝트 네이밍 규칙 준수)
 - [ ] `[AI]` 관리자 세션 포함 (해당 시)
 
+### Wave Protocol 완료 확인
+- [ ] `[AI]` **Wave 2 트레이서빌리티 리포트** 존재 (S3 요구사항 → S4 산출물 매핑)
+- [ ] `[AI]` **Wave 3 CTO 리뷰 리포트** 존재 (CRITICAL/HIGH 이슈 0건 또는 해결 완료)
+- [ ] `[AI]` **Wave 3 UX 리뷰 리포트** 존재 (CRITICAL/HIGH 이슈 0건 또는 해결 완료)
+- [ ] `[AI]` Wave 4 최종본에 Wave 2-3 피드백 반영 확인
+
 ### Trine 연동 확인
 - [ ] `[AI]` 기획 패키지 → Trine Phase 1 입력으로 사용 가능
 - [ ] `[AI]` S3 기획서 → Trine Phase 1.5/2 입력으로 사용 가능
 - [ ] `[Human]` [STOP] 승인 후 Trine 세션 시작 안내
-
----
-
-## S4 Production Guide DoD (콘텐츠 트랙)
-
-### 유튜브/롱폼
-- [ ] `[AI]` 제작 가이드 완성 (촬영 체크리스트 + 편집 지침)
-- [ ] `[AI]` SEO 전략 완성 (키워드 + 메타데이터)
-- [ ] `[AI]` 썸네일 가이드 완성
-- [ ] `[AI]` 배포 캘린더 완성
-- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s4-production-guide.md`
-
-### 쇼폼
-- [ ] `[AI]` 배포 캘린더 완성
-- [ ] `[AI]` 해시태그 전략 완성
-- [ ] `[AI]` 산출물: `{folderMap.content}/{project}/YYYY-MM-DD-s4-deployment-calendar.md`
 
 ---
 
@@ -157,8 +138,9 @@
 | Stage | S1 / S2 / S3 / S4 |
 | 결과 | ✅ PASS / 🔄 수정 후 통과 / ❌ 반려 |
 | 일자 | YYYY-MM-DD |
+| 세션 | 세션 번호 (같은 날 같은 대화 세션 = 동일 번호) |
 | 조건 | 충족된 DoD 요약 또는 Go/No-Go 점수 |
-| 비고 | 수정 횟수, 특이사항, Human 코멘트 |
+| 비고 | 수정 횟수, 특이사항, Human 코멘트, [Human] 항목 갈음 여부 |
 
 ---
 

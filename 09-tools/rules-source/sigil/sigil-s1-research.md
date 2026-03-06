@@ -15,14 +15,21 @@ enforcement: flexible
 
 ## S1. Research (리서치)
 
-- **개발 트랙**: research-coordinator → market/academic/fact-checker (병렬)
-- **콘텐츠 트랙**: research-coordinator → market-researcher + 트렌드 분석
+- research-coordinator → 아래 실존 리소스를 Fan-out 병렬 조율:
+
+| 리소스 | 유형 | 역할 |
+|--------|------|------|
+| **academic-researcher** | Agent | 학술 논문, 리뷰 논문, 인용 분석 |
+| **fact-checker** | Agent | 수치 검증, 출처 신뢰도, 교차 검증 |
+| **WebSearch** | Tool | 실시간 뉴스, 업계 동향, 일반 웹 |
+| **`/competitor`** | Command | 경쟁사 심층 분석 (기능/가격/전략) |
+| **`marketing:competitive-analysis`** | Plugin | 경쟁사 포지셔닝, 메시징 비교 |
+| **`data:data-exploration`** | Plugin | 시장 데이터 정량 분석 (해당 시) |
+
 - **에이전트 회의**: Competing Hypotheses — 리서치 에이전트 독립 분석 → 비교 → 방향 도출
 - **필수 방법론**: AI-augmented Research + JTBD + Competitive Intelligence 자동화 + Evidence-Based Management
 - **선택 방법론**: SOAR, PESTLE
-- **플러그인 보강** (선택적):
-  - `enterprise-search` — 크로스 소스 통합 검색 (Slack/이메일/위키 등 내부 데이터 소스 연결 시)
-  - `data:data-exploration` + `data:statistical-analysis` — 시장 데이터 정량 분석이 필요할 때
+- **방법론 구현 가이드**: `09-tools/prompts/sigil-methodologies.md` 참조
 - **산출물**: `{folderMap.research}/{project}/YYYY-MM-DD-s{N}-{topic}.md`
 - **게이트**: **[STOP]** 리서치 결과 리뷰 + 방향 확정
 

@@ -1,6 +1,12 @@
-# 01-research - 시장조사 & 분석 자동화 시스템
+# 01-research - 시장조사 & 분석
 
-> **약점 영역**: ★☆☆☆☆ → **AI 보완**: ★★★★☆
+> **영역**: A. 제품 사업 (Track A)
+> SIGIL 파이프라인 S1(리서치) 산출물 저장소 + 일반 리서치
+
+## SIGIL 연결
+
+SIGIL S1 리서치 산출물은 `projects/{project}/YYYY-MM-DD-s1-*.md`에 저장.
+파이프라인 규칙은 `.claude/rules/sigil-compiled.md` §S1 참조.
 
 ---
 
@@ -124,4 +130,4 @@ monthly/YYYY-MM-comprehensive-report.md 생성"
 
 ---
 
-*Last Updated: 2026-02-26*
+*Last Updated: 2026-03-06*

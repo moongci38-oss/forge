@@ -1,6 +1,12 @@
-# 05-design - 디자인 & UX 자동화 시스템
+# 05-design - 디자인 & UX
 
-> **약점 영역**: ★☆☆☆☆ → **AI 보완**: ★★★★★ (가장 높음)
+> **영역**: A. 제품 사업 (Track A)
+> SIGIL S4 UI/UX 기획서 저장소 + 프로젝트 디자인 자산
+
+## SIGIL 연결
+
+SIGIL S4 UI/UX 기획서는 `projects/{project}/YYYY-MM-DD-s4-uiux-spec.md`에 저장.
+파이프라인 규칙은 `.claude/rules/sigil-compiled.md` §S4 참조.
 
 ---
 
@@ -115,4 +121,4 @@ claude plugin install marketing@knowledge-work-plugins --scope project
 
 ---
 
-*Last Updated: 2026-02-26*
+*Last Updated: 2026-03-06*

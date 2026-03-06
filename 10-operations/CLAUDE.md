@@ -1,7 +1,12 @@
-# 10-operations - 서비스 운영 자동화 시스템
+# 10-operations - 서비스 운영
 
-> **영역**: A. 제품 사업 영역 (서비스 런칭 이후)
+> **영역**: A. 제품 사업 (Track A, 서비스 런칭 이후)
 > 시장조사 → 기획 → 마케팅 → **운영** 사이클의 마지막 단계
+
+## SIGIL 연결
+
+SIGIL S2 Go/No-Go에서 운영 지표(`metrics/`)를 참고하여 시장 기회를 평가한다.
+Handoff 문서(`handoff-to-dev/`, `handoff-from-dev/`)는 SIGIL↔Trine 전환 시 사용.
 
 ---
 
@@ -98,4 +103,4 @@ portfolio-project/         → 개발 구현
 
 ---
 
-*Last Updated: 2026-02-18*
+*Last Updated: 2026-03-06*

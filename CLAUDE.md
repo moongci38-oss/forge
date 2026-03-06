@@ -48,7 +48,7 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 - 병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토
 
 ### Don'ts
-- B 영역(`06-finance/`, `07-legal/`, `08-admin/`) 내용 외부 공유/출력 금지
+- B 영역 접근/출력 금지 (상세: `business-core.md` 보안 체크리스트)
 - 검증 없는 시장 데이터를 사실로 단정 금지
 - 스킬/컴포넌트 라이브러리 원본 직접 수정 금지
 
@@ -75,11 +75,10 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ## MCP Servers & Plugins
 
-### MCP Servers (4개, .mcp.json 정의)
+### MCP Servers (3개, .mcp.json 정의)
 
 | 서버 | 설명 |
 |------|------|
-| **Filesystem** | 파일 접근 (Business + Portfolio 프로젝트) |
 | **Sequential Thinking** | 복잡한 전략 계획 수립 |
 | **Notion** | Notion 페이지/DB 연동 |
 | **NanoBanana** | Google Gemini AI 이미지 생성/편집 (Tier 3) |
@@ -106,23 +105,25 @@ claude plugin enable {plugin-name}
 claude plugin disable {plugin-name}
 ```
 
-### Cowork 공식 플러그인
+### 설치된 플러그인
 
-| 플러그인 | 연결 폴더 | 설치 우선순위 |
-|---------|----------|:-----------:|
-| **productivity** | 06-project-management | Phase 1 |
-| **product-management** | 02-product | Phase 1 |
-| **marketing** | 03-marketing | Phase 1 |
-| **enterprise-search** | 전체 크로스 검색 | Phase 1 |
-| **data** | 01-research, 02-product | Phase 2 |
-| **finance** | 06-finance | Phase 2 (--scope local) |
-| **legal** | 07-legal | Phase 2 (--scope local) |
+| 플러그인 | 용도 | 상태 |
+|---------|------|:----:|
+| **product-management** | 02-product 기획, PRD, 로드맵 | ✅ 활성 |
+| **marketing** | 03-marketing 캠페인, 콘텐츠, SEO | ✅ 활성 |
+| **data** | 데이터 분석, 대시보드, SQL | ✅ 활성 |
+| **frontend-design** | UI/UX 디자인 구현 | ✅ 활성 |
+| **playground** | 시각적 탐색 (SIGIL S1~S4) | ✅ 활성 |
+| **code-review** | PR 코드 리뷰 | ✅ 활성 |
+| **ralph-loop** | 반복 실행 루프 | ✅ 활성 |
+| **finance** | 06-finance (B트랙 접근 금지) | ⛔ 비활성 |
+| **legal** | 07-legal (B트랙 접근 금지) | ⛔ 비활성 |
 
 ---
 
 ## Agent Teams (Opus 4.6+)
 
-> 실험적 기능 활성화됨 (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`)
+> 활성화됨 (권장). `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
 > 상세: `business-core.md` 내 agent-teams 섹션 참조
 
 ---
@@ -133,8 +134,8 @@ claude plugin disable {plugin-name}
 |------|------|
 | `.claude/rules/` | 컴파일된 규칙 (세션 시작 시 자동 로드) |
 | `09-tools/rules-source/` | 규칙 원본 (Frontmatter 포함, 빌드 소스) |
-| `~/.claude/rules/` | 전역 규칙 (3파일: docs-structure, opus-best-practices, plan-mode) |
-| `~/.claude/trine/rules/` | Trine 개발 규칙 (11파일, 개발 프로젝트에 symlink 배포) |
+| `~/.claude/rules/` | 전역 규칙 (3파일: docs-structure, opus-best-practices, analysis-to-implementation-gate) |
+| `~/.claude/trine/rules/` | Trine 개발 규칙 (14파일, 개발 프로젝트에 symlink 배포) |
 
 ---
 
@@ -145,4 +146,4 @@ claude plugin disable {plugin-name}
 
 ---
 
-*Last Updated: 2026-03-02 (Rules-as-Code 전환 + 토큰 최적화)*
+*Last Updated: 2026-03-06 (3-Layer Architecture 적용 + 폴더 CLAUDE.md 축소)*

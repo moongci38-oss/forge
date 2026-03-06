@@ -13,4 +13,3 @@
 | 6 | S3 기획서 | sigil-s3-design | HIGH | sigil-structure |
 | 7 | S4 기획 패키지 | sigil-s4-planning | HIGH | sigil-s3-design |
 | 8 | Trine 전환 | trine-handoff | HIGH | sigil-s4-planning |
-| 9 | Council 모드 | sigil-council-mode | MEDIUM | sigil-structure |

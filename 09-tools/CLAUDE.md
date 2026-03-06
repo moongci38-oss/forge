@@ -1,7 +1,15 @@
 # 09-tools - AI 워크스페이스 운영 도구
 
 > **영역**: C. 시스템 영역 (Tools & Systems)
-> 기존 `07-operations/dev-tools/` 이동 + `06-project-management/` 통합
+
+## Rules-as-Code 시스템
+
+규칙 원본은 `rules-source/`에 저장되며 `manage-rules.sh build`로 `.claude/rules/`에 컴파일된다.
+
+| Scope | 원본 경로 | 컴파일 결과 |
+|-------|----------|-----------|
+| always | `rules-source/always/` | `business-core.md` |
+| sigil | `rules-source/sigil/` | `sigil-compiled.md` |
 
 ---
 
@@ -92,4 +100,4 @@ bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
 
 ---
 
-*Last Updated: 2026-02-18*
+*Last Updated: 2026-03-06*

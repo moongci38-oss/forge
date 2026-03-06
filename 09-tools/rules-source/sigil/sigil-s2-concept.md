@@ -15,14 +15,12 @@ enforcement: rigid
 
 ## S2. Concept (컨셉 확정)
 
-- **개발 트랙**: `/lean-canvas` + 제품/게임 컨셉
-- **콘텐츠 트랙**: `/content-calendar` + 채널 전략
+- `/lean-canvas` + 제품/게임 컨셉
 - **필수 방법론**: Pretotyping + Mom Test + Lean Validation + TAM/SAM/SOM + OKR
 - **선택 방법론**: OST (Opportunity Solution Tree), PR/FAQ
 - **플러그인 보강** (선택적):
   - `product-management:roadmap-management` — 로드맵 우선순위 결정 시 RICE/ICE 자동 스코어링 보조
-- **산출물 (개발)**: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
-- **산출물 (콘텐츠)**: `{folderMap.content}/{project}/YYYY-MM-DD-s2-channel-strategy.md`
+- **산출물**: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
 - **게이트**: **[STOP]** 비전/타겟/차별점 승인
 
 ## S2 Gate: Go/No-Go 스코어링
@@ -51,7 +49,7 @@ S2 [STOP] 게이트에서 프로젝트 진행 여부를 정량 평가한다.
 
 - 필수 방법론(Pretotyping, Mom Test, Lean Validation, TAM/SAM/SOM, OKR)을 적용한다
 - Go/No-Go 스코어링은 Kill Criteria 검토 후 실행한다
-- 개발 트랙은 `{folderMap.product}/{project}/`에, 콘텐츠 트랙은 `{folderMap.content}/{project}/`에 산출물을 저장한다
+- 산출물은 `{folderMap.product}/{project}/`에 저장한다
 
 ## Don't
 
@@ -64,3 +62,4 @@ S2 [STOP] 게이트에서 프로젝트 진행 여부를 정량 평가한다.
 1. S2 Go/No-Go 스코어링은 Kill Criteria 검토 후 실행한다
 2. 각 Stage 산출물은 해당 폴더의 `projects/{project}/` 하위에 저장한다
 3. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
+4. S2 Gate에서 [Human] 항목(Mom Test, Pretotype) 미실행 시 gate-log 비고에 "계획서로 갈음" 명시 기록한다

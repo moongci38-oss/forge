@@ -37,17 +37,13 @@ sigil-workspace.json의 folderMap 예시:
 
 | 필수 산출물 | 경로 |
 |-----------|------|
-| 상세 기획서 | `{folderMap.product}/{project}/*-s4-detailed-plan.md` |
-| 사이트맵 | `{folderMap.product}/{project}/*-s4-sitemap.md` |
-| 로드맵 | `{folderMap.product}/{project}/*-s4-roadmap.md` |
-| 개발 계획 | `{folderMap.product}/{project}/*-s4-development-plan.md` |
-| WBS | `{folderMap.product}/{project}/*-s4-wbs.md` |
+| 상세 기획서 (사이트맵 포함) | `{folderMap.product}/{project}/*-s4-detailed-plan.md` |
+| 개발 계획 (로드맵+WBS 포함) | `{folderMap.product}/{project}/*-s4-development-plan.md` |
 | UI/UX 기획서 | `{folderMap.design}/{project}/*-s4-uiux-spec.md` |
 | 테스트 전략서 | `{folderMap.product}/{project}/*-s4-test-strategy.md` |
 
 관리자 산출물이 있다면 추가 확인:
 - `{folderMap.product}/{project}/*-s4-admin-detailed-plan.md`
-- `{folderMap.product}/{project}/*-s4-admin-sitemap.md`
 - `{folderMap.design}/{project}/*-s4-admin-uiux-spec.md`
 
 누락된 산출물이 있으면 목록을 표시하고 계속할지 사용자에게 확인.
@@ -123,7 +119,7 @@ Handoff 문서: {folderMap.handoff}/{project}/YYYY-MM-DD-sigil-handoff.md
 Symlink 생성: {devTarget}/{symlinkBase}/ (N개 파일)
 
 ### 다음 단계
-1. 개발 프로젝트 환경으로 이동
+1. 개발 프로젝트 환경으로 이동 (Trine 자동 발동)
 2. Trine Session 1부터 순서대로 진행
 3. 각 세션에서 Spec → Plan → 구현 → Walkthrough → PR 사이클 반복
 
