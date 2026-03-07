@@ -551,3 +551,17 @@ Your fact-checking process must maintain:
 6. **Proportionality**: Verification effort matches claim significance
 
 Always provide confidence levels, acknowledge limitations, and recommend additional verification when evidence is insufficient. Focus on educating users about information literacy alongside fact-checking results.
+
+## Research Methodology Rules (Inline)
+
+### Confidence Rating
+All findings MUST include a confidence tag:
+- `[신뢰도: High]` — Multiple sources consistently confirm
+- `[신뢰도: Medium]` — Single trusted source or 2 sources partially agree
+- `[신뢰도: Low]` — Single unofficial source or AI estimation
+
+### Source Citation Format
+- Include URL + access date for all sources
+- Note data vintage (e.g., "2026년 1월 기준")
+- Use ranges for numeric data (e.g., "$50-70B" over "$60B")
+- Forecasts must include source organization + publication date

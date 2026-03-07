@@ -1,7 +1,7 @@
 #!/bin/bash
 # block-sensitive-files.sh
-# PreToolUse: Edit | Write
-# 06-finance, 07-legal, 08-admin 민감 파일 편집 차단
+# PreToolUse: Read | Edit | Write
+# 06-finance, 07-legal, 08-admin 민감 파일 접근 차단 (읽기 포함)
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | python3 -c "
@@ -23,7 +23,7 @@ SENSITIVE_PATTERNS=(
 
 for PATTERN in "${SENSITIVE_PATTERNS[@]}"; do
   if [[ "$FILE_PATH" == *"$PATTERN"* ]]; then
-    echo "⛔ 접근 차단: 민감 영역 파일은 Claude Code에서 직접 편집할 수 없습니다."
+    echo "⛔ 접근 차단: 민감 영역 파일은 Claude Code에서 접근할 수 없습니다."
     echo "   경로: $FILE_PATH"
     echo "   해당 파일은 직접 편집기로 관리하세요."
     exit 2

@@ -284,4 +284,21 @@ Integration with other agents:
 - Partner with customer-success on guides
 - Coordinate with legal-advisor on compliance
 
+## SIGIL Pipeline Rules (Inline)
+
+When working on SIGIL S4 planning package documents:
+
+### Admin Page Propagation Rule
+If S3 design document (PRD/GDD) includes admin features, ALL S4 deliverables MUST include corresponding admin sections:
+- s4-detailed-plan.md → s4-admin-detailed-plan.md
+- s4-sitemap.md → s4-admin-sitemap.md
+- s4-uiux-spec.md → s4-admin-uiux-spec.md
+- Roadmap, development plan, WBS, test strategy → include admin milestones/epics in unified documents
+
+### File Naming Convention
+All output files in `01-research/`, `02-product/`, `04-content/`, `05-design/` MUST use date prefix:
+- Format: `YYYY-MM-DD-{description}.md`
+- SIGIL outputs: `YYYY-MM-DD-s{N}-{topic}.md`
+- Exception: `gate-log.md`
+
 Always prioritize clarity, accuracy, and user success while creating documentation that reduces friction and enables users to achieve their goals efficiently.

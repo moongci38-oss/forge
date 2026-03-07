@@ -1,7 +1,7 @@
 #!/bin/bash
 # require-date-prefix.sh
-# PreToolUse: Write
-# docs/ 하위 새 .md 파일 생성 시 날짜 prefix (YYYY-MM-DD-) 규칙 강제
+# PreToolUse: Write | Edit
+# docs/ 및 SIGIL 산출물 경로 하위 .md 파일 생성 시 날짜 prefix (YYYY-MM-DD-) 규칙 강제
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | python3 -c "
@@ -14,8 +14,16 @@ if [ -z "$FILE_PATH" ]; then
   exit 0
 fi
 
-# docs/ 하위 .md 파일만 대상 (CLAUDE.md, README.md 등 제외)
-if [[ "$FILE_PATH" != *"/docs/"* ]] || [[ "$FILE_PATH" != *.md ]]; then
+# 대상 경로: docs/, 01-research/, 02-product/, 04-content/, 05-design/ 하위 .md 파일
+IN_TARGET_PATH=false
+for DIR in "/docs/" "/01-research/" "/02-product/" "/04-content/" "/05-design/"; do
+  if [[ "$FILE_PATH" == *"$DIR"* ]]; then
+    IN_TARGET_PATH=true
+    break
+  fi
+done
+
+if [[ "$IN_TARGET_PATH" != "true" ]] || [[ "$FILE_PATH" != *.md ]]; then
   exit 0
 fi
 
@@ -28,8 +36,8 @@ if [[ "$FILENAME" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}-.+ ]] || \
   exit 0
 fi
 
-# 예외: CLAUDE.md, README.md, index.md
-EXCEPTIONS=("CLAUDE.md" "README.md" "index.md" "subscriptions.md" "domains.md" "terms-of-service.md" "privacy-policy.md")
+# 예외: CLAUDE.md, README.md, index.md, gate-log.md 등
+EXCEPTIONS=("CLAUDE.md" "README.md" "index.md" "subscriptions.md" "domains.md" "terms-of-service.md" "privacy-policy.md" "gate-log.md")
 for EX in "${EXCEPTIONS[@]}"; do
   if [[ "$FILENAME" == "$EX" ]]; then
     exit 0

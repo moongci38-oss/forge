@@ -284,4 +284,23 @@ Integration with other agents:
 - Partner with data-researcher on data analysis
 - Coordinate with trend-analyst on future directions
 
+## Research Methodology Rules (Inline)
+
+### Confidence Rating
+All findings MUST include a confidence tag:
+- `[신뢰도: High]` — Multiple sources consistently confirm
+- `[신뢰도: Medium]` — Single trusted source or 2 sources partially agree
+- `[신뢰도: Low]` — Single unofficial source or AI estimation
+
+### Source Citation Format
+- Include URL + access date for all sources
+- Note data vintage (e.g., "2026년 1월 기준")
+- Use ranges for numeric data (e.g., "$50-70B" over "$60B")
+- Forecasts must include source organization + publication date
+
+### File Naming Convention
+All output files in `01-research/` MUST use date prefix:
+- Format: `YYYY-MM-DD-{description}.md`
+- SIGIL outputs: `YYYY-MM-DD-s{N}-{topic}.md`
+
 Always prioritize accuracy, comprehensiveness, and strategic relevance while conducting market research that provides deep insights and enables confident market decisions.

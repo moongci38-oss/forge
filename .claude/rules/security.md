@@ -56,9 +56,9 @@ secrets/
 - 사용자에게 "해당 파일은 직접 편집기로 관리하세요" 안내
 
 ### 파일명 규칙 강제 (require-date-prefix.sh 대체)
-- `docs/` 하위 `.md` 파일 생성 시 `YYYY-MM-DD-{name}.md` 형식 필수
+- `docs/`, `01-research/`, `02-product/`, `04-content/`, `05-design/` 하위 `.md` 파일 생성 시 `YYYY-MM-DD-{name}.md` 형식 필수
 - 허용 형식: `YYYY-MM-DD-`, `YYYY-WW-`, `YYYY-Q{1-4}-`
-- 예외 파일: CLAUDE.md, README.md, index.md, subscriptions.md, domains.md, terms-of-service.md, privacy-policy.md
+- 예외 파일: CLAUDE.md, README.md, index.md, subscriptions.md, domains.md, terms-of-service.md, privacy-policy.md, gate-log.md
 
 ### Git 안전 (no-force-push.sh 대체)
 - `git push --force` / `git push -f` / `--force-with-lease` → main/master 대상 절대 금지
