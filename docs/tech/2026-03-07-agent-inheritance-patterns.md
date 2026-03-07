@@ -214,7 +214,44 @@ Sub-agent 방식으로 SIGIL을 구성했을 경우 발생했을 문제들:
 
 ---
 
-## 7. Claude Agent SDK 환경에서의 차이
+## 7. 인프라 레벨 갭 분석 (상속과 별개)
+
+CLAUDE.md 상속 자체는 문제없지만, **Hook 커버리지**에 보완이 필요한 영역이 존재한다.
+
+### 발견된 갭
+
+| 갭 | 현황 | 영향 | 심각도 |
+|----|------|------|:------:|
+| **Read 경로 미차단** | `block-sensitive-files.sh`가 Write/Edit만 매칭 | Read 가능한 에이전트(market-researcher 등)가 이론적으로 06-finance 파일 읽기 가능 | Medium |
+| **파일명 Hook 범위** | `require-date-prefix.sh`가 `docs/`만 커버 | SIGIL 산출물 경로(`01-research/`, `02-product/`, `04-content/`, `05-design/`)는 Hook 미적용 | Low |
+| **리서치 포맷** | `[신뢰도: High/Medium/Low]` 태그가 에이전트 프롬프트에 미포함 | CLAUDE.md 상속으로 커버되지만, 에이전트가 프롬프트의 자체 지시를 우선할 수 있음 | Low |
+| **관리자 페이지 전파** | "S3 관리자 포함 시 S4 반영" 규칙이 orchestrator에만 존재 | technical-writer 스폰 시 orchestrator가 매번 전달 필요 | Low |
+
+### 현재 방어 수준 평가
+
+```
+보안 (Write/Edit 차단)    ████████████████████ 100%  ← Hook 완벽 방어
+보안 (Read 차단)          ████████░░░░░░░░░░░░  40%  ← CLAUDE.md만 의존
+파일명 규칙 (docs/)       ████████████████████ 100%  ← Hook 방어
+파일명 규칙 (SIGIL 경로)   ████████████░░░░░░░░  60%  ← CLAUDE.md + 에이전트 프롬프트만
+파이프라인 상태 전달       ████████████████░░░░  80%  ← orchestrator 설계로 커버
+리서치 방법론 적용         ████████████████░░░░  80%  ← CLAUDE.md 상속으로 커버
+```
+
+### 개선 권고사항
+
+| 우선순위 | 조치 | 파일 | 영향 |
+|:--------:|------|------|------|
+| **P1** | `block-sensitive-files.sh` Hook matcher에 `Read` 추가 | `settings.json` | Read 경로 보안 완성 |
+| **P2** | `require-date-prefix.sh` 범위를 SIGIL 산출물 경로로 확장 | Hook 스크립트 | 파일명 규칙 완전 적용 |
+| **P3** | technical-writer 에이전트 프롬프트에 관리자 전파 규칙 인라인 | `.claude/agents/technical-writer.md` | 컨텍스트 전달 의존 해소 |
+| **P3** | research 에이전트들에 `[신뢰도]` 태그 형식 인라인 | `.claude/agents/market-researcher.md` 등 | 출력 형식 표준화 |
+
+> 이 개선사항들은 상속 문제가 아니라 **인프라 커버리지 확장** 성격이다. 현재도 운영에 큰 문제는 없으나, 방어 깊이(Defense in Depth)를 높이는 조치들이다.
+
+---
+
+## 8. Claude Agent SDK 환경에서의 차이
 
 > 참고: Claude Code와 Claude Agent SDK는 다른 환경이다.
 
@@ -224,6 +261,17 @@ Sub-agent 방식으로 SIGIL을 구성했을 경우 발생했을 문제들:
 | **Claude Agent SDK** | 별도 프로세스 | Task API 스폰 | 명시적 전달 필요 ❌ |
 
 Agent SDK로 마이그레이션할 경우, 현재 CLAUDE.md에 의존하는 규칙들을 프롬프트에 명시적으로 포함해야 한다. 이 점은 향후 SDK 전환 시 주의 사항이다.
+
+---
+
+## 최종 결론
+
+| 질문 | 답변 |
+|------|------|
+| CLAUDE.md 상속에 문제가 있는가? | **없다** — Agent tool로 스폰, 동일 프로젝트 디렉토리 |
+| 컨텍스트 격리로 문제가 있는가? | **거의 없다** — orchestrator 프롬프트 + 파일 기반 상태 관리로 대응 |
+| 인프라 갭이 있는가? | **일부 있다** — Read 경로 보안, Hook 범위가 보완 가능 |
+| 현재 운영에 지장이 있는가? | **없다** — 3중 방어 + SIGIL 에이전트 프롬프트 설계가 충분히 커버 |
 
 ---
 
