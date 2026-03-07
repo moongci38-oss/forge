@@ -21,14 +21,13 @@ if [[ ! -f "$WORKSPACE_JSON" ]]; then
   exit 1
 fi
 
-# jq fallback: grep-based JSON parsing
-json_value() {
-  grep "\"$1\"" "$WORKSPACE_JSON" | head -1 | sed 's/.*: *"\(.*\)".*/\1/'
-}
+# folderMap 경로 추출 (python3 dot-path parser)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/json-get.sh"
 
-PRODUCT_DIR=$(json_value "product")
+PRODUCT_DIR=$(json_get "$WORKSPACE_JSON" "folderMap.product")
 PRODUCT_DIR=${PRODUCT_DIR:-"02-product/projects"}
-DESIGN_DIR=$(json_value "design")
+DESIGN_DIR=$(json_get "$WORKSPACE_JSON" "folderMap.design")
 DESIGN_DIR=${DESIGN_DIR:-"05-design/projects"}
 
 S3_DIR="$PRODUCT_DIR/$PROJECT"

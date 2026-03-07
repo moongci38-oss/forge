@@ -29,7 +29,7 @@ Usage:
   manage-skills.sh install-aitmpl <skill-slug>       Download skill from aitmpl.com
   manage-skills.sh sync <target-project-path>        Sync dev skills to a project
   manage-skills.sh info <skill-name>                 Show skill details
-  manage-skills.sh audit                             Find unreferenced skills (disable candidates)
+  manage-skills.sh audit [--usage]                    Find unreferenced skills (disable candidates)
   manage-skills.sh validate [skill-name]             Validate SKILL.md frontmatter fields
   manage-skills.sh build <skill-name>                Generate AGENTS.md from rules/ subdirectory
   manage-skills.sh test <skill-name>                 Run subagent scenario test (placeholder)
@@ -356,6 +356,11 @@ cmd_info() {
 
 # ─── AUDIT ─────────────────────────────────────────────────────────────────
 cmd_audit() {
+    local show_usage=false
+    for arg in "$@"; do
+        [[ "$arg" == "--usage" ]] && show_usage=true
+    done
+
     echo -e "${CYAN}=== Skill Audit: Unreferenced Skills ===${NC}"
     echo ""
 
@@ -369,6 +374,17 @@ cmd_audit() {
     local referenced_by_pipeline=()
     local unreferenced_skills=()
 
+    # Search directories for references
+    local search_dirs=()
+    [ -d "$BUSINESS_ROOT/.claude/commands" ] && search_dirs+=("$BUSINESS_ROOT/.claude/commands")
+    [ -d "$BUSINESS_ROOT/.claude/agents" ] && search_dirs+=("$BUSINESS_ROOT/.claude/agents")
+    [ -d "$BUSINESS_ROOT/09-tools/rules-source" ] && search_dirs+=("$BUSINESS_ROOT/09-tools/rules-source")
+    [ -d "$ACTIVE_RULES" ] && search_dirs+=("$ACTIVE_RULES")
+
+    # Parallel arrays for usage data
+    declare -A skill_ref_count
+    declare -A skill_ref_files
+
     # Collect all active skill names
     for item in "$ACTIVE_SKILLS"/*/; do
         [ -d "${item%/}" ] || continue
@@ -376,36 +392,24 @@ cmd_audit() {
         name=$(basename "${item%/}")
         total=$((total + 1))
 
-        # Check if skill is referenced in commands, agents, or pipeline rules
         local found=false
+        local ref_files=()
 
-        # Check .claude/commands/
-        if [ -d "$BUSINESS_ROOT/.claude/commands" ]; then
-            if grep -rql "$name" "$BUSINESS_ROOT/.claude/commands/" 2>/dev/null; then
+        for search_dir in "${search_dirs[@]}"; do
+            local matches
+            matches=$(grep -rl "$name" "$search_dir" 2>/dev/null || true)
+            if [ -n "$matches" ]; then
                 found=true
+                while IFS= read -r match_file; do
+                    # Show relative path from BUSINESS_ROOT
+                    local rel_path="${match_file#$BUSINESS_ROOT/}"
+                    ref_files+=("$rel_path")
+                done <<< "$matches"
             fi
-        fi
+        done
 
-        # Check .claude/agents/
-        if [ -d "$BUSINESS_ROOT/.claude/agents" ] && [ "$found" = "false" ]; then
-            if grep -rql "$name" "$BUSINESS_ROOT/.claude/agents/" 2>/dev/null; then
-                found=true
-            fi
-        fi
-
-        # Check rules-source for pipeline references
-        if [ -d "$BUSINESS_ROOT/09-tools/rules-source" ] && [ "$found" = "false" ]; then
-            if grep -rql "$name" "$BUSINESS_ROOT/09-tools/rules-source/" 2>/dev/null; then
-                found=true
-            fi
-        fi
-
-        # Check active rules
-        if [ "$found" = "false" ]; then
-            if grep -rql "$name" "$ACTIVE_RULES/" 2>/dev/null; then
-                found=true
-            fi
-        fi
+        skill_ref_count["$name"]="${#ref_files[@]}"
+        skill_ref_files["$name"]=$(IFS=', '; echo "${ref_files[*]}")
 
         if [ "$found" = "true" ]; then
             referenced_by_pipeline+=("$name")
@@ -417,14 +421,22 @@ cmd_audit() {
 
     echo -e "${GREEN}Referenced by pipeline/commands/agents: ${#referenced_by_pipeline[@]}${NC}"
     for s in "${referenced_by_pipeline[@]}"; do
-        echo "  [ok] $s"
+        if $show_usage; then
+            echo "  [ok] $s (${skill_ref_count[$s]} refs: ${skill_ref_files[$s]})"
+        else
+            echo "  [ok] $s"
+        fi
     done
 
     echo ""
     if [ "$unreferenced" -gt 0 ]; then
         echo -e "${YELLOW}Unreferenced (disable candidates): $unreferenced${NC}"
         for s in "${unreferenced_skills[@]}"; do
-            echo "  [?] $s"
+            if $show_usage; then
+                echo "  [?] $s (0 refs)"
+            else
+                echo "  [?] $s"
+            fi
         done
         echo ""
         echo -e "${YELLOW}Run 'manage-skills.sh disable <name>' to deactivate${NC}"
@@ -685,7 +697,7 @@ main() {
             cmd_info "$1"
             ;;
         audit)
-            cmd_audit
+            cmd_audit "$@"
             ;;
         validate)
             cmd_validate "${1:-}"
