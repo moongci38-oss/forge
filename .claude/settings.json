@@ -38,6 +38,11 @@
             "type": "command",
             "command": "bash .claude/hooks/no-force-push.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-sensitive-bash.sh",
+            "timeout": 5
           }
         ]
       }

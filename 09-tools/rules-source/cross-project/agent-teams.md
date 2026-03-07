@@ -13,7 +13,7 @@ enforcement: rigid
 # Agent Teams 규칙
 
 > Opus 4.6+ 실험적 기능. `settings.json`의 `env`에 활성화됨.
-> 상세 가이드: `docs/tech/Opus_4_6_신기능_심층_가이드_추가_섹션.md`
+> 상세: `business-core.md` 내 agent-teams 섹션 참조
 
 ---
 

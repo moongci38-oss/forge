@@ -75,49 +75,35 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ## MCP Servers & Plugins
 
-### MCP Servers (3개, .mcp.json 정의)
+### MCP Servers
 
-| 서버 | 설명 |
-|------|------|
-| **Sequential Thinking** | 복잡한 전략 계획 수립 |
-| **Notion** | Notion 페이지/DB 연동 |
-| **NanoBanana** | Google Gemini AI 이미지 생성/편집 (Tier 3) |
+| 서버 | Scope | 설명 |
+|------|:-----:|------|
+| **filesystem** | project | 워크스페이스 파일 접근 |
+| **Sequential Thinking** | project | 복잡한 전략 계획 수립 |
+| **Notion** | project | Notion 페이지/DB 연동 |
+| **NanoBanana** | user | Google Gemini AI 이미지 생성/편집 |
+| **Stitch** | user | AI UI 목업 생성 |
+| **Lighthouse** | user | 웹 성능/접근성 감사 |
+| **A11y** | user | 접근성 검사 |
 
-### Plugins (2개, 플러그인 시스템)
-
-| 플러그인 | 설명 |
-|---------|------|
-| **Context7** | 최신 라이브러리 문서 → 코드 생성 시 항상 사용 |
-| **Playwright** | 브라우저 자동화, UI 스크린샷 |
+### Plugins (Context7, Playwright는 플러그인 시스템)
 
 > 웹 검색은 내장 `WebSearch` 도구 사용.
 
----
-
-## Plugin System (Claude Code 2025.10+)
-
-### 핵심 CLI 명령어
-```bash
-claude plugin marketplace add anthropics/knowledge-work-plugins
-claude plugin install {plugin-name}@{marketplace} --scope project
-claude plugin list
-claude plugin enable {plugin-name}
-claude plugin disable {plugin-name}
-```
-
 ### 설치된 플러그인
 
-| 플러그인 | 용도 | 상태 |
-|---------|------|:----:|
-| **product-management** | 02-product 기획, PRD, 로드맵 | ✅ 활성 |
-| **marketing** | 03-marketing 캠페인, 콘텐츠, SEO | ✅ 활성 |
-| **data** | 데이터 분석, 대시보드, SQL | ✅ 활성 |
-| **frontend-design** | UI/UX 디자인 구현 | ✅ 활성 |
-| **playground** | 시각적 탐색 (SIGIL S1~S4) | ✅ 활성 |
-| **code-review** | PR 코드 리뷰 | ✅ 활성 |
-| **ralph-loop** | 반복 실행 루프 | ✅ 활성 |
-| **finance** | 06-finance (B트랙 접근 금지) | ⛔ 비활성 |
-| **legal** | 07-legal (B트랙 접근 금지) | ⛔ 비활성 |
+| 플러그인 | 마켓플레이스 | 용도 | 상태 |
+|---------|------------|------|:----:|
+| **product-management** | knowledge-work-plugins | 기획, PRD, 로드맵 | ✅ |
+| **marketing** | knowledge-work-plugins | 캠페인, 콘텐츠, SEO | ✅ |
+| **data** | knowledge-work-plugins | 데이터 분석, 대시보드 | ✅ |
+| **playground** | claude-plugins-official | 시각적 탐색 (SIGIL) | ✅ |
+| **code-review** | claude-plugins-official | PR 코드 리뷰 | ✅ |
+| **security-guidance** | claude-plugins-official | 보안 가이드 | ✅ |
+| **superpowers** | claude-plugins-official | 워크플로 스킬 | ✅ |
+| finance | knowledge-work-plugins | 06-finance (B트랙) | ⛔ |
+| legal | knowledge-work-plugins | 07-legal (B트랙) | ⛔ |
 
 ---
 

@@ -10,6 +10,8 @@
 .env.*.local
 *.key
 *.pem
+credentials.json
+secrets/
 
 # OS files
 .DS_Store
