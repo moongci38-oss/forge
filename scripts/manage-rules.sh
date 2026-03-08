@@ -109,8 +109,24 @@ cmd_validate() {
 # ─── BUILD ─────────────────────────────────────────────────────────────────
 cmd_build() {
     local target_scope="$1"
+    shift || true
+
+    # Parse --skip-subtraction flag
+    local skip_subtraction=false
+    for arg in "$@"; do
+      if [ "$arg" = "--skip-subtraction" ]; then
+        skip_subtraction=true
+      fi
+    done
+
     echo -e "${CYAN}=== Building Rules (scope: $target_scope) ===${NC}"
     echo ""
+
+    # 빌드 전 기존 규칙 수 카운트
+    local pre_count=0
+    for f in "$ACTIVE_RULES"/*.md; do
+      [ -f "$f" ] && pre_count=$((pre_count + 1))
+    done
 
     if [ "$target_scope" = "--all" ] || [ "$target_scope" = "all" ]; then
         _build_scope "business"
@@ -118,10 +134,36 @@ cmd_build() {
         _build_scope "sigil"
         echo ""
         _build_scope "trine"
-        return
+    else
+        _build_scope "$target_scope"
     fi
 
-    _build_scope "$target_scope"
+    # 빌드 후 규칙 수 카운트 + 감산 리뷰
+    local post_count=0
+    for f in "$ACTIVE_RULES"/*.md; do
+      [ -f "$f" ] && post_count=$((post_count + 1))
+    done
+
+    local source_count=0
+    for f in "$RULES_SOURCE"/*/*.md; do
+      [ -f "$f" ] && source_count=$((source_count + 1))
+    done
+
+    local net_change=$((post_count - pre_count))
+    if [ "$net_change" -ge 3 ] && [ "$skip_subtraction" = false ]; then
+      echo ""
+      echo -e "${YELLOW}================================================${NC}"
+      echo -e "${YELLOW}  Subtraction Review Required${NC}"
+      echo -e "${YELLOW}================================================${NC}"
+      echo -e "  규칙 순 증가: ${BOLD}+${net_change}${NC} (빌드 전 ${pre_count} → 빌드 후 ${post_count})"
+      echo -e "  소스 규칙 총 수: ${source_count}개"
+      echo ""
+      echo -e "  아래 질문에 답하세요:"
+      echo -e "  1. 이 변경으로 제거/간소화할 수 있는 기존 규칙은?"
+      echo -e "  2. 총 토큰 예산이 이전 대비 증감했는가?"
+      echo ""
+      echo -e "  ${CYAN}--skip-subtraction 플래그로 이 경고를 무시할 수 있습니다${NC}"
+    fi
 }
 
 _build_scope() {
@@ -319,10 +361,81 @@ cmd_stats() {
     local global_tokens=$((global_bytes / 4))
     echo -e "${BOLD}Global total: $global_files files, $global_bytes bytes, ~$global_tokens tokens${NC}"
 
+    # === Token Budget Breakdown ===
     echo ""
-    local session_tokens=$((active_tokens + global_tokens))
-    local pct=$((session_tokens * 100 / 200000))
-    echo -e "${BOLD}Session start estimate: ~$session_tokens tokens (${pct}% of 200K)${NC}"
+    echo -e "${CYAN}=== Token Budget Breakdown ===${NC}"
+    echo ""
+
+    # 1. Compiled rules (already counted as active_tokens above)
+    echo -e "${BLUE}Compiled Rules (.claude/rules/):${NC}"
+    local rules_total=0
+    for f in "$ACTIVE_RULES"/*.md; do
+      [ -f "$f" ] || continue
+      local size
+      size=$(wc -c < "$f")
+      local tokens=$((size / 4))
+      rules_total=$((rules_total + tokens))
+      printf "  %-35s %6d tokens\n" "$(basename "$f")" "$tokens"
+    done
+    printf "  ${BOLD}%-35s %6d tokens${NC}\n" "Subtotal" "$rules_total"
+
+    # 2. CLAUDE.md files
+    echo ""
+    echo -e "${BLUE}CLAUDE.md files:${NC}"
+    local claude_total=0
+    for f in "$HOME/CLAUDE.md" "$BUSINESS_ROOT/CLAUDE.md"; do
+      [ -f "$f" ] || continue
+      local size
+      size=$(wc -c < "$f")
+      local tokens=$((size / 4))
+      claude_total=$((claude_total + tokens))
+      local display
+      display=$(realpath --relative-to="$BUSINESS_ROOT" "$f" 2>/dev/null || basename "$f")
+      printf "  %-35s %6d tokens\n" "$display" "$tokens"
+    done
+    printf "  ${BOLD}%-35s %6d tokens${NC}\n" "Subtotal" "$claude_total"
+
+    # 3. Global rules (already counted as global_tokens above)
+    echo ""
+    echo -e "${BLUE}Global Rules (~/.claude/rules/):${NC}"
+    local gr_total=0
+    if [ -d "$global_dir" ]; then
+      for f in "$global_dir"/*.md; do
+        [ -f "$f" ] || continue
+        local size
+        size=$(wc -c < "$f")
+        local tokens=$((size / 4))
+        gr_total=$((gr_total + tokens))
+        printf "  %-35s %6d tokens\n" "$(basename "$f")" "$tokens"
+      done
+    fi
+    printf "  ${BOLD}%-35s %6d tokens${NC}\n" "Subtotal" "$gr_total"
+
+    # 4. Auto Memory
+    echo ""
+    echo -e "${BLUE}Auto Memory:${NC}"
+    local memory_total=0
+    local mem_dir="$HOME/.claude/projects/-home-damools-business/memory"
+    if [ -d "$mem_dir" ]; then
+      for f in "$mem_dir"/*.md; do
+        [ -f "$f" ] || continue
+        local size
+        size=$(wc -c < "$f")
+        local tokens=$((size / 4))
+        memory_total=$((memory_total + tokens))
+        printf "  %-35s %6d tokens\n" "$(basename "$f")" "$tokens"
+      done
+    fi
+    printf "  ${BOLD}%-35s %6d tokens${NC}\n" "Subtotal" "$memory_total"
+
+    # 5. 합산
+    echo ""
+    local grand_total=$((rules_total + claude_total + gr_total + memory_total))
+    local pct=$((grand_total * 100 / 200000))
+    echo -e "${BOLD}=======================================${NC}"
+    printf "${BOLD}  Total Context at Session Start:  %6d tokens (%d%% of 200K)${NC}\n" "$grand_total" "$pct"
+    printf "${BOLD}  Remaining for work:             %6d tokens${NC}\n" "$((200000 - grand_total))"
+    echo -e "  ${YELLOW}Note: MCP tool definitions not measured (estimate +5-10K)${NC}"
 }
 
 # ─── SYNC ──────────────────────────────────────────────────────────────────
