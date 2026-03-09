@@ -7,9 +7,13 @@ allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 
 ## 수행 절차
 
-### 1. 최신 주간 리포트 읽기
+### 1. 최신 주간 리서치 파일 읽기
 
-`01-research/weekly/` 폴더에서 가장 최근 파일을 찾아 읽습니다.
+`01-research/weekly/` 폴더에서 동일 날짜의 2개 파일을 찾아 읽습니다:
+- `YYYY-MM-DD-tech-trends.md` (기술 뉴스)
+- `YYYY-MM-DD-biz-trends.md` (비즈니스 뉴스)
+
+가장 최근 날짜 기준으로 두 파일을 모두 읽습니다. 사업 아이템(s1-research.md)과 AI 분석 리포트는 뉴스레터에 포함하지 않습니다.
 
 ### 2. 내부용 뉴스레터 작성
 
