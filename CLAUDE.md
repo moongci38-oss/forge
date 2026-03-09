@@ -24,9 +24,9 @@
 
 | 프로젝트 | 경로 | 설명 |
 |---------|------|------|
-| **BUSINESS** | `Z:/home/damools/business/` | 비즈니스/기획 문서 (현재) |
-| **Portfolio** | `Z:/home/damools/mywsl_workspace/portfolio-project/` | Next.js + NestJS 웹 개발 |
-| **GODBLADE** | `E:/new_workspace/god_Sword/src/` | Unity 게임 프로젝트 (C#) |
+| **BUSINESS** | `./` | 비즈니스/기획 문서 (현재) |
+| **Portfolio** | `{YOUR_PORTFOLIO_PATH}` | Next.js + NestJS 웹 개발 |
+| **GODBLADE** | `{YOUR_GAME_PROJECT_PATH}` | Unity 게임 프로젝트 (C#) |
 
 ---
 

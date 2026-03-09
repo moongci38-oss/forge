@@ -60,3 +60,80 @@ scripts/weekly-report/.report-meta.json
 
 # yt-analyzer cache
 01-research/videos/cache/
+
+# ============================================
+# SIGIL Pipeline Outputs (PRIVATE)
+# Framework is PUBLIC, execution outputs are untracked
+# ============================================
+
+# 01-research: project-specific research outputs
+01-research/projects/*/
+!01-research/projects/.gitkeep
+01-research/competitors/
+01-research/market-data/
+01-research/trends/
+01-research/weekly/
+
+# 02-product: PRD/GDD/concept/roadmap outputs
+02-product/projects/*/
+!02-product/projects/.gitkeep
+02-product/business-plans/
+02-product/gtm-strategy/
+02-product/lean-canvas/
+02-product/pricing-models/
+02-product/product-specs/
+02-product/roadmap/
+
+# 03-marketing: campaign/SEO/ads outputs
+03-marketing/projects/*/
+!03-marketing/projects/.gitkeep
+03-marketing/ads/
+03-marketing/analytics/
+03-marketing/campaigns/
+03-marketing/email-sequences/
+03-marketing/seo/
+
+# 04-content: blog/newsletter/social outputs
+04-content/projects/*/
+!04-content/projects/.gitkeep
+04-content/blog-posts/
+04-content/docs/
+04-content/newsletters/
+04-content/social-media/
+
+# 05-design: design/brand/UI outputs
+05-design/projects/*/
+!05-design/projects/.gitkeep
+05-design/brand-assets/
+05-design/illustrations/
+05-design/portfolio/
+05-design/ui-mockups/
+
+# 10-operations: handoff/ops outputs
+10-operations/handoff-to-dev/*/
+10-operations/handoff-from-dev/*/
+10-operations/incidents/
+10-operations/metrics/
+10-operations/releases/
+10-operations/shared-assets/*/
+!10-operations/handoff-to-dev/README.md
+!10-operations/handoff-from-dev/README.md
+!10-operations/shared-assets/README.md
+
+# docs: project-specific planning/review/tech docs
+docs/planning/
+docs/reviews/
+docs/tech/
+docs/walkthroughs/
+docs/_archive/
+docs/assets/
+docs/infrastructure/
+
+# Per-user config & state
+sigil-workspace.json
+.claude/state/
+.claude/memory/
+
+# Generated images
+generated_imgs/
+.playwright-mcp/

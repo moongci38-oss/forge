@@ -1,0 +1,19 @@
+{
+  "$schema": "~/.claude/trine/schemas/sigil-workspace-schema.json",
+  "version": "1.0.0",
+  "name": "my-business",
+  "folderMap": {
+    "research": "01-research/projects",
+    "product": "02-product/projects",
+    "design": "05-design/projects",
+    "content": "04-content/projects",
+    "operations": "10-operations",
+    "templates": "09-tools/templates",
+    "handoff": "10-operations/handoff-to-dev"
+  },
+  "projects": {},
+  "defaults": {
+    "symlinkBase": "docs/planning/active/sigil",
+    "datePrefix": true
+  }
+}
