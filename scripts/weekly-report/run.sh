@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUSINESS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$SCRIPT_DIR/logs"
 LOG_FILE="$LOG_DIR/$(date +%Y-W%V).log"
-ALLOWED_TOOLS="WebSearch,WebFetch,Write,Read,Glob"
+ALLOWED_TOOLS="WebSearch,WebFetch,Write,Read,Glob,Grep,Agent"
 
 mkdir -p "$LOG_DIR"
 
@@ -27,7 +27,7 @@ cd "$BUSINESS_DIR"
 echo "=== Step 1: Weekly Report ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-claude -p "/weekly-report" \
+claude -p "/weekly-research $(date +%Y-%m-%d)" \
   --allowedTools "$ALLOWED_TOOLS" \
   2>&1 | tee -a "$LOG_FILE"
 
