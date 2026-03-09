@@ -7,6 +7,9 @@
 
 set -euo pipefail
 
+# cron 환경에서 claude CLI를 찾기 위해 PATH 확장
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:/usr/local/bin:$PATH"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUSINESS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$SCRIPT_DIR/logs"
