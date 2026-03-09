@@ -10,7 +10,7 @@
 
 1. **Project 스코프 MCP 서버** (`.mcp.json`) - ✅ 설치 완료
    - Filesystem
-   - Playwright
+   - ~~Playwright~~ → **Playwright CLI** (`@playwright/cli`) 전환 완료
    - Sequential Thinking
    - Memory
 
@@ -94,7 +94,7 @@ Claude Code 인터랙티브 세션에서:
 - context7 (user 스코프)
 - brave-search (user 스코프)
 - filesystem (project 스코프)
-- playwright (project 스코프)
+- playwright-cli (글로벌 npm 패키지, `playwright-cli --version`으로 확인)
 - sequential-thinking (project 스코프)
 - memory (project 스코프)
 
@@ -104,7 +104,7 @@ Claude Code 인터랙티브 세션에서:
 /context
 ```
 
-총 6개 서버, 도구 ~60-80개가 표시되어야 합니다.
+총 5개 MCP 서버 + playwright-cli가 표시되어야 합니다.
 
 ---
 

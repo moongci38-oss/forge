@@ -10,15 +10,6 @@
         "<YOUR_PORTFOLIO_PROJECT>"
       ]
     },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest",
-        "--headless",
-        "--browser",
-        "chromium"
-      ]
-    },
     "sequential-thinking": {
       "command": "npx",
       "args": [

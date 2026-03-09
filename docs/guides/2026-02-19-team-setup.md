@@ -141,7 +141,8 @@ claude mcp add --scope user brave-search -e BRAVE_API_KEY=$BRAVE_API_KEY -- npx 
 
 ```bash
 cd ~/business && claude
-# /mcp list → filesystem, playwright, sequential-thinking, memory, notion 확인
+# /mcp list → filesystem, sequential-thinking, memory, notion 확인
+# playwright-cli --version → CLI 버전 확인
 ```
 
 ```bash

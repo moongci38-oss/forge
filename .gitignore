@@ -46,8 +46,8 @@ __pycache__/
 # MCP config (팀원별 경로 상이)
 .mcp.json
 
-# MCP server temp files
-.playwright-mcp/
+# Playwright CLI temp files
+.playwright/
 
 # Local settings
 .claude/settings.local.json
@@ -57,3 +57,6 @@ scripts/weekly-report/.report-meta.json
 
 # Trine sync state (per-user)
 .claude/trine-sync-state.json
+
+# yt-analyzer cache
+01-research/videos/cache/

@@ -69,7 +69,7 @@
 |------|------|------|
 | filesystem | ✅ 수정 완료 | `Z:/`, `E:/` 경로 사용 |
 | memory | ✅ 정상 | |
-| playwright | ✅ 정상 | |
+| ~~playwright~~ | ❌ 제거됨 (CLI 전환) | playwright-cli 사용 |
 | sequential-thinking | ✅ 정상 | |
 
 ### User MCP (`~/.claude.json`)

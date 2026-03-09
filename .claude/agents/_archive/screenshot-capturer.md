@@ -1,9 +1,9 @@
 ---
 name: screenshot-capturer
 description: |
-  Automated UI screenshot capture using Playwright MCP.
+  Automated UI screenshot capture using Playwright CLI.
   Captures responsive screenshots (mobile, tablet, desktop) from running apps.
-tools: mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_resize, Read, Write
+tools: Bash, Read, Write
 model: haiku
 color: cyan
 ---
@@ -17,12 +17,12 @@ color: cyan
 - Tablet: 768x1024
 - Desktop: 1920x1080
 
-### Process
-1. Navigate to URL
-2. Wait for load (browser_wait_for)
-3. Resize viewport
-4. Take screenshot
-5. Save to file
+### Process (Playwright CLI)
+1. `playwright-cli open <url>` — Open browser and navigate
+2. `playwright-cli resize <width> <height>` — Set viewport
+3. `playwright-cli snapshot` — Capture accessibility snapshot (YAML)
+4. `playwright-cli screenshot` — Take screenshot
+5. Save to output folder
 
 ## Output Structure
 
@@ -40,6 +40,7 @@ color: cyan
 
 For each project:
 1. Start local dev server
-2. Capture all pages
-3. Stop server
-4. Move screenshots to output folder
+2. `playwright-cli open <url>`
+3. For each page × viewport: resize + screenshot
+4. `playwright-cli close`
+5. Move screenshots to output folder
