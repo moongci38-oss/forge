@@ -1,0 +1,602 @@
+[
+  {
+    "video_id": "VxEZ7-gxZCY",
+    "title": "Claude가 UI를 직접 만들어줍니다! Playground 플러그인 활용법",
+    "url": "https://youtu.be/VxEZ7-gxZCY",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-VxEZ7-gxZCY-analysis.md"
+    },
+    "tldr": "Anthropic 공식 Playground 플러그인은 Claude가 인터랙티브 UI를 직접 생성하고, 사용자의 시각적 조작을 자연어 프롬프트로 자동 변환하는 새로운 피드백 루프를 제공한다.",
+    "duration": "15:28",
+    "view_count": "3.8K",
+    "published": "2026-02-20",
+    "like_count": "96",
+    "comment_count": "1",
+    "has_followup": true
+  },
+  {
+    "video_id": "bFmSoBstVPY",
+    "title": "디자인 오류 90%를 해결한 방법",
+    "url": "https://youtu.be/bFmSoBstVPY",
+    "channel": "Tech Bridge",
+    "category": "tech/web",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 1,
+      "business": 3
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-bFmSoBstVPY-analysis.md"
+    },
+    "tldr": "Penpot Dev와 Claude Code를 MCP로 연결하고, 디자인 파일 변경 감지 시 자동 코드 동기화 스크립트를 구축하여 디자인-코드 핸드오프 오버헤드를 제거했다.",
+    "duration": "10:36",
+    "view_count": "902",
+    "published": "2026-03-02",
+    "like_count": "19",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "QKoSVY2T4ec",
+    "title": "이것으로 AI 디자인이 훨씬 좋아졌습니다",
+    "url": "https://youtu.be/QKoSVY2T4ec",
+    "channel": "Tech Bridge",
+    "category": "tech/web",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 1,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-QKoSVY2T4ec-analysis.md"
+    },
+    "tldr": "Penpot과 Claude Code를 MCP로 연결하여 디자인-코드 양방향 워크플로우를 구축하고, GSAP + Lenis 조합으로 스크롤 애니메이션을 추가한 실전 사례이다.",
+    "duration": "10:24",
+    "view_count": "245",
+    "published": "2026-03-01",
+    "like_count": "5",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "uBLcY01m-vI",
+    "title": "클로드 코드로 멋진 다이어그램을 만들어보세요 (전체 워크플로우)",
+    "url": "https://youtu.be/uBLcY01m-vI",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 2,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-uBLcY01m-vI-analysis.md"
+    },
+    "tldr": "Claude Code에 Excalidraw 스킬을 추가하면 텍스트 입력만으로 다이어그램을 자동 생성하고, PNG 렌더링을 통한 시각적 자기 검증 루프를 실행할 수 있다.",
+    "duration": "10:07",
+    "view_count": "1.2K",
+    "published": "2026-03-03",
+    "like_count": "38",
+    "comment_count": "1",
+    "has_followup": true
+  },
+  {
+    "video_id": "5OGGt0xiVD0",
+    "title": "CLAUDE.md가 AI 코딩을 망치고 있었습니다 (연구 결과)",
+    "url": "https://youtu.be/5OGGt0xiVD0",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 2,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-5OGGt0xiVD0-analysis.md"
+    },
+    "tldr": "AGENTS.md/CLAUDE.md 같은 컨텍스트 파일이 AI 코딩 에이전트 성능을 실제로 개선하지 않으며, LLM 자동 생성 컨텍스트는 오히려 성능 3% 저하 + 비용 20% 증가시킨다는 연구 결과.",
+    "duration": "30:31",
+    "view_count": "556",
+    "published": "2026-02-24",
+    "like_count": "10",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "-NkxSGtes7k",
+    "title": "Anthropic이 Claude Code Skills 2.0을 출시했습니다",
+    "url": "https://youtu.be/-NkxSGtes7k",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 3,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10--NkxSGtes7k-analysis.md"
+    },
+    "tldr": "Anthropic이 Claude Code Skills 2.0을 출시 — 스킬 크리에이터 플러그인으로 스킬 생성, A/B 벤치마크, 트리거 최적화를 자동화. 감사 스킬 기준 성공률 13.5% 향상.",
+    "duration": "12:58",
+    "view_count": "4.4K",
+    "published": "2026-03-05",
+    "like_count": "102",
+    "comment_count": "0",
+    "has_followup": true
+  },
+  {
+    "video_id": "7Hj9Khv_HU0",
+    "title": "하네스 엔지니어(Harness Engineer)란 무엇이고 왜 중요할까요?",
+    "url": "https://youtu.be/7Hj9Khv_HU0",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-7Hj9Khv_HU0-analysis.md"
+    },
+    "tldr": "AI 모델이 장기 실행 자율 작업을 수행할 준비가 되었으며, 하네스 엔지니어가 프롬프트 엔지니어에서 진화한 새로운 핵심 직능으로 부상하고 있다.",
+    "duration": "15:50",
+    "view_count": "1.7K",
+    "published": "2026-03-06",
+    "like_count": "39",
+    "comment_count": "2",
+    "has_followup": false
+  },
+  {
+    "video_id": "v7_4stI79Xs",
+    "title": "Claude Code + NotebookLM + Obsidian = 갓 모드입니다",
+    "url": "https://youtu.be/v7_4stI79Xs",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 2,
+      "godblade": 1,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-v7_4stI79Xs-analysis.md"
+    },
+    "tldr": "Claude Code에 Skill Creator + NotebookLM + Obsidian을 결합한 리서치 자동화 파이프라인. 슈퍼스킬로 단일 명령 실행 + Obsidian 볼트의 CLAUDE.md 자기진화 루프.",
+    "duration": "15:16",
+    "view_count": "4.6K",
+    "published": "2026-03-07",
+    "like_count": "160",
+    "comment_count": "3",
+    "has_followup": true
+  },
+  {
+    "video_id": "GaVoI5ZxV10",
+    "title": "Claude Code + Playwright = 놀라운 브라우저 자동화입니다",
+    "url": "https://youtu.be/GaVoI5ZxV10",
+    "channel": "Tech Bridge",
+    "category": "tech/web",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 2,
+      "business": 3
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-GaVoI5ZxV10-analysis.md"
+    },
+    "tldr": "Claude Code에 Playwright CLI를 연동하면 자연어 명령으로 병렬 브라우저 자동화와 UI 테스트 실행 가능. MCP 서버 대비 약 9만 토큰 절감.",
+    "duration": "14:25",
+    "view_count": "2.3K",
+    "published": "2026-03-08",
+    "like_count": "78",
+    "comment_count": "3",
+    "has_followup": false
+  },
+  {
+    "video_id": "3myLW6_-Lao",
+    "title": "Claude Code가 무적이 되었습니다 (Skills 2.0)",
+    "url": "https://youtu.be/3myLW6_-Lao",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-3myLW6_-Lao-analysis.md"
+    },
+    "tldr": "Skills 2.0의 스킬 실행 가시성 + 자동 벤치마크 테스트 기능. SEO, 인포그래픽, 콘텐츠 재활용, RAG DB, 경쟁 정보 수집 5가지 비즈니스 스킬 시연.",
+    "duration": "31:04",
+    "view_count": "3.1K",
+    "published": "2026-03-07",
+    "like_count": "64",
+    "comment_count": "0",
+    "has_followup": true
+  },
+  {
+    "video_id": "LsHgkoxLpMU",
+    "title": "Claude Code의 \"/loop\" 기능은 게임 체인저입니다",
+    "url": "https://youtu.be/LsHgkoxLpMU",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 3
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-LsHgkoxLpMU-analysis.md"
+    },
+    "tldr": "Claude Code /loop 기능으로 자연어 크론 작업 생성, 최대 3일 반복 자동화. /loop와 예약 작업(Scheduled Tasks)의 차이점 명확 설명.",
+    "duration": "8:57",
+    "view_count": "1.5K",
+    "published": "2026-03-08",
+    "like_count": "25",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "9R1bX7L-YFo",
+    "title": "Claude Code가 대규모 업그레이드를 받았습니다 (Agent Loops)",
+    "url": "https://youtu.be/9R1bX7L-YFo",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 3
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-9R1bX7L-YFo-analysis.md"
+    },
+    "tldr": "Agent Loop(/loop)는 세션 종속 + 최대 3일 제한. CLI /loop, Desktop /schedule, GitHub Actions 세 가지 방식의 차이와 용도별 선택 기준.",
+    "duration": "10:46",
+    "view_count": "2.1K",
+    "published": "2026-03-08",
+    "like_count": "27",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "vMW4coDKplw",
+    "title": "OpenClaw에서 꼭 써야 할 7가지 에이전트 도구입니다",
+    "url": "https://youtu.be/vMW4coDKplw",
+    "channel": "Tech Bridge",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 3,
+      "godblade": 2,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-vMW4coDKplw-analysis.md"
+    },
+    "tldr": "Claude Code 생태계의 보안/비용 문제를 해결하는 7가지 도구: CloakSec, HotBeat, AnthFarm, LanceDB Memory, UnBrowse, MoltWorker, OpenClaw Dashboard.",
+    "duration": "12:06",
+    "view_count": "268",
+    "published": "2026-03-08",
+    "like_count": "8",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "OzCE6CWaSVY",
+    "title": "Claude Code로 GTM 엔지니어링 시작하는 방법을 알려드립니다",
+    "url": "https://youtu.be/OzCE6CWaSVY",
+    "channel": "Tech Bridge",
+    "category": "business/marketing",
+    "relevance": {
+      "portfolio": 2,
+      "godblade": 1,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-OzCE6CWaSVY-analysis.md"
+    },
+    "tldr": "Claude Code를 GTM 엔지니어링 도구로 활용 — 키워드 리서치부터 블로그 작성, CMS 발행, 구글 서치 콘솔 성과 분석까지 전 사이클 자동화.",
+    "duration": "13:49",
+    "view_count": "384",
+    "published": "2026-03-09",
+    "like_count": "8",
+    "comment_count": "0",
+    "has_followup": false
+  },
+  {
+    "video_id": "OhD69NPmbyk",
+    "title": "클로드AI의 미친 기능을 소개합니다 | 이 기능 하나 때문에 클로드는 대체 불가입니다!",
+    "url": "https://youtu.be/OhD69NPmbyk",
+    "channel": "오은환의 하이라이트",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 3,
+      "godblade": 3,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-OhD69NPmbyk-analysis.md"
+    },
+    "tldr": "Claude의 Projects(프로젝트) 기능에 지침 문서를 축적하면, 기획서/제안서/비즈니스 이메일/블로그 글 쓰기를 맥락 없이도 일관된 품질로 자동 생성할 수 있다.",
+    "duration": "17:49",
+    "view_count": "100.9K",
+    "published": "2025-04-21",
+    "like_count": "2.8K",
+    "comment_count": "259",
+    "has_followup": false
+  },
+  {
+    "video_id": "Omm6T-Xnah0",
+    "title": "챗GPT보다 뛰어나다는 클로드 AI 사용후기 | 클로드3.5 소넷 미친 신기능 4가지",
+    "url": "https://youtu.be/Omm6T-Xnah0",
+    "channel": "유튜브신쌤",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 2,
+      "godblade": 1,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-Omm6T-Xnah0-analysis.md"
+    },
+    "tldr": "Claude 3.5 Sonnet의 4가지 신기능(Computer Use, 개선된 데이터 분석, LaTeX 렌더링, 시각적 PDF 분석)을 한국어 사용자 관점에서 실제 데모와 함께 소개한다.",
+    "duration": "5:14",
+    "view_count": "49.3K",
+    "published": "2024-11-10",
+    "like_count": "627",
+    "comment_count": "49",
+    "has_followup": false
+  },
+  {
+    "video_id": "fkqXQOjj8cA",
+    "title": "MCP써야 진짜 Claude다! 500% 활용 튜토리얼 (개념부터 활용까지)",
+    "url": "https://youtu.be/fkqXQOjj8cA",
+    "channel": "시민개발자 구씨",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 3,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-fkqXQOjj8cA-analysis.md"
+    },
+    "tldr": "MCP(Model Context Protocol)는 AI가 외부 서비스와 표준화된 방식으로 소통하게 해주는 프로토콜로, JSON 설정 파일에 서버 코드 한 줄만 붙여넣으면 Claude Desktop에서 다양한 서비스를 즉시 연동할 수 있다.",
+    "duration": "26:05",
+    "view_count": "166.9K",
+    "published": "2025-04-05",
+    "like_count": "4.1K",
+    "comment_count": "320",
+    "has_followup": false
+  },
+  {
+    "video_id": "nfPXfsVz6jM",
+    "title": "검색 못하던 클로드가 MCP 달더니 별의별 걸 다 하는 모습 공개 (프롬프트 엔지니어 강수진 박사)",
+    "url": "https://youtu.be/nfPXfsVz6jM",
+    "channel": "티타임즈TV",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 3,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-nfPXfsVz6jM-analysis.md"
+    },
+    "tldr": "MCP(Model Context Protocol)는 AI 모델이 Slack, Gmail, Jira 등 외부 서비스에 연결하는 USB-C 같은 표준 인터페이스로, Claude Desktop에 Firecrawl MCP를 연결하면 웹 크롤링·실시간 검색·슬랙 연동이 가능해진다.",
+    "duration": "20:15",
+    "view_count": "23.0K",
+    "published": "2025-05-03",
+    "like_count": "449",
+    "comment_count": "19",
+    "has_followup": false
+  },
+  {
+    "video_id": "Ek_I0iFyyZU",
+    "title": "이 영상 하나만 보시면 됩니다. | 모든 Claude Code 세팅, 효과적인 워크플로우, 추천하는 서비스들",
+    "url": "https://youtu.be/Ek_I0iFyyZU",
+    "channel": "개발동생",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 2,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-Ek_I0iFyyZU-analysis.md"
+    },
+    "tldr": "Claude Code의 초기 설정부터 MCP 연동, Sub-agents 병렬 처리, Hooks 자동화까지 실무에서 바로 적용 가능한 워크플로우를 시연 기반으로 상세히 소개한다.",
+    "duration": "30:13",
+    "view_count": "56.1K",
+    "published": "2025-08-16",
+    "like_count": "1.4K",
+    "comment_count": "61",
+    "has_followup": false
+  },
+  {
+    "video_id": "r54WCz3XQlw",
+    "title": "[무편집] 커서(Cursor)를 완전히 넘어선, 클로드 코드의 충격적 성능 같이 알아봅시다.",
+    "url": "https://youtu.be/r54WCz3XQlw",
+    "channel": "커리어해커 알렉스",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 4,
+      "godblade": 2,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-r54WCz3XQlw-analysis.md"
+    },
+    "tldr": "Claude Code가 Cursor를 넘어선 이유를 무편집 라이브로 소개. CLI 기반 자율 코딩 에이전트의 핵심 강점인 컨텍스트 관리, 서브 에이전트 시스템, 스킬/플러그인 생태계를 설명한다.",
+    "duration": "29:09",
+    "view_count": "30.1K",
+    "published": "2026-01-13",
+    "like_count": "614",
+    "comment_count": "58",
+    "has_followup": false
+  },
+  {
+    "video_id": "yynmJ4nS_Kc",
+    "title": "클로드 코드 이렇게 쓰세요. 슈바(슈퍼 바이브코딩)",
+    "url": "https://youtu.be/yynmJ4nS_Kc",
+    "channel": "퀀텀점프클럽",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 3,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": false,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-yynmJ4nS_Kc-analysis.md"
+    },
+    "tldr": "Claude Code를 제대로 쓰려면 CLAUDE.md/spec.md/prompt_plan.md 3종 문서를 먼저 만든 뒤 Claude(PM)가 Claude Code(개발자)에게 명령하는 메타바이브 코딩 구조로 운영해야 한다.",
+    "duration": "20:06",
+    "view_count": "3.0K",
+    "published": "2026-01-15",
+    "like_count": "73",
+    "comment_count": "3",
+    "has_followup": false
+  },
+  {
+    "video_id": "9aS--Zs5ILA",
+    "title": "n8n 노가다 끝: 클로드로 워크플로우 자동 생성하는 '8단계 프롬프트 + MCP 세팅' (성공률 10배)",
+    "url": "https://youtu.be/9aS--Zs5ILA",
+    "channel": "언베일퍼스낼리티",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 1,
+      "godblade": 1,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-9aS--Zs5ILA-analysis.md"
+    },
+    "tldr": "Claude Desktop 또는 Claude Code에 4개의 MCP 서버(Context7, n8n MCP, n8n Skills, n8n Workflows)와 8단계 프롬프트 가이드를 세팅하면 말 한마디로 n8n 워크플로우를 자동 생성할 수 있다.",
+    "duration": "18:49",
+    "view_count": "6.2K",
+    "published": "2026-01-28",
+    "like_count": "173",
+    "comment_count": "16",
+    "has_followup": true
+  },
+  {
+    "video_id": "QUFJgtGPk-o",
+    "title": "n8n의 종말? 에이전틱 워크플로우와 n8n의 차이를 알아보자",
+    "url": "https://youtu.be/QUFJgtGPk-o",
+    "channel": "퀀텀점프클럽",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 2,
+      "godblade": 1,
+      "business": 5
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-QUFJgtGPk-o-analysis.md"
+    },
+    "tldr": "n8n(규칙 기반 자동화)과 Claude Code(에이전틱 AI)는 경쟁 관계가 아니라 상호보완적 도구이며, n8n이 오케스트레이션을 맡고 Claude Code가 창의적·맥락적 작업을 담당하는 조합이 1인 기업 자동화의 현실적 해법이다.",
+    "duration": "6:38",
+    "view_count": "5.7K",
+    "published": "2026-01-25",
+    "like_count": "52",
+    "comment_count": "7",
+    "has_followup": false
+  },
+  {
+    "video_id": "u4_AcW96_78",
+    "title": "Claude Code 신기능 Subagents | 멀티 에이전트 + Playwright MCP",
+    "url": "https://youtu.be/u4_AcW96_78",
+    "channel": "개발동생",
+    "category": "tech/ai",
+    "relevance": {
+      "portfolio": 5,
+      "godblade": 2,
+      "business": 4
+    },
+    "status": "analyzed",
+    "has_comparison": true,
+    "analyzed_at": "2026-03-10",
+    "files": {
+      "analysis": "01-research/videos/analyses/2026-03-10-u4_AcW96_78-analysis.md"
+    },
+    "tldr": "Claude Code의 서브에이전트 기능을 활용해 E2E 테스트 자동화 멀티 워크플로우를 구축하는 방법을 시연. 시나리오 분석 에이전트와 테스트 코드 작성 에이전트를 병렬로 실행하여 Playwright MCP와 연동한다.",
+    "duration": "20:00",
+    "view_count": "12.4K",
+    "published": "2025-08-11",
+    "like_count": "248",
+    "comment_count": "18",
+    "has_followup": false
+  }
+]

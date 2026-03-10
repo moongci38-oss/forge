@@ -16,12 +16,24 @@ from config import YOUTUBE_API_KEY
 
 
 def get_metadata(video_id: str) -> dict:
-    """영상 메타데이터 추출 (캐시 → oembed)"""
+    """영상 메타데이터 추출 (캐시 → oembed → API → HTML 스크래핑)"""
     cached = cache.get(video_id, "metadata")
     if cached:
         return cached
 
     meta = _fetch_oembed(video_id)
+
+    # API로 정확한 메타데이터 보강 (published, duration, view_count)
+    if YOUTUBE_API_KEY:
+        api_meta = get_video_details(video_id)
+        if api_meta:
+            if not meta:
+                meta = api_meta
+            else:
+                for k, v in api_meta.items():
+                    if v and not meta.get(k):
+                        meta[k] = v
+
     if meta:
         cache.put(video_id, meta, "metadata")
 
@@ -73,6 +85,119 @@ def _api_request(endpoint: str, params: dict) -> dict:
         # 일반 예외에서도 키 노출 방지
         msg = str(e).replace(YOUTUBE_API_KEY, "***") if YOUTUBE_API_KEY else str(e)
         raise RuntimeError(f"YouTube API request failed: {msg}") from None
+
+
+def _parse_iso8601_duration(iso_duration: str) -> str:
+    """ISO 8601 duration (PT1H2M3S) → 사람이 읽기 쉬운 형식 (1:02:03)"""
+    match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", iso_duration or "")
+    if not match:
+        return ""
+    h = int(match.group(1) or 0)
+    m = int(match.group(2) or 0)
+    s = int(match.group(3) or 0)
+    if h > 0:
+        return f"{h}:{m:02d}:{s:02d}"
+    return f"{m}:{s:02d}"
+
+
+def _format_view_count(count: int) -> str:
+    """조회수를 읽기 쉬운 형식으로 변환"""
+    if count >= 1_000_000:
+        return f"{count/1_000_000:.1f}M"
+    elif count >= 1_000:
+        return f"{count/1_000:.1f}K"
+    return str(count)
+
+
+def get_video_details(video_id: str) -> Optional[dict]:
+    """YouTube Data API v3 videos.list로 정확한 메타데이터 추출
+
+    Returns: {"published": str, "duration": str, "view_count": str,
+              "like_count": str, "comment_count": str} or None
+    """
+    if not YOUTUBE_API_KEY:
+        return None
+
+    try:
+        data = _api_request("videos", {
+            "part": "snippet,contentDetails,statistics",
+            "id": video_id,
+        })
+    except RuntimeError as e:
+        print(f"API error for video details {video_id}: {e}")
+        return None
+
+    items = data.get("items", [])
+    if not items:
+        return None
+
+    item = items[0]
+    snippet = item.get("snippet", {})
+    content = item.get("contentDetails", {})
+    stats = item.get("statistics", {})
+
+    view_count_raw = int(stats.get("viewCount", 0))
+    like_count_raw = int(stats.get("likeCount", 0))
+    comment_count_raw = int(stats.get("commentCount", 0))
+
+    return {
+        "published": snippet.get("publishedAt", "")[:10],
+        "duration": _parse_iso8601_duration(content.get("duration", "")),
+        "view_count": _format_view_count(view_count_raw),
+        "view_count_raw": view_count_raw,
+        "like_count": _format_view_count(like_count_raw),
+        "like_count_raw": like_count_raw,
+        "comment_count": _format_view_count(comment_count_raw),
+        "comment_count_raw": comment_count_raw,
+        "tags": snippet.get("tags", []),
+        "description": snippet.get("description", "")[:500],
+    }
+
+
+def get_video_details_batch(video_ids: list[str]) -> dict[str, dict]:
+    """여러 영상의 메타데이터를 한 번에 조회 (최대 50개씩)
+
+    Returns: {video_id: details_dict, ...}
+    """
+    if not YOUTUBE_API_KEY:
+        return {}
+
+    results = {}
+    for i in range(0, len(video_ids), 50):
+        batch = video_ids[i:i+50]
+        try:
+            data = _api_request("videos", {
+                "part": "snippet,contentDetails,statistics",
+                "id": ",".join(batch),
+            })
+        except RuntimeError as e:
+            print(f"Batch API error: {e}")
+            continue
+
+        for item in data.get("items", []):
+            vid = item.get("id", "")
+            snippet = item.get("snippet", {})
+            content = item.get("contentDetails", {})
+            stats = item.get("statistics", {})
+
+            view_count_raw = int(stats.get("viewCount", 0))
+            like_count_raw = int(stats.get("likeCount", 0))
+            comment_count_raw = int(stats.get("commentCount", 0))
+
+            results[vid] = {
+                "published": snippet.get("publishedAt", "")[:10],
+                "duration": _parse_iso8601_duration(content.get("duration", "")),
+                "view_count": _format_view_count(view_count_raw),
+                "view_count_raw": view_count_raw,
+                "like_count": _format_view_count(like_count_raw),
+                "like_count_raw": like_count_raw,
+                "comment_count": _format_view_count(comment_count_raw),
+                "comment_count_raw": comment_count_raw,
+                "tags": snippet.get("tags", []),
+                "description": snippet.get("description", "")[:500],
+            }
+
+    return results
 
 
 def search_videos(query: str, limit: int = 10) -> list[dict]:
