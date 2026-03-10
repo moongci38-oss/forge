@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
-  "buildDate": "2026-03-02",
+  "buildDate": "2026-03-09",
   "stats": {
     "totalRules": 16,
     "byScope": {
-      "always": 6,
-      "cowork": 2,
-      "sigil": 9,
+      "always": 7,
+      "cowork": 3,
+      "sigil": 8,
       "trine": 1
     },
     "byImpact": {
@@ -14,9 +14,31 @@
       "HIGH": 8,
       "CRITICAL": 2
     },
-    "totalTokens": 10057
+    "totalTokens": 15717
   },
   "rules": [
+    {
+      "id": "cowork-environment",
+      "title": "Cowork 환경 매핑",
+      "file": "09-tools/rules-source/always/cowork-environment.md",
+      "impact": "MEDIUM",
+      "scope": [
+        "always",
+        "cowork"
+      ],
+      "tags": [
+        "cowork",
+        "mcp",
+        "hooks",
+        "environment"
+      ],
+      "requires": [],
+      "audience": "non-dev",
+      "tokens": 311,
+      "doCount": 2,
+      "dontCount": 2,
+      "aiRuleCount": 0
+    },
     {
       "id": "file-naming",
       "title": "파일명 규칙",
@@ -93,9 +115,9 @@
       ],
       "requires": [],
       "audience": "all",
-      "tokens": 260,
-      "doCount": 0,
-      "dontCount": 0,
+      "tokens": 1141,
+      "doCount": 3,
+      "dontCount": 4,
       "aiRuleCount": 0
     },
     {
@@ -115,9 +137,9 @@
         "security-rules"
       ],
       "audience": "non-dev",
-      "tokens": 358,
-      "doCount": 0,
-      "dontCount": 0,
+      "tokens": 883,
+      "doCount": 3,
+      "dontCount": 3,
       "aiRuleCount": 0
     },
     {
@@ -135,9 +157,9 @@
       ],
       "requires": [],
       "audience": "dev",
-      "tokens": 812,
-      "doCount": 0,
-      "dontCount": 0,
+      "tokens": 1224,
+      "doCount": 4,
+      "dontCount": 3,
       "aiRuleCount": 0
     },
     {
@@ -155,29 +177,7 @@
       ],
       "requires": [],
       "audience": "dev",
-      "tokens": 575,
-      "doCount": 0,
-      "dontCount": 0,
-      "aiRuleCount": 0
-    },
-    {
-      "id": "sigil-council-mode",
-      "title": "Agent Council 모드",
-      "file": "09-tools/rules-source/sigil/sigil-council-mode.md",
-      "impact": "MEDIUM",
-      "scope": [
-        "sigil"
-      ],
-      "tags": [
-        "pipeline",
-        "council",
-        "tournament"
-      ],
-      "requires": [
-        "sigil-structure"
-      ],
-      "audience": "all",
-      "tokens": 404,
+      "tokens": 584,
       "doCount": 0,
       "dontCount": 0,
       "aiRuleCount": 0
@@ -201,9 +201,9 @@
         "sigil-structure"
       ],
       "audience": "all",
-      "tokens": 1151,
-      "doCount": 4,
-      "dontCount": 3,
+      "tokens": 1402,
+      "doCount": 5,
+      "dontCount": 2,
       "aiRuleCount": 0
     },
     {
@@ -224,7 +224,7 @@
         "sigil-structure"
       ],
       "audience": "all",
-      "tokens": 1036,
+      "tokens": 795,
       "doCount": 0,
       "dontCount": 0,
       "aiRuleCount": 0
@@ -246,7 +246,7 @@
         "sigil-structure"
       ],
       "audience": "all",
-      "tokens": 429,
+      "tokens": 496,
       "doCount": 3,
       "dontCount": 3,
       "aiRuleCount": 0
@@ -269,7 +269,7 @@
         "sigil-structure"
       ],
       "audience": "all",
-      "tokens": 592,
+      "tokens": 560,
       "doCount": 3,
       "dontCount": 3,
       "aiRuleCount": 0
@@ -293,9 +293,9 @@
         "sigil-structure"
       ],
       "audience": "all",
-      "tokens": 526,
-      "doCount": 3,
-      "dontCount": 3,
+      "tokens": 2159,
+      "doCount": 7,
+      "dontCount": 5,
       "aiRuleCount": 0
     },
     {
@@ -317,8 +317,8 @@
         "sigil-s3-design"
       ],
       "audience": "all",
-      "tokens": 1100,
-      "doCount": 4,
+      "tokens": 1673,
+      "doCount": 3,
       "dontCount": 3,
       "aiRuleCount": 0
     },
@@ -337,7 +337,7 @@
       ],
       "requires": [],
       "audience": "all",
-      "tokens": 830,
+      "tokens": 903,
       "doCount": 3,
       "dontCount": 3,
       "aiRuleCount": 0
@@ -360,9 +360,9 @@
         "sigil-s4-planning"
       ],
       "audience": "dev",
-      "tokens": 612,
-      "doCount": 0,
-      "dontCount": 0,
+      "tokens": 2214,
+      "doCount": 6,
+      "dontCount": 9,
       "aiRuleCount": 0
     }
   ]

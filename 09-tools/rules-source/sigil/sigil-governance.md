@@ -90,7 +90,7 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 | S1 | AI-augmented Research, JTBD, Competitive Intelligence, Evidence-Based Mgmt | SOAR, PESTLE |
 | S2 | Pretotyping, Mom Test, Lean Validation, TAM/SAM/SOM, OKR | OST, PR/FAQ |
 | S3 | Shape Up Pitch, User Story Mapping, Modern PRD | Outcome-based Roadmap, Event Storming |
-| S4 | Now/Next/Later, RICE/ICE, Agile WBS, C4 Model, ADR | WSJF |
+| S4 | Now/Next/Later, RICE/ICE, C4 Model, ADR | WSJF |
 | 거버넌스 | Stage-Gate, Go/No-Go, DACI, Double Diamond | Pre-mortem |
 | 관리 | Personal Kanban, Decision Log | — |
 

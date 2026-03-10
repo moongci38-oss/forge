@@ -1,6 +1,30 @@
 {
   "testCases": [
     {
+      "ruleId": "cowork-environment",
+      "type": "do",
+      "description": "Cowork에서 2개 이상 독립 작업 발견 시 Task 도구 병렬 호출",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-environment",
+      "type": "do",
+      "description": "Cowork 보안 규칙(cowork-safety) 준수",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-environment",
+      "type": "dont",
+      "description": "Cowork에서 프로덕션 변경 작업 수행",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-environment",
+      "type": "dont",
+      "description": "bash hooks 실행 가정 (Cowork에서는 규칙 기반 대체)",
+      "verifiable": true
+    },
+    {
       "ruleId": "git-rules",
       "type": "do",
       "description": "Conventional Commits 형식으로 커밋 메시지를 작성한다",
@@ -67,6 +91,132 @@
       "verifiable": true
     },
     {
+      "ruleId": "security-rules",
+      "type": "do",
+      "description": "`.gitignore`에 `.env`, `credentials.json`, `secrets/`, `06-finance/`, `07-legal/` 경로를 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "do",
+      "description": "API 키와 토큰은 환경변수로만 관리한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "do",
+      "description": "06-08 폴더 내 파일 접근 요청 시 즉시 거부하고 이유를 안내한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "dont",
+      "description": "`.env`, `credentials.json` 등 민감 파일을 커밋하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "dont",
+      "description": "코드에 API 키, 토큰, 패스워드를 하드코딩하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "dont",
+      "description": "로그 파일에 민감 정보를 포함하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "security-rules",
+      "type": "dont",
+      "description": "`~/.claude/.mcp.json`에 MCP 서버를 설정하지 않는다 (Claude Code 미인식 경로)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "do",
+      "description": "민감 파일 경로(`06-finance/`, `07-legal/`, `08-admin/insurance/`, `08-admin/freelancers/`) 접근 요청 시 즉시 거부한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "do",
+      "description": "새 문서 파일명에 `YYYY-MM-DD-` 날짜 prefix를 적용한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "do",
+      "description": "main/master 브랜치 대상 force push 요청 시 거부한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "dont",
+      "description": "Cowork 환경에서 프로덕션 변경 작업(DB 마이그레이션, 배포 등)을 수행하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "dont",
+      "description": "bash hooks가 실행된다고 가정하지 않는다 (Cowork에서는 규칙 기반으로만 보호)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "cowork-safety",
+      "type": "dont",
+      "description": "민감 영역 파일을 요청해도 내용을 출력하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "do",
+      "description": "병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "do",
+      "description": "태스크 시작 전 파일 소유권을 반드시 선언한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "do",
+      "description": "의존성 없는 태스크만 동시 스폰한다 (Wave 기반)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "do",
+      "description": "모델 계층화를 적용한다 (Opus/Sonnet/Haiku)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "dont",
+      "description": "파일 소유권 선언 없이 병렬 작업을 시작하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "dont",
+      "description": "의존성 있는 태스크를 동시 스폰하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "agent-teams",
+      "type": "dont",
+      "description": "공유 파일(CLAUDE.md, settings.*)을 Teammate이 수정하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-governance",
+      "type": "do",
+      "description": "시각적 탐색이 필요한 기획 단계에서 Playground 활용을 검토한다",
+      "verifiable": true
+    },
+    {
       "ruleId": "sigil-governance",
       "type": "do",
       "description": "Stage별 DoD 체크리스트를 게이트 판단 전 확인한다",
@@ -88,12 +238,6 @@
       "ruleId": "sigil-governance",
       "type": "do",
       "description": "모델 계층화(Opus/Sonnet/Haiku)를 작업 성격에 맞게 적용한다",
-      "verifiable": true
-    },
-    {
-      "ruleId": "sigil-governance",
-      "type": "dont",
-      "description": "Agent Council 모드를 Human 명시 선택 없이 활성화하지 않는다",
       "verifiable": true
     },
     {
@@ -123,7 +267,7 @@
     {
       "ruleId": "sigil-s1-research",
       "type": "do",
-      "description": "산출물을 `01-research/projects/{project}/` 하위에 저장한다",
+      "description": "산출물을 `{folderMap.research}/{project}/` 하위에 저장한다",
       "verifiable": true
     },
     {
@@ -159,7 +303,7 @@
     {
       "ruleId": "sigil-s2-concept",
       "type": "do",
-      "description": "개발 트랙은 `02-product/projects/{project}/`에, 콘텐츠 트랙은 `04-content/projects/{project}/`에 산출물을 저장한다",
+      "description": "산출물은 `{folderMap.product}/{project}/`에 저장한다",
       "verifiable": true
     },
     {
@@ -183,7 +327,7 @@
     {
       "ruleId": "sigil-s3-design",
       "type": "do",
-      "description": "개발 트랙 S3 기획서는 **.md + .pptx** 모두 생성한다",
+      "description": "S3 기획서는 **.md + .pptx** 모두 생성한다",
       "verifiable": true
     },
     {
@@ -200,8 +344,32 @@
     },
     {
       "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": ".md 기획서에 Mermaid 다이어그램, 비교 테이블, 수치 그래프를 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": ".pptx에 NanoBanana 배경/일러스트, 차트(BAR/PIE/LINE), 플로우 다이어그램을 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": "수치 데이터(시장 규모, 확률, 경제 설계 등)는 반드시 차트/그래프로 시각화한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "do",
+      "description": "앱/웹 프로젝트는 Stitch로 핵심 화면 UI 목업을 생성하여 기획서에 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
       "type": "dont",
-      "description": "개발 트랙에서 .pptx 없이 기획서 승인을 진행하지 않는다",
+      "description": ".pptx 없이 기획서 승인을 진행하지 않는다",
       "verifiable": true
     },
     {
@@ -217,6 +385,18 @@
       "verifiable": true
     },
     {
+      "ruleId": "sigil-s3-design",
+      "type": "dont",
+      "description": "텍스트와 테이블만으로 구성된 기획서를 완성으로 간주하지 않는다 (다이어그램/차트 필수)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "sigil-s3-design",
+      "type": "dont",
+      "description": "PPT 슬라이드를 텍스트+불릿으로만 채우지 않는다 (매 슬라이드에 시각 요소 필수)",
+      "verifiable": true
+    },
+    {
       "ruleId": "sigil-s4-planning",
       "type": "do",
       "description": "S3 기획서에 관리자 기능이 포함되면 S4 모든 산출물에 관리자 섹션을 반영한다",
@@ -225,19 +405,13 @@
     {
       "ruleId": "sigil-s4-planning",
       "type": "do",
-      "description": "개발 트랙 S4 완료 후 Trine Handoff 문서를 자동 생성하고 진입을 안내한다",
+      "description": "S4 완료 후 Trine Handoff 문서를 자동 생성하고 진입을 안내한다",
       "verifiable": true
     },
     {
       "ruleId": "sigil-s4-planning",
       "type": "do",
-      "description": "콘텐츠 트랙 S4 완료 후 제작 체크리스트를 제공한다",
-      "verifiable": true
-    },
-    {
-      "ruleId": "sigil-s4-planning",
-      "type": "do",
-      "description": "필수 산출물 7종을 모두 작성한다",
+      "description": "필수 산출물 4종을 모두 작성한다",
       "verifiable": true
     },
     {
@@ -249,7 +423,7 @@
     {
       "ruleId": "sigil-s4-planning",
       "type": "dont",
-      "description": "필수 산출물 7종 중 하나라도 빠진 상태로 게이트를 통과하지 않는다",
+      "description": "필수 산출물 4종 중 하나라도 빠진 상태로 게이트를 통과하지 않는다",
       "verifiable": true
     },
     {
@@ -292,6 +466,96 @@
       "ruleId": "sigil-structure",
       "type": "dont",
       "description": "S3에 관리자 페이지가 포함되었는데 S4에서 누락하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "S4 Gate PASS 후 Handoff 문서를 자동 생성한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "산출물 인덱스에 모든 S4 산출물 경로를 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "S3에 관리자 기능이 포함된 경우 관리자 산출물도 Handoff에 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "Handoff 문서에 Todo Tracker 경로를 포함한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "Handoff 단계에서 개발 프로젝트에 전체 SIGIL 산출물 symlink를 생성한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "do",
+      "description": "기획서/개발계획서 수정은 반드시 SIGIL 워크스페이스에서 SIGIL 파이프라인을 통해 수행한다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "Handoff 문서 미생성으로 Trine에 진입하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "산출물 인덱스에 누락이 있는 상태로 Handoff를 완료하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "Todo Tracker 미생성 상태로 Trine에 진입하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "개발 프로젝트에서 기획/계획 문서 원본을 직접 수정하지 않는다 (symlink이므로 SIGIL 워크스페이스에서 수정)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "symlink 없이 문서를 복사하여 개발 프로젝트에 배치하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "`sigil-workspace.json` 없이 경로를 하드코딩하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "symlinkBase를 도메인 없이 sigil/ 루트로 설정하지 않는다",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "todo.md를 도메인 하위에 생성하지 않는다 (sigil/ 루트에 통합)",
+      "verifiable": true
+    },
+    {
+      "ruleId": "trine-handoff",
+      "type": "dont",
+      "description": "todo.md를 symlink으로 생성하지 않는다 (실제 파일 필수)",
       "verifiable": true
     }
   ]

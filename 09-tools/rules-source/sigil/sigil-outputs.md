@@ -34,7 +34,7 @@ enforcement: flexible
 | 관리자 UI/UX 기획서 | `design` | `{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` |
 | 테스트 전략서 | `product` | `{project}/YYYY-MM-DD-s4-test-strategy.md` |
 | 게이트 로그 | `product` | `{project}/gate-log.md` |
-| Todo | `product` | `{project}/YYYY-MM-DD-todo.md` |
+| Todo | `product` | `todo.md` |
 | Handoff 문서 | `handoff` | `{target-project}/YYYY-MM-DD-sigil-handoff.md` |
 
 ## 템플릿
