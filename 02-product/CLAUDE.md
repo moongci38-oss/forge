@@ -11,7 +11,7 @@
 |:-----:|-------------|----------|
 | S2 | 컨셉 문서 저장 (`projects/{project}/YYYY-MM-DD-s2-concept.md`) | sigil-compiled §S2 |
 | S3 | PRD/GDD 저장 (`projects/{project}/YYYY-MM-DD-s3-prd.md`) | sigil-compiled §S3 |
-| S4 | 기획 패키지 4종 저장 (`projects/{project}/YYYY-MM-DD-s4-*.md`) | sigil-compiled §S4 |
+| S4 | 기획 패키지 3종 저장 (`projects/{project}/YYYY-MM-DD-s4-*.md`) | sigil-compiled §S4 |
 
 > 파이프라인 규칙, DoD, Gate 프로세스는 `.claude/rules/sigil-compiled.md`에 정의됨 — 여기서 재설명하지 않는다.
 

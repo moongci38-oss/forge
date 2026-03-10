@@ -161,11 +161,13 @@ case $STAGE in
 
   S4|s4)
     echo "[S4 DoD Checks]"
-    # 4대 필수 산출물
+    # 3대 필수 산출물
     check_file "상세 기획서" "*s4-detailed-plan*.md" "$PROJECT_PRODUCT"
     check_file "개발 계획" "*s4-development-plan*.md" "$PROJECT_PRODUCT"
     check_file "UI/UX 기획서" "*s4-uiux*.md" "$PROJECT_DESIGN"
-    check_file "테스트 전략서" "*s4-test-strategy*.md" "$PROJECT_PRODUCT"
+
+    # 개발 계획 내 테스트 전략 섹션 존재 확인
+    check_grep "테스트 전략 섹션" "테스트 전략\|테스트 계층\|커버리지 목표" "$PROJECT_PRODUCT" "*s4-development-plan*.md"
 
     # Wave 리포트
     check_file "Wave 2 트레이서빌리티 리포트" "*wave2-verification*.md" "$PROJECT_PRODUCT"

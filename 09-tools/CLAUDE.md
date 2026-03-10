@@ -93,7 +93,7 @@ bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
 
 ---
 
-## Agent Teams
+## 병렬 실행 에이전트
 
 - **pipeline-orchestrator** ✅ — SIGIL S1-S4 파이프라인 오케스트레이션
 - **technical-writer** ✅ — 프로세스 문서화

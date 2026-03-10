@@ -20,7 +20,7 @@ claude plugin install marketing@knowledge-work-plugins --scope project
 
 ---
 
-## Agent Teams
+## 병렬 실행 에이전트
 
 - **ux-researcher** ✅ — UX 분석 및 개선 제안
 - **screenshot-capturer** ✅ — Playwright 기반 자동 캡처

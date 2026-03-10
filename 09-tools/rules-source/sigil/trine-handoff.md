@@ -28,7 +28,7 @@ enforcement: rigid
 Trine 진입은 아래 **모든 조건**을 충족해야 한다:
 
 1. SIGIL S4 Gate가 `PASS`로 기록됨 (`gate-log.md`)
-2. S4 필수 산출물 4종이 존재함
+2. S4 필수 산출물 3종이 존재함
 3. Todo Tracker가 존재함 (`{folderMap.product}/todo.md`)
 
 ## Handoff 문서 구조
@@ -46,9 +46,8 @@ S4 완료 시 자동 생성하는 Handoff 문서:
 | S1 리서치 | Phase 1 | 프로젝트 컨텍스트 이해 |
 | S3 기획서 (PRD/GDD) | Phase 1.5 요구사항 분석 | 기능/비기능 요구사항 추출 |
 | S4 상세 기획서 | Phase 2 Spec 작성 | 화면별 동작, 데이터 흐름, 사이트맵(페이지 계층/네비게이션) 참조 |
-| S4 개발 계획 | Phase 1 세션 이해 | 기술 스택, ADR, 세션 로드맵, 로드맵(Now/Next/Later), WBS(태스크 분해/규모) |
+| S4 개발 계획 | Phase 1 세션 이해 + Phase 3 Check | 기술 스택, ADR, 세션 로드맵, WBS + 테스트 전략(피라미드/커버리지/도구) |
 | S4 UI/UX 기획서 | Phase 2 Spec UI 섹션 | 와이어프레임, 인터랙션 참조 |
-| S4 테스트 전략서 | Phase 3 Check | 테스트 계층, 도구, 커버리지 목표 |
 
 ## 프로젝트 유형별 Trine 대상
 
@@ -77,7 +76,6 @@ S4 완료 시 자동 생성하는 Handoff 문서:
 | `s4-detailed-plan.md` | `{folderMap.product}/{project}/YYYY-MM-DD-s4-detailed-plan.md` |
 | `s4-development-plan.md` | `{folderMap.product}/{project}/YYYY-MM-DD-s4-development-plan.md` |
 | `s4-uiux-spec.md` | `{folderMap.design}/{project}/YYYY-MM-DD-s4-uiux-spec.md` |
-| `s4-test-strategy.md` | `{folderMap.product}/{project}/YYYY-MM-DD-s4-test-strategy.md` |
 | `gate-log.md` | `{folderMap.product}/{project}/gate-log.md` |
 | 관리자 산출물 (`s4-admin-*.md`) | 해당 원본 경로 (S3에 관리자 포함 시) |
 

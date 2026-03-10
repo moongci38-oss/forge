@@ -26,10 +26,10 @@ claude plugin install data@knowledge-work-plugins --scope project
 
 ---
 
-## Agent Teams
+## 병렬 실행 에이전트
 
 ### 조정자
-- **research-coordinator** ✅ — 리서치 요청 분석 → 태스크 분배 → 결과 종합
+- **research-coordinator** ✅ — 리서치 요청 분석 → Subagent 분배 → 결과 종합
 
 ### 전문가 팀
 - **market-researcher** ✅ — 시장 규모, 경쟁사, 트렌드

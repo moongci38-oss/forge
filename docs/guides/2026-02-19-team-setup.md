@@ -15,9 +15,11 @@
 | VS Code | 최신 | https://code.visualstudio.com/ |
 | Claude Code CLI | 최신 | `npm install -g @anthropic-ai/claude-code` |
 
-### WSL 내부 추가 설치 (Agent Teams용)
+### WSL 내부 추가 설치 (선택 — Agent Teams 사용 시)
 
 ```bash
+# Agent Teams(Competing Hypotheses/Watchdog)를 사용하는 경우에만 필요
+# 일반 병렬 작업은 Subagent로 tmux 없이 동작
 sudo apt update && sudo apt install -y tmux
 ```
 
@@ -62,15 +64,16 @@ git clone git@github.com:ljw7555-rgb/godblade.git ~/godblade
 | `PORTFOLIO_PROJECT` | `C:\Users\홍길동\portfolio-project` | Portfolio 프로젝트 절대경로 |
 | `BRAVE_API_KEY` | (팀 리더에게 문의) | Brave Search API 키 |
 | `CONTEXT7_API_KEY` | (팀 리더에게 문의) | Context7 API 키 |
-| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | `1` | Agent Teams 활성화 (선택) |
+| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | `1` | Agent Teams 활성화 (선택 — Competing Hypotheses 전용) |
 
-### WSL 환경변수 (Agent Teams 사용 시)
+### WSL 환경변수
 
 ```bash
 # ~/.bashrc 에 추가
 export BUSINESS_ROOT="/home/$(whoami)/business"
 export PORTFOLIO_PROJECT="/home/$(whoami)/portfolio-project"
-export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+# Agent Teams(Competing Hypotheses/Watchdog) 사용 시에만 필요:
+# export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 ```
 
 ---
@@ -179,9 +182,16 @@ cd ~/godblade/src && claude
 
 ---
 
-## 8. Agent Teams 사용법 (선택)
+## 8. 병렬 실행 가이드
 
-Agent Teams는 병렬 작업 시 사용. **tmux가 필수**.
+### Subagent (기본 — 대부분의 병렬 작업)
+
+별도 설정 불필요. Claude Code가 자동으로 Subagent를 스폰합니다.
+VS Code, 일반 터미널 모두 동작합니다.
+
+### Agent Teams (선택 — Competing Hypotheses/Watchdog 전용)
+
+에이전트 간 소통이 필요한 특수 케이스에만 사용. **tmux가 필수**.
 
 ```bash
 # WSL에서 실행
@@ -191,7 +201,7 @@ cd ~/godblade/src  # 또는 다른 프로젝트
 claude
 ```
 
-자세한 가이드: 각 프로젝트의 `.claude/rules/agent-teams.md` 참조
+자세한 가이드: 각 프로젝트의 `.claude/rules/` 내 병렬 실행 규칙 참조
 
 ---
 

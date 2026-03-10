@@ -152,6 +152,67 @@ cd /home/damools/business/scripts/yt-analyzer && python3 yt-analyzer.py $ARGUMEN
 ]
 ```
 
+## 멀티 영상 병렬 분석 (Subagent 파이프라인)
+
+`--playlist` 또는 `--urls`로 복수 영상이 입력된 경우, subagent 병렬 분석을 적용한다.
+
+### 병렬 분석 흐름
+
+```
+Main Agent
+├── Step 1: 전체 영상 트랜스크립트 일괄 추출
+│   └── yt-analyzer.py 또는 youtube-transcript-api 직접 호출
+│   └── 실패 시 Fallback: VPN 우회, Playwright, Windows Python 순차 시도
+├── Step 2: 개별 JSON 파일 생성 (메타데이터 + 트랜스크립트)
+│   └── /tmp/yt-transcripts/individual/{video_id}.json
+├── Step 3: Subagent 병렬 분석 (최대 7개 동시)
+│   ├── Subagent 1~7: 영상 A~G 분석 + analysis.md 저장 (Wave 1)
+│   └── Subagent 8~N: 영상 H~N 분석 + analysis.md 저장 (Wave 2)
+│   └── 에이전트 타입: yt-video-analyst (model: sonnet)
+├── Step 4: 비교 분석 + 적용 계획서 (tech 영상만, 순차 또는 병렬)
+├── Step 5: Main Agent 취합
+│   ├── index.json 레코드 일괄 생성
+│   └── 종합 보고서 작성 (선택)
+└── Step 6: Notion DB 등록 (Tier 1/2)
+```
+
+### Subagent 프롬프트 템플릿
+
+각 subagent에 아래 정보를 전달한다:
+
+```
+- JSON 파일 경로: /tmp/yt-transcripts/individual/{video_id}.json
+- 출력 경로: 01-research/videos/analyses/YYYY-MM-DD-{video_id}-analysis.md
+- 출력 형식: /yt 스킬의 출력 형식 섹션 참조
+- 에이전트 타입: yt-video-analyst
+- 실행 모드: run_in_background (병렬)
+```
+
+### Wave 분할 기준
+
+| 영상 수 | Wave 전략 |
+|:-------:|----------|
+| 1~3개 | 병렬 없이 순차 실행 |
+| 4~7개 | 단일 Wave 병렬 |
+| 8~14개 | 2 Wave (7+7) |
+| 15개+ | 3+ Wave (7개 단위) |
+
+### IP 차단 대응 (Fallback 체인)
+
+트랜스크립트 추출 시 IP 차단(429)이 발생하면 아래 순서로 시도:
+
+```
+1. youtube-transcript-api (기본)
+   ↓ 실패 시
+2. VPN 연결 후 재시도 (Human에게 VPN 연결 요청)
+   ↓ 실패 시
+3. Windows Python (WSL→PowerShell 경유)
+   ↓ 실패 시
+4. yt-dlp + Chrome 쿠키 (Chrome 종료 필요)
+   ↓ 실패 시
+5. [STOP] Human에게 수동 자막 추출 안내
+```
+
 ## 주의사항
 
 - 영어 트랜스크립트 → 핵심 포인트는 한국어 번역
@@ -160,3 +221,4 @@ cd /home/damools/business/scripts/yt-analyzer && python3 yt-analyzer.py $ARGUMEN
 - 30분+ 영상은 섹션별 분석
 - `--urls`, `--search`, `--playlist` 옵션도 그대로 전달 가능
 - Notion DB 등록 실패 시 Tier 2 Fallback으로 진행 (파이프라인 중단 안 함)
+- 멀티 영상 분석 시 subagent 병렬 실행으로 처리 속도 최적화

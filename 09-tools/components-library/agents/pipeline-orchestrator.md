@@ -86,8 +86,8 @@ S3 기획서(PRD/GDD) 작성 완료 후:
 S4 기획 패키지 작성 시 3명의 에이전트가 Wave 기반으로 협업한다.
 
 ```
-Wave 1 (순차): technical-writer → 4대 산출물 초안 작성
-  - 상세 기획서(사이트맵 포함), 개발 계획(로드맵+WBS 포함), UI/UX 기획서, 테스트 전략서
+Wave 1 (순차): technical-writer → 3대 산출물 초안 작성
+  - 상세 기획서(사이트맵 포함), 개발 계획(로드맵+WBS+테스트전략 포함), UI/UX 기획서
   - 관리자 포함 시 서비스 + 관리자 산출물 모두 작성
 
 Wave 2 (Spec 검증): S3 기획서 대비 Spec 준수 검증
@@ -150,7 +150,7 @@ S3 기획서 단계에서 사용:
 
 여러 프로젝트를 동시에 실행할 때:
 1. 각 프로젝트별 독립 태스크 그룹 생성
-2. 프로젝트 간 의존성이 없으면 병렬 스폰
+2. 프로젝트 간 의존성이 없으면 Subagent로 병렬 스폰
 3. 공유 리소스(출력 폴더 등) 충돌 방지
 4. 진행 상황을 통합 대시보드로 보고
 
@@ -181,11 +181,10 @@ S3 기획서 단계에서 사용:
 
 ### S4 완료 시 자동 액션
 
-1. 기획 패키지 산출물 존재 확인 (4종):
+1. 기획 패키지 산출물 존재 확인 (3종):
    - 상세 기획서 (사이트맵 포함): `{folderMap.product}/{project}/YYYY-MM-DD-s4-detailed-plan.md`
-   - 개발 계획 (로드맵+WBS 포함): `{folderMap.product}/{project}/YYYY-MM-DD-s4-development-plan.md`
+   - 개발 계획 (로드맵+WBS+테스트전략 포함): `{folderMap.product}/{project}/YYYY-MM-DD-s4-development-plan.md`
    - UI/UX 기획서: `{folderMap.design}/{project}/YYYY-MM-DD-s4-uiux-spec.md`
-   - 테스트 전략서: `{folderMap.product}/{project}/YYYY-MM-DD-s4-test-strategy.md`
    - (관리자 포함 시) 관리자 산출물도 확인
 
 2. **Handoff 요약 문서 자동 생성**:

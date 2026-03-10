@@ -8,7 +8,7 @@
 
 | 환경 | 사용자 | 주요 작업 |
 |------|--------|----------|
-| **Claude Code (CLI)** | 개발자 | Agent Teams, 스크립트 실행, Git 작업 |
+| **Claude Code (CLI)** | 개발자 | Subagent 병렬 실행, 스크립트 실행, Git 작업 |
 | **Claude Desktop Cowork** | 비개발자 | 리서치, 문서 작성, 콘텐츠 기획 |
 
 > Cowork 환경 상세(MCP 매핑, Hooks 대체, 보안)는 `business-core.md` 규칙에 포함.
@@ -18,7 +18,7 @@
 ## Workspace Context
 
 **소유자**: 1인 기업 운영자 (풀스택 개발자 겸 사업가)
-**비전**: 백엔드 개발자 1명이 AI Agent Teams로 6개 약점 영역을 80% 이상 보완
+**비전**: 백엔드 개발자 1명이 AI Subagent로 6개 약점 영역을 80% 이상 보완
 
 ### 멀티 프로젝트 워크스페이스
 
@@ -45,7 +45,7 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 ### Do's
 - 리서치 결과는 출처(URL, 날짜) 반드시 포함
 - 문서 작성 시 한국어 기본, 전문 용어는 영어 병기
-- 병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토
+- 병렬 처리 가능한 작업은 Subagent 사용을 우선 검토
 
 ### Don'ts
 - B 영역 접근/출력 금지 (상세: `business-core.md` 보안 체크리스트)
@@ -107,10 +107,10 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ---
 
-## Agent Teams (Opus 4.6+)
+## 병렬 실행 (Subagent 기본)
 
-> 활성화됨 (권장). `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
-> 상세: `business-core.md` 내 agent-teams 섹션 참조
+> Subagent가 기본 병렬 도구. Agent Teams는 Competing Hypotheses/Watchdog 전용.
+> 상세: `business-core.md` 내 parallel-execution 섹션 참조
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Strategy & Idea Generation Intelligent Loop**
 >
-> 아이디어에서 개발 준비 완료까지, AI Agent Teams가 리서치 → 컨셉 → 기획서 → 기획 패키지를 자동 생성하는 4-Stage 파이프라인.
+> 아이디어에서 개발 준비 완료까지, AI Subagent가 리서치 → 컨셉 → 기획서 → 기획 패키지를 자동 생성하는 4-Stage 파이프라인.
 
 ```
 S1 Research → S2 Concept → S3 Design Document → S4 Planning Package → Trine (개발)
@@ -25,7 +25,7 @@ SIGIL은 **1인 기업/소규모 팀**이 AI Agent를 활용하여 비개발 업
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI 설치
 - Node.js 18+
-- tmux (선택 — 장시간 세션 유지에 권장)
+- tmux (선택 — Agent Teams 사용 시 필요, Subagent는 불필요)
 
 ## Quick Start
 
@@ -140,14 +140,13 @@ Lean Canvas 기반 비즈니스 모델을 검증합니다.
 
 ### S4. Planning Package (기획 패키지)
 
-Trine 진입 전 4종 산출물을 작성합니다.
+Trine 진입 전 3종 산출물을 작성합니다.
 
 | # | 산출물 | 내용 |
 |:-:|--------|------|
 | 1 | 상세 기획서 | 화면별 동작 + 데이터 흐름 + 사이트맵 |
-| 2 | 개발 계획 | 기술 스택 + 아키텍처 + ADR + 로드맵 + WBS |
+| 2 | 개발 계획 | 기술 스택 + 아키텍처 + ADR + 로드맵 + WBS + 테스트 전략 |
 | 3 | UI/UX 기획서 | 와이어프레임 + 컴포넌트 스펙 |
-| 4 | 테스트 전략서 | 테스트 계층/도구/커버리지 목표 |
 
 - **에이전트**: `technical-writer` (작성) + `cto-advisor` (기술 검토) + `ux-researcher` (UX 검증)
 - **Wave Protocol**: Wave 1 (초안) → Wave 2 (Spec 검증) → Wave 3 (리뷰) → Wave 4 (최종본)
@@ -164,7 +163,7 @@ Trine 진입 전 4종 산출물을 작성합니다.
 | `academic-researcher` | 학술 자료, 논문, 인용 분석 |
 | `fact-checker` | 팩트 검증, 출처 신뢰도 평가 |
 | `gdd-writer` | Game Design Document 작성 |
-| `technical-writer` | S4 기획 패키지 4종 작성 |
+| `technical-writer` | S4 기획 패키지 3종 작성 |
 | `cto-advisor` | S4 기술 검토 (아키텍처, ADR) |
 | `ux-researcher` | S4 UX 검증 (와이어프레임, 인터랙션) |
 | `yt-video-analyst` | YouTube 영상 트랜스크립트 분석 |
@@ -279,28 +278,18 @@ bash scripts/manage-rules.sh stats
 규칙 소스: `09-tools/rules-source/` (Frontmatter 포함)
 빌드 결과: `.claude/rules/` (세션 시작 시 자동 로드)
 
-## Agent Teams
+## Parallel Execution
 
-SIGIL은 Claude Code의 Agent Teams 기능을 활용하여 병렬 작업을 수행합니다.
-
-```bash
-# 환경변수 설정 (.claude/settings.json에 포함)
-CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-
-# 터미널에서 실행
-claude
-
-# tmux 사용 시 세션 유지 가능 (선택)
-# tmux new-session -s sigil && claude
-```
+SIGIL은 **Subagent(Agent 도구)**를 기본 병렬 실행 도구로 사용합니다.
+Agent Teams는 에이전트 간 소통이 필요한 특수 케이스(Competing Hypotheses)에만 사용합니다.
 
 ### 오케스트레이션 패턴
 
-| 패턴 | 사용 시점 | 예시 |
-|------|----------|------|
-| **Fan-out/Fan-in** | 독립 병렬 작업 | S1 리서치 (시장/기술/법규 병렬) |
-| **Pipeline** | 순차 의존성 | S1→S2→S3→S4 |
-| **Competing Hypotheses** | 최적 해법 탐색 | S3 에이전트 회의 |
+| 패턴 | 기본 도구 | 사용 시점 | 예시 |
+|------|:--------:|----------|------|
+| **Fan-out/Fan-in** | **Subagent** | 독립 병렬 작업 | S1 리서치 (시장/기술/법규 병렬) |
+| **Pipeline** | 순차 Subagent | 순차 의존성 | S1→S2→S3→S4 |
+| **Competing Hypotheses** | **Agent Teams** | 에이전트 간 비교/토론 | S3 에이전트 회의 |
 
 ### 모델 계층화
 
@@ -325,7 +314,7 @@ SIGIL S4 완료 → Handoff 문서 자동 생성 → 개발 프로젝트에 syml
 | S4 상세 기획서 | Phase 2 Spec 작성 |
 | S4 개발 계획 | Phase 1 세션 이해 |
 | S4 UI/UX 기획서 | Phase 2 Spec UI 섹션 |
-| S4 테스트 전략서 | Phase 3 Check |
+| S4 개발 계획 (테스트 전략 포함) | Phase 1 세션 이해 + Phase 3 Check |
 
 ## MCP Servers
 
@@ -417,13 +406,14 @@ npm install -g @anthropic-ai/claude-code
 claude  # 최초 실행 → ~/.claude/ 자동 생성
 ```
 
-### Agent Teams 동작 안 함
+### Agent Teams 동작 안 함 (Competing Hypotheses 사용 시)
 
-환경변수가 설정되어 있는지 확인합니다:
+Agent Teams는 Competing Hypotheses/Watchdog 패턴에서만 사용합니다. 일반 병렬 작업은 Subagent를 사용하세요.
 
 ```bash
-# .claude/settings.json의 env에 아래가 포함되어야 함
+# Agent Teams가 필요한 경우 .claude/settings.json의 env에 아래 포함
 CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+# tmux 필수
 ```
 
 ### MCP 서버 연결 실패

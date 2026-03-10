@@ -38,9 +38,8 @@ sigil-workspace.json의 folderMap 예시:
 | 필수 산출물 | 경로 |
 |-----------|------|
 | 상세 기획서 (사이트맵 포함) | `{folderMap.product}/{project}/*-s4-detailed-plan.md` |
-| 개발 계획 (로드맵+WBS 포함) | `{folderMap.product}/{project}/*-s4-development-plan.md` |
+| 개발 계획 (로드맵+WBS+테스트전략 포함) | `{folderMap.product}/{project}/*-s4-development-plan.md` |
 | UI/UX 기획서 | `{folderMap.design}/{project}/*-s4-uiux-spec.md` |
-| 테스트 전략서 | `{folderMap.product}/{project}/*-s4-test-strategy.md` |
 
 관리자 산출물이 있다면 추가 확인:
 - `{folderMap.product}/{project}/*-s4-admin-detailed-plan.md`

@@ -1,4 +1,8 @@
-# {프로젝트명} — S4 테스트 전략서
+> **DEPRECATED** — 이 템플릿은 더 이상 사용하지 않습니다.
+> 테스트 전략은 `planning-package-template.md`의 개발 계획 내 "테스트 전략" 섹션으로 흡수되었습니다.
+> E2E 시나리오 상세는 Trine Spec Section 10에서만 작성합니다.
+
+# {프로젝트명} — S4 테스트 전략서 (DEPRECATED)
 
 **작성일**: YYYY-MM-DD
 **프로젝트 유형**: {앱/웹/게임}

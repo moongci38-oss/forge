@@ -169,43 +169,43 @@
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "do",
-      "description": "병렬 처리 가능한 작업은 Agent Teams 사용을 우선 검토한다",
+      "description": "병렬 처리 가능한 작업은 Subagent 사용을 우선 검토한다",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "do",
       "description": "태스크 시작 전 파일 소유권을 반드시 선언한다",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "do",
       "description": "의존성 없는 태스크만 동시 스폰한다 (Wave 기반)",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "do",
       "description": "모델 계층화를 적용한다 (Opus/Sonnet/Haiku)",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "dont",
       "description": "파일 소유권 선언 없이 병렬 작업을 시작하지 않는다",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "dont",
       "description": "의존성 있는 태스크를 동시 스폰하지 않는다",
       "verifiable": true
     },
     {
-      "ruleId": "agent-teams",
+      "ruleId": "parallel-execution",
       "type": "dont",
       "description": "공유 파일(CLAUDE.md, settings.*)을 Teammate이 수정하지 않는다",
       "verifiable": true

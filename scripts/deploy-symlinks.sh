@@ -76,7 +76,6 @@ ARTIFACTS=(
     "s4-roadmap.md|product|no|no"
     "s4-sitemap.md|product|no|no"
     "s4-wbs.md|product|no|no"
-    "s4-test-strategy.md|product|no|no"
     "s4-uiux-spec.md|design|no|no"
     "todo.md|product|no|copy"
     "s4-admin-detailed-plan.md|product|admin|no"

@@ -29,10 +29,9 @@ enforcement: flexible
 | 관리자 PRD | `product` | `{project}/YYYY-MM-DD-s3-admin-prd.md` |
 | 상세 기획서 (사이트맵 포함) | `product` | `{project}/YYYY-MM-DD-s4-detailed-plan.md` |
 | 관리자 상세 기획서 | `product` | `{project}/YYYY-MM-DD-s4-admin-detailed-plan.md` |
-| 개발 계획 (로드맵+WBS 포함) | `product` | `{project}/YYYY-MM-DD-s4-development-plan.md` |
+| 개발 계획 (로드맵+WBS+테스트전략 포함) | `product` | `{project}/YYYY-MM-DD-s4-development-plan.md` |
 | UI/UX 기획서 | `design` | `{project}/YYYY-MM-DD-s4-uiux-spec.md` |
 | 관리자 UI/UX 기획서 | `design` | `{project}/YYYY-MM-DD-s4-admin-uiux-spec.md` |
-| 테스트 전략서 | `product` | `{project}/YYYY-MM-DD-s4-test-strategy.md` |
 | 게이트 로그 | `product` | `{project}/gate-log.md` |
 | Todo | `product` | `todo.md` |
 | Handoff 문서 | `handoff` | `{target-project}/YYYY-MM-DD-sigil-handoff.md` |
@@ -44,8 +43,6 @@ enforcement: flexible
 | GDD 템플릿 | `templates` | `gdd-template.md` |
 | 기획 패키지 템플릿 | `templates` | `planning-package-template.md` |
 | UI/UX 기획서 템플릿 | `templates` | `uiux-spec-template.md` |
-
-| 테스트 전략서 템플릿 | `templates` | `test-strategy-template.md` |
 | DoD 체크리스트 | `templates` | `dod-checklist.md` |
 | PM Todo 구조 | `templates` | `notion-task-template.md` |
 
