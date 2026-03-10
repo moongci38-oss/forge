@@ -5,8 +5,18 @@
 
 set -uo pipefail
 
-PROJECT=${1:-""}
-STAGE=${2:-""}
+AUTO_PASS=false
+ARGS=()
+for arg in "$@"; do
+  if [[ "$arg" == "--auto-pass" ]]; then
+    AUTO_PASS=true
+  else
+    ARGS+=("$arg")
+  fi
+done
+
+PROJECT=${ARGS[0]:-""}
+STAGE=${ARGS[1]:-""}
 
 if [[ -z "$PROJECT" || -z "$STAGE" ]]; then
   echo "Usage: bash scripts/sigil-gate-check.sh <project> <stage>"
@@ -189,11 +199,28 @@ echo "=== Result: $PASS PASS / $FAIL FAIL / $WARN WARN ==="
 
 if [[ $FAIL -gt 0 ]]; then
   echo "STATUS: FAIL — $FAIL item(s) not met"
+  if [[ "$AUTO_PASS" == "true" ]]; then
+    echo "AUTO-PASS: ESCALATED TO [STOP] — Human review required"
+  fi
   exit 1
 elif [[ $WARN -gt 0 ]]; then
   echo "STATUS: CONDITIONAL — $WARN warning(s)"
+  if [[ "$AUTO_PASS" == "true" ]]; then
+    echo "AUTO-PASS: CONDITIONAL — Proceeding with warnings"
+    case $STAGE in
+      S1|s1) echo "AUTO-PASS SUMMARY: S1 DoD verified (${PASS} PASS, ${WARN} WARN). High credibility: check above." ;;
+      S4|s4) echo "AUTO-PASS SUMMARY: S4 DoD verified (${PASS} PASS, ${WARN} WARN). Wave 2/3 reports: check above." ;;
+    esac
+  fi
   exit 0
 else
   echo "STATUS: PASS — All [AI] DoD items verified"
+  if [[ "$AUTO_PASS" == "true" ]]; then
+    case $STAGE in
+      S1|s1) echo "AUTO-PASS SUMMARY: S1 DoD all PASS (${PASS} items). Ready for S2." ;;
+      S4|s4) echo "AUTO-PASS SUMMARY: S4 DoD all PASS (${PASS} items). Ready for Trine." ;;
+      *) echo "AUTO-PASS SUMMARY: ${STAGE} DoD all PASS (${PASS} items)." ;;
+    esac
+  fi
   exit 0
 fi
