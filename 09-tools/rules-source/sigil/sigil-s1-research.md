@@ -31,7 +31,7 @@ enforcement: flexible
 - **선택 방법론**: SOAR, PESTLE
 - **방법론 구현 가이드**: `09-tools/prompts/sigil-methodologies.md` 참조
 - **산출물**: `{folderMap.research}/{project}/YYYY-MM-DD-s{N}-{topic}.md`
-- **게이트**: **[STOP]** 리서치 결과 리뷰 + 방향 확정
+- **게이트**: **[AUTO-PASS]** DoD 자동 검증 (sigil-gate-check.sh S1)
 
 ## Do
 
@@ -43,10 +43,11 @@ enforcement: flexible
 
 - 단일 소스에만 의존하여 리서치를 완료하지 않는다
 - 검증 없는 시장 데이터를 사실로 단정하지 않는다
-- [STOP] 게이트 없이 S2로 진행하지 않는다
+- DoD 자동 검증 없이 S2로 진행하지 않는다
 
 ## AI 행동 규칙
 
 1. 에이전트 회의 결과는 비교표 + 선택 근거를 명시한다
 2. 각 Stage 산출물은 해당 폴더의 `projects/{project}/` 하위에 저장한다
 3. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
+4. S1 Gate AUTO-PASS 알림을 출력하고 S2로 자동 진행한다. 검증 FAIL 시 [STOP]으로 에스컬레이션한다

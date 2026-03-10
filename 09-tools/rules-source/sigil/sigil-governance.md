@@ -40,7 +40,7 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 | Tier 2 | Notion 연결 불가 | 내부 Markdown Todo 문서 |
 
 - pipeline-orchestrator가 파이프라인 시작 시 Tier 자동 선택
-- 각 [STOP] 게이트 통과 시 다음 Stage 태스크를 자동 등록
+- 각 게이트([STOP] 또는 [AUTO-PASS]) 통과 시 다음 Stage 태스크를 자동 등록
 - 상세 구조: `{folderMap.templates}/notion-task-template.md` 참조
 
 ## Trine 연동
@@ -61,16 +61,29 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 | S4 기획 패키지 | Phase 1 세션 이해, Phase 2 Spec 작성 입력 |
 | S4 Trine 세션 로드맵 | Trine 세션별 범위/산출물 가이드 |
 
+## 게이트 유형
+
+| 유형 | 동작 | 사용 |
+|------|------|------|
+| **[STOP]** | AI 검증 → 파이프라인 중단 → Human 승인 대기 | 전략적 판단 필요 (S2, S3) |
+| **[AUTO-PASS]** | AI 검증 → 알림 출력 → 자동 진행 | 기계적 검증 충분 (S1, S4) |
+
+[AUTO-PASS] 알림 형식:
+- `✅ {Stage} Gate AUTO-PASS: {DoD 요약}`
+- `→ {다음 Stage}로 자동 진행합니다. 이상 있으면 말씀해주세요.`
+- Human은 언제든 "잠깐, {Stage} 다시 봐줘"로 소급 개입 가능
+- 자동 검증 FAIL 시 → [STOP]으로 에스컬레이션
+
 ## 게이트 로그 메커니즘
 
-각 [STOP] 게이트 통과 시 프로젝트 폴더에 `gate-log.md`를 자동 생성/업데이트한다.
+각 게이트([STOP] 또는 [AUTO-PASS]) 통과 시 프로젝트 폴더에 `gate-log.md`를 자동 생성/업데이트한다.
 
 ```markdown
 ## Gate Log — {프로젝트명}
 
 | Stage | 결과 | 일자 | 세션 | 조건 | 비고 |
 |:-----:|:----:|------|:----:|------|------|
-| S1 | ✅ PASS | YYYY-MM-DD | 1 | DoD 전항목 충족 | |
+| S1 | ✅ AUTO | YYYY-MM-DD | 1 | DoD 자동 검증 통과 | 신뢰도 High 72% |
 | S2 | ✅ PASS | YYYY-MM-DD | 1 | Go/No-Go 85점 | |
 | S3 | — | — | — | — | |
 | S4 | — | — | — | — | |
@@ -78,7 +91,7 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 
 ## Stage별 DoD (Definition of Done)
 
-각 [STOP] 게이트 통과 전 DoD 체크리스트를 검증한다.
+각 게이트 통과 전 DoD 체크리스트를 검증한다.
 상세 체크리스트: `{folderMap.templates}/dod-checklist.md`
 
 ## Stage별 방법론 참조
