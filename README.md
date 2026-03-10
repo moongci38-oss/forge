@@ -140,17 +140,14 @@ Lean Canvas 기반 비즈니스 모델을 검증합니다.
 
 ### S4. Planning Package (기획 패키지)
 
-Trine 진입 전 7종 산출물을 작성합니다.
+Trine 진입 전 4종 산출물을 작성합니다.
 
 | # | 산출물 | 내용 |
 |:-:|--------|------|
-| 1 | 상세 기획서 | 화면별 동작 + 데이터 흐름 |
-| 2 | 사이트맵 | 페이지/화면 계층 + 네비게이션 |
-| 3 | 로드맵 | 마일스톤 + Now/Next/Later |
-| 4 | 개발 계획 | 기술 스택 + 아키텍처 + ADR |
-| 5 | WBS | 태스크 분해 + 규모 추정 |
-| 6 | UI/UX 기획서 | 와이어프레임 + 컴포넌트 스펙 |
-| 7 | 테스트 전략서 | 테스트 계층/도구/커버리지 목표 |
+| 1 | 상세 기획서 | 화면별 동작 + 데이터 흐름 + 사이트맵 |
+| 2 | 개발 계획 | 기술 스택 + 아키텍처 + ADR + 로드맵 + WBS |
+| 3 | UI/UX 기획서 | 와이어프레임 + 컴포넌트 스펙 |
+| 4 | 테스트 전략서 | 테스트 계층/도구/커버리지 목표 |
 
 - **에이전트**: `technical-writer` (작성) + `cto-advisor` (기술 검토) + `ux-researcher` (UX 검증)
 - **Wave Protocol**: Wave 1 (초안) → Wave 2 (Spec 검증) → Wave 3 (리뷰) → Wave 4 (최종본)
@@ -167,7 +164,7 @@ Trine 진입 전 7종 산출물을 작성합니다.
 | `academic-researcher` | 학술 자료, 논문, 인용 분석 |
 | `fact-checker` | 팩트 검증, 출처 신뢰도 평가 |
 | `gdd-writer` | Game Design Document 작성 |
-| `technical-writer` | S4 기획 패키지 7종 작성 |
+| `technical-writer` | S4 기획 패키지 4종 작성 |
 | `cto-advisor` | S4 기술 검토 (아키텍처, ADR) |
 | `ux-researcher` | S4 UX 검증 (와이어프레임, 인터랙션) |
 | `yt-video-analyst` | YouTube 영상 트랜스크립트 분석 |

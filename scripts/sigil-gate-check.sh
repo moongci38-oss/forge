@@ -161,12 +161,9 @@ case $STAGE in
 
   S4|s4)
     echo "[S4 DoD Checks]"
-    # 7대 필수 산출물
+    # 4대 필수 산출물
     check_file "상세 기획서" "*s4-detailed-plan*.md" "$PROJECT_PRODUCT"
-    check_file "사이트맵" "*s4-sitemap*.md" "$PROJECT_PRODUCT"
-    check_file "로드맵" "*s4-roadmap*.md" "$PROJECT_PRODUCT"
     check_file "개발 계획" "*s4-development-plan*.md" "$PROJECT_PRODUCT"
-    check_file "WBS" "*s4-wbs*.md" "$PROJECT_PRODUCT"
     check_file "UI/UX 기획서" "*s4-uiux*.md" "$PROJECT_DESIGN"
     check_file "테스트 전략서" "*s4-test-strategy*.md" "$PROJECT_PRODUCT"
 

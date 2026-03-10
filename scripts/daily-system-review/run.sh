@@ -1,8 +1,9 @@
 #!/bin/bash
 # ──────────────────────────────────────────────
-# 주간 리서치 리포트 자동 생성 스크립트
+# AI 시스템 일일 분석 자동 실행 스크립트
 # Claude Code CLI (Max 구독) 기반
-# cron: 0 0 * * 1 (매주 월요일 00:00 UTC = KST 09:00)
+# cron: 0 0 * * 2-7,0 (화~일 00:00 UTC = KST 09:00)
+# 월요일은 weekly-research가 커버하므로 제외
 # ──────────────────────────────────────────────
 
 set -euo pipefail
@@ -14,8 +15,8 @@ export PATH="/home/damools/.local/bin:/home/damools/.npm-global/bin:/usr/local/b
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUSINESS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$SCRIPT_DIR/logs"
-LOG_FILE="$LOG_DIR/$(date +%Y-W%V).log"
-ALLOWED_TOOLS="WebSearch,WebFetch,Write,Read,Glob,Grep,Agent"
+LOG_FILE="$LOG_DIR/$(date +%Y-%m-%d).log"
+ALLOWED_TOOLS="Agent,WebSearch,WebFetch,Write,Read,Glob,Grep"
 
 mkdir -p "$LOG_DIR"
 
@@ -24,10 +25,10 @@ unset CLAUDECODE 2>/dev/null || true
 
 cd "$BUSINESS_DIR"
 
-echo "=== Weekly Research Report ===" | tee -a "$LOG_FILE"
+echo "=== Daily System Review ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-claude -p "/weekly-research $(date +%Y-%m-%d)" \
+claude -p "/daily-system-review $(date -d 'yesterday' +%Y-%m-%d)" \
   --allowedTools "$ALLOWED_TOOLS" \
   2>&1 | tee -a "$LOG_FILE"
 
