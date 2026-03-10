@@ -22,6 +22,8 @@ enforcement: flexible
 | **academic-researcher** | Agent | 학술 논문, 리뷰 논문, 인용 분석 |
 | **fact-checker** | Agent | 수치 검증, 출처 신뢰도, 교차 검증 |
 | **WebSearch** | Tool | 실시간 뉴스, 업계 동향, 일반 웹 |
+| **`mcp__brave-search__brave_web_search`** | Tool | 웹 검색 (WebSearch 대체/보완, 풍부한 메타데이터) |
+| **`mcp__brave-search__brave_news_search`** | Tool | 뉴스 전용 검색 (날짜 필터, freshness 파라미터 지원) |
 | **`/competitor`** | Command | 경쟁사 심층 분석 (기능/가격/전략) |
 | **`marketing:competitive-analysis`** | Plugin | 경쟁사 포지셔닝, 메시징 비교 |
 | **`data:data-exploration`** | Plugin | 시장 데이터 정량 분석 (해당 시) |

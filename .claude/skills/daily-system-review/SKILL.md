@@ -4,7 +4,7 @@ description: >
   매일 실행하는 AI 시스템 일일 분석. 6-Tier 소스에서 전일 AI/Agentic 동향을
   총망라 수집하고, 우리 시스템과 1:1 비교 분석하여 갭 분석 + 적용 계획서를 생성한다.
 argument-hint: "[YYYY-MM-DD]"
-allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep"
+allowed-tools: "Agent,WebSearch,WebFetch,mcp__brave-search__brave_web_search,mcp__brave-search__brave_news_search,mcp__brave-search__brave_video_search,Write,Read,Glob,Grep"
 user-invocable: true
 ---
 
@@ -117,12 +117,12 @@ user-invocable: true
 **Teammate B (Haiku): 개발자 커뮤니티 + 미디어**
 - Tier 3 전체 (HN, Reddit, Twitter, Discord)
 - Tier 6 전체 (TechCrunch, VentureBeat, Product Hunt)
-- WebSearch 날짜 필터: 전날~오늘
+- `mcp__brave-search__brave_news_search` 날짜 필터: 전날~오늘 (WebSearch 대체)
 - 출력: 구조화된 JSON 요약 → Lead에게 반환
 
 **Teammate C (Haiku): YouTube 영상 탐색**
 - Tier 4 전체
-- WebSearch: 채널별 최신 업로드 + 키워드 검색
+- `mcp__brave-search__brave_video_search`: 채널별 최신 업로드 + 키워드 검색 (WebSearch 대체)
 - 영상 제목, URL, 예상 내용 요약, 조회수/반응
 - 심층 분석 필요 영상은 "추천 시청" 목록으로 분리
 - 출력: 영상 목록 + 요약 → Lead에게 반환

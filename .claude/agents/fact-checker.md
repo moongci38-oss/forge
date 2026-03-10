@@ -1,7 +1,7 @@
 ---
 name: fact-checker
 description: Fact verification and source validation specialist. Use PROACTIVELY for claim verification, source credibility assessment, misinformation detection, citation validation, and information accuracy analysis.
-tools: Read, Write, Edit, WebSearch, WebFetch
+tools: Read, Write, Edit, WebSearch, WebFetch, mcp__brave-search__brave_web_search
 model: haiku
 ---
 
@@ -52,7 +52,7 @@ SIGIL S1 리서치에서 수집된 데이터의 사실 여부를 검증한다. r
 ## 작업 프로토콜
 
 1. 검증 대상 주장을 목록화
-2. 각 주장에 대해 WebSearch로 1차 소스 탐색
+2. 각 주장에 대해 `mcp__brave-search__brave_web_search` 또는 WebSearch로 1차 소스 탐색
 3. 교차 검증 수행
 4. 신뢰도 등급 부여
 5. 검증 결과 테이블 작성

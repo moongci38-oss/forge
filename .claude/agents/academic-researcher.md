@@ -1,7 +1,7 @@
 ---
 name: academic-researcher
 description: Academic research specialist for scholarly sources, peer-reviewed papers, and academic literature. Use PROACTIVELY for research paper analysis, literature reviews, citation tracking, and academic methodology evaluation.
-tools: Read, Write, Edit, WebSearch, WebFetch
+tools: Read, Write, Edit, WebSearch, WebFetch, mcp__brave-search__brave_web_search
 model: sonnet
 ---
 

@@ -6,7 +6,7 @@ description: |
   [STOP]/[AUTO-PASS] 게이트를 관리하며, 멀티 프로젝트 병렬 실행을 조율한다.
 
   Use PROACTIVELY for: SIGIL 파이프라인 실행, 멀티 프로젝트 병렬 조율
-tools: Read, Write, Edit, TaskCreate, TaskUpdate, TaskList, TaskGet, Glob, Grep, WebSearch
+tools: Read, Write, Edit, TaskCreate, TaskUpdate, TaskList, TaskGet, Glob, Grep, WebSearch, mcp__brave-search__brave_web_search, mcp__brave-search__brave_news_search
 model: opus
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: yt-research-followup
 description: YouTube 분석 리포트의 "추가 리서치 필요" 항목을 실제로 조사하는 에이전트. 비즈니스 관련성 4+ 영상만 대상.
-tools: Read, Write, Glob, Grep, WebSearch, WebFetch
+tools: Read, Write, Glob, Grep, WebSearch, WebFetch, mcp__brave-search__brave_web_search
 model: haiku
 ---
 
