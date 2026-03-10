@@ -27,7 +27,7 @@ cd "$BUSINESS_DIR"
 echo "=== Weekly Research Report ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-claude -p "/weekly-research $(date +%Y-%m-%d)" \
+/home/damools/.local/bin/claude -p "/weekly-research $(date +%Y-%m-%d)" \
   --allowedTools "$ALLOWED_TOOLS" \
   2>&1 | tee -a "$LOG_FILE"
 

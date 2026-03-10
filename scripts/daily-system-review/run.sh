@@ -16,7 +16,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUSINESS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOG_DIR="$SCRIPT_DIR/logs"
 LOG_FILE="$LOG_DIR/$(date +%Y-%m-%d).log"
-ALLOWED_TOOLS="Agent,WebSearch,WebFetch,Write,Read,Glob,Grep"
+ALLOWED_TOOLS="Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep"
 
 mkdir -p "$LOG_DIR"
 
@@ -28,7 +28,7 @@ cd "$BUSINESS_DIR"
 echo "=== Daily System Review ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-claude -p "/daily-system-review $(date -d 'yesterday' +%Y-%m-%d)" \
+/home/damools/.local/bin/claude -p "/daily-system-review $(date -d 'yesterday' +%Y-%m-%d)" \
   --allowedTools "$ALLOWED_TOOLS" \
   2>&1 | tee -a "$LOG_FILE"
 
