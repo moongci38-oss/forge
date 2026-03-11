@@ -20,8 +20,8 @@ user-invocable: true
 
 | # | 문서 | 저장 위치 | 파일명 |
 |:-:|------|----------|--------|
-| 1 | AI 시스템 분석 리포트 | `docs/reviews/` | `{date}-ai-system-analysis.md` |
-| 2 | 적용 계획서 | `docs/planning/active/plans/` | `{date}-system-improvement-plan.md` |
+| 1 | AI 시스템 분석 리포트 | `01-research/daily/{date}/` | `ai-system-analysis.md` |
+| 2 | 적용 계획서 | `01-research/daily/{date}/` | `system-improvement-plan.md` |
 
 ## 데이터 수집 소스 (6-Tier)
 
@@ -145,7 +145,7 @@ user-invocable: true
 
 Lead가 5개 Teammate 결과를 종합하여 2개 문서 직접 작성:
 
-**산출물 1: AI 시스템 분석 리포트** (`docs/reviews/{date}-ai-system-analysis.md`)
+**산출물 1: AI 시스템 분석 리포트** (`01-research/daily/{date}/ai-system-analysis.md`)
 
 ```markdown
 # {date} AI 시스템 일일 분석 리포트
@@ -178,7 +178,7 @@ Lead가 5개 Teammate 결과를 종합하여 2개 문서 직접 작성:
 ## 출처 및 신뢰도
 ```
 
-**산출물 2: 적용 계획서** (`docs/planning/active/plans/{date}-system-improvement-plan.md`)
+**산출물 2: 적용 계획서** (`01-research/daily/{date}/system-improvement-plan.md`)
 
 ```markdown
 # {date} 시스템 개선 계획서
