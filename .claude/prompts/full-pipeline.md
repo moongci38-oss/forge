@@ -169,7 +169,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 ## Phase 1: 작업 요청 및 세션 이해
 
 1. Handoff 문서 + S4 개발 계획에서 해당 세션 내용 숙지 + 세션 요약 출력
-2. 세션 상태 초기화: `node ~/.claude/scripts/session-state.mjs init --name <name>`
+2. 세션 상태 초기화: `node ~/.claude/trine/scripts/session-state.mjs init --name <name>`
 3. **작업 규모 자동 분류** (재분류 필요 시만 [STOP]):
 
    | 분류 | 기준 | Phase 스킵 |
@@ -278,12 +278,12 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 1. AI가 커밋 생성 (Conventional Commits)
 2. AI가 `gh pr create` → PR URL 반환
-3. **Check 5 (PR Health Check)** — `/loop 2m` 자동 폴링:
-   - `gh pr checks` + `gh api .../reviews` + `gh api .../comments` CI + 리뷰 상태 확인
-   - 전부 PASS + 코멘트 없음 → 완료 보고 후 루프 종료
-   - merge conflict → rebase → 충돌 해결
-   - CI 실패 → 로그 분석 → 코드 수정 → 새 커밋 push → 루프 계속
-   - PR 본문 체크리스트 미완료 → 자동 채움
+3. **Check 5 (PR Health Check)** — 2단계 전략:
+   - **Step 1**: `gh run watch {RUN_ID}` — CI 완료까지 블로킹 대기 (sleep 폴링 없음)
+   - **Step 2** (CI PASS 후 즉시): `gh api .../reviews` + `gh api .../comments` + `gh api .../issues/{PR}/comments` 3종 인라인 폴링
+   - 코멘트 없음 → 체크박스 자동 체크 → 완료 보고
+   - CI 실패 또는 코멘트 발견 → 코드 수정 → 새 커밋 push → Step 1 재시작
+   - `/loop 2m`은 세션 종료 예정 등 인라인 불가 시만 보조 수단
 4. **Phase 4 완료 분기**:
    - `autoMerge=false` → **[STOP]** Human merge 대기
    - `autoMerge=true` → CI+리뷰 PASS 시 `gh pr merge --squash --delete-branch` → 완료
