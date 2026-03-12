@@ -54,6 +54,8 @@ __pycache__/
 
 # Weekly report temp files
 scripts/weekly-report/.report-meta.json
+scripts/weekly-report/logs/
+scripts/daily-system-review/logs/
 
 # Trine sync state (per-user)
 .claude/trine-sync-state.json
@@ -73,6 +75,9 @@ scripts/weekly-report/.report-meta.json
 01-research/market-data/
 01-research/trends/
 01-research/weekly/
+01-research/videos/
+01-research/youtube/
+01-research/daily/
 
 # 02-product: PRD/GDD/concept/roadmap outputs
 02-product/projects/*/

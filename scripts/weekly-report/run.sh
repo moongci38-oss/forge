@@ -7,9 +7,10 @@
 
 set -euo pipefail
 
-# cron 환경에서 HOME/PATH가 미설정될 수 있으므로 절대 경로 사용
-export HOME="${HOME:-/home/damools}"
-export PATH="/home/damools/.local/bin:/home/damools/.npm-global/bin:/usr/local/bin:$PATH"
+# cron 환경에서 HOME/PATH가 미설정될 수 있으므로 명시적으로 설정
+# HOME이 이미 설정된 경우 그대로 사용, 미설정 시 현재 사용자 홈 디렉토리 사용
+export HOME="${HOME:-$(getent passwd "$(whoami)" | cut -d: -f6)}"
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:/usr/local/bin:$PATH"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUSINESS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -27,7 +28,7 @@ cd "$BUSINESS_DIR"
 echo "=== Weekly Research Report ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-/home/damools/.local/bin/claude -p "/weekly-research $(date +%Y-%m-%d)" \
+"$HOME/.local/bin/claude" -p "/weekly-research $(date +%Y-%m-%d)" \
   --allowedTools "$ALLOWED_TOOLS" \
   2>&1 | tee -a "$LOG_FILE"
 
