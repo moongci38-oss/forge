@@ -28,9 +28,11 @@ cd "$BUSINESS_DIR"
 echo "=== Weekly Research Report ===" | tee -a "$LOG_FILE"
 echo "Started: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
-"$HOME/.local/bin/claude" -p "/weekly-research $(date +%Y-%m-%d)" \
-  --allowedTools "$ALLOWED_TOOLS" \
-  2>&1 | tee -a "$LOG_FILE"
+# Claude Code 대화형 세션으로 스킬 호출
+# stdin을 통해 프롬프트 전달 (EOF 마커로 입력 종료)
+"$HOME/.local/bin/claude" << EOF 2>&1 | tee -a "$LOG_FILE"
+/weekly-research $(date +%Y-%m-%d)
+EOF
 
 EXIT_CODE=${PIPESTATUS[0]}
 echo "Exit code: $EXIT_CODE" | tee -a "$LOG_FILE"
