@@ -38,7 +38,7 @@ Examples:
   manage-skills.sh enable aitmpl/business-marketing/product-strategist
   manage-skills.sh disable product-strategist
   manage-skills.sh install-aitmpl product-strategist
-  manage-skills.sh sync ~/mywsl_workspace/portfolio-project
+  manage-skills.sh sync {YOUR_PORTFOLIO_PATH}
   manage-skills.sh validate
   manage-skills.sh validate nextjs-best-practices
   manage-skills.sh build my-skill

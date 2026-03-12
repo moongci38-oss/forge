@@ -2,7 +2,7 @@
 """기존 영상 JSON 및 index.json의 메타데이터를 YouTube Data API v3로 보강하는 일회성 스크립트
 
 Usage:
-    cd /home/damools/business/scripts/yt-analyzer
+    cd /path/to/business/scripts/yt-analyzer
     python3 backfill-metadata.py              # 전체 보강
     python3 backfill-metadata.py --dry-run    # 변경 없이 미리보기
 """

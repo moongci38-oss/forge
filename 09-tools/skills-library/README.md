@@ -39,7 +39,7 @@ skills-library/
 bash ~/business/scripts/manage-skills.sh enable aitmpl/business-marketing/product-strategist
 
 # 포트폴리오 프로젝트에 개발 스킬 동기화
-bash ~/business/scripts/manage-skills.sh sync ~/mywsl_workspace/portfolio-project
+bash ~/business/scripts/manage-skills.sh sync {YOUR_PORTFOLIO_PATH}
 ```
 
 ## 스킬 추가

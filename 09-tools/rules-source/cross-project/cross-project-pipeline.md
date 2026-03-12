@@ -48,7 +48,7 @@ BUSINESS(비개발 리서치/콘텐츠) ↔ 개발 프로젝트(Portfolio/GodBla
 | API 문서 (비기술 요약) | 개발 프로젝트 | `{folderMap.operations}/handoff-from-dev/` | Markdown |
 
 ## MCP 연결
-- Filesystem MCP가 `Z:/home/damools/business/` + `E:/portfolio_project` 접근 가능
+- Filesystem MCP가 `{BUSINESS_ROOT}` + `{PORTFOLIO_PROJECT}` 접근 가능
 - 개발 프로젝트에서 BUSINESS 파이프라인 폴더 읽기 가능 (쓰기는 BUSINESS에서만)
 
 ## 역할 분리

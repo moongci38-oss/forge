@@ -721,7 +721,7 @@ add_textbox(slide, 1, 5, 11, 0.5, "감사합니다", 28, WHITE, False, PP_ALIGN.
 add_textbox(slide, 1, 6, 11, 0.5, "2026-02-27  |  Version 1.0  |  한국 국내 전용", 14, GRAY, False, PP_ALIGN.CENTER)
 
 # ── 저장 ──
-output_path = "/home/damools/business/02-product/projects/baduki/2026-02-27-s3-gdd.pptx"
+import os; output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../02-product/projects/baduki/2026-02-27-s3-gdd.pptx')
 prs.save(output_path)
 print(f"GDD PPTX 생성 완료: {output_path}")
 print(f"슬라이드 수: {len(prs.slides)}")

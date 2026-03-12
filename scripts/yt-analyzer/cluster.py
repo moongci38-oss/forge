@@ -2,7 +2,7 @@
 """index.json의 카테고리/태그 기반 영상 클러스터링
 
 Usage:
-    cd /home/damools/business/scripts/yt-analyzer
+    cd /path/to/business/scripts/yt-analyzer
     python3 cluster.py                    # 클러스터 분석 출력
     python3 cluster.py --output clusters.json  # JSON 파일 저장
 """

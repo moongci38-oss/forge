@@ -64,7 +64,7 @@ Examples:
   manage-components.sh disable agents search-ai-optimization-expert
   manage-components.sh install agents web-tools/search-ai-optimization-expert
   manage-components.sh info agents academic-researcher
-  manage-components.sh sync ~/mywsl_workspace/portfolio-project
+  manage-components.sh sync {YOUR_PORTFOLIO_PATH}
 EOF
 }
 

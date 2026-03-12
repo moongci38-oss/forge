@@ -56,7 +56,7 @@ bash scripts/manage-skills.sh enable marketingskills/seo-audit
 bash scripts/manage-skills.sh disable product-strategist
 
 # portfolio-project에 dev 스킬 동기화
-bash scripts/manage-skills.sh sync ~/mywsl_workspace/portfolio-project
+bash scripts/manage-skills.sh sync {YOUR_PORTFOLIO_PATH}
 ```
 
 ## 컴포넌트 관리
@@ -70,7 +70,7 @@ bash scripts/manage-components.sh list agents
 bash scripts/manage-components.sh enable agents search-ai-optimization-expert
 
 # portfolio-project에 동기화
-bash scripts/manage-components.sh sync ~/mywsl_workspace/portfolio-project
+bash scripts/manage-components.sh sync {YOUR_PORTFOLIO_PATH}
 ```
 
 ---

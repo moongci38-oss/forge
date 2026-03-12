@@ -41,7 +41,7 @@ Examples:
   manage-rules.sh build --scope business
   manage-rules.sh build --all
   manage-rules.sh stats
-  manage-rules.sh sync ~/mywsl_workspace/portfolio-project
+  manage-rules.sh sync {YOUR_PORTFOLIO_PATH}
   manage-rules.sh manifest
 EOF
 }

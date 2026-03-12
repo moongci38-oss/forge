@@ -133,7 +133,7 @@ resolve_source() {
 # Convert Windows path to WSL path if needed
 normalize_path() {
     local path="$1"
-    # E:/... → /mnt/e/...
+    # {WIN_DRIVE}:/... → /mnt/{drive}/...
     if [[ "$path" =~ ^[A-Z]:/ ]]; then
         local drive
         drive=$(echo "${path:0:1}" | tr '[:upper:]' '[:lower:]')

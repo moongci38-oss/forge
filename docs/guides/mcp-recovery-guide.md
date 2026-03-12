@@ -67,7 +67,7 @@
 
 | 서버 | 상태 | 설정 |
 |------|------|------|
-| filesystem | ✅ 수정 완료 | `Z:/`, `E:/` 경로 사용 |
+| filesystem | ✅ 수정 완료 | `{BUSINESS_ROOT}`, `{PORTFOLIO_PROJECT}` 경로 사용 |
 | memory | ✅ 정상 | |
 | ~~playwright~~ | ❌ 제거됨 (CLI 전환) | playwright-cli 사용 |
 | sequential-thinking | ✅ 정상 | |
