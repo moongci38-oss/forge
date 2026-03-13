@@ -92,10 +92,12 @@ enforcement: rigid
 - 에이전트 회의에서 UI 안을 비교할 때 (generate_variants로 변형 생성)
 - PPT에 삽입할 화면 레이아웃 참조가 필요할 때
 
+**핵심 화면 기준:** 사용자가 가장 자주 방문하거나, 핵심 가치 제안을 전달하거나, 복잡한 인터랙션이 존재하는 화면. 예: 랜딩/홈, 핵심 기능 화면, 주요 폼/입력 화면. 관리자 포함 시 관리자 핵심 대시보드도 포함.
+
 **워크플로:**
-1. `create_project` — SIGIL 프로젝트용 Stitch 프로젝트 생성
+1. `create_project` — SIGIL 프로젝트용 Stitch 프로젝트 생성 (이름: `{sigil-project}-{stage}`, 예: `portfolio-blog-s3`)
 2. `generate_screen_from_text` — 핵심 화면별 목업 생성 (Desktop/Mobile)
-3. `generate_variants` — 레이아웃/컬러 변형 2-3개 생성하여 비교
+3. `generate_variants` — 레이아웃/컬러 변형 최소 2개 생성하여 비교
 4. 최종 선택한 목업을 기획서(.md)에 참조, PPT에 스크린샷 삽입
 
 **프로젝트 유형별 적용:**
@@ -108,6 +110,33 @@ enforcement: rigid
 **Stitch + 에이전트 회의 연계:**
 - 에이전트 A/B/C 각각의 UI 안을 Stitch로 생성 → `generate_variants`로 변형 → 비교표에 포함
 
+### 프로젝트 유형별 시각 자료 생성 가이드
+
+S3 기획서 작성 시 프로젝트 유형에 따라 아래 시각 자료를 생성한다.
+
+**프로젝트 유형별 필수 시각 자료:**
+
+| 시각 자료 | 게임 | 웹/앱 | 생성 도구 |
+|----------|:----:|:----:|----------|
+| **UI 목업** (핵심 화면) | 필수 | 필수 | Stitch MCP (웹/앱 필수, 게임 선택) |
+| **컨셉 일러스트** (테마/세계관/브랜드) | 필수 | 권장 | NanoBanana MCP |
+| **캐릭터/아바타/마스코트** | 필수 (캐릭터 존재 시) | 선택 | NanoBanana MCP |
+| **플로우 다이어그램** (코어 루프/유저 플로우) | 필수 | 필수 | Mermaid / Draw.io |
+| **이펙트/파티클 레퍼런스** | 필수 | 선택 | `/video-reference-guide` + NanoBanana |
+| **경쟁사 UI 분석** | 필수 | 필수 | `/game-screenshot-analyze` |
+| **반응형 레이아웃** (Desktop/Mobile) | N/A | 필수 (Large) | Stitch MCP (generate_variants) |
+| **아이콘 세트/디자인 토큰** | 선택 | 권장 | NanoBanana MCP |
+| **FSM/로직 시각화** | 필수 | 선택 | `/game-logic-visualize` |
+
+**시각 자료 생성 시점:**
+
+| 시점 | 생성 대상 | 비고 |
+|------|----------|------|
+| S3 기획서 초안 | 컨셉 일러스트, 핵심 UI 목업, 코어 플로우 | 에이전트 회의 입력으로 활용 |
+| 에이전트 회의 | UI 안 비교용 변형 (generate_variants) | 안별 목업 비교표에 포함 |
+| S3 기획서 확정 | 경쟁사 UI 분석, 캐릭터/마스코트 | PPT에 포함 |
+| S4 전환 | 나머지 시각 자료 (반응형, FSM, 아키텍처) | S4 산출물에 포함 |
+
 ### .md 기획서 시각 자료
 
 Markdown 기획서에는 아래를 포함한다:
@@ -116,6 +145,8 @@ Markdown 기획서에는 아래를 포함한다:
 - **테이블**: 비교표, 수치 데이터, 매트릭스
 - **ASCII 다이어그램**: 간단한 구조도 (Mermaid가 과할 때)
 - **NanoBanana 이미지 임베딩**: 컨셉 일러스트, UI 목업 (이미지 생성 후 상대경로로 삽입)
+
+> `_assets/`: S3 기획서와 동일 디렉토리의 `_assets/` 폴더 (예: `02-product/projects/{project}/_assets/`). 경쟁사 스크린샷 분석 결과는 `docs/assets/screenshot-refs/`에 저장된다.
 
 ```markdown
 <!-- Mermaid 예시 -->
@@ -159,10 +190,12 @@ flowchart LR
 3. 각 Stage 산출물은 해당 폴더의 `projects/{project}/` 하위에 저장한다
 4. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
 5. S3 산출물(PRD/GDD)에 "에이전트 회의 결과" 섹션을 필수 포함한다
-5-1. PRD/GDD에 **"도메인 용어 정의(Glossary)"** 섹션을 필수 포함한다 — 한국어(기획 용어)↔영어(코드명)↔정의↔관계 4열 테이블
-6. 수치 데이터는 차트/그래프로, 프로세스는 다이어그램으로, 구조는 도형으로 시각화한다
-7. NanoBanana로 PPT 배경 이미지와 컨셉 일러스트를 생성한다
-8. 앱/웹 프로젝트는 Stitch로 핵심 화면 UI 목업을 생성하고, generate_variants로 UI 안을 비교한다
+6. PRD/GDD에 **"도메인 용어 정의(Glossary)"** 섹션을 필수 포함한다 — 한국어(기획 용어)↔영어(코드명)↔정의↔관계 4열 테이블
+7. 수치 데이터는 차트/그래프로, 프로세스는 다이어그램으로, 구조는 도형으로 시각화한다
+8. NanoBanana로 PPT 배경 이미지와 컨셉 일러스트를 생성한다
+9. 앱/웹 프로젝트는 Stitch로 핵심 화면 UI 목업을 생성하고, generate_variants로 UI 안을 비교한다
+10. 프로젝트 유형별 필수 시각 자료 테이블을 참조하여 누락 없이 생성한다 (게임/웹/앱 공통)
+11. 경쟁사 UI 분석은 모든 프로젝트 유형에서 `/game-screenshot-analyze`로 수행한다
 
 ## Iron Laws
 

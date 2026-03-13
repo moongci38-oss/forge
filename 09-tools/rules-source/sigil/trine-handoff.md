@@ -51,11 +51,154 @@ S4 완료 시 자동 생성하는 Handoff 문서:
 
 ## 프로젝트 유형별 Trine 대상
 
-| 프로젝트 유형 | Trine 대상 환경 | 비고 |
-|-------------|---------------|------|
-| 게임 (Unity) | GodBlade 또는 별도 Unity 프로젝트 | C# 개발 |
-| 웹 서비스 | Portfolio (Next.js + NestJS) | TypeScript 개발 |
-| 앱 개발 | 별도 앱 프로젝트 | 프레임워크에 따라 |
+| 프로젝트 유형 | Trine 대상 환경 | Spec 템플릿 | 비고 |
+|-------------|---------------|-----------|------|
+| 게임 (Unity) | GodBlade 또는 별도 Unity 프로젝트 | `spec-template-game.md` | C# 개발 |
+| 웹 서비스 | Portfolio (Next.js + NestJS) | `spec-template-base.md` | TypeScript 개발 |
+| 앱 개발 | 별도 앱 프로젝트 | `spec-template-base.md` | 프레임워크에 따라 |
+
+### Spec 템플릿 자동 선택
+
+`sigil-workspace.json`의 `projectType` 필드로 Spec 템플릿을 자동 선택한다:
+
+| projectType | 템플릿 | Section 9 내용 |
+|:-----------:|--------|---------------|
+| `game` | `spec-template-game.md` | 씬 구조, Prefab 계층, FSM, Canvas UI, 해상도, 입력, 연출/이펙트, Animator |
+| `web` (기본) | `spec-template-base.md` | 페이지/라우트, 컴포넌트, Props, 상태관리, 반응형, 접근성, SEO |
+
+- `projectType` 미지정 시 기본값 `web` (기존 동작 유지)
+- 게임 프로젝트는 서버 Spec을 경량화 (Section 8 → "서버 연동" 참조만)
+
+### 게임 프로젝트 Trine 도구
+
+| 도구 | 용도 | 활용 Phase |
+|------|------|-----------|
+| Unity MCP | Unity Editor 연동 (씬/프리팹/컴포넌트 조작) | Phase 3 구현 |
+| Unity AI | Muse Chat, Muse Behavior AI | Phase 3 구현 |
+| `/video-reference-guide` | 게임 연출 영상 → 구현 가이드 | S3 기획, Phase 2 Spec (9.9) |
+| `/game-screenshot-analyze` | 게임 스크린샷 → UI/레이아웃 분석 | S3 기획, S4 UI/UX, Phase 2 Spec |
+| `/game-logic-visualize` | FSM/확률/전투/경제 시각화+시뮬레이션 | S3 GDD, S4 상세기획, Phase 2 Spec |
+| `/game-reference-collect` | 경쟁작 레퍼런스 통합 수집·분석 | S1 리서치, S3 GDD |
+| `analyze-video.sh` | Gemini 프레임 분석 CLI | 스킬 내부 / 직접 호출 |
+| `analyze-screenshot.sh` | Gemini Vision 이미지 분석 CLI | 스킬 내부 / 직접 호출 |
+
+> 게임 프로젝트의 Unity MCP/AI 설정은 개발 프로젝트의 `.mcp.json`에 정의되어 있다.
+
+### 게임 프로젝트 시각 자료 최소 기준
+
+S4 기획 패키지에 포함해야 하는 게임 프로젝트의 시각 자료 최소 기준. `sigil-workspace.json`의 `projectScale` 필드로 차등 적용:
+
+#### 규모 분류 기준
+
+| 규모 | 기준 |
+|------|------|
+| **Small** | Trine 세션 3개 이하, 핵심 시스템 2개 이하 |
+| **Large** | Trine 세션 4개 이상, 또는 핵심 시스템 3개 이상 |
+
+> **핵심 시스템**: 게임 코어 루프에 직접 관여하는 시스템 (전투, 경제, 상태 관리, 보상 등). UI/설정 시스템은 포함하지 않음.
+
+#### 규모별 시각 자료 최소 기준
+
+| 항목 | Small | Large | 도구 |
+|------|:-----:|:-----:|------|
+| FSM 다이어그램 | 코어 루프 1개 | 핵심 시스템당 1개 | `/game-logic-visualize` |
+| UI 목업 (Stitch) | 핵심 화면 1개 | 핵심 화면 3+개 | Stitch MCP |
+| 레퍼런스 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/game-screenshot-analyze` |
+| 영상 레퍼런스 분석 | 선택 | 핵심 연출 1+개 | `/video-reference-guide` |
+
+> **경쟁사 스크린샷 저장 경로**: `docs/assets/screenshot-refs/` (분석 결과 .md 포함). 원본 이미지는 `docs/assets/screenshot-refs/originals/`에 보관 권장.
+| 밸런싱 시뮬레이터 | 선택 | 핵심 시스템 1+개 | `/game-logic-visualize` (playground) |
+| 사이트 레퍼런스 수집 | 선택 | 경쟁작 사이트 2+개 | `/game-reference-collect` |
+
+### 게임 S4 산출물별 시각 자료 기준
+
+> `sigil-s4-planning.md` → "S4 산출물 시각 자료 기준 (프로젝트 유형별)" 테이블 참조
+
+### 웹/앱 프로젝트 Trine 도구
+
+| 도구 | 용도 | 활용 Phase |
+|------|------|-----------|
+| Stitch MCP | UI 목업 생성 (Desktop/Mobile) | S3 기획, S4 UI/UX, Phase 2 Spec |
+| NanoBanana MCP | 히어로 이미지, 컨셉 일러스트, 아이콘 | S3 기획, S4 상세기획 |
+| `/game-screenshot-analyze` | 경쟁사 UI 스크린샷 분석, 구현 검증 | S3 기획, S4 UI/UX, Phase 3 역비교 |
+| Draw.io MCP | C4 아키텍처, 복잡한 플로우 (15+ 노드) | S4 개발 계획, Phase 2 Spec |
+| Mermaid | 간단한 플로우/시퀀스 (≤15 노드) | S3 기획, S4 상세기획, Phase 2 Spec |
+| Playwright CLI | 구현 결과 브라우저 스크린샷 캡처 | Phase 3 역비교 |
+
+### 웹/앱 프로젝트 시각 자료 최소 기준
+
+S4 기획 패키지에 포함해야 하는 웹/앱 프로젝트의 시각 자료 최소 기준. `sigil-workspace.json`의 `projectScale` 필드로 차등 적용:
+
+#### 규모별 시각 자료 최소 기준
+
+| 항목 | Small | Large | 도구 |
+|------|:-----:|:-----:|------|
+| UI 목업 (Stitch) | 핵심 화면 1개 | 핵심 화면 3+개 | Stitch MCP |
+| 플로우 다이어그램 | 코어 플로우 1개 | 주요 플로우 전체 | Mermaid / Draw.io MCP |
+| 경쟁사 UI 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/game-screenshot-analyze` |
+| 컨셉 일러스트/히어로 이미지 | 선택 | 핵심 페이지 1+개 | NanoBanana MCP |
+
+> **경쟁사 스크린샷 저장 경로**: `docs/assets/screenshot-refs/` (분석 결과 .md 포함).
+| 반응형 레이아웃 목업 | 선택 | Desktop+Mobile 각 1+개 | Stitch MCP (generate_variants) |
+| 아키텍처 다이어그램 (C4) | 선택 | Level 1-2 필수 | Draw.io MCP |
+
+### 웹/앱 S4 산출물별 시각 자료 기준
+
+> `sigil-s4-planning.md` → "S4 산출물 시각 자료 기준 (프로젝트 유형별)" 테이블 참조
+
+### 파이프라인 시각 도구 선택 가이드
+
+```
+시각 자료 유형 판별:
+  동영상? → /video-reference-guide (무성) 또는 /yt (음성)
+  스크린샷? → /game-screenshot-analyze
+  로직/수치? → /game-logic-visualize
+  레퍼런스 수집? → /game-reference-collect (위 3개 자동 라우팅)
+  목업 생성? → Stitch MCP
+  컨셉 아트? → NanoBanana MCP
+  복잡한 다이어그램? → Draw.io MCP
+  간단한 다이어그램? → Mermaid
+```
+
+### Trine Phase 3 구현↔레퍼런스 역비교
+
+UI/연출 구현 완료 후, 구현 결과물을 S3/S4 레퍼런스와 비교하여 기획 의도 충족도를 검증한다. **모든 프로젝트 유형**에 적용.
+
+> **게임 역비교 범위**: UI/HUD/메뉴 레이어에 한정한다. 타격감, FPS, 파티클, 사운드 등 런타임 품질은 역비교 범위 밖이다. FSM 로직 변경도 시각 역비교 범위 밖이다 — Unit/Integration 테스트로 검증한다.
+
+```
+Phase 3 구현 완료
+  ↓
+Check 3 (build/test/lint) PASS
+  ↓
+시각 역비교 (UI/화면 컴포넌트 신규/변경 시, 선택적)
+  ├─ 게임: Unity Editor Play 모드 스크린샷 캡처 (UI/HUD 레이어만)
+  ├─ 웹/앱: Playwright CLI 스크린샷 또는 수동 브라우저 캡처
+  ├─ docs/assets/screenshot-refs/ 의 레퍼런스와 비교
+  ├─ /game-screenshot-analyze 실행
+  └─ 비교 결과를 Walkthrough에 포함
+  ↓
+Check 3.5 (Spec compliance)
+```
+
+**"선택적"인 이유**: UI/화면 컴포넌트 신규 생성 또는 변경 시에만 수행. 로직·API·DB만 변경 시 스킵.
+
+**웹/앱 Playwright CLI 전제조건:**
+
+| 항목 | 확인 방법 |
+|------|---------|
+| dev 서버 실행 여부 | `pnpm dev` / `npm run dev` 실행 확인 |
+| URL/포트 | `http://localhost:{PORT}` (프로젝트별 상이) |
+| 인증 필요 화면 | 테스트 계정 또는 `--bypass-csp` 옵션 확인 |
+| 캡처 명령 | `npx playwright screenshot {URL} {output}.png` |
+
+**프로젝트 유형별 스크린샷 캡처 방법:**
+
+| 유형 | 캡처 방법 | 자동화 수준 |
+|------|----------|:----------:|
+| 게임 (Unity) | Unity Editor Play 모드 (UI/HUD 레이어만) | 수동 |
+| 웹/앱 | Playwright CLI (`npx playwright screenshot`) | 자동화 가능 |
+| 웹/앱 (대안) | 수동 브라우저 캡처 | 수동 |
 
 ## Symlink 기반 문서 연동 (Source of Truth: SIGIL 워크스페이스)
 
