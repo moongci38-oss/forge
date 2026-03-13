@@ -76,7 +76,7 @@ S4 완료 시 자동 생성하는 Handoff 문서:
 | Unity MCP | Unity Editor 연동 (씬/프리팹/컴포넌트 조작) | Phase 3 구현 |
 | Unity AI | Muse Chat, Muse Behavior AI | Phase 3 구현 |
 | `/video-reference-guide` | 게임 연출 영상 → 구현 가이드 | S3 기획, Phase 2 Spec (9.9) |
-| `/game-screenshot-analyze` | 게임 스크린샷 → UI/레이아웃 분석 | S3 기획, S4 UI/UX, Phase 2 Spec |
+| `/screenshot-analyze` | 게임 스크린샷 → UI/레이아웃 분석 | S3 기획, S4 UI/UX, Phase 2 Spec |
 | `/game-logic-visualize` | FSM/확률/전투/경제 시각화+시뮬레이션 | S3 GDD, S4 상세기획, Phase 2 Spec |
 | `/game-reference-collect` | 경쟁작 레퍼런스 통합 수집·분석 | S1 리서치, S3 GDD |
 | `analyze-video.sh` | Gemini 프레임 분석 CLI | 스킬 내부 / 직접 호출 |
@@ -103,7 +103,7 @@ S4 기획 패키지에 포함해야 하는 게임 프로젝트의 시각 자료 
 |------|:-----:|:-----:|------|
 | FSM 다이어그램 | 코어 루프 1개 | 핵심 시스템당 1개 | `/game-logic-visualize` |
 | UI 목업 (Stitch) | 핵심 화면 1개 | 핵심 화면 3+개 | Stitch MCP |
-| 레퍼런스 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/game-screenshot-analyze` |
+| 레퍼런스 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/screenshot-analyze` |
 | 영상 레퍼런스 분석 | 선택 | 핵심 연출 1+개 | `/video-reference-guide` |
 
 > **경쟁사 스크린샷 저장 경로**: `docs/assets/screenshot-refs/` (분석 결과 .md 포함). 원본 이미지는 `docs/assets/screenshot-refs/originals/`에 보관 권장.
@@ -120,7 +120,7 @@ S4 기획 패키지에 포함해야 하는 게임 프로젝트의 시각 자료 
 |------|------|-----------|
 | Stitch MCP | UI 목업 생성 (Desktop/Mobile) | S3 기획, S4 UI/UX, Phase 2 Spec |
 | NanoBanana MCP | 히어로 이미지, 컨셉 일러스트, 아이콘 | S3 기획, S4 상세기획 |
-| `/game-screenshot-analyze` | 경쟁사 UI 스크린샷 분석, 구현 검증 | S3 기획, S4 UI/UX, Phase 3 역비교 |
+| `/screenshot-analyze` | 경쟁사 UI 스크린샷 분석, 구현 검증 | S3 기획, S4 UI/UX, Phase 3 역비교 |
 | Draw.io MCP | C4 아키텍처, 복잡한 플로우 (15+ 노드) | S4 개발 계획, Phase 2 Spec |
 | Mermaid | 간단한 플로우/시퀀스 (≤15 노드) | S3 기획, S4 상세기획, Phase 2 Spec |
 | Playwright CLI | 구현 결과 브라우저 스크린샷 캡처 | Phase 3 역비교 |
@@ -135,7 +135,7 @@ S4 기획 패키지에 포함해야 하는 웹/앱 프로젝트의 시각 자료
 |------|:-----:|:-----:|------|
 | UI 목업 (Stitch) | 핵심 화면 1개 | 핵심 화면 3+개 | Stitch MCP |
 | 플로우 다이어그램 | 코어 플로우 1개 | 주요 플로우 전체 | Mermaid / Draw.io MCP |
-| 경쟁사 UI 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/game-screenshot-analyze` |
+| 경쟁사 UI 스크린샷 분석 | 경쟁작 1개 | 경쟁작 2+개 | `/screenshot-analyze` |
 | 컨셉 일러스트/히어로 이미지 | 선택 | 핵심 페이지 1+개 | NanoBanana MCP |
 
 > **경쟁사 스크린샷 저장 경로**: `docs/assets/screenshot-refs/` (분석 결과 .md 포함).
@@ -151,7 +151,7 @@ S4 기획 패키지에 포함해야 하는 웹/앱 프로젝트의 시각 자료
 ```
 시각 자료 유형 판별:
   동영상? → /video-reference-guide (무성) 또는 /yt (음성)
-  스크린샷? → /game-screenshot-analyze
+  스크린샷? → /screenshot-analyze
   로직/수치? → /game-logic-visualize
   레퍼런스 수집? → /game-reference-collect (위 3개 자동 라우팅)
   목업 생성? → Stitch MCP
@@ -175,7 +175,7 @@ Check 3 (build/test/lint) PASS
   ├─ 게임: Unity Editor Play 모드 스크린샷 캡처 (UI/HUD 레이어만)
   ├─ 웹/앱: Playwright CLI 스크린샷 또는 수동 브라우저 캡처
   ├─ docs/assets/screenshot-refs/ 의 레퍼런스와 비교
-  ├─ /game-screenshot-analyze 실행
+  ├─ /screenshot-analyze 실행
   └─ 비교 결과를 Walkthrough에 포함
   ↓
 Check 3.5 (Spec compliance)
