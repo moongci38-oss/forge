@@ -112,6 +112,7 @@ user-invocable: true
 - Tier 1 전체 (13개 공식 소스) — WebFetch로 직접 확인
 - Tier 2 전체 (GitHub 릴리즈, 트렌딩)
 - 전날 날짜 기준 신규 콘텐츠만 필터
+- **Brave Search 활용**: `brave_web_search`로 공식 소스 도메인 필터링 검색 (예: `site:anthropic.com`, `site:openai.com`). WebFetch 접근 실패 시 Brave Search를 fallback으로 사용하여 최신 발표 감지
 - 출력: 구조화된 JSON 요약 → Lead에게 반환
 
 **Teammate B (Haiku): 개발자 커뮤니티 + 미디어**

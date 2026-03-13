@@ -2,3 +2,9 @@ node_modules/
 *.lock
 *.log
 .git/
+06-finance/
+07-legal/
+08-admin/
+.DS_Store
+*.tmp
+.env*
