@@ -6,3 +6,4 @@
 |:----:|---------|-----|:------:|------|
 | 1 | 병렬 실행 | parallel-execution | HIGH | 병렬 처리, 오케스트레이션 |
 | 2 | 크로스 프로젝트 | cross-project-pipeline | MEDIUM | BUSINESS ↔ 개발 데이터 흐름 |
+| 3 | 스킬 생성 | skill-creation | LOW | skill-creator vs writing-skills 선택 |

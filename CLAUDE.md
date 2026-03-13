@@ -104,19 +104,19 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 | 서버 | Scope | 설명 |
 |------|:-----:|------|
-| **filesystem** | project | 워크스페이스 파일 접근 |
+| **filesystem** | project | 워크스페이스 파일 접근 (Cowork용) |
 | **Sequential Thinking** | project | 복잡한 전략 계획 수립 |
 | **Notion** | project | Notion 페이지/DB 연동 |
 | **NanoBanana** | user | Google Gemini AI 이미지 생성/편집 |
 | **Stitch** | user | AI UI 목업 생성 |
-| **Lighthouse** | user | 웹 성능/접근성 감사 |
-| **A11y** | user | 접근성 검사 |
+| **Lighthouse** | user | 웹 성능/접근성/SEO 감사 |
+| **Sentry** | user | 프로덕션 에러 추적 |
+| **Brave Search** | user | 웹 검색 (내장 WebSearch 보완) |
+| **Draw.io** | user | 다이어그램 생성 (PPT/Spec 시각 자료) |
 
-### Plugins (Context7, Playwright는 플러그인 시스템)
+> 제거됨: a11y (lighthouse에 통합), playwright (CLI 전환 완료), notion user-level (project와 중복)
 
-> 웹 검색은 내장 `WebSearch` 도구 사용.
-
-### 설치된 플러그인
+### Plugins
 
 | 플러그인 | 마켓플레이스 | 용도 | 상태 |
 |---------|------------|------|:----:|
@@ -127,9 +127,10 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 | **code-review** | claude-plugins-official | PR 코드 리뷰 | ✅ |
 | **security-guidance** | claude-plugins-official | 보안 가이드 | ✅ |
 | **superpowers** | claude-plugins-official | 워크플로 스킬 | ✅ |
+| **skill-creator** | claude-plugins-official | 스킬 생성/평가/개선 | ✅ |
 | finance | knowledge-work-plugins | 06-finance (B트랙) | ⛔ |
 | legal | knowledge-work-plugins | 07-legal (B트랙) | ⛔ |
 
 ---
 
-*Last Updated: 2026-03-13 (캐시 최적화: 정적 콘텐츠 상단, 동적 콘텐츠 하단 재배치)*
+*Last Updated: 2026-03-13 (MCP 감사: a11y/playwright/notion중복 제거, brave-search/drawio/skill-creator 추가)*

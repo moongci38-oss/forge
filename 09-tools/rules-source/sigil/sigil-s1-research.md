@@ -22,9 +22,19 @@ enforcement: flexible
 | **academic-researcher** | Agent | 학술 논문, 리뷰 논문, 인용 분석 |
 | **fact-checker** | Agent | 수치 검증, 출처 신뢰도, 교차 검증 |
 | **WebSearch** | Tool | 실시간 뉴스, 업계 동향, 일반 웹 |
+| **Brave Search** | MCP | 도메인 필터링 검색 (`.edu`, `.org`, `.gov` 우선), 로컬 검색 |
 | **`/competitor`** | Command | 경쟁사 심층 분석 (기능/가격/전략) |
 | **`marketing:competitive-analysis`** | Plugin | 경쟁사 포지셔닝, 메시징 비교 |
 | **`data:data-exploration`** | Plugin | 시장 데이터 정량 분석 (해당 시) |
+
+### 검색 도구 선택 기준
+
+| 상황 | 도구 | 이유 |
+|------|------|------|
+| 일반 웹 검색 (기본) | **WebSearch** | 빠르고 범용적 |
+| 신뢰도 높은 소스 필요 (학술, 공식 통계) | **Brave Search** | 도메인 필터링 (`site:.edu`, `site:.gov`) |
+| 로컬/지역 비즈니스 조사 | **Brave Search** (local) | 지역 검색 지원 |
+| fact-checker 교차 검증 | **Brave Search** | 공식 소스 우선 검색으로 신뢰도 향상 |
 
 - **에이전트 회의**: Competing Hypotheses — 리서치 에이전트 독립 분석 → 비교 → 방향 도출
 - **필수 방법론**: AI-augmented Research + JTBD + Competitive Intelligence 자동화 + Evidence-Based Management
