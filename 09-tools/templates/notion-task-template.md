@@ -15,10 +15,13 @@
 
 ### Notion DB URLs
 
-- **Projects DB**: https://www.notion.so/f5e9b91fa40441d4a8cef2f98ae8d26e
-- **Tasks DB**: https://www.notion.so/afe1ec3c2cce4123ab91d1ec381f0c2c
-- **Daily System Review DB**: https://www.notion.so/b3a833acdc1644c99acf81e7da25a268
-- **Weekly Research DB**: https://www.notion.so/8023d8cc603d48e3b6f99e95739457fd
+> **Source of Truth**: `sigil-workspace.json`의 `notionDBs` 섹션에서 참조.
+> 아래 URL은 참조용이며, 변경 시 반드시 `sigil-workspace.json`을 업데이트한다.
+
+- **Projects DB**: `notionDBs.projects`
+- **Tasks DB**: `notionDBs.tasks`
+- **Daily System Review DB**: `notionDBs.dailyReview`
+- **Weekly Research DB**: `notionDBs.weeklyResearch`
 
 ---
 
@@ -156,9 +159,13 @@ Notion MCP 미연결 시 `docs/planning/active/sigil/todo.md` 사용.
 ```markdown
 ## Trine 개발 진행
 
-| # | Spec | Session | SP | Status | PR | 완료일 |
-|:-:|------|:-------:|:--:|:------:|:--:|:------:|
-| 1 | {Spec 이름} | S{N} | {SP} | ⬜ Todo | — | — |
+| # | Spec | Type | Session | SP | Status | PR | 완료일 |
+|:-:|------|:----:|:-------:|:--:|:------:|:--:|:------:|
+| 1 | {Spec 이름} | feat | S{N} | {SP} | ⬜ Todo | — | — |
 ```
+
+**Type 컬럼 값**: `feat` (신규기능) / `fix` (버그수정) / `hotfix` (긴급수정) / `upgrade` (기능개선)
+
+> Notion MCP 미연결 시 (Tier 2 Fallback) Type 컬럼으로 최소한의 유형/우선순위 정보를 보존한다.
 
 **상태 흐름**: ⬜ Todo → 🔄 Doing (브랜치 생성) → 🧪 QA (Check 3) → ✅ Done (PR Merge)

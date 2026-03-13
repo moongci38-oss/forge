@@ -1,3 +1,10 @@
+---
+id: pm-tools
+title: "PM 도구 연동 규칙 (Notion Tasks)"
+scope: always
+impact: HIGH
+---
+
 # PM 도구 연동 규칙 (Notion Tasks)
 
 > Notion Tasks DB와 Trine 파이프라인 이벤트 간 상태 자동 전환 규칙.
@@ -12,8 +19,7 @@
 📌 Tasks DB     ←─ 프로젝트별 뷰 + 전체 칸반
 ```
 
-- **Projects DB URL**: https://www.notion.so/f5e9b91fa40441d4a8cef2f98ae8d26e
-- **Tasks DB URL**: https://www.notion.so/afe1ec3c2cce4123ab91d1ec381f0c2c
+- **DB URL**: `sigil-workspace.json`의 `notionDBs` 섹션에서 참조 (하드코딩 금지)
 
 ## 상태 자동 전환 규칙
 
@@ -39,12 +45,14 @@
 
 - Notion UI에서 언제든 상태 직접 변경 가능
 - AI 자동 전환과 충돌 시 **Human 설정이 우선**
-- 판단 기준: `등록자=Human`이고 상태가 AI 예상값과 다르면 → **스킵** (덮어쓰지 않음)
+- 판단 기준: `등록자` **또는** `last_edited_by`가 Human이고 상태가 AI 예상값과 다르면 → **스킵** (덮어쓰지 않음)
 - AI는 스킵 시 확인 메시지 출력: "Human이 수동 변경한 상태입니다. 덮어쓰지 않습니다."
+- AI가 등록한 Task라도 Human이 Notion에서 상태를 수동 변경한 경우, `last_edited_by`를 확인하여 Human 의도를 존중한다
 
 ## 버그/기능 자동 등록
 
-- 사용자가 버그/기능을 언급하면 Tasks DB에 자동 등록
+- 사용자가 **명시적으로 등록을 요청**할 때만 Tasks DB에 등록 (예: "등록해줘", "추가해줘", "올려줘", "만들어줘")
+- 단순 언급/논의는 등록 트리거가 아님 — "이 버그가 있는 것 같다"는 등록 아님, "이 버그 등록해줘"는 등록
 - 등록 시 필수: 프로젝트 연결 (`sigil-workspace.json` 참조로 프로젝트명 → Projects DB 매핑)
 - 등록자 = AI, 우선순위 = P2-보통 (기본값)
 - Hotfix 등록 시 예외: 우선순위 = P0-긴급 강제
@@ -59,6 +67,18 @@
 3. 있으면 → notion-update-page (상태만 변경)
 ```
 
+## Notion MCP 연결 상태 감지
+
+Trine 세션 시작 시 Notion MCP 연결 상태를 먼저 확인한다.
+
+| 상태 | 판단 방법 | 행동 |
+|------|---------|------|
+| 연결 가능 | `notion-search` 호출 성공 | Tier 1 (Notion + todo.md) |
+| 연결 불가 | `notion-search` 호출 실패/타임아웃 | Tier 2 Fallback (todo.md만) |
+
+- Tier 2 전환 시 세션 내내 Notion 갱신 스킵 (매 이벤트마다 재시도하지 않음)
+- 세션 중간에 연결 복구 시에도 Tier 전환하지 않음 (일관성 유지)
+
 ## DB 미존재 시 처리
 
 - Projects DB 또는 Tasks DB가 없으면 `notion-create-database`로 먼저 생성
@@ -72,6 +92,26 @@ PR Merge 후 아래 두 곳을 모두 완료 처리한다:
 |------|---------|
 | `docs/planning/active/sigil/todo.md` (Spec 칸반) | ✅ Done + PR 번호 + 완료일 기록 |
 | Notion Tasks DB (해당 Task) | 상태=완료 + PR URL + 완료일 자동 기록 |
+
+> **순서**: todo.md 갱신 완료 → Notion Tasks 갱신. Notion 갱신 실패 시 경고만 출력하고 파이프라인을 중단하지 않는다.
+
+## Source of Truth 원칙
+
+**`docs/planning/active/sigil/todo.md`가 유일한 Source of Truth**이다. Notion Tasks는 대시보드/공유 뷰로만 사용하며, 역동기화하지 않는다.
+
+### 갱신 순서
+
+todo.md 갱신이 항상 **먼저** 완료된 후 Notion Tasks를 갱신한다. Notion 갱신 실패 시 todo.md만으로 파이프라인은 중단 없이 진행한다.
+
+### 갱신 주체 역할 매트릭스
+
+| 대상 | 갱신 주체 | 시점 | 비고 |
+|------|----------|------|------|
+| todo.md (⬜→🔄 Doing) | GitHub Actions (자동) | branch create | todo-tracker.yml |
+| todo.md (🔄→🧪 QA) | trine-pm-updater (AI) | Check 3 진입 | AI 세션 내 |
+| todo.md (🧪→✅ Done) | GitHub Actions (자동) | PR merge | todo-tracker.yml |
+| Notion Tasks 상태 전환 | trine-pm-updater (AI) | Trine 이벤트 후 | todo.md 갱신 완료 후에만 |
+| Notion Tasks (Hotfix) | AI 직접 | Hotfix 등록 시 | P0-긴급 강제 |
 
 ## 담당자 역할
 
@@ -109,13 +149,16 @@ PR Merge 후 아래 두 곳을 모두 완료 처리한다:
 ## AI 행동 규칙
 
 1. Trine 이벤트 발생 시 해당 Task 검색 후 상태 자동 전환
-2. Human override 판단: `등록자=Human`이고 현재 상태≠예상 상태 → 스킵
-3. 버그/기능 요청 언급 시 Projects DB에서 프로젝트 확인 후 Tasks DB 자동 등록
+2. Human override 판단: `등록자=Human` **또는** `last_edited_by=Human`이고 현재 상태≠예상 상태 → 스킵
+3. 버그/기능 등록은 **명시적 요청**("등록해줘", "추가해줘" 등) 시에만 실행. 단순 언급/논의는 등록 트리거가 아님
 4. Hotfix 등록 시 Priority=P0-긴급 강제 설정
 5. Tasks 등록 시 `프로젝트` 관계 필수 연결 (누락 시 등록 중단 + Human에게 프로젝트 확인 요청)
 6. DB 미존재 시 notion-create-database로 먼저 생성
 7. PR Merge 후 todo.md(Spec 칸반) + Notion Tasks 양쪽 모두 완료 처리
 8. 작업자 필드가 비어있으면 Human에게 담당자 배정 요청
+9. todo.md 갱신을 Notion 갱신보다 항상 먼저 수행한다. Notion 실패 시 경고만 출력하고 파이프라인을 계속한다.
+10. Trine 세션 시작 시 `notion-search`로 MCP 연결 상태를 확인한다. 실패 시 Tier 2 Fallback 선언 후 세션 내 Notion 갱신 전체 스킵.
+11. Notion DB URL은 `sigil-workspace.json`의 `notionDBs`에서 참조한다. 규칙/템플릿에 하드코딩하지 않는다.
 
 ## Iron Laws
 
