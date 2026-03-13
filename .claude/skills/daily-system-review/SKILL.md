@@ -201,6 +201,48 @@ Lead가 5개 Teammate 결과를 종합하여 2개 문서 직접 작성:
 
 이전 날짜의 계획서가 있으면 미처리 액션을 이월한다.
 
+### Wave 3 (Notion 자동 등록 — Wave 2 완료 후)
+
+2개 문서 작성 완료 후, Notion "Daily System Review" DB에 페이지를 자동 생성한다.
+
+**Notion DB 정보:**
+- Data Source ID: `43829f7b-8d3f-47f1-90a1-84f40d39239e`
+- DB URL: `https://www.notion.so/b3a833acdc1644c99acf81e7da25a268`
+
+**`mcp__notion__notion-create-pages` 호출:**
+
+```json
+{
+  "parent": { "data_source_id": "43829f7b-8d3f-47f1-90a1-84f40d39239e" },
+  "pages": [{
+    "properties": {
+      "제목": "{date} AI 시스템 분석",
+      "Executive Summary": "{리포트의 Executive Summary 3줄 그대로}",
+      "date:날짜:start": "{date}",
+      "상태": "완료",
+      "Critical 갭": {Critical 갭 개수},
+      "High 갭": {High 갭 개수},
+      "Medium 갭": {Medium 갭 개수},
+      "P0 액션": {P0 액션 개수},
+      "P1 액션": {P1 액션 개수},
+      "리포트 경로": "01-research/daily/{date}/ai-system-analysis.md",
+      "적용계획 경로": "01-research/daily/{date}/system-improvement-plan.md"
+    },
+    "content": "{리포트 Executive Summary}\n\n## 갭 분석 요약\n{Critical/High/Medium 갭 항목 1줄씩}\n\n## P0 액션 아이템\n{P0 항목 목록}\n\n## 추천 시청/읽기\n{Top 3 추천 항목}"
+  }]
+}
+```
+
+**속성 값 추출 규칙:**
+- Executive Summary: 리포트의 `## Executive Summary` 섹션 전문
+- Critical/High/Medium 갭: 리포트 섹션 4의 각 등급별 항목 수 카운트
+- P0/P1 액션: 적용 계획서의 P0/P1 항목 수 카운트
+- content: 핵심 요약만 포함 (전체 리포트가 아닌 Notion에서 빠르게 읽을 수 있는 분량)
+
+**실패 처리:**
+- Notion MCP 미연결 시 경고 출력 후 스킵 (리포트 파일은 이미 저장됨)
+- 페이지 생성 실패 시 에러 로그 출력 후 스킵 (파이프라인 중단 안 함)
+
 ## 신뢰도 등급
 
 모든 데이터에 신뢰도를 표기한다:
