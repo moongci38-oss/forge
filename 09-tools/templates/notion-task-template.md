@@ -17,6 +17,8 @@
 
 - **Projects DB**: https://www.notion.so/f5e9b91fa40441d4a8cef2f98ae8d26e
 - **Tasks DB**: https://www.notion.so/afe1ec3c2cce4123ab91d1ec381f0c2c
+- **Daily System Review DB**: https://www.notion.so/b3a833acdc1644c99acf81e7da25a268
+- **Weekly Research DB**: https://www.notion.so/8023d8cc603d48e3b6f99e95739457fd
 
 ---
 

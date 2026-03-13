@@ -4,17 +4,6 @@
 
 ---
 
-## 사용 환경
-
-| 환경 | 사용자 | 주요 작업 |
-|------|--------|----------|
-| **Claude Code (CLI)** | 개발자 | Subagent 병렬 실행, 스크립트 실행, Git 작업 |
-| **Claude Desktop Cowork** | 비개발자 | 리서치, 문서 작성, 콘텐츠 기획 |
-
-> Cowork 환경 상세(MCP 매핑, Hooks 대체, 보안)는 `business-core.md` 규칙에 포함.
-
----
-
 ## Workspace Context
 
 **소유자**: 1인 기업 운영자 (풀스택 개발자 겸 사업가)
@@ -73,6 +62,42 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ---
 
+## 병렬 실행 (Subagent 기본)
+
+> Subagent가 기본 병렬 도구. Agent Teams는 Competing Hypotheses/Watchdog 전용.
+> 상세: `business-core.md` 내 parallel-execution 섹션 참조
+
+---
+
+## 규칙 시스템 (Rules-as-Code)
+
+| 위치 | 내용 |
+|------|------|
+| `.claude/rules/` | 컴파일된 규칙 (세션 시작 시 자동 로드) |
+| `09-tools/rules-source/` | 규칙 원본 (Frontmatter 포함, 빌드 소스) |
+| `~/.claude/rules/` | 전역 규칙 (3파일: docs-structure, opus-best-practices, analysis-to-implementation-gate) |
+| `~/.claude/trine/rules/` | Trine 개발 규칙 (14파일, 개발 프로젝트에 symlink 배포) |
+
+---
+
+## Output Preferences
+
+- **문서**: Markdown 기본
+- **언어**: 한국어 기본, 해외 대상 자료는 영어
+
+---
+
+## 사용 환경
+
+| 환경 | 사용자 | 주요 작업 |
+|------|--------|----------|
+| **Claude Code (CLI)** | 개발자 | Subagent 병렬 실행, 스크립트 실행, Git 작업 |
+| **Claude Desktop Cowork** | 비개발자 | 리서치, 문서 작성, 콘텐츠 기획 |
+
+> Cowork 환경 상세(MCP 매핑, Hooks 대체, 보안)는 `business-core.md` 규칙에 포함.
+
+---
+
 ## MCP Servers & Plugins
 
 ### MCP Servers
@@ -107,29 +132,4 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ---
 
-## 병렬 실행 (Subagent 기본)
-
-> Subagent가 기본 병렬 도구. Agent Teams는 Competing Hypotheses/Watchdog 전용.
-> 상세: `business-core.md` 내 parallel-execution 섹션 참조
-
----
-
-## 규칙 시스템 (Rules-as-Code)
-
-| 위치 | 내용 |
-|------|------|
-| `.claude/rules/` | 컴파일된 규칙 (세션 시작 시 자동 로드) |
-| `09-tools/rules-source/` | 규칙 원본 (Frontmatter 포함, 빌드 소스) |
-| `~/.claude/rules/` | 전역 규칙 (3파일: docs-structure, opus-best-practices, analysis-to-implementation-gate) |
-| `~/.claude/trine/rules/` | Trine 개발 규칙 (14파일, 개발 프로젝트에 symlink 배포) |
-
----
-
-## Output Preferences
-
-- **문서**: Markdown 기본
-- **언어**: 한국어 기본, 해외 대상 자료는 영어
-
----
-
-*Last Updated: 2026-03-06 (3-Layer Architecture 적용 + 폴더 CLAUDE.md 축소)*
+*Last Updated: 2026-03-13 (캐시 최적화: 정적 콘텐츠 상단, 동적 콘텐츠 하단 재배치)*
