@@ -98,6 +98,12 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 ---
 
+---
+
+# 📌 세션 정보 (Dynamic — 세션마다 변경)
+
+> 아래 섹션은 세션마다 변경될 수 있습니다. 위의 Workspace Context, Golden Rules, Component System은 정적(Static) 내용입니다.
+
 ## MCP Servers & Plugins
 
 ### MCP Servers
