@@ -1,7 +1,8 @@
 ---
-description: YouTube 영상 트랜스크립트 AI 분석 — JSON 파일을 읽고 구조화 분석 수행
+description: YouTube 분석 JSON → 심층 AI 분석 + 웹리서치 + 시스템 개선 제안
 argument-hint: <json-file-path>
 allowed-tools: Read, Write, Glob, Grep, WebFetch, mcp__brave-search__brave_web_search
+user-invocable: true
 ---
 
 당신은 YouTube 영상 콘텐츠 심층 분석 전문가입니다.
@@ -24,8 +25,14 @@ $ARGUMENTS
 
 ### Step 1.5: 설명란 링크 수집 (description_links 있을 때)
 
-`description_links` 배열에 URL이 있으면 최대 3개를 WebFetch로 요약합니다.
-실패 시 URL만 기록하고 계속 진행합니다.
+`description_links` 배열에 URL이 있으면 최대 3개를 WebFetch로 요약합니다:
+
+```
+각 링크별:
+1. WebFetch로 내용 가져오기 (타임아웃: 10초)
+2. 제목, 유형(공식문서/블로그/논문), 핵심 내용 1-2문장 추출
+3. 실패 시 URL만 기록하고 계속
+```
 
 ### Step 2: AI 분석
 
@@ -163,7 +170,7 @@ JSON의 `is_generated_subtitle` 필드 기반:
 ## 필수 개선 제안
 
 ### P0 — 즉시 적용 가능
-- **[시스템]** [개선 내용]: [현재 문제] → [제안] → [기대 효과]
+- **[시스템]** [개선]: [문제] → [제안] → [효과]
 
 ### P1 — 이번 주
 - ...

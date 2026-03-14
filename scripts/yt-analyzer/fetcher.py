@@ -109,11 +109,62 @@ def _format_view_count(count: int) -> str:
     return str(count)
 
 
+def extract_description_links(description: str) -> list[str]:
+    """설명란에서 외부 URL 추출 (YouTube 내부 링크 제외, 최대 10개)"""
+    if not description:
+        return []
+    urls = re.findall(r'https?://[^\s\)\]\>\'"]+', description)
+    external = [
+        url.rstrip('.,;')
+        for url in urls
+        if not re.search(r'(youtube\.com|youtu\.be)', url)
+    ]
+    return external[:10]
+
+
+def get_video_comments(video_id: str, max_results: int = 20) -> list[dict]:
+    """YouTube Data API v3 commentThreads.list로 상위 댓글 수집
+
+    Returns: [{"text": str, "author": str, "likes": int, "published": str}, ...]
+    API 키 없거나 댓글 비활성화 시 [] 반환 (조용히 실패)
+    """
+    if not YOUTUBE_API_KEY:
+        return []
+
+    try:
+        data = _api_request("commentThreads", {
+            "part": "snippet",
+            "videoId": video_id,
+            "maxResults": min(max_results, 100),
+            "order": "relevance",
+        })
+    except RuntimeError as e:
+        # 댓글 비활성화(403) 또는 기타 오류 — 조용히 빈 목록 반환
+        print(f"Comments unavailable for {video_id}: {e}")
+        return []
+
+    comments = []
+    for item in data.get("items", []):
+        top = item.get("snippet", {}).get("topLevelComment", {})
+        snippet = top.get("snippet", {})
+        text = snippet.get("textDisplay", "").strip()
+        if text:
+            comments.append({
+                "text": text,
+                "author": snippet.get("authorDisplayName", ""),
+                "likes": snippet.get("likeCount", 0),
+                "published": snippet.get("publishedAt", "")[:10],
+            })
+
+    return comments
+
+
 def get_video_details(video_id: str) -> Optional[dict]:
     """YouTube Data API v3 videos.list로 정확한 메타데이터 추출
 
     Returns: {"published": str, "duration": str, "view_count": str,
-              "like_count": str, "comment_count": str} or None
+              "like_count": str, "comment_count": str,
+              "description": str, "description_links": list, "tags": list} or None
     """
     if not YOUTUBE_API_KEY:
         return None
@@ -140,6 +191,8 @@ def get_video_details(video_id: str) -> Optional[dict]:
     like_count_raw = int(stats.get("likeCount", 0))
     comment_count_raw = int(stats.get("commentCount", 0))
 
+    description = snippet.get("description", "")
+
     return {
         "published": snippet.get("publishedAt", "")[:10],
         "duration": _parse_iso8601_duration(content.get("duration", "")),
@@ -150,7 +203,8 @@ def get_video_details(video_id: str) -> Optional[dict]:
         "comment_count": _format_view_count(comment_count_raw),
         "comment_count_raw": comment_count_raw,
         "tags": snippet.get("tags", []),
-        "description": snippet.get("description", "")[:500],
+        "description": description,
+        "description_links": extract_description_links(description),
     }
 
 
@@ -184,6 +238,7 @@ def get_video_details_batch(video_ids: list[str]) -> dict[str, dict]:
             like_count_raw = int(stats.get("likeCount", 0))
             comment_count_raw = int(stats.get("commentCount", 0))
 
+            desc = snippet.get("description", "")
             results[vid] = {
                 "published": snippet.get("publishedAt", "")[:10],
                 "duration": _parse_iso8601_duration(content.get("duration", "")),
@@ -194,7 +249,8 @@ def get_video_details_batch(video_ids: list[str]) -> dict[str, dict]:
                 "comment_count": _format_view_count(comment_count_raw),
                 "comment_count_raw": comment_count_raw,
                 "tags": snippet.get("tags", []),
-                "description": snippet.get("description", "")[:500],
+                "description": desc,
+                "description_links": extract_description_links(desc),
             }
 
     return results

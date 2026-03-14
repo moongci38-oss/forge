@@ -14,6 +14,7 @@ def generate_intermediate_json(
     video_id: str,
     transcript_data: dict,
     metadata: Optional[dict] = None,
+    comments: Optional[list] = None,
 ) -> dict:
     """AI 분석용 중간 JSON 생성"""
     meta = metadata or {}
@@ -38,6 +39,10 @@ def generate_intermediate_json(
         "language": transcript_data["language"],
         "is_generated_subtitle": transcript_data.get("is_generated", False),
         "transcript_source": transcript_data["source"],
+        "description": meta.get("description", ""),
+        "description_links": meta.get("description_links", []),
+        "tags": meta.get("tags", []),
+        "comments": comments or [],
         "full_text": full_text,
         "timestamped_text": "\n".join(timestamped_text),
         "segment_count": len(transcript_data["segments"]),

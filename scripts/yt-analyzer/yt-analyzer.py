@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from config import SUPPORTED_FORMATS, DEFAULT_FORMAT, ANALYSES_DIR
 from transcript import extract_video_id, get_transcript
-from fetcher import get_metadata, extract_metadata_from_page, search_videos, get_playlist_videos
+from fetcher import get_metadata, extract_metadata_from_page, search_videos, get_playlist_videos, get_video_comments
 from reporter import (
     generate_intermediate_json,
     save_intermediate_json,
@@ -41,10 +41,10 @@ def analyze_single(url: str, fmt: str = DEFAULT_FORMAT, save: bool = True,
                     category_override: str = None) -> dict:
     """단일 영상 분석 파이프라인"""
     video_id = extract_video_id(url)
-    print(f"[1/4] Video ID: {video_id}")
+    print(f"[1/5] Video ID: {video_id}")
 
     # 메타데이터 추출
-    print("[2/4] Fetching metadata...")
+    print("[2/5] Fetching metadata...")
     metadata = get_metadata(video_id)
 
     # 추가 메타데이터 (조회수, 게시일, 영상길이)
@@ -58,15 +58,23 @@ def analyze_single(url: str, fmt: str = DEFAULT_FORMAT, save: bool = True,
     print(f"       Channel: {metadata.get('channel', 'Unknown')}")
 
     # 트랜스크립트 추출
-    print("[3/4] Extracting transcript...")
+    print("[3/5] Extracting transcript...")
     transcript_data = get_transcript(video_id)
     print(f"       Language: {transcript_data['language']} | "
           f"Segments: {len(transcript_data['segments'])} | "
           f"Source: {transcript_data['source']}")
 
+    # 댓글 수집 (API 키 있으면, 없으면 조용히 스킵)
+    print("[4/5] Collecting comments...")
+    comments = get_video_comments(video_id)
+    if comments:
+        print(f"       Comments: {len(comments)}개 수집")
+    else:
+        print("       Comments: 스킵 (API 키 없음 또는 댓글 비활성화)")
+
     # 중간 JSON 생성
-    print("[4/4] Generating output...")
-    intermediate = generate_intermediate_json(video_id, transcript_data, metadata)
+    print("[5/5] Generating output...")
+    intermediate = generate_intermediate_json(video_id, transcript_data, metadata, comments)
 
     # 카테고리 자동 분류
     category = category_override or auto_categorize(intermediate)
