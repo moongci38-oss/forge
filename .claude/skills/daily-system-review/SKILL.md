@@ -106,6 +106,23 @@ user-invocable: true
 
 ## 실행 흐름
 
+### Wave 0 (raw-data.json 존재 확인 — 최우선)
+
+```
+RAW_JSON="01-research/daily/{date}/raw-data.json"
+```
+
+`Glob(RAW_JSON)` 으로 파일 존재 여부 확인:
+
+- **존재 → 수집 스킵**: `/daily-analyze {date}` 흐름으로 전환한다.
+  Wave 1 수집 Teammate(A/B/C/D) 스폰을 건너뛰고,
+  raw-data.json + Claude 검색 보강 → `daily-system-analyst` 에이전트 스폰 순서로 진행한다.
+  (상세: `.claude/skills/daily-analyze/SKILL.md` 참조)
+
+- **미존재 → 전체 파이프라인 실행**: 아래 Wave 1부터 정상 진행한다.
+
+---
+
 ### Wave 1 (병렬 — 5개 동시 스폰)
 
 **Teammate A (Sonnet): AI 공식 소스 + GitHub 생태계**

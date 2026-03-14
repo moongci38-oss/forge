@@ -1,11 +1,7 @@
 ---
-name: weekly-research
-description: >
-  매주 실행하는 주간 리서치 파이프라인. 기술 뉴스, 비즈니스 뉴스,
-  사업 아이템 제안 3종을 Subagent 병렬로 생성한다.
+description: "주간 리서치 파이프라인 — 기술/비즈니스 뉴스 수집 + 사업 아이템 제안 3종 생성"
 argument-hint: "[YYYY-MM-DD]"
-allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
-user-invocable: true
+allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search,mcp__notion__notion-create-pages"
 ---
 
 # 주간 리서치 파이프라인
@@ -26,7 +22,7 @@ user-invocable: true
 
 ## 실행 흐름
 
-### Wave 0 (raw-data.json 존재 확인 — 최우선)
+### Step 0 (raw-data.json 존재 확인 — 최우선)
 
 ```
 RAW_JSON="01-research/weekly/{date}/raw-data.json"
@@ -34,10 +30,9 @@ RAW_JSON="01-research/weekly/{date}/raw-data.json"
 
 `Glob(RAW_JSON)` 으로 파일 존재 여부 확인:
 
-- **존재 → 수집 스킵**: `/weekly-analyze {date}` 흐름으로 전환한다.
-  Wave 1 수집 Subagent(A/B) 스폰을 건너뛰고,
-  raw-data.json + Claude 검색 보강 → `weekly-research-analyst` 에이전트 스폰 순서로 진행한다.
-  (상세: `.claude/skills/weekly-analyze/SKILL.md` 참조)
+- **존재 → 수집 스킵**: Wave 1 Subagent(A/B) 스폰을 건너뛴다.
+  raw-data.json 경로를 Wave 2로 직접 전달하고, Subagent C (사업 아이템) 스폰 후
+  모든 결과를 합쳐서 Wave 2 취합 및 Wave 3 등록을 진행한다.
 
 - **미존재 → 전체 파이프라인 실행**: 아래 Wave 1부터 정상 진행한다.
 

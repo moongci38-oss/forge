@@ -1,7 +1,7 @@
 ---
 description: "AI 시스템 일일 분석 — 6-Tier 소스 수집 + 우리 시스템과 갭 분석 + 적용 계획서 생성"
 argument-hint: "[YYYY-MM-DD]"
-allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep"
+allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
 ---
 
 # AI 시스템 일일 분석 파이프라인
@@ -21,23 +21,42 @@ allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep"
 
 ## 실행 흐름
 
+### Step 0 (raw-data.json 존재 확인 — 최우선)
+
+```
+RAW_JSON="01-research/daily/{date}/raw-data.json"
+```
+
+`Glob(RAW_JSON)` 으로 파일 존재 여부 확인:
+
+- **존재 → 수집 스킵**: Wave 1 Subagent(A/B/C/D) 스폰을 건너뛴다.
+  raw-data.json 경로를 Wave 2로 직접 전달하고, Subagent E (시스템 스냅샷)만 별도 실행한 뒤
+  두 결과를 합쳐서 Wave 2 종합 분석을 실행한다.
+
+- **미존재 → 전체 파이프라인 실행**: 아래 Wave 1부터 정상 진행한다.
+
+---
+
 ### Wave 1 (병렬 — 5개 Subagent 동시 스폰)
 
 **Subagent A (Sonnet): AI 공식 소스 + GitHub 생태계**
 - Tier 1: Anthropic, OpenAI, Google, Meta, Microsoft, HuggingFace 공식 블로그/changelog
 - Tier 2: GitHub Trending (AI/ML), Claude Code Issues, MCP Registry, LangChain/CrewAI/AutoGen 릴리즈
 - 전날 날짜 기준 신규 콘텐츠만 필터 (WebFetch + WebSearch)
+- **Brave Search 활용**: `brave_web_search`로 공식 소스 도메인 필터링 (예: `site:anthropic.com`, `site:openai.com`). WebFetch 실패 시 fallback
 - 출력: 구조화된 마크다운 요약 (최대 1500 토큰)
 
 **Subagent B (Haiku): 개발자 커뮤니티 + 미디어**
 - Tier 3: Hacker News 탑 AI 스토리, Reddit r/MachineLearning + r/LocalLLaMA + r/ClaudeAI
 - Tier 6: TechCrunch AI, VentureBeat, Product Hunt AI 카테고리, a16z AI Blog
 - WebSearch 날짜 필터: `after:$ARGUMENTS`
+- **Brave Search 활용**: `brave_web_search`로 커뮤니티/미디어 검색 (HN, Reddit, TechCrunch 등). WebSearch 실패 시 fallback
 - 출력: 구조화된 마크다운 요약 (최대 1000 토큰)
 
 **Subagent C (Haiku): YouTube 영상 탐색**
 - Tier 4: Fireship, AI Jason, Matt Wolfe, Yannic Kilcher, The AI Advantage 최신 업로드
 - WebSearch: "Claude Code" site:youtube.com, "MCP server" site:youtube.com, "AI agents 2026" site:youtube.com
+- **Brave Search 활용**: `brave_web_search`로 채널별 최신 업로드 검색 (예: `site:youtube.com "Fireship" AI 2026`)
 - 심층 분석 필요 영상 = "추천 시청" 목록으로 분리
 - 비즈니스 관련성 4점 이상 예상 영상은 반드시 아래 형식으로 별도 섹션에 나열 (자동 분석 트리거용):
   ```
