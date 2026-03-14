@@ -212,15 +212,19 @@ Check 3.5 (Spec compliance)
 
 ### Symlink 대상 (전체 SIGIL 산출물)
 
-| symlink 이름 | 원본 경로 (folderMap 기준) |
-|-------------|--------------------------|
-| `handoff.md` | `{folderMap.handoff}/{project}/YYYY-MM-DD-sigil-handoff.md` |
-| `s3-prd.md` (또는 `s3-gdd.md`) | `{folderMap.product}/{project}/YYYY-MM-DD-s3-prd.md` |
-| `s4-detailed-plan.md` | `{folderMap.product}/{project}/YYYY-MM-DD-s4-detailed-plan.md` |
-| `s4-development-plan.md` | `{folderMap.product}/{project}/YYYY-MM-DD-s4-development-plan.md` |
-| `s4-uiux-spec.md` | `{folderMap.design}/{project}/YYYY-MM-DD-s4-uiux-spec.md` |
-| `gate-log.md` | `{folderMap.product}/{project}/gate-log.md` |
-| 관리자 산출물 (`s4-admin-*.md`) | 해당 원본 경로 (S3에 관리자 포함 시) |
+원본 파일명에서 날짜 prefix(`YYYY-MM-DD-`)만 제거하여 symlink 이름으로 사용한다.
+나머지 파일명은 원본과 동일하게 유지한다.
+
+| 원본 파일명 예시 | symlink 이름 | 원본 경로 (folderMap 기준) |
+|----------------|-------------|--------------------------|
+| `YYYY-MM-DD-sigil-handoff.md` | `sigil-handoff.md` | `{folderMap.handoff}/{project}/` |
+| `YYYY-MM-DD-gacha-system-design.md` | `gacha-system-design.md` | `{folderMap.product}/{project}/` |
+| `YYYY-MM-DD-gacha-development-plan.md` | `gacha-development-plan.md` | `{folderMap.product}/{project}/` |
+| `YYYY-MM-DD-s4-uiux-spec.md` | `s4-uiux-spec.md` | `{folderMap.design}/{project}/` |
+| `gate-log.md` | `gate-log.md` | `{folderMap.product}/{project}/` (날짜 없음) |
+| 관리자 산출물 | 원본명 - 날짜 prefix | 해당 원본 경로 (S3에 관리자 포함 시) |
+
+> **원칙**: 파일명에서 앞의 `YYYY-MM-DD-` 부분만 제거. 이후 내용은 원본과 100% 동일하게 유지한다.
 
 ### Symlink 생성 시점
 
@@ -229,8 +233,10 @@ Check 3.5 (Spec compliance)
 
 ### Symlink 파일명 규칙
 
-- 원본의 날짜 prefix(`YYYY-MM-DD-`)를 제거한 이름으로 symlink 생성
-- 예: `2026-03-03-s4-detailed-plan.md` → symlink 이름 `s4-detailed-plan.md`
+- 원본의 날짜 prefix(`YYYY-MM-DD-`)만 제거하고, 나머지 파일명은 원본과 동일하게 유지한다
+- 예: `2026-03-14-sigil-handoff.md` → `sigil-handoff.md`
+- 예: `2026-03-06-gacha-system-design.md` → `gacha-system-design.md`
+- 예: `gate-log.md` → `gate-log.md` (날짜 prefix 없으면 그대로)
 
 ### symlinkBase 네이밍 규칙 (모든 프로젝트 공통)
 

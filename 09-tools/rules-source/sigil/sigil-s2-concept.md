@@ -57,9 +57,28 @@ S2 [STOP] 게이트에서 프로젝트 진행 여부를 정량 평가한다.
 - Go/No-Go 스코어링 없이 S3로 진행하지 않는다
 - 비전/타겟/차별점 승인 없이 [STOP] 게이트를 통과하지 않는다
 
+## Pretotyping 실행 경로
+
+S2에서 Pretotyping은 아래 3가지 경로로 수행한다. 프로젝트 성격과 Human의 의지에 따라 선택한다.
+
+| 경로 | 방법 | 소요 시간 | 적합 상황 |
+|------|------|:--------:|----------|
+| **A. Replit Agent** | Replit Agent로 클릭 가능한 HTML 프로토타입 즉시 생성 → 실사용자 피드백 | 1-2시간 | UI/UX 검증이 핵심인 웹/앱 |
+| **B. Stitch MCP** | AI UI 목업 생성 → 스크린샷으로 아이디어 검증 | 30분 | 빠른 시각적 검증 |
+| **C. 문서 Pretotype** | Landing Page 초안(MD) 또는 PR/FAQ 작성 → 반응 측정 | 1시간 | 콘텐츠/가격 모델 검증 |
+
+**Replit Agent 활용 가이드 (경로 A)**:
+1. Replit.com → "Create App" → 기능 설명 1-2문장 입력
+2. Agent가 자동 생성한 HTML/JS 앱을 Deploy (무료 플랜)
+3. 공유 링크를 5-10명에게 보내 피드백 수집
+4. 피드백을 S2 컨셉 문서에 반영 → Go/No-Go 스코어에 "실사용자 검증" 가산점 적용
+
+> Replit Pretotyping은 Mom Test 인터뷰를 대체하지 않는다. 사용성/UI 가설 검증에 특화되며, 문제-해결 적합성(Problem-Solution Fit)은 Mom Test로 별도 검증한다.
+
 ## AI 행동 규칙
 
 1. S2 Go/No-Go 스코어링은 Kill Criteria 검토 후 실행한다
 2. 각 Stage 산출물은 해당 폴더의 `projects/{project}/` 하위에 저장한다
 3. 프로젝트 폴더 내 파일명에서 프로젝트명을 제거한다 (폴더가 이미 프로젝트를 나타냄)
 4. S2 Gate에서 [Human] 항목(Mom Test, Pretotype) 미실행 시 gate-log 비고에 "계획서로 갈음" 명시 기록한다
+5. Pretotyping 경로 선택 시 프로젝트 성격(UI 중심 vs 콘텐츠 중심)에 따라 A/B/C 중 적합한 경로를 제안한다
