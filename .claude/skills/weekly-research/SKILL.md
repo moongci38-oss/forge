@@ -123,6 +123,13 @@ Notion "Weekly Research" DB에 페이지를 자동 생성한다.
 - Data Source ID: `d7ba2bc1-4c7b-400d-872f-8d78bfeea213`
 - DB URL: `https://www.notion.so/8023d8cc603d48e3b6f99e95739457fd`
 
+**실행 순서:**
+
+1. `Read("01-research/weekly/{date}/tech-trends.md")` → 전체 내용 변수 저장
+2. `Read("01-research/weekly/{date}/biz-trends.md")` → 전체 내용 변수 저장
+3. 두 파일 내용을 구분선(`---`)으로 이어 붙여 `content` 구성
+4. `mcp__notion__notion-create-pages` 호출
+
 **`mcp__notion__notion-create-pages` 호출:**
 
 ```json
@@ -130,7 +137,7 @@ Notion "Weekly Research" DB에 페이지를 자동 생성한다.
   "parent": { "data_source_id": "d7ba2bc1-4c7b-400d-872f-8d78bfeea213" },
   "pages": [{
     "properties": {
-      "제목": "{date} 주간 리서치",
+      "제목": "{date} 주간 리서치 리포트",
       "요약": "{tech-trends 핵심 3줄 + biz-trends 핵심 3줄}",
       "date:날짜:start": "{date}",
       "상태": "완료",
@@ -142,7 +149,7 @@ Notion "Weekly Research" DB에 페이지를 자동 생성한다.
       "biz-trends 경로": "01-research/weekly/{date}/biz-trends.md",
       "s1-research 경로": "01-research/projects/{project}/{date}-s1-research.md"
     },
-    "content": "## 기술 트렌드 요약\n{tech-trends 핵심 항목}\n\n## 비즈니스 트렌드 요약\n{biz-trends 핵심 항목}\n\n## 사업 아이템\n{선정 아이템 1줄 요약 + 선정 근거}"
+    "content": "{tech-trends.md 전체 내용}\n\n---\n\n{biz-trends.md 전체 내용}"
   }]
 }
 ```
@@ -152,7 +159,7 @@ Notion "Weekly Research" DB에 페이지를 자동 생성한다.
 - 기술/비즈니스 트렌드: 각 파일의 Top 3 뉴스 항목 1줄씩
 - 사업 아이템: s1-research에서 최종 선정된 아이템명
 - 블로그 발행: Step 1 결과 반영
-- content: Notion에서 빠르게 읽을 수 있는 분량으로 핵심만 포함
+- content: **tech-trends.md 전체 + `---` 구분선 + biz-trends.md 전체** (Notion 페이지에서 스크롤하며 전체 내용 열람 가능)
 
 **실패 처리:**
 - Notion MCP 미연결 시 경고 출력 후 스킵 (리포트 파일은 이미 저장됨)

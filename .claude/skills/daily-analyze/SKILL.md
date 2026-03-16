@@ -52,10 +52,20 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 
 ## Step 3: 우리 시스템 현황 스냅샷
 
-Read로 현재 시스템 상태 파악:
-- `~/.claude/trine/rules/` (최근 수정 파일)
-- `.claude/skills/`, `.claude/agents/`
-- `docs/planning/active/plans/` (미처리 액션 확인)
+**인프라 레이어:**
+- Read: `~/.claude/trine/rules/` (최근 수정 파일)
+- Read: `.claude/skills/`, `.claude/agents/`
+- Read: `docs/planning/active/plans/` (미처리 액션 확인)
+
+**SIGIL 파이프라인 현황 (필수):**
+- Read: `sigil-workspace.json` → 활성 프로젝트 목록 + folderMap 경로 확인
+- 각 프로젝트의 `gate-log.md` Read → 현재 Gate 위치 (S1/S2/S3/S4) 확인
+- Read: `02-product/projects/todo.md` (있으면) → SIGIL 전체 프로젝트 진행 현황
+
+**Trine 파이프라인 현황 (필수):**
+- Glob: `**/.claude/state/sessions/*.json` → 활성/미완료 세션 목록
+- Read: `docs/planning/active/sigil/todo.md` → Spec별 진행 상태 (⬜/🔄/🧪/✅)
+- Glob: `docs/walkthroughs/` → 최근 작성된 walkthrough (완료 Spec 파악)
 
 ## Step 4: 분석 + 산출물 생성
 
@@ -76,9 +86,44 @@ Read로 현재 시스템 상태 파악:
 
 ## Step 5: Notion 자동 등록
 
-분석 완료 후 Notion "Daily System Review" DB에 페이지 생성:
+분석 완료 후, 두 파일의 **전체 내용**을 Notion 페이지 본문에 직접 기록한다.
+
+**Notion DB 정보:**
 - Data Source ID: `43829f7b-8d3f-47f1-90a1-84f40d39239e`
-- Notion MCP 미연결 시 경고 후 스킵 (파이프라인 중단 안 함)
+- DB URL: `https://www.notion.so/b3a833acdc1644c99acf81e7da25a268`
+
+**실행 순서:**
+
+1. `Read("01-research/daily/{date}/ai-system-analysis.md")` → 전체 내용 변수 저장
+2. `Read("01-research/daily/{date}/system-improvement-plan.md")` → 전체 내용 변수 저장
+3. 두 파일 내용을 구분선(`---`)으로 이어 붙여 `content` 구성
+4. `mcp__notion__notion-create-pages` 호출:
+
+```json
+{
+  "parent": { "data_source_id": "43829f7b-8d3f-47f1-90a1-84f40d39239e" },
+  "pages": [{
+    "properties": {
+      "제목": "{date} AI 시스템 분석",
+      "Executive Summary": "{리포트의 ## Executive Summary 섹션 전문}",
+      "date:날짜:start": "{date}",
+      "상태": "완료",
+      "Critical 갭": {Critical 갭 개수},
+      "High 갭": {High 갭 개수},
+      "Medium 갭": {Medium 갭 개수},
+      "P0 액션": {P0 액션 개수},
+      "P1 액션": {P1 액션 개수},
+      "리포트 경로": "01-research/daily/{date}/ai-system-analysis.md",
+      "적용계획 경로": "01-research/daily/{date}/system-improvement-plan.md"
+    },
+    "content": "{ai-system-analysis.md 전체 내용}\n\n---\n\n{system-improvement-plan.md 전체 내용}"
+  }]
+}
+```
+
+**실패 처리:**
+- Notion MCP 미연결 시 경고 출력 후 스킵 (파이프라인 중단 안 함)
+- 페이지 생성 실패 시 에러 로그 출력 후 스킵
 
 ## 신뢰도 등급
 

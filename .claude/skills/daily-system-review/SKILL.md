@@ -156,11 +156,24 @@ RAW_JSON="01-research/daily/{date}/raw-data.json"
 - 출력: 논문 목록 + 핵심 요약 → Lead에게 반환
 
 **Teammate E (Sonnet): 우리 시스템 현황 스냅샷**
+
+인프라 레이어:
 - Read: `~/.claude/trine/rules/`, `~/.claude/rules/`
 - Read: `.claude/skills/`, `.claude/agents/`, `.claude/rules/`
 - Read: 최근 improvement plan (있으면)
-- 현재 시스템 구조, 버전, 패턴, 미해결 갭 정리
-- 출력: 시스템 현황 JSON → Lead에게 반환
+
+**SIGIL 파이프라인 현황 (필수):**
+- Read: `sigil-workspace.json` → 활성 프로젝트 목록 + folderMap 경로 확인
+- 각 프로젝트의 `gate-log.md` Read → 현재 Gate 위치 (S1/S2/S3/S4) 확인
+- Read: `02-product/projects/todo.md` (있으면) → SIGIL 전체 프로젝트 진행 현황
+
+**Trine 파이프라인 현황 (필수):**
+- Glob: `**/.claude/state/sessions/*.json` → 활성/미완료 세션 목록
+- Read: `docs/planning/active/sigil/todo.md` → Spec별 진행 상태 (⬜/🔄/🧪/✅)
+- Glob: `docs/walkthroughs/` → 최근 작성된 walkthrough (완료 Spec 파악)
+- Read: 각 프로젝트의 `.specify/config.json` (있으면) → autoMerge, 프로젝트 설정
+
+출력: SIGIL 게이트 현황 + Trine 세션 현황 + 인프라 현황 JSON → Lead에게 반환
 
 ### Wave 2 (Lead Opus 종합 — A~E 결과 의존)
 
