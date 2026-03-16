@@ -7,17 +7,17 @@
 ```
 S1 Research → S2 Concept → S3 Design Document → S4 Planning Package → Trine (개발)
      ↓             ↓              ↓                      ↓
-  [STOP]        [STOP]         [STOP]                 [STOP]
-  리서치 리뷰    비전 승인       기획서 승인              개발 진입
+ [AUTO-PASS]    [STOP]         [STOP]              [AUTO-PASS]
+ DoD 자동 검증   비전 승인       기획서 승인          Wave 검증 → Trine
 ```
 
 ## What is SIGIL?
 
 SIGIL은 **1인 기업/소규모 팀**이 AI Agent를 활용하여 비개발 업무(시장조사, 기획, 마케팅, 콘텐츠, 디자인)를 체계적으로 수행하기 위한 워크스페이스 프레임워크입니다.
 
-- **9개 전문 AI 에이전트**: 리서치, 기획서 작성, 기술 검토, UX 검증 등
-- **6개 스킬**: CTO 자문, 프론트엔드 디자인, 콘텐츠 제작, PM 도구 등
-- **8개 슬래시 커맨드**: `/prd`, `/gdd`, `/research`, `/lean-canvas` 등
+- **13개 전문 AI 에이전트**: 리서치, 기획서 작성, 기술 검토, UX 검증, YouTube 분석 등
+- **12개 스킬**: CTO 자문, 프론트엔드 디자인, 콘텐츠 제작, PM 도구, 일일/주간 리서치 등
+- **10개 슬래시 커맨드**: `/prd`, `/gdd`, `/research`, `/lean-canvas`, `/daily-system-review` 등
 - **Rules-as-Code**: 컴파일 가능한 규칙 시스템으로 파이프라인 거버넌스 자동화
 - **[Trine](https://github.com/moongci38-oss/trine) 연동**: S4 완료 → 개발 프로젝트로 자동 핸드오프
 
@@ -109,7 +109,7 @@ AI가 시장, 경쟁사, 기술, 법규를 병렬 조사합니다.
 - **에이전트**: `research-coordinator` (조율) + `academic-researcher`, `fact-checker` (병렬)
 - **방법론**: JTBD, Competitive Intelligence, TAM/SAM/SOM
 - **산출물**: 통합 리서치 리포트
-- **게이트**: `[STOP]` 리서치 결과 Human 리뷰
+- **게이트**: `[AUTO-PASS]` DoD 자동 검증 (이상 시 Human 소급 개입 가능)
 
 ### S2. Concept (컨셉 확정)
 
@@ -150,11 +150,11 @@ Trine 진입 전 3종 산출물을 작성합니다.
 
 - **에이전트**: `technical-writer` (작성) + `cto-advisor` (기술 검토) + `ux-researcher` (UX 검증)
 - **Wave Protocol**: Wave 1 (초안) → Wave 2 (Spec 검증) → Wave 3 (리뷰) → Wave 4 (최종본)
-- **게이트**: `[STOP]` 승인 → Trine 자동 핸드오프
+- **게이트**: `[AUTO-PASS]` Wave 2+3 자동 검증 → Trine 자동 핸드오프 (CRITICAL 이슈 시 [STOP] 에스컬레이션)
 
 ## Components
 
-### Agents (9개)
+### Agents (13개)
 
 | 에이전트 | 역할 |
 |---------|------|
@@ -166,9 +166,13 @@ Trine 진입 전 3종 산출물을 작성합니다.
 | `technical-writer` | S4 기획 패키지 3종 작성 |
 | `cto-advisor` | S4 기술 검토 (아키텍처, ADR) |
 | `ux-researcher` | S4 UX 검증 (와이어프레임, 인터랙션) |
+| `daily-system-analyst` | AI 시스템 일일 동향 분석 + 갭 분석 |
+| `weekly-research-analyst` | 주간 리서치 트렌드 분석 |
 | `yt-video-analyst` | YouTube 영상 트랜스크립트 분석 |
+| `yt-cross-analyst` | YouTube 클러스터 내 비교 분석 |
+| `yt-research-followup` | YouTube 분석 후속 리서치 |
 
-### Skills (6개)
+### Skills (12개)
 
 | 스킬 | 용도 |
 |------|------|
@@ -178,8 +182,14 @@ Trine 진입 전 3종 산출물을 작성합니다.
 | `playwright-cli` | 브라우저 자동화 (테스트, 스크린샷) |
 | `product-manager-toolkit` | RICE 우선순위, 고객 인터뷰, 스프린트 |
 | `requirements-clarity` | 모호한 요구사항 인터랙티브 Q&A 해소 |
+| `daily-system-review` | AI 시스템 일일 분석 파이프라인 |
+| `daily-analyze` | 일일 리뷰 JSON 심층 분석 (재분석용) |
+| `weekly-research` | 주간 리서치 파이프라인 (기술/비즈니스 뉴스) |
+| `weekly-analyze` | 주간 리서치 JSON 심층 분석 (재분석용) |
+| `yt` | YouTube 영상 심층 분석 (트랜스크립트 + 댓글 + 웹리서치) |
+| `yt-analyze` | YouTube 트랜스크립트 AI 분석 (JSON 재분석용) |
 
-### Slash Commands (8개)
+### Slash Commands (10개)
 
 | 커맨드 | 설명 |
 |--------|------|
@@ -188,6 +198,8 @@ Trine 진입 전 3종 산출물을 작성합니다.
 | `/research` | 시장조사 시작 |
 | `/lean-canvas` | Lean Canvas 작성 |
 | `/generate-image` | AI 이미지 생성 (NanoBanana MCP) |
+| `/daily-system-review` | AI 시스템 일일 동향 분석 |
+| `/weekly-research` | 주간 리서치 파이프라인 실행 |
 | `/yt` | YouTube 영상 분석 (트랜스크립트 + AI) |
 | `/yt-analyze` | YouTube 트랜스크립트 분석 전용 |
 | `/trine` | SIGIL → Trine 핸드오프 |
@@ -208,9 +220,9 @@ Trine 진입 전 3종 산출물을 작성합니다.
 ```text
 sigil/
 ├── .claude/                        # Claude Code 컴포넌트
-│   ├── agents/                     # AI 에이전트 정의 (9개)
-│   ├── skills/                     # 스킬 패키지 (6개)
-│   ├── commands/                   # 슬래시 커맨드 (8개)
+│   ├── agents/                     # AI 에이전트 정의 (13개)
+│   ├── skills/                     # 스킬 패키지 (12개)
+│   ├── commands/                   # 슬래시 커맨드 (10개)
 │   ├── hooks/                      # 이벤트 훅 (6개)
 │   ├── rules/                      # 컴파일된 규칙 (자동 생성)
 │   └── settings.json               # Claude Code 설정
@@ -325,7 +337,10 @@ SIGIL S4 완료 → Handoff 문서 자동 생성 → 개발 프로젝트에 syml
 | **Notion** | Notion 페이지/DB 연동 (PM 도구) | project |
 | **NanoBanana** | AI 이미지 생성/편집 (Gemini) | user |
 | **Stitch** | AI UI 목업 생성 | user |
-| **Lighthouse** | 웹 성능/접근성 감사 | user |
+| **Lighthouse** | 웹 성능/접근성/SEO 감사 | user |
+| **Sentry** | 프로덕션 에러 추적 | user |
+| **Brave Search** | 웹 검색 (내장 WebSearch 보완) | user |
+| **Draw.io** | 다이어그램 생성 (C4, 아키텍처) | user |
 
 ## CLI Scripts
 
