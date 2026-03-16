@@ -52,6 +52,30 @@ raw-data.json의 `items` 배열을 카테고리별로 분류:
 5. **최종 1개 선정** + 선정 근거 명시
 6. **실행 로드맵**: MVP 범위, 기술 스택, 예상 타임라인
 
+### Step 3.5: Ground Truth Check (GTC) — 리포트 자체 검증
+
+산출물 작성 **직전에** 아래 3단계 검증을 수행하여 인라인 자동 수정한다.
+
+**GTC-1: 관련성 필터** — 언급된 도구/서비스가 실제 사용 중인지 확인
+- Read: `.mcp.json`, `~/.claude.json` (MCP 서버 목록)
+- Read: `sigil-workspace.json` (활성 프로젝트)
+- Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
+- Step 1-3에서 수집된 모든 도구/서비스 언급을 위 파일에서 검색
+- **미사용 도구가 High 이상으로 분류된 경우** → 영향도를 Low로 강제 하향 + "우리 시스템 미사용" 표기
+
+**GTC-2: 기구현 확인** — 액션 아이템이 이미 존재하는 기능을 제안하는지 확인
+- Glob: `.github/workflows/*.yml` (GitHub Actions)
+- Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
+- Glob: `~/.claude/trine/rules/*.md`, `~/.claude/rules/*.md`
+- tech-trends 액션 아이템 초안을 위 파일과 대조
+- **이미 구현된 기능을 제안하는 항목** → ~~취소선~~ + "이미 완료: {파일 경로}" 표기, 액션 목록에서 제거
+
+**GTC-3: 핵심 커버리지** — SIGIL/Trine 개선 액션이 포함되었는지 확인
+- tech-trends 액션 아이템에 "SIGIL" 또는 "Trine" 키워드가 포함된 항목이 1개 이상 있는지 확인
+- **누락 시**: `sigil-workspace.json` → 활성 프로젝트 gate-log.md Read + `docs/planning/active/sigil/todo.md` Read → SIGIL/Trine 개선 액션을 보충한 후 산출물 작성 진행
+
+> GTC 실패는 모두 인라인 자동 수정이다. [STOP] 없이 수정 후 Step 4로 진행한다.
+
 ### Step 4: 3종 산출물 작성
 
 **산출물 1: 기술 트렌드** (`01-research/weekly/{date}/tech-trends.md`)
