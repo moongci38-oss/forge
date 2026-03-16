@@ -81,11 +81,36 @@ JSON의 `is_generated_subtitle` 필드 기반:
 |------|------|-------------|:-----------:|
 | ... | [제목](url) | ... | 일치/보완/반박 |
 
+### Step 2.85: Ground Truth Check (GTC) — 리포트 자체 검증
+
+시스템 비교분석 **직전에** 아래 3단계 검증을 수행하여 Step 2.9의 입력을 정확하게 만든다.
+
+**GTC-1: 관련성 필터** — 영상에서 언급된 도구/서비스가 우리 시스템에서 실제 사용 중인지 확인
+- Read: `.mcp.json`, `~/.claude.json` (MCP 서버 목록)
+- Read: `sigil-workspace.json` (활성 프로젝트)
+- Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
+- 영상의 도구/서비스 언급을 위 파일에서 검색
+- **미사용 도구에 대한 High+ 개선 제안** → 영향도를 Low로 강제 하향 + "우리 시스템 미사용" 표기
+
+**GTC-2: 기구현 확인** — 영상의 제안/패턴이 이미 우리 시스템에 존재하는지 확인
+- Glob: `.github/workflows/*.yml` (GitHub Actions)
+- Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
+- Glob: `~/.claude/trine/rules/*.md`, `~/.claude/rules/*.md`
+- **이미 구현된 기능을 개선 제안하는 경우** → 비교 매트릭스에서 "이미 적용" 표기, 제안 목록에서 제거
+
+**GTC-3: 핵심 커버리지** — SIGIL/Trine 파이프라인 현황을 실제 파일에서 확인
+- Read: `sigil-workspace.json` → 활성 프로젝트 + gate-log.md 위치
+- Read: 각 프로젝트의 `gate-log.md` → 현재 Gate 위치
+- Read: `docs/planning/active/sigil/todo.md` → Trine Spec 진행
+- **"시스템 현황 참조" 하드코딩 대신 실제 파일 Read 결과를 Step 2.9의 입력으로 사용**
+
+> GTC 실패는 모두 인라인 자동 수정이다. [STOP] 없이 수정 후 Step 2.9로 진행한다.
+
 ### Step 2.9: 시스템 비교분석 + 개선 제안
 
-**시스템 현황 참조:**
-- Business 워크스페이스: SIGIL (S1→S4), Trine (Phase 1→4)
-- 개발 도구: Claude Code + Skills/Agents/MCP, Subagent 병렬
+**시스템 현황 참조 (GTC에서 수집된 실제 파일 데이터 사용):**
+- Business 워크스페이스: SIGIL (GTC-3: gate-log.md 기준 실제 Gate 위치), Trine (GTC-3: todo.md 실제 진행 현황)
+- 개발 도구: Claude Code + Skills/Agents/MCP (GTC-1/2: 실제 파일 목록 기준)
 - 프론트엔드: Next.js + Framer Motion + Lenis
 - 백엔드: NestJS + TypeORM + PostgreSQL
 - 자동화: cron (daily-system-review, weekly-research)

@@ -174,6 +174,7 @@ RAW_JSON="01-research/daily/{date}/raw-data.json"
 - Read: 각 프로젝트의 `.specify/config.json` (있으면) → autoMerge, 프로젝트 설정
 
 출력: SIGIL 게이트 현황 + Trine 세션 현황 + 인프라 현황 JSON → Lead에게 반환
+> Teammate E의 수집 결과는 Lead의 **GTC-3 (핵심 커버리지)** 검증 입력으로 사용된다. (`daily-system-analyst.md` Step 3.5 참조)
 
 ### Wave 2 (Lead Opus 종합 — A~E 결과 의존)
 
