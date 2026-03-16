@@ -11,3 +11,5 @@
 | 4 | 파일명 규칙 | file-naming | MEDIUM | 명명 규칙, 폴더 구조 |
 | 5 | 리서치 방법론 | research-methodology | MEDIUM | 출처 검증, 신뢰도 등급 |
 | 6 | Cowork 환경 | cowork-environment | MEDIUM | MCP→내장 도구 매핑 |
+| 7 | MCP vs CLI | mcp-vs-cli | MEDIUM | 도구 유형 선택 기준 |
+| 8 | 콘텐츠 품질 | content-quality | MEDIUM | AI 생성 콘텐츠 검증 기준 |
