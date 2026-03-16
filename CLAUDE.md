@@ -35,6 +35,7 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 - 리서치 결과는 출처(URL, 날짜) 반드시 포함
 - 문서 작성 시 한국어 기본, 전문 용어는 영어 병기
 - 병렬 처리 가능한 작업은 Subagent 사용을 우선 검토
+- Cowork 세션 시작 시 `09-tools/templates/project-context-brief.md` 참조 (프로젝트별 브리프 존재 시)
 
 ### Don'ts
 - B 영역 접근/출력 금지 (상세: `business-core.md` 보안 체크리스트)
