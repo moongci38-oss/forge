@@ -40,7 +40,7 @@ fi
 
 # Step 2: Claude Code CLI로 분석 실행
 echo "--- Step 2: Claude 분석 ---" | tee -a "$LOG_FILE"
-"$HOME/.local/bin/claude" << EOF 2>&1 | tee -a "$LOG_FILE"
+"$HOME/.local/bin/claude" --dangerously-skip-permissions << EOF 2>&1 | tee -a "$LOG_FILE"
 /weekly-research $TARGET_DATE
 EOF
 
