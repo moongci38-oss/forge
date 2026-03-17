@@ -41,9 +41,9 @@ fi
 
 # Step 2: Claude Code CLI로 분석 실행
 echo "--- Step 2: Claude 분석 ---" | tee -a "$LOG_FILE"
-"$HOME/.local/bin/claude" --dangerously-skip-permissions << EOF 2>&1 | tee -a "$LOG_FILE"
-/daily-system-review $TARGET_DATE
-EOF
+"$HOME/.local/bin/claude" -p "/daily-system-review $TARGET_DATE" \
+  --allowedTools "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search,mcp__notion__notion-search,mcp__notion__notion-create-pages,mcp__notion__notion-update-page" \
+  2>&1 | tee -a "$LOG_FILE"
 
 EXIT_CODE=${PIPESTATUS[0]}
 echo "Exit code: $EXIT_CODE" | tee -a "$LOG_FILE"

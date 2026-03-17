@@ -3,11 +3,11 @@
 > React Native(1순위) / Flutter(2순위) 서비스 앱의 테스트 전략.
 > SIGIL/Trine 파이프라인과 연동하여 품질을 보장한다.
 
-**컨텍스트 로딩 가이드 (Progressive Disclosure):**
-- **Passive**: 이 문서는 세션 시작 시 자동 로드하지 않는다. 모바일 프로젝트 작업 시에만 참조.
-- **Active**: `projectType`이 `mobile-rn` 또는 `mobile-flutter`일 때 Phase 2/3에서 참조.
-- **Deep**: Check 3.5T T-6 검증 시 섹션 5.3, 11.4만 선택 로드.
-- **trine-context-engineering.md 라우팅 등록 필요**: `*.dart`, `*_test.dart`, `.detoxrc.js`, `e2e/**/*.test.{ts,js}`, `integration_test/**/*.dart` → 이 문서 + `trine-test-quality.md` Deep 로드.
+**참조 전용 문서 — Deep 로드 대상 아님:**
+- 이 문서는 세션 시작 시 자동 로드하지 않는다. 모바일 프로젝트 작업 시에만 참조.
+- `projectType`이 `mobile-rn` 또는 `mobile-flutter`일 때 Phase 2/3에서 필요 섹션만 참조.
+- Check 3.5T T-6 검증 시 섹션 5.3만 선택 참조.
+- trine-context-engineering.md 라우팅에는 등록하지 않는다 (참조 전용).
 
 ---
 
@@ -154,6 +154,7 @@ describe('AuthService + AuthStore Integration', () => {
         return new Promise(() => {}); // never resolves
       }),
     );
+    const authService = new AuthService();
     await expect(authService.login('valid@test.com', 'password'))
       .rejects.toThrow(/timeout/i);
   });
@@ -323,7 +324,8 @@ void main() {
 
 | 상황 | 행동 | 게이트 |
 |------|------|:------:|
-| UI 의도적 변경 (Spec에 명시) | AI가 `--update-goldens` 자율 실행 허용 | AUTO-PASS |
+| Spec FR에 직접 매핑되는 화면 UI 변경 | AI가 `--update-goldens` 자율 실행 허용 | AUTO-PASS |
+| Spec FR에 매핑되지 않는 화면 변경 | **[STOP]** Human 확인 필수 | **STOP** |
 | 예상치 못한 Golden Test 실패 | **[STOP]** Human 확인 필수 — diff 리포트 제시 | **STOP** |
 | 갱신 전 보존 | `test/golden/goldens/` → `test/golden/goldens-backup/` 스냅샷 | 필수 |
 
@@ -536,7 +538,13 @@ jobs:
       - run: flutter pub get
       - run: flutter test --coverage
       - run: dart analyze
-      - run: flutter test test/golden/ --update-goldens  # Golden Test CI 통합
+      - run: flutter test test/golden/
+      - name: Upload golden diff
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-diff
+          path: test/golden/failures/
 ```
 
 ```yaml
@@ -564,7 +572,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Pixel 7
-          script: flutter test integration_test/ --machine > test-results/flutter-results.json
+          script: flutter test integration_test/ --machine | tee test-results/flutter-results.json
 
   integration-test-ios:
     runs-on: macos-latest
@@ -573,7 +581,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { flutter-version: '3.24.x', channel: stable }
       - run: flutter pub get
-      - run: flutter test integration_test/
+      - run: flutter test integration_test/ --machine | tee test-results/flutter-results.json
 ```
 
 ### 4.3 CI 비용 최적화
@@ -586,7 +594,21 @@ jobs:
 | **경로 필터** | `paths-ignore: ['docs/**', '*.md']`로 문서 변경 시 E2E 스킵 | 불필요 실행 50%+ |
 | **대표 디바이스만 CI** | iPhone 15 + Pixel 7만 CI. 전체 매트릭스는 릴리즈 전 수동 | macOS runner 추가 $300+ |
 
-### 4.4 테스트 메트릭 수집 (OTel 연동)
+### 4.4 iOS DerivedData 캐싱 (CI 빌드 시간 단축)
+
+```yaml
+# iOS 빌드 캐싱 — Detox CI 워크플로에 추가
+- uses: actions/cache@v4
+  with:
+    path: ios/build/Build/Products
+    key: ${{ runner.os }}-detox-ios-${{ hashFiles('ios/Podfile.lock') }}
+    restore-keys: |
+      ${{ runner.os }}-detox-ios-
+```
+
+> DerivedData 캐싱으로 iOS 빌드 시간을 50-70% 단축할 수 있다. `Podfile.lock` 변경 시 캐시가 무효화된다.
+
+### 4.5 테스트 메트릭 수집 (OTel 연동)
 
 CI 워크플로에서 아래 메트릭을 수집하여 추적한다:
 
@@ -610,6 +632,37 @@ CI 워크플로에서 아래 메트릭을 수집하여 추적한다:
 
 Detox 결과를 JUnit XML로 출력: `detox test --configuration ios.sim.debug --cleanup --reporters jest-junit`
 
+### CI 메트릭 수집 (JUnit XML → Step Summary)
+
+Detox와 Flutter E2E 결과를 GitHub Actions Step Summary에 자동 표시한다:
+
+**Detox JUnit Reporter 설정** (`.detoxrc.js`):
+```js
+testRunner: {
+  args: {
+    $0: 'jest',
+    config: 'e2e/jest.config.js',
+  },
+  jest: {
+    setupTimeout: 120000,
+    reporters: ['default', 'jest-junit'],
+  },
+},
+```
+
+**GitHub Actions JUnit → Step Summary**:
+```yaml
+- name: Publish E2E Results
+  if: always()
+  uses: mikepenz/action-junit-report@v4
+  with:
+    report_paths: 'test-results/**/*.xml'
+    check_name: 'E2E Test Results'
+    include_passed: true
+```
+
+> OTel 통합(분산 트레이싱, 메트릭 대시보드)은 향후 확장 사항으로, 현재는 JUnit XML 기반 리포팅으로 충분하다.
+
 ---
 
 ## 5. Trine 파이프라인 연동
@@ -624,47 +677,20 @@ Detox 결과를 JUnit XML로 출력: `detox test --configuration ios.sim.debug -
 | **Check 3.5** | Spec Section 10 대비 E2E 존재 확인 | 명시된 시나리오 누락 체크 |
 | **Check 3.5T** | T-1(Integration), T-2(Error Case), T-6(디바이스) | 테스트 품질 8축 검증 |
 
-### 5.2 verify.sh 통합 (OS 감지 + MODE 분기 + 아티팩트 표준화)
+### 5.2 verify.sh 모바일 E2E 확장 (기존 verify.sh 템플릿에 함수 추가)
 
 ```bash
 #!/bin/bash
-# verify.sh — 모바일 앱 프로젝트용
+# verify_mobile_e2e() — 기존 verify.sh에 추가하는 모바일 E2E 함수
+# ~/.claude/trine/templates/verify.sh 에 아래 함수를 추가한다.
 # MODE: unit (기본, PR용) | full (develop/main용, E2E 포함)
 # 환경: macOS=iOS+Android E2E, Linux=Android-only E2E
 
-set -e
-
-MODE="${VERIFY_MODE:-unit}"
-OS_NAME="$(uname -s)"
-
-# --- 공통: Unit + Lint + Type Check ---
-echo "=== Unit Tests ==="
-# RN:
-npx jest --coverage
-# Flutter:
-# flutter test --coverage
-
-echo "=== Lint ==="
-# RN:
-npx eslint src/
-# Flutter:
-# dart analyze
-
-echo "=== Type Check ==="
-# RN (TypeScript):
-npx tsc --noEmit
-
-if [ "$MODE" = "unit" ]; then
-  echo "=== Unit-only mode complete (E2E skipped) ==="
-  exit 0
-fi
-
-# --- E2E (MODE=full 일 때만) ---
+# --- verify.sh 기존 구조에 추가 ---
 
 # 네이티브 빌드 설정 확인
 verify_native_build() {
-  local project_type
-  project_type=$(grep -o '"projectType"[[:space:]]*:[[:space:]]*"[^"]*"' sigil-workspace.json 2>/dev/null | head -1 | grep -o '"[^"]*"$' | tr -d '"')
+  local project_type="$1"
 
   case "$project_type" in
     mobile-rn)
@@ -681,8 +707,9 @@ verify_native_build() {
 
 # E2E 실행 (빌드 실패 → 즉시 STOP, autoFix 미소비)
 verify_mobile_e2e() {
-  local project_type
-  project_type=$(grep -o '"projectType"[[:space:]]*:[[:space:]]*"[^"]*"' sigil-workspace.json 2>/dev/null | head -1 | grep -o '"[^"]*"$' | tr -d '"')
+  local project_type="$1"
+  local os_name
+  os_name="$(uname -s)"
 
   # test-results/ 디렉토리 초기화 (Trine autoFix 호환)
   mkdir -p test-results
@@ -693,25 +720,26 @@ verify_mobile_e2e() {
 
       # 빌드 단계 (실패 시 autoFix 불가 → 즉시 종료)
       echo "--- Build Phase (autoFix 불가 — 빌드 실패 시 즉시 [STOP]) ---"
-      if [ "$OS_NAME" = "Darwin" ]; then
+      if [ "$os_name" = "Darwin" ]; then
         detox build --configuration ios.sim.debug || { echo "BUILD_FAIL: iOS 빌드 실패 — 환경 설정 확인 필요 [STOP]"; exit 2; }
       fi
       detox build --configuration android.emu.debug || { echo "BUILD_FAIL: Android 빌드 실패 — 환경 설정 확인 필요 [STOP]"; exit 2; }
 
       # 테스트 단계 (실패 시 autoFix 가능)
       echo "--- Test Phase ---"
-      if [ "$OS_NAME" = "Darwin" ]; then
-        detox test --configuration ios.sim.debug --cleanup || true
+      local ios_fail=0
+      if [ "$os_name" = "Darwin" ]; then
+        detox test --configuration ios.sim.debug --cleanup || ios_fail=$?
       else
         echo "SKIP: iOS E2E — Linux 환경에서는 macOS 필수 (Android-only 실행)"
       fi
       detox test --configuration android.emu.debug --cleanup
+      [ "$ios_fail" -ne 0 ] && exit "$ios_fail"
       ;;
 
     mobile-flutter)
       echo "=== Integration Test (Flutter) ==="
-      flutter test integration_test/ --machine > test-results/flutter-results.json || true
-      flutter test integration_test/
+      flutter test integration_test/ --machine | tee test-results/flutter-results.json
       ;;
 
     *)
@@ -720,15 +748,21 @@ verify_mobile_e2e() {
   esac
 }
 
-verify_native_build
-verify_mobile_e2e
-
-echo "=== All checks passed ==="
+# --- verify.sh 메인 로직에 PROJECT_TYPE 분기 추가 ---
+# case "$PROJECT_TYPE" in
+#   mobile-rn|mobile-flutter)
+#     verify_native_build "$PROJECT_TYPE"
+#     if [ "$MODE" != "unit" ]; then
+#       verify_mobile_e2e "$PROJECT_TYPE"
+#     fi
+#     ;;
+#   web|*)
+#     verify_e2e  # 기존 웹 E2E
+#     ;;
+# esac
 ```
 
-**빌드/테스트 분리 원칙:**
-- 빌드 실패 (exit code 2) → autoFix 카운터 미소비, 즉시 **[STOP]** Human 에스컬레이션
-- 테스트 실패 (exit code 1) → autoFix 1회 시도 (E2E 컨텍스트 포함)
+이 스크립트는 독립 실행 파일이 아니라 기존 `~/.claude/trine/templates/verify.sh`에 추가할 함수 모음이다. `PROJECT_TYPE` 환경 변수로 프로젝트 유형을 전달하며, 기존 verify.sh의 메인 로직에 위 주석 처리된 분기를 추가한다.
 
 ### 5.3 Check 3.5T 모바일 적용
 
@@ -740,15 +774,27 @@ echo "=== All checks passed ==="
 | T-3 (Spec 매핑) | Section 10 시나리오 대비 구현률 80%+ | 동일 |
 | T-4 (격리) | Mock 서버 사용, 전역 상태 오염 방지 | 동일 |
 | T-5 (커버리지) | 프로젝트 설정 임계값 | 선택 |
-| **T-6 (디바이스)** | **iOS + Android 양 플랫폼 E2E 존재** | **모바일 필수** — projectScale 차등 (아래 참조) |
-| T-7 (스킵 금지) | `test.skip()` 으로 버그 숨기기 금지 | 동일 |
+| **T-6 (디바이스)** | **iOS + Android 양 플랫폼 E2E 존재** | **모바일 필수** — `test-quality-config.json`의 `mobileE2EMinCount`로 차등 |
+| T-7 (스킵 금지) | `test.skip()`, `xit()`, `xdescribe()`, `skip: true` 으로 버그 숨기기 금지 | 동일 — 모바일 프레임워크별 skip 패턴 포함 |
 
-**T-6 projectScale 차등 기준:**
+**T-6 모바일 E2E 최소 기준:**
 
-| projectScale | T-6 FAIL 기준 |
-|:------------:|--------------|
-| Small (Spec 3개 이하) | E2E 시나리오 3개 이상 + 1 플랫폼 이상 |
-| Large (Spec 4개 이상) | E2E 시나리오 5개 이상 + 양 플랫폼(iOS+Android) 필수 |
+프로젝트별 `test-quality-config.json`에 `mobileE2EMinCount` 값을 직접 설정한다 (`sigil-workspace.json` 참조 없음):
+
+```json
+{
+  "mobileE2EMinCount": 3,
+  "mobileE2EPlatforms": ["android"],
+  "mobileE2ERequireBothPlatforms": false
+}
+```
+
+| 설정 예시 | 의미 |
+|----------|------|
+| `mobileE2EMinCount: 3` + `mobileE2ERequireBothPlatforms: false` | E2E 3개 이상 + 1 플랫폼 이상 (소규모) |
+| `mobileE2EMinCount: 5` + `mobileE2ERequireBothPlatforms: true` | E2E 5개 이상 + 양 플랫폼 필수 (대규모) |
+
+> **T-6 projectType 분기**: `web` 프로젝트는 모바일 뷰포트 E2E (Playwright devices)를 검증하고, `mobile-rn`/`mobile-flutter` 프로젝트는 플랫폼 존재 (iOS + Android 별도 빌드)를 검증한다. 검증 기준이 다르므로 projectType에 따라 T-6 판정 로직을 분기한다.
 
 ### 5.4 Human-AI 역할 매트릭스
 
@@ -771,7 +817,7 @@ echo "=== All checks passed ==="
 | **Flaky 판정** | 3회 중 2회 이상 통과 = PASS, 1회만 통과 = FLAKY | FLAKY는 WARN |
 | **Human 에스컬레이션** | 동일 테스트 3회 연속 FLAKY | **[STOP]** + 실패 컨텍스트 제공 |
 | **Flaky 비율 임계값** | 전체 E2E 중 Flaky >10% | **[STOP]** 테스트 안정성 리뷰 |
-| **에스컬레이션 정보 패킷** | 실패 시나리오명, 스크린샷 경로, 에러 로그, 이전 3회 결과, AI 가설 | PR 코멘트 자동 생성 |
+| **에스컬레이션 정보 패킷** | 실패 시나리오명, 스크린샷 경로, 에러 로그, 이전 3회 결과, 가능한 원인 후보 (검증 미완료) | PR 코멘트 자동 생성 — 원시 데이터(로그, 스크린샷)를 가설보다 먼저 제시 |
 | **pass@k 기준** | 핵심 플로우(P0): pass@3 >= 100%, 일반(P1): pass@3 >= 67% | Critical 시나리오 Flaky 허용 안 함 |
 
 ---
@@ -1193,6 +1239,21 @@ flowchart TD
 ```
 
 > **핵심:** P0/P1의 전역 규칙 파일 수정(`~/.claude/rules/`, `~/.claude/trine/templates/`)은 모두 **[STOP]** Human 승인 필수. 프로젝트별 설정 파일(`.specify/`, `verify.sh`)은 [AUTO-PASS].
+
+### Spec 템플릿 라우팅 확장
+
+Trine Phase 2 Spec 템플릿 자동 선택 로직(`~/.claude/trine/` 내)에 모바일 프로젝트 라우팅을 추가해야 한다:
+
+| projectType | 템플릿 | 현재 상태 |
+|:-----------:|--------|:--------:|
+| `web` (기본) | `spec-template-base.md` | ✅ 구현됨 |
+| `game` | `spec-template-game.md` | ✅ 구현됨 |
+| `mobile-rn` | `spec-template-mobile.md` | ⬜ 미구현 — 모바일 프로젝트 착수 시 생성 |
+| `mobile-flutter` | `spec-template-mobile.md` | ⬜ 미구현 — 모바일 프로젝트 착수 시 생성 |
+
+> `spec-template-mobile.md`는 모바일 프로젝트가 실제로 착수될 때 생성한다. Section 9가 모바일 전용(네이티브 빌드, 디바이스 매트릭스, 제스처 등)으로 구성된다.
+
+> **Section 9 네이밍**: `spec-template-mobile.md` 생성 시 모바일 전용 서브섹션은 `9.M1` ~ `9.M4` 네이밍을 사용하여 기존 `9.1` ~ `9.9` (웹)과 번호 충돌을 방지한다. 예: `9.M1 네이티브 빌드`, `9.M2 디바이스 매트릭스`, `9.M3 제스처/인터랙션`, `9.M4 플랫폼별 UI`.
 
 ---
 

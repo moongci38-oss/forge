@@ -116,9 +116,18 @@ case $STAGE in
 
   S2|s2)
     echo "[S2 DoD Checks]"
+    CONCEPT_FILE="$PROJECT_PRODUCT"
     check_file "S2 컨셉 파일 존재" "*s2-concept*.md" "$PROJECT_PRODUCT"
     check_grep "Go/No-Go 점수" "총점\|Go.No-Go\|점수" "$PROJECT_PRODUCT" "*s2-*.md"
     check_grep "Kill Criteria 확인" "Kill.Criteria\|킬 크라이테리아" "$PROJECT_PRODUCT" "*s2-*.md"
+    # 기획 디렉션 5축 검증
+    check_grep "S2 5축: 전략 방향 정의" "전략 방향" "$CONCEPT_FILE" "*s2-*.md"
+    check_grep "S2 5축: 경험 원칙 정의" "경험 원칙" "$CONCEPT_FILE" "*s2-*.md"
+    check_grep "S2 5축: 범위 경계 (Do/Don't)" "범위 경계" "$CONCEPT_FILE" "*s2-*.md"
+    check_grep "S2 5축: 품질 기준 정의" "품질 기준" "$CONCEPT_FILE" "*s2-*.md"
+    check_grep "S2 5축: 벤치마크 레퍼런스" "벤치마크" "$CONCEPT_FILE" "*s2-*.md"
+    # 트레이드오프 형식 검증 (Axis 1)
+    check_grep "S2 5축: 전략 방향 트레이드오프 형식 ('A > B')" ">" "$CONCEPT_FILE" "*s2-*.md"
     ;;
 
   S3|s3)

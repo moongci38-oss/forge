@@ -9,6 +9,27 @@ model: sonnet
 
 NanoBanana MCP를 사용하여 이미지를 생성하거나 편집합니다: $ARGUMENTS
 
+## 스타일 가이드 자동 참조
+
+이미지 생성 시 프로젝트의 `style-guide.md`와 `art-direction-brief.md`를 자동으로 탐색한다:
+
+1. 현재 프로젝트 경로에서 `style-guide.md` 검색
+2. 존재 시 → 키워드/팔레트를 프롬프트에 자동 주입
+3. `art-direction-brief.md` 존재 시 → 감성 키워드 + 안티패턴 키워드 주입
+4. `style-guide.md`에 LoRA 모델 ID가 있으면 → `--model replicate` 분기 제안
+
+### Replicate 분기
+
+학습된 LoRA 모델이 존재하는 경우 (`style-guide.md`의 "LoRA 모델 참조" 섹션):
+
+```
+/generate-image --model replicate {프롬프트}
+```
+
+- Replicate MCP를 통해 학습된 LoRA 모델로 이미지 생성
+- 트리거 워드가 자동으로 프롬프트에 추가됨
+- Replicate 미연결 시 NanoBanana로 폴백 (경고 출력)
+
 ## 사전 검증
 
 1. `GOOGLE_API_KEY` 환경변수 확인:

@@ -81,12 +81,12 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 ```markdown
 ## Gate Log — {프로젝트명}
 
-| Stage | 결과 | 일자 | 세션 | 조건 | 비고 |
-|:-----:|:----:|------|:----:|------|------|
-| S1 | ✅ AUTO | YYYY-MM-DD | 1 | DoD 자동 검증 통과 | 신뢰도 High 72% |
-| S2 | ✅ PASS | YYYY-MM-DD | 1 | Go/No-Go 85점 | |
-| S3 | — | — | — | — | |
-| S4 | — | — | — | — | |
+| Stage | 결과 | 일자 | 세션 | 조건 | humanDecision | 비고 |
+|:-----:|:----:|------|:----:|------|:------------:|------|
+| S1 | ✅ AUTO | YYYY-MM-DD | 1 | DoD 자동 검증 통과 | auto | 신뢰도 High 72% |
+| S2 | ✅ PASS | YYYY-MM-DD | 1 | Go/No-Go 85점 | approved | |
+| S3 | — | — | — | — | — | |
+| S4 | — | — | — | — | — | |
 ```
 
 ## Stage별 DoD (Definition of Done)

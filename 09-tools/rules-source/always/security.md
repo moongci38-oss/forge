@@ -100,10 +100,10 @@ Claude Code가 인식하는 MCP 설정 파일은 **2곳뿐**이다:
 
 ## Iron Laws
 
-- **IRON-1**: 민감 정보(.env, credentials, API 키)를 절대 커밋하지 않는다
-- **IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용을 외부로 출력하지 않는다
-- **IRON-3**: 하드코딩된 시크릿을 코드에 포함하지 않는다
-- **IRON-4**: `~/.claude/trine/`, `~/.claude/rules/`, `~/.claude/scripts/`를 삭제/이동/덮어쓰기하지 않는다
+- **SECURITY-IRON-1**: 민감 정보(.env, credentials, API 키)를 절대 커밋하지 않는다
+- **SECURITY-IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용을 외부로 출력하지 않는다
+- **SECURITY-IRON-3**: 하드코딩된 시크릿을 코드에 포함하지 않는다
+- **SECURITY-IRON-4**: `~/.claude/trine/`, `~/.claude/rules/`, `~/.claude/scripts/`를 삭제/이동/덮어쓰기하지 않는다
 
 ## Rationalization Table
 

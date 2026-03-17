@@ -12,9 +12,9 @@
 S1 Research → S2 Concept → S3 Design Document → S4 Planning Package
      ↓              ↓               ↓                      ↓
 [AUTO-PASS]      [STOP]          [STOP]             [AUTO-PASS]
-                                                           ↓
-                                               Handoff 문서 + symlink 생성
-                                                           ↓
+                                                          ↓
+                                              Handoff 문서 + symlink 생성
+                                                          ↓
 [Trine 파이프라인 — 구현 + 배포]
 Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7
   (auto)    (auto)    [STOP]     (auto)   [STOP]/auto  (자동)   [STOP]    (자동)
@@ -51,6 +51,8 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 4. 산출물 저장: `{folderMap.research}/projects/{project}/YYYY-MM-DD-s1-{topic}.md`
 5. gate-log.md 업데이트
 
+**사용 도구**: Brave Search(MCP), WebSearch(내장), Context7(MCP), Sequential Thinking(MCP), Notion(MCP), `/screenshot-analyze`(CLI), `/game-reference-collect`(스킬)
+
    ─── [AUTO-PASS] S1 Gate: DoD 자동 검증 → 알림 후 자동 진행 ───
 
 ---
@@ -72,11 +74,34 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 
    - 80점+ = Go / 60-79점 = 조건부 / 60점 미만 = No-Go
 
-4. OKR 정의 (S3 기획서 측정 기준으로 연결)
-5. 산출물 저장: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
-6. gate-log.md 업데이트
+4. **기획 디렉션 5축** 수립:
 
-   ─── **[STOP]** S2 Gate: 비전/타겟/차별점 Human 승인 ───
+   | # | 축 | 형식 요건 |
+   |:-:|---|---------|
+   | 1 | 전략 방향 | "A > B" 또는 "A, not B" (트레이드오프 필수) |
+   | 2 | 경험 원칙 | 측정 가능한 수치 포함 |
+   | 3 | 범위 경계 | Do 2개+ / Don't 2개+ (Don't는 `태그` 형식) |
+   | 4 | 품질 기준 | 측정 가능한 NFR 값 |
+   | 5 | 벤치마크 | 레퍼런스 1-3개 + 참조 이유 |
+
+   - AI가 축당 2-3개 후보 → Human이 최종 확정
+   - **Iron Law**: Axis 1/3은 Human 확인 없이 확정 불가
+
+5. **Pretotyping** (3경로):
+
+   | 경로 | 방법 | 도구 | 적합 상황 |
+   |------|------|------|----------|
+   | A | 클릭 가능 프로토타입 | Replit Agent | UI/UX 검증 |
+   | B | AI UI 목업 | **Stitch MCP** | 빠른 시각 검증 |
+   | C | 문서 Pretotype | Markdown | 콘텐츠/가격 검증 |
+
+6. OKR 정의 (S3 기획서 측정 기준으로 연결)
+7. 산출물 저장: `{folderMap.product}/{project}/YYYY-MM-DD-s2-concept.md`
+8. gate-log.md 업데이트
+
+**사용 도구**: Brave Search(MCP), Stitch(MCP), Sequential Thinking(MCP), Notion(MCP)
+
+   ─── **[STOP]** S2 Gate: 비전/타겟/차별점 + 기획 디렉션 5축 Human 승인 ───
 
 ---
 
@@ -90,14 +115,29 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 | 앱/웹 | `/prd` 커맨드 | PRD (.md + .pptx 필수) |
 | 게임 | `gdd-writer` 에이전트 | GDD (.md + .pptx 필수) |
 
-1. 에이전트 2~3명 병렬 스폰 → 독립 기획서 초안 작성
-2. Competing Hypotheses: 비교표 + 선택 근거 명시
-3. 시각 자료 필수: Mermaid 다이어그램, Stitch UI 목업, NanoBanana 일러스트, 차트
-4. **Glossary** 섹션 필수 (한국어↔영어↔정의↔관계 4열 테이블)
-5. 관리자 기능 포함 시 관리자 기획서도 동등 작성
-6. `/pptx` 스킬로 .pptx 변환
-7. 산출물 저장: `{folderMap.product}/{project}/YYYY-MM-DD-s3-prd.md` + `.pptx`
-8. gate-log.md 업데이트
+### 에이전트 회의 흐름 (디렉션 탈락 필터 포함)
+
+```
+S2 디렉션 5축 요약 프롬프트 주입 (~5줄)
+    ↓
+에이전트 A/B/C 자유 초안 작성
+    ↓
+디렉션 탈락 필터 (Don't 태그 위반 → 해당 초안 탈락)
+    ↓
+생존 초안만 비교 (아키텍처, 성능, UX) → 최적안 선택/병합
+```
+
+1. S2 디렉션 5축 요약을 에이전트 프롬프트에 주입
+2. 에이전트 2~3명 병렬 스폰 → 독립 기획서 초안 작성
+3. **디렉션 탈락 필터**: Don't 태그 위반 초안 → 비교에서 제외
+4. Competing Hypotheses: 생존 초안 비교표 + 선택 근거
+5. 시각 자료 포함 필수: Mermaid, Stitch UI 목업, NanoBanana 일러스트, 차트
+6. **Glossary** 섹션 필수 (한국어↔영어↔정의↔관계 4열 테이블)
+7. 관리자 기능 포함 시 관리자 기획서도 동등 작성
+8. `/pptx` 스킬로 .pptx 변환 (단계적: 시안 5-7슬라이드 → 전체 확장)
+9. 산출물 저장 + gate-log.md 업데이트
+
+**사용 도구**: NanoBanana(MCP), Stitch(MCP), Draw.io(MCP), Notion(MCP), `/pptx`(스킬), `/screenshot-analyze`(CLI), `/game-logic-visualize`(스킬), `/game-reference-collect`(스킬), `/video-reference-guide`(CLI), Mermaid(인라인)
 
    ─── **[STOP]** S3 Gate: 기획서(.md + .pptx) Human 승인 ───
 
@@ -112,24 +152,53 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 | # | 산출물 | 파일명 | 내용 |
 |:-:|--------|--------|------|
 | 1 | **상세 기획서** | s4-detailed-plan.md | 화면별 동작 + 데이터 흐름 + 사이트맵 |
-| 2 | **개발 계획** | s4-development-plan.md | 기술 스택 + C4 아키텍처 + ADR + Trine 세션 로드맵 + WBS + 테스트 전략 |
+| 2 | **개발 계획** | s4-development-plan.md | 기술 스택 + C4 아키텍처 + ADR + Trine 세션 로드맵 + WBS + **테스트 전략** |
 | 3 | **UI/UX 기획서** | s4-uiux-spec.md | 와이어프레임 + 컴포넌트 스펙 + 인터랙션 패턴 |
 
 > S3에 관리자 기능 포함 시: `s4-admin-detailed-plan.md`, `s4-admin-uiux-spec.md` 추가 필수
+
+### Spec 크기 가드레일 5원칙 (세션 로드맵 작성 시)
+
+| # | 원칙 | 기준 | 위반 시 |
+|:-:|------|------|---------|
+| 1 | 1 Spec = 1 Feature | 하나의 사용자 가치 단위 | 분리 권고 |
+| 2 | Spec 크기 상한 | 700-900줄 적정, 1,500줄+ 분리 필수 | [STOP] |
+| 3 | SP 상한 | 5-8 SP 적정, 12+ 분리 필수 | [STOP] |
+| 4 | 세션-Spec 명시 | "Session N — Spec M: [제목] (N SP)" 형식 | Gate FAIL |
+| 5 | 번들링 정당화 | 2개 기능 번들 시 분리 불가 사유 명시 | 리뷰 시 확인 |
 
 ### Wave 프로토콜
 
 ```
 Wave 1 (순차): technical-writer → 3종 산출물 초안
-Wave 2 (검증): S3 FR/NFR 전수 체크 → 누락 항목 보완
-Wave 3 (병렬): cto-advisor(기술) + ux-researcher(UX) 동시 검토
+  - S3 시각 자료 재활용 정책 적용
+  - MCP 도구 (Stitch, NanoBanana, Draw.io) 직접 호출
+
+Wave 2A (트레이서빌리티 검증):
+  - S3 FR/NFR 전수 체크 → 누락 항목 보완
+
+Wave 2B (디렉션 일관성 검증 — Lead 또는 cto-advisor, self-review 불허):
+  - S2 디렉션 5축 vs S4 산출물 일관성 검증
+  - Don't 태그 위반 = CRITICAL → [STOP]
+  - 전략/품질 불일치 = WARN
+
+Wave 3 (병렬):
+  - cto-advisor    → 기술 검토 (아키텍처, ADR)
+  - ux-researcher  → UX 검증 (와이어프레임, 인터랙션)
+
 Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 ```
 
-1. Wave 1-4 순차 실행
-2. `sigil-gate-check.sh S4` 자동 검증 (8개 DoD 항목)
-3. 산출물 저장: `{folderMap.product}/{project}/`, `{folderMap.design}/{project}/`
-4. gate-log.md 업데이트
+### AUTO-PASS 조건 (모두 충족)
+
+1. `sigil-gate-check.sh S4` → PASS
+2. Wave 2A: 누락 FR/NFR 0건
+3. Wave 2B: CRITICAL 0건 (Don't 태그 위반 없음)
+4. Wave 3: CRITICAL 0건
+
+하나라도 FAIL → [STOP] 에스컬레이션.
+
+**사용 도구**: Stitch(MCP), NanoBanana(MCP), Draw.io(MCP), Notion(MCP), `/screenshot-analyze`(CLI), `/game-logic-visualize`(스킬), `sigil-gate-check.sh`(CLI), Mermaid(인라인)
 
    ─── [AUTO-PASS] S4 Gate: Wave 검증 통과 시 자동 진행 / 실패 시 [STOP] ───
 
@@ -181,25 +250,18 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
    - 7축 분석 리포트 → `docs/reviews/`에 저장
    - Lead는 요약(~300토큰)만 수신
 
+**사용 도구**: `session-state.mjs`(CLI), `codebase-analyzer`(에이전트)
+
    ─── checkpoint: state=phase1_complete ───
 
 ---
 
 ## Phase 1.5: 요구사항 분석
 
-> S3 PRD/GDD에서 모호한 요구사항을 구현 전에 해소
-> 참조: `trine-requirements-analysis.md` 규칙
+> S3 PRD/GDD에서 모호한 요구사항을 구현 전에 해소. → `trine-requirements-analysis.md` 규칙 참조.
 
 1. S3 기획서 읽기 + 불명확점 식별
-2. 질문 수 판정:
-
-   | 질문 수 | 판정 | 동작 |
-   |:-------:|------|------|
-   | 0개 | 명확 | Q&A 스킵 |
-   | 1~3개 | 정상 | Q&A 실행 |
-   | 4~5개 | 경고 | Q&A + 기획서 보완 권고 |
-   | 6+개 | 반려 | [STOP] 기획서 반려 |
-
+2. 질문 수 판정: 0개(스킵) / 1~3개(Q&A) / 4~5개(Q&A+보완 권고) / 6+개([STOP] 반려)
 3. 인터랙티브 Q&A 실행
 4. 도메인 완결성 체크 (CRUD/권한/에러/3-State UI/테스트/입력 검증 6축)
 5. 트레이서빌리티 매트릭스 생성 → `.specify/traceability/{name}-matrix.json`
@@ -214,14 +276,12 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 > S4 상세 기획서 + UI/UX 기획서를 참조하여 Spec 작성.
 
 1. AI가 **Spec.md** 작성 → `.specify/specs/`에 저장
-2. 복잡도 판단:
-   - Plan 필요 (멀티도메인/아키결정/10+파일) → Plan.md 작성
-   - Plan 불필요 → 4단계
-3. (조건부) **Plan.md** 작성 → `.specify/plans/`에 저장
-4. 3관점 검증 (Spec/Plan/Task)
-5. **[STOP]** Human이 Spec(+Plan) 승인
-6. (조건부) **Task.md** 작성 — 3+ 병렬 에이전트 필요 시만
-7. (조건부) **[STOP]** Human이 Task 최종 승인
+2. 복잡도 판단 → Plan 필요 시 Plan.md 작성
+3. 3관점 검증 (Spec/Plan/Task)
+4. **[STOP]** Human이 Spec(+Plan) 승인
+5. (조건부) **Task.md** 작성 → **[STOP]** Human 최종 승인
+
+**사용 도구**: `spec-writer`(에이전트), Draw.io(MCP, 선택), Mermaid(인라인)
 
    ─── checkpoint: state=phase2_complete ───
 
@@ -245,6 +305,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
    - **Walkthrough 작성** → `docs/walkthroughs/`
    - **Check 3**: `verify.sh code` (test + lint + build + type)
      - 실패 → 1회 자동 수정 → 재실행 / 재실패 → **[STOP]**
+     - **E2E 실패 시**: `test-results/` 컨텍스트(에러 메시지+스크린샷) 수집 → autoFix 프롬프트에 주입
 3. Check 3 PASS 후 순차 실행:
    - **Check 3.5** 트레이서빌리티 (`spec-compliance-checker` 스킬)
    - **Check 3.7** 코드 리뷰 (`code-reviewer` 에이전트 스폰)
@@ -260,6 +321,8 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 5. 디자인 조정 → 4번 재확인
 6. 만족 시 다음 컴포넌트로 이동
 ```
+
+**사용 도구**: `verify.sh`(CLI), `spec-compliance-checker`(스킬), `code-reviewer`(에이전트), `ui-quality-checker`(에이전트), Stitch(MCP), NanoBanana(MCP), Context7(MCP), Playwright CLI(CLI), Mermaid(인라인)
 
    ─── checkpoint: state=phase3_complete ───
 
@@ -280,14 +343,17 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 2. AI가 `gh pr create` → PR URL 반환
 3. **Check 5 (PR Health Check)** — 2단계 전략:
    - **Step 1**: `gh run watch {RUN_ID}` — CI 완료까지 블로킹 대기 (sleep 폴링 없음)
-   - **Step 2** (CI PASS 후 즉시): `gh api .../reviews` + `gh api .../comments` + `gh api .../issues/{PR}/comments` 3종 인라인 폴링
+   - **Step 2** (CI PASS 후 즉시): 리뷰 코멘트 인라인 폴링
+     - `gh api .../pulls/{PR}/reviews` + `.../comments` + `.../issues/{PR}/comments`
    - 코멘트 없음 → 체크박스 자동 체크 → 완료 보고
-   - CI 실패 또는 코멘트 발견 → 코드 수정 → 새 커밋 push → Step 1 재시작
+   - CI 실패 또는 코멘트 발견 → 코드 수정 → push → Step 1 재시작
    - `/loop 2m`은 세션 종료 예정 등 인라인 불가 시만 보조 수단
 4. **Phase 4 완료 분기**:
    - `autoMerge=false` → **[STOP]** Human merge 대기
    - `autoMerge=true` → CI+리뷰 PASS 시 `gh pr merge --squash --delete-branch` → 완료
 5. (조건부) 리뷰 코멘트 대응 → `superpowers:receiving-code-review` 프로토콜
+
+**사용 도구**: `gh` CLI, `code-review`(플러그인, 선택), Notion(MCP)
 
    ─── checkpoint: state=session_complete ───
 
@@ -303,7 +369,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
    - `e2e-runner.sh --env local` (`.specify/e2e-pipeline.json` 존재 시만)
 3. **결과 분기**:
    - ✅ PASS → Step Summary 출력 → Phase 6 진입 가능
-   - ❌ FAIL → **Check 6.5**: GitHub Issue 자동 생성 (`integration-failure` + `trine-phase-5` 라벨) → AI가 이슈 분석 + 수정 → develop 재push
+   - ❌ FAIL → **Check 6.5**: GitHub Issue 자동 생성 → AI 분석 + 수정 → develop 재push
 4. PASS 확인 후 `/trine-release` 커맨드로 Phase 6 진입
 
    ─── Check 6: develop-integration.yml 자동 ───
@@ -312,16 +378,13 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ## Phase 6: 릴리스 브랜치 + 스테이징 (수동 트리거)
 
-> `/trine-release {version}` 커맨드로 진입. `release-staging.yml`이 릴리스 브랜치 생성부터 Release PR까지 자동화.
+> `/trine-release {version}` 커맨드로 진입. `release-staging.yml`이 자동화.
 
-1. Human이 `/trine-release {version}` 실행 (예: `/trine-release 1.2.0`)
+1. Human이 `/trine-release {version}` 실행
 2. `release-staging.yml` workflow_dispatch 트리거:
-   - `release/{version}` 브랜치 생성 (develop 기준)
-   - `package.json` version 자동 bump + `CHANGELOG.md` 생성
-   - `deploy-runner.sh --env staging` 실행:
-     - `release-config.json`의 `environments.staging.deployCommand` 읽기
-     - **빈 값이면 skip** → "배포 인프라 미설정 — build/test만 실행" 안내
-   - **Check 7**: E2E (`e2e-runner.sh --env staging` — `e2e-pipeline.json` 존재 시)
+   - `release/{version}` 브랜치 생성 + version bump + CHANGELOG
+   - `deploy-runner.sh --env staging` (빈 값이면 skip)
+   - **Check 7**: E2E (`e2e-runner.sh --env staging`)
    - Release PR 자동 생성 (`release/{version}` → `main`)
 3. **[STOP]** Human이 Release PR 검토 + 승인 + merge to main → Phase 7 자동 트리거
 
@@ -336,11 +399,8 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 1. Release PR merge to main → `production-deploy.yml` 자동 트리거
 2. **Check 8** 자동 실행:
-   - `deploy-runner.sh --env production` 실행
-     - `release-config.json`의 `environments.production.deployCommand` 읽기
-     - **빈 값이면 skip** → build artifacts만 생성
-   - Health check (`healthEndpoint` 설정 시)
-   - Smoke test (`smokeTestURL` 설정 시)
+   - `deploy-runner.sh --env production` (빈 값이면 skip)
+   - Health check + Smoke test (설정 시)
    - GitHub Release 자동 생성 (tag + changelog)
    - `release/{version}` 브랜치 자동 삭제
 3. **결과 분기**:
@@ -349,12 +409,28 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
      | 레벨 | 방법 | 기준 |
      |------|------|------|
-     | L1 Quick Revert | `git revert` — 최근 커밋만 되돌리기 | < 30분 |
+     | L1 Quick Revert | `git revert` — 최근 커밋만 | < 30분 |
      | L2 Release Revert | 이전 릴리스 태그로 재배포 | < 2시간 |
-     | L3 Hotfix Forward | `hotfix/*` 브랜치 → Trine Hotfix 플로우 재진입 | > 2시간 |
+     | L3 Hotfix Forward | `hotfix/*` → Trine Hotfix 재진입 | > 2시간 |
 
    ─── Check 8: production-deploy.yml 자동 ───
    ─── Check 8.5: **[STOP]** 롤백 필요 시 Human이 /trine-rollback 실행 ───
+
+---
+
+# 리소스 파이프라인 (Diamond Architecture)
+
+S3/S4 시각 자료 및 에셋 생성 시 적용:
+
+```
+P0 (수렴): 스타일 정의 → style-guide.md       도구: /style-train (Replicate LoRA)
+P1 (수렴): 방향 설정 → Art Direction Brief     도구: 수동 작성
+P2 (확산): 프로토타입 → 3-5개 시험 생성        도구: NanoBanana / Ludo.ai / Replicate
+P3 (확산): 대량 생산 → 전체 에셋 생성          도구: /game-asset-generate (라우팅)
+P4 (수렴): 품질 검증 → 일관성 + 크리틱 루프    도구: /screenshot-analyze
+```
+
+**MCP 폴백**: Replicate→NanoBanana / Ludo.ai→NanoBanana+수동 / Stitch→NanoBanana+수동
 
 ---
 
@@ -363,9 +439,9 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 | # | 게이트 | 위치 | 유형 | 주체 |
 |:-:|--------|------|:----:|:----:|
 | 1 | S1 DoD 자동 검증 | SIGIL S1 완료 | AUTO-PASS | AI |
-| 2 | 비전/타겟/차별점 승인 | SIGIL S2 완료 | **[STOP]** | Human |
+| 2 | 비전/타겟/차별점 + 5축 승인 | SIGIL S2 완료 | **[STOP]** | Human |
 | 3 | 기획서(.md+.pptx) 승인 | SIGIL S3 완료 | **[STOP]** | Human |
-| 4 | Wave 2-3 검증 통과 | SIGIL S4 완료 | AUTO-PASS | AI |
+| 4 | Wave 2A/2B/3 검증 통과 | SIGIL S4 완료 | AUTO-PASS | AI |
 | 5 | Spec(+Plan) 승인 | Trine Phase 2 완료 | **[STOP]** | Human |
 | 6 | Check 3/3.5/3.7 | Trine Phase 3 완료 | auto-fix→[STOP] | AI→Human |
 | 7 | PR 검토 + Merge | Trine Phase 4 | **[STOP]** or auto-merge | Human or AI |
@@ -396,6 +472,8 @@ Trine 탐색 Teammate                  → Haiku 4.5  (파일 탐색, 패턴 확
 - S4 기획 패키지 없이 Trine 진입 금지 (Hard 의존성)
 - Handoff 문서 없이 Trine 세션 시작 금지
 - S3에 관리자 기능 포함 시 S4에도 관리자 산출물 필수
+- S2 기획 디렉션 5축의 Axis 1/3은 Human 확인 없이 확정 금지
+- S4 Wave 2B Don't 태그 위반 = CRITICAL → [STOP]
 - Trine Phase 2 Spec 승인 없이 구현 시작 금지
 - Phase 5 Check 6 PASS 없이 Phase 6 진입 금지
 - Phase 6 Release PR 승인 없이 Phase 7 진입 금지

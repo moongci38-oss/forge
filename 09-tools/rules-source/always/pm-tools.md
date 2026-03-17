@@ -184,6 +184,6 @@ todo.md 갱신이 항상 **먼저** 완료된 후 Notion Tasks를 갱신한다. 
 
 ## Iron Laws
 
-- **IRON-1**: Human이 수동 변경한 Notion 상태를 덮어쓰지 않는다
-- **IRON-2**: Hotfix 등록 시 P0-긴급을 반드시 설정한다
-- **IRON-3**: Projects DB 연결 없이 Task를 생성하지 않는다
+- **PM-IRON-1**: Human이 수동 변경한 Notion 상태를 덮어쓰지 않는다
+- **PM-IRON-2**: Hotfix 등록 시 P0-긴급을 반드시 설정한다
+- **PM-IRON-3**: Projects DB 연결 없이 Task를 생성하지 않는다
