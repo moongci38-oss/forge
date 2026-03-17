@@ -1,4 +1,4 @@
-# 2026-03-14 시스템 개선 계획서
+@# 2026-03-14 시스템 개선 계획서
 
 > 생성일: 2026-03-16 | 근거 문서: `01-research/daily/2026-03-14/ai-system-analysis.md`
 
@@ -6,12 +6,20 @@
 
 ## 오늘의 액션 아이템
 
+### P0 (긴급 — 오늘 처리)
+
+| # | 액션 | 영향 범위 | 예상 작업량 |
+|:-:|------|----------|:-----------:|
+| 0 | **MCP 보안 점검 + Claude Code 패치 즉시 실행** | 전체 프로젝트 MCP 설정 | 2.5h |
+
+> P0 근거: OpenClaw 취약점 (프롬프트 인젝션 + 데이터 유출) + CNCERT 공식 경고 발령. 이전 이월 P1-1, P1-2가 2일 연속 미처리 상태이며 보안 위협 수준이 상승함.
+
 ### P1 (높음 — 이번 주)
 
 | # | 액션 | 영향 범위 | 예상 작업량 |
 |:-:|------|----------|:-----------:|
 | 1 | **MCP Elicitation 훅 적용 가능성 검토** (신규) | trine 파이프라인 [STOP] 게이트 | 2h |
-| 2 | **Claude Code 버전 업데이트** (이월 P1-2, 신기능 도입) | Claude Code CLI | 0.5h |
+| 2 | **trine-workflow.md에 refuse 조건 추가** (이월 P2-8, 우선순위 상향) | `~/.claude/trine/rules/trine-workflow.md` | 1.5h |
 | 3 | **claude-api 스킬 Structured Outputs + Tool Streaming 반영** (이월 P1-3) | `.claude/skills/claude-api/` | 2h |
 | 4 | **Claude Code Review 프리뷰 신청** (이월 P1-4) | Trine Check 3.7 | 1h |
 | 5 | **MCP Streamable HTTP + Elicitation 통합 마이그레이션 계획 수립** (이월 P1-5 확장) | 9개 MCP 서버 설정 | 2h |
@@ -22,22 +30,37 @@
 |:-:|------|----------|:-----------:|
 | 6 | **trine-context-management.md에 /context 액션블 연동 추가** (신규) | `~/.claude/trine/rules/trine-context-management.md` | 1h |
 | 7 | **1M 컨텍스트 전략 수립 + context-management.md 업데이트** (이월 P2-7) | `~/.claude/trine/rules/trine-context-management.md`, `trine-context-engineering.md` | 2h |
-| ~~8~~ | ~~**GitHub Action v1.0 도입 검토**~~ | ~~이미 도입 완료 (todo-tracker.yml 등)~~ | — |
+| 8 | **GitHub Action v1.0 도입 검토** (이월 P2-6) | portfolio, godblade `.github/workflows/` | 3h |
 | 9 | **에이전트 협업 효율 메트릭 설계** (이월 P2-9) | Trine 파이프라인 | 2h |
 | 10 | **장기 코드 품질 추적 메트릭 설계** (이월 P2-10) | Business Notion DB | 2h |
-| 11 | **MCP 서버 버전 점검** (이월 P1-1, 정기 점검) | `~/.claude.json`, `.mcp.json` (9개 MCP 서버) | 1h |
-| 12 | **trine-workflow.md에 refuse 조건 추가** (이월 P2-8) | `~/.claude/trine/rules/trine-workflow.md` | 1.5h |
 
 ---
 
 ## 각 액션 상세
+
+### P0: MCP 보안 점검 + Claude Code 패치 즉시 실행
+
+- **액션명**: P0-Security — MCP 서버 전수 버전 검증 + Claude Code 최신 패치 적용
+- **영향 범위**: `~/.claude.json` (user-scope MCP), `/home/damools/business/.mcp.json` (project-scope MCP)
+- **예상 작업량**: 2.5h
+- **의존성**: 없음 (최우선 실행)
+- **작업 내용**:
+  1. `claude --version` 확인 → v2.1.76 미만이면 즉시 업데이트
+  2. 9개 MCP 서버 각각의 설치 버전 확인 (filesystem, notion, sentry, stitch, nanobanana, brave-search, drawio, sequential-thinking, lighthouse)
+  3. 각 서버의 GitHub 릴리즈 페이지에서 최신 버전 + 보안 패치 여부 확인
+  4. CVE-2026-26118 패턴 (Azure MCP 서버 스타일) 해당 여부 확인
+  5. OpenClaw 취약점 패턴(프롬프트 인젝션 경로) 우리 MCP 설정에서 점검
+  6. 취약 서버 발견 시 즉시 업데이트 + business-core.md 보안 체크리스트 갱신
+- **참조 소스**: OpenClaw 취약점 보고서, CNCERT 경고, `business-core.md` 보안 체크리스트
+
+---
 
 ### P1-1: MCP Elicitation 훅 적용 가능성 검토 (신규)
 
 - **액션명**: MCP Elicitation 훅 → trine [STOP] 게이트 강화 PoC
 - **영향 범위**: trine 파이프라인 [STOP] 게이트 로직 (trine-workflow.md, session-state.mjs)
 - **예상 작업량**: 2h
-- **의존성**: 없음
+- **의존성**: P0 완료 후 (보안 점검 후 새 기능 통합)
 - **작업 내용**:
   1. Claude Code v2.1.76 Elicitation/ElicitationResult 훅 사양 확인 (GitHub 릴리즈 노트 + 공식 문서)
   2. 현재 trine [STOP] 게이트 (텍스트 메시지 → Human 수동 확인) vs Elicitation 다이얼로그 비교
@@ -47,7 +70,7 @@
 
 ---
 
-### P2-12: trine-workflow.md에 refuse 조건 추가 (이월 P2-8)
+### P1-2: trine-workflow.md에 refuse 조건 추가 (이월 P2-8, 우선순위 High로 상향)
 
 - **액션명**: Trine 에이전트 명시적 refuse 조건 섹션 추가
 - **영향 범위**: `~/.claude/trine/rules/trine-workflow.md`
@@ -55,27 +78,12 @@
 - **의존성**: 없음
 - **작업 내용**:
   1. MOSAIC 논문(2603.03205) plan-check-act/refuse 루프 핵심 아이디어 정리
-  2. 위험 작업 패턴 목록화 (프로덕션 직접 삭제, force push, 보안 체크리스트 우회 등)
+  2. OpenClaw 사례에서 도출한 위험 작업 패턴 목록화
   3. trine-workflow.md "Auto-Fix 규칙" 섹션 다음에 "Refuse 조건" 섹션 추가:
      - 즉시 refuse 대상: 프로덕션 직접 삭제/force push/보안 체크리스트 우회
      - 확인 후 진행 대상: 외부 서비스 게시, 대용량 파일 삭제
   4. trine-workflow.md 컴파일 (manage-rules.sh build)
-- **참조 소스**: arXiv 2603.03205
-
----
-
-### P1-2: Claude Code 버전 업데이트 (이월 P1-2)
-
-- **액션명**: Claude Code 최신 버전 확인 + 업데이트
-- **영향 범위**: Claude Code CLI 전체
-- **예상 작업량**: 0.5h
-- **의존성**: 없음
-- **작업 내용**:
-  1. `claude --version` 확인
-  2. 최신 버전 확인 (github.com/anthropics/claude-code/releases)
-  3. 업데이트 필요 시 `npm update -g @anthropic-ai/claude-code`
-  4. Elicitation, /context 액션블 등 신기능 동작 확인
-- **참조 소스**: github.com/anthropics/claude-code/releases
+- **참조 소스**: arXiv 2603.03205, OpenClaw 취약점 패턴
 
 ---
 
@@ -84,7 +92,7 @@
 - **액션명**: claude-api 스킬에 Structured Outputs + Tool Streaming GA 패턴 추가
 - **영향 범위**: `/home/damools/business/.claude/skills/claude-api/SKILL.md`
 - **예상 작업량**: 2h
-- **의존성**: 없음
+- **의존성**: P0 완료 후 (보안 상태 확인 후 스킬 업데이트)
 - **작업 내용**:
   1. Anthropic API Structured Outputs GA 사양 확인 (docs.anthropic.com)
   2. Subagent JSON 반환 패턴을 Structured Outputs로 표준화하는 예제 추가
@@ -113,7 +121,7 @@
 - **액션명**: MCP 통합 마이그레이션 계획 수립 (Streamable HTTP + Elicitation 훅 포함)
 - **영향 범위**: 9개 MCP 서버 설정, `~/.claude.json`, `.mcp.json`
 - **예상 작업량**: 2h
-- **의존성**: P1-1 완료 후 (Elicitation 훅 범위 확정 후)
+- **의존성**: P0 완료 후 (현재 서버 상태 파악 후), P1-1 완료 후 (Elicitation 훅 범위 확정 후)
 - **작업 내용**:
   1. MCP Streamable HTTP 사양 상세 확인 (modelcontextprotocol GitHub)
   2. 현행 9개 MCP 서버 중 영향받는 서버 식별
@@ -147,9 +155,13 @@
 
 ---
 
-### ~~P2-8: GitHub Action v1.0 도입 검토~~ — ✅ 이미 완료
+### P2-8: GitHub Action v1.0 도입 검토 (이월 P2-6)
 
-> `todo-tracker.yml`, `develop-integration.yml` 등 GitHub Actions 이미 도입·운용 중. 이월 불필요.
+- **액션명**: Claude Code GitHub Action v1.0 portfolio/godblade CI 통합 검토
+- **영향 범위**: portfolio, godblade `.github/workflows/`
+- **예상 작업량**: 3h
+- **의존성**: P0 완료 후 (보안 확인 후)
+- **참조 소스**: github.com/anthropics/claude-code releases
 
 ---
 
@@ -160,21 +172,6 @@
 - **예상 작업량**: 2h
 - **의존성**: 없음
 - **참조 소스**: arXiv 2603.00309 (DIG to Heal), EmCoop
-
----
-
-### P2-11: MCP 서버 버전 점검 (이월 P1-1, 정기 점검)
-
-- **액션명**: 9개 MCP 서버 버전 현황 확인 + 구 버전 업데이트
-- **영향 범위**: `~/.claude.json` (user-scope MCP), `/home/damools/business/.mcp.json` (project-scope MCP)
-- **예상 작업량**: 1h
-- **의존성**: 없음
-- **작업 내용**:
-  1. 9개 MCP 서버 각각의 설치 버전 확인 (filesystem, notion, sentry, stitch, nanobanana, brave-search, drawio, sequential-thinking, lighthouse)
-  2. 각 서버의 GitHub 릴리즈 페이지에서 최신 버전 확인
-  3. 구 버전 서버 발견 시 업데이트
-  4. CVE-2026-26118 패턴(Azure MCP 서버 취약점) 해당 여부 확인
-- **참조 소스**: 각 서버 GitHub releases, `business-core.md` 보안 체크리스트
 
 ---
 
@@ -194,14 +191,14 @@
 
 | 이전 # | 이전 액션 | 이전 우선순위 | 2026-03-14 계획서 위치 | 우선순위 변화 | 변화 근거 |
 |:------:|----------|:----------:|:--------------------:|:----------:|----------|
-| P1-1 | MCP 보안 점검 (9개 서버) | P1 | P2-11 | **하향** | 즉각 위협 없음 — 정기 점검으로 전환 |
-| P1-2 | Claude Code 버전 업데이트 | P1 | P1-2 | 유지 | 신기능 도입 (긴급성 없음) |
+| P1-1 | MCP 보안 점검 (9개 서버) | P1 | **P0** | **상향** | OpenClaw 취약점 + CNCERT 경고 발령 |
+| P1-2 | Claude Code 보안 패치 | P1 | **P0** (P1-1에 통합) | **상향** | OpenClaw 사례로 긴급성 증가 |
 | P1-3 | claude-api 스킬 Structured Outputs | P1 | P1-3 | 유지 | 신규 신호 없음 |
 | P1-4 | Claude Code Review 프리뷰 신청 | P1 | P1-4 | 유지 | 신규 신호 없음 |
 | P1-5 | MCP Streamable HTTP 마이그레이션 계획 | P1 | P1-5 (Elicitation 통합 확장) | 유지 (범위 확장) | MCP Elicitation 신기능 연계 |
-| P2-6 | GitHub Action v1.0 도입 | P2 | ~~P2-8~~ | **완료** | 이미 도입 완료 (todo-tracker.yml, develop-integration.yml 등) |
+| P2-6 | GitHub Action v1.0 도입 | P2 | P2-8 | 유지 | 신규 신호 없음 |
 | P2-7 | 1M 컨텍스트 전략 | P2 | P2-7 | 유지 | 신규 신호 없음 |
-| P2-8 | trine-workflow refuse 조건 | P2 | P2-12 | 유지 | MOSAIC 논문 참조 가치 있으나 긴급하지 않음 |
+| P2-8 | trine-workflow refuse 조건 | P2 | **P1-2** | **상향** | OpenClaw 사례로 업계 표준화 가속 |
 | P2-9 | 에이전트 협업 메트릭 | P2 | P2-9 | 유지 | 신규 신호 없음 |
 | P2-10 | 장기 코드 품질 추적 | P2 | P2-10 | 유지 | 신규 신호 없음 |
 
@@ -209,8 +206,8 @@
 
 | # | 액션 | 근거 | 우선순위 |
 |:-:|------|------|:--------:|
-| 신규-1 | MCP Elicitation 훅 적용 가능성 검토 | v2.1.76 신기능 — [STOP] 게이트 강화 가능 | P1 |
-| 신규-2 | trine-context-management.md에 /context 액션블 연동 | v2.1.74 /context 커맨드 강화 | P2 |
+| 신규-1 | MCP Elicitation 훅 적용 가능성 검토 | v2.1.76 신기능 — [STOP] 게이트 강화 가능 | P1-1 |
+| 신규-2 | trine-context-management.md에 /context 액션블 연동 | v2.1.74 /context 커맨드 강화 | P2-6 |
 
 ---
 
