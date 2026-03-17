@@ -82,6 +82,7 @@ scripts/daily-system-review/logs/
 # 02-product: PRD/GDD/concept/roadmap outputs
 02-product/projects/*/
 !02-product/projects/.gitkeep
+!02-product/projects/godblade/
 02-product/business-plans/
 02-product/gtm-strategy/
 02-product/lean-canvas/
@@ -109,6 +110,7 @@ scripts/daily-system-review/logs/
 # 05-design: design/brand/UI outputs
 05-design/projects/*/
 !05-design/projects/.gitkeep
+!05-design/projects/godblade/
 05-design/brand-assets/
 05-design/illustrations/
 05-design/portfolio/
