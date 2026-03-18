@@ -6,6 +6,7 @@ description: >
 argument-hint: "[YYYY-MM-DD]"
 allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # AI 시스템 일일 분석 파이프라인
