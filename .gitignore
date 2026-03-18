@@ -144,3 +144,6 @@ sigil-workspace.json
 # Generated images
 generated_imgs/
 .playwright-mcp/
+
+# Archived unused folders
+_unused/
