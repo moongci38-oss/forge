@@ -7,7 +7,13 @@ argument-hint: "[YYYY-MM-DD]"
 allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
 user-invocable: true
 disable-model-invocation: true
+context: fork
 ---
+
+## Dynamic Context (자동 주입)
+
+Current date: !date +%Y-%m-%d
+Recent commits: !git log --oneline -5
 
 # AI 시스템 일일 분석 파이프라인
 
