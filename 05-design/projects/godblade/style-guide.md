@@ -159,8 +159,74 @@ consistent with GodBlade gacha system art direction,
 | FLUX | 50198 | 카드 그리드 | 10 cards face-down, 2 rows |
 | FLUX | 28048 | 마을 UI | village bottom bar, 8 buttons |
 
+## 8. 카메라/조명/구도 사전
+
+### 8.1 GodBlade 게임 카메라
+
+| 앵글 | 프롬프트 키워드 | 사용 씬 |
+|------|--------------|---------|
+| 탑다운 제단 뷰 | `top-down view, bird's eye, overhead perspective, stone altar centered` | 뽑기 메인 씬, 카드 배치 씬 |
+| 사이드뷰 카드 그리드 | `side view, slight low angle, 2 rows of 5 cards, grid layout` | 카드 10장 뒤집기 씬 |
+| 정면 클로즈업 | `front view, centered, close-up, dramatic focus` | 상자 개봉, 결과 연출 |
+| 로우앵글 | `low angle, looking up, dramatic perspective, heroic` | 보스 등장, 에픽 등급 연출 |
+
+### 조명
+
+| 유형 | 프롬프트 키워드 | 사용 씬 |
+|------|--------------|---------|
+| 횃불 양측 조명 | `dual blue torches from sides (#4FC3F7), warm-cool contrast, flickering light` | 모든 던전 씬 |
+| 시안 룬 발광 | `cyan rune glow (#00CED1) from below, magical ambient light, pulsing` | 제단 위 마법진 활성 |
+| 금빛 폭발 | `golden burst light (#FFD700) from center, radial light rays, explosive` | 당첨/획득 연출 |
+| 볼류메트릭 | `volumetric light rays through dust, god rays from above, dust motes` | 보물 발견 순간 |
+| 앰비언트 던전 | `dim ambient, vignette edges, center-focused illumination, dark surroundings` | 기본 배경 상태 |
+
+## 9. 에셋 기술 규격
+
+### 9.1 GodBlade 게임 에셋 규격
+
+| 에셋 유형 | 타겟 해상도 | 종횡비 | 투명 배경 | 포맷 | 비고 |
+|----------|:---------:|:------:|:--------:|:----:|------|
+| 스프라이트 (장비 아이템) | 512×512 | 1:1 | 필수 | PNG-32 | pixel-art 스타일, 인게임 축소 |
+| VFX 이펙트 (번개/글로우) | 1024×1024 | 1:1 | 필수 | PNG-32 | 등급별 4색, 고해상도 |
+| UI 요소 (버튼/패널) | 가변 | 가변 | 필수 | PNG-32 | 9-slice 대응, 금 테두리 |
+| 카드 뒷면 | 256×384 | 2:3 | 권장 | PNG-32 | 10장 동일 디자인 |
+| 카드 슬롯 배경 | 256×384 | 2:3 | 불필요 | PNG-24 | 어두운 사각 #2A2A3E |
+| 배경 (던전 전체) | 1920×1080 | 16:9 | 불필요 | PNG-24 | 풀스크린 |
+| 제단+마법진 | 800×600 | 4:3 | 권장 | PNG-32 | 중앙 배치 오브젝트 |
+| 아이콘 (별 등급) | 64×64 | 1:1 | 필수 | PNG-32 | 금색 #D4A520 |
+
+## 10. 반복 개선 프로토콜
+
+### GodBlade 실패 원인 → 수정 전략
+
+| 실패 항목 | GodBlade 수정 전략 | 프롬프트 변경 |
+|----------|------------------|-------------|
+| 색상 불일치 | Dark Navy #1A1A2E 배경 미적용 | `dominant dark navy background #1A1A2E, absolutely no bright backgrounds` |
+| 밝은 톤 생성 | 던전 어둠 키워드 강화 | `deep underground, no daylight, only torch and magic illumination` |
+| 금색 과도 | Gold Burst를 Primary Gold로 제한 | `gold trim #D4A520 only on borders, no full gold surfaces` |
+| 시안 부족 | 룬 마법진 강조 | `prominent cyan rune circle #00CED1 on altar surface, glowing` |
+| 현대적 UI 느낌 | 판타지 키워드 보강 | `gothic medieval ornate, stone texture, NO modern UI, NO flat design` |
+| AI 플라스틱 느낌 | Layer 3 물성 강화 | `weathered stone grain, tarnished gold, oxidized bronze, dust motes` |
+| 서사 부재 | Layer 2 순간 키워드 | `the instant the seal cracks, energy still building, ancient dust rising` |
+| 등급 이펙트 약함 | 등급별 색상 HEX 직접 지정 | `{등급} lightning with exact color #{HEX}, intense glow aura` |
+
+### 반복 프로세스
+
+```
+1차 생성 → /asset-critic 6항목 평가
+  │
+  ├─ 평균 3.5+ & 항목5,6 각 3.0+ → ✅ PASS
+  │   → resource-manifest + prompt-log 기록
+  │   → 크리틱 4.5+ → 앵커 이미지 후보
+  │
+  └─ 미달 → 최저 항목 식별 → 위 수정 전략 적용
+      │
+      └─ 2차 생성 → 재평가 (최대 3회 자동)
+          └─ 3회 실패 → Human 개입 요청
+```
+
 ---
 
-*Generated: 2026-03-17*
+*Generated: 2026-03-18*
 *Art Direction Brief: `05-design/projects/godblade/art-direction-brief.md`*
 *Source Assets: 7개 (NanoBanana 3 + Stitch 4) — `02-product/projects/godblade/_assets/`*
