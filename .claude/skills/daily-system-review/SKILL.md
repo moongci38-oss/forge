@@ -1,8 +1,8 @@
 ---
 name: daily-system-review
 description: >
-  매일 실행하는 AI 시스템 일일 분석. 6-Tier 소스에서 전일 AI/Agentic 동향을
-  총망라 수집하고, 우리 시스템과 1:1 비교 분석하여 갭 분석 + 적용 계획서를 생성한다.
+  매일 실행하는 AI 시스템 경량 스캔. 6-Tier 소스에서 전일 AI/Agentic 동향을 수집하되,
+  Critical/Breaking/Deprecated/보안만 상세 분석한다. 심층 분석은 weekly-research에서 수행.
 argument-hint: "[YYYY-MM-DD]"
 allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
 user-invocable: true
