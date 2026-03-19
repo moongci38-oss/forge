@@ -147,3 +147,8 @@ generated_imgs/
 
 # Archived unused folders
 _unused/
+
+# OpenViking (contains API keys and local data)
+ov.conf
+.openviking/
+data/
