@@ -1,0 +1,50 @@
+# Performance Checker Agent Eval — 3 test cases
+
+- vars:
+    code_snippet: |
+      async function getOrderDetails(orderId: string) {
+        const order = await orderRepo.findOne({ where: { id: orderId } });
+        const items = await itemRepo.find({ where: { orderId } });
+        const user = await userRepo.findOne({ where: { id: order.userId } });
+        const payments = await paymentRepo.find({ where: { orderId } });
+        return { order, items, user, payments };
+      }
+  assert:
+    - type: contains
+      value: "N+1"
+    - type: llm-rubric
+      value: "Identifies sequential queries that should be parallelized (Promise.all) or joined, and the N+1 pattern of separate queries instead of relations"
+
+- vars:
+    code_snippet: |
+      @Get('products')
+      async findAll() {
+        return this.productRepo.find();
+      }
+  assert:
+    - type: contains
+      value: "pagination"
+    - type: llm-rubric
+      value: "Flags missing pagination (no take/skip/limit) — unbounded query returning all records"
+
+- vars:
+    code_snippet: |
+      @Get('users')
+      async findAll(
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+        @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+      ) {
+        return this.userRepo.find({
+          take: Math.min(limit, 100),
+          skip: (page - 1) * limit,
+          relations: ['profile'],
+          order: { createdAt: 'DESC' },
+        });
+      }
+  assert:
+    - type: contains
+      value: "0 issues"
+    - type: not-contains
+      value: "pagination"
+    - type: not-contains
+      value: "N+1"

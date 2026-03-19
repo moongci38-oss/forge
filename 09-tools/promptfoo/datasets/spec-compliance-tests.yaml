@@ -1,0 +1,48 @@
+# Spec Compliance Checker Agent Eval — 3 test cases
+
+- vars:
+    spec_requirements: |
+      FR-1: 사용자는 이메일/비밀번호로 로그인할 수 있다
+      FR-2: 로그인 실패 시 에러 메시지를 표시한다
+      FR-3: 5회 실패 시 계정을 잠근다
+    implementation_summary: |
+      auth.service.ts: login(email, password) 구현 완료
+      auth.controller.ts: POST /auth/login 엔드포인트
+      테스트: login 성공/실패 케이스 작성
+  assert:
+    - type: contains
+      value: "FR-3"
+    - type: llm-rubric
+      value: "Correctly identifies FR-3 (account lockout after 5 failures) as NOT implemented — missing lockout logic and counter"
+
+- vars:
+    spec_requirements: |
+      FR-1: 게시글 목록을 페이지네이션으로 조회
+      FR-2: 게시글 상세 조회
+      NFR-1: 목록 API 응답 시간 500ms 이내
+    implementation_summary: |
+      posts.service.ts: findAll(page, limit) + findOne(id)
+      posts.controller.ts: GET /posts, GET /posts/:id
+      테스트: unit + integration 작성, 응답 시간 assertion 포함
+  assert:
+    - type: contains
+      value: "PASS"
+    - type: llm-rubric
+      value: "All FRs and NFRs are covered. Reports full compliance."
+
+- vars:
+    spec_requirements: |
+      FR-1: 파일 업로드 (최대 10MB)
+      FR-2: 업로드 진행률 표시
+      NFR-1: 동시 업로드 3개 제한
+    implementation_summary: |
+      upload.service.ts: uploadFile() 구현
+      upload.controller.ts: POST /upload, multer 10MB 제한
+      프론트엔드: UploadButton 컴포넌트
+  assert:
+    - type: contains
+      value: "FR-2"
+    - type: contains
+      value: "NFR-1"
+    - type: llm-rubric
+      value: "Identifies FR-2 (progress bar) and NFR-1 (concurrent limit) as not implemented"

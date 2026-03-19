@@ -1,0 +1,43 @@
+# UI Quality Checker Agent Eval — 3 test cases
+
+- vars:
+    component_code: |
+      <button className="bg-gray-200 text-gray-400 text-xs p-1">
+        Submit
+      </button>
+  assert:
+    - type: contains
+      value: "contrast"
+    - type: contains
+      value: "touch target"
+    - type: llm-rubric
+      value: "Correctly identifies WCAG AA color contrast violation (gray-400 on gray-200) AND touch target too small (p-1 < 44px)"
+
+- vars:
+    component_code: |
+      export function UserList({ users }) {
+        return (
+          <div>
+            {users.map(u => <div key={u.id}>{u.name}</div>)}
+          </div>
+        );
+      }
+  assert:
+    - type: contains
+      value: "empty state"
+    - type: llm-rubric
+      value: "Identifies missing loading state, error state, and empty state (users.length === 0) — 3-state coverage gap"
+
+- vars:
+    component_code: |
+      <nav aria-label="Main navigation" role="navigation">
+        <ul>
+          <li><a href="/" aria-current="page" className="font-bold text-blue-600">Home</a></li>
+          <li><a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About</a></li>
+        </ul>
+      </nav>
+  assert:
+    - type: contains
+      value: "0 issues"
+    - type: not-contains
+      value: "error"

@@ -1,0 +1,90 @@
+# Daily System Review Agent — Test Dataset
+# 3 cases: critical alert detection, source credibility, actionable recommendations
+
+- description: "Correctly flags a breaking API change as Critical"
+  vars:
+    news_items: |
+      1. [Anthropic Official] Claude API v2 deprecation notice: All /v1/complete endpoints
+         will stop functioning on 2026-04-01. Migration to /v2/messages required.
+         Source: https://docs.anthropic.com/en/docs/changelog (2026-03-18)
+
+      2. [Hacker News] New open-source MCP server for PostgreSQL released, 200 stars in 24h.
+         Source: https://news.ycombinator.com/item?id=99999 (2026-03-18)
+
+      3. [Reddit r/ClaudeAI] User reports improved code generation with system prompts.
+         Source: https://reddit.com/r/ClaudeAI/comments/abc123 (2026-03-18)
+  assert:
+    - type: icontains
+      value: "critical"
+      metric: critical-detected
+    - type: icontains
+      value: "deprecat"
+      metric: deprecation-flagged
+    - type: llm-rubric
+      value: >
+        The response MUST classify the API v1 deprecation as Critical/P0 or P1 because
+        it has a hard deadline (2026-04-01) and will break existing integrations.
+        The MCP server and Reddit post should NOT be classified as Critical — they are
+        informational (P2-P3). If both the MCP server and Reddit item are also marked
+        Critical, the response fails.
+      metric: severity-accuracy
+
+- description: "Distinguishes high-credibility from low-credibility sources"
+  vars:
+    news_items: |
+      1. [Anthropic Engineering] New tool-use improvements in Claude Sonnet 4.6:
+         30% faster function calling, reduced hallucination in structured output.
+         Source: https://anthropic.com/engineering/tool-use-improvements (2026-03-18)
+
+      2. [Anonymous blog] Claude 5.0 leaked! Will have 10M token context and AGI capabilities.
+         No confirmation from Anthropic.
+         Source: https://random-ai-blog.xyz/claude-5-leak (2026-03-18)
+
+      3. [Twitter/X @random_user] "I heard Google is shutting down Gemini next month"
+         No official source cited. 2 likes, 0 retweets.
+         Source: https://x.com/random_user/status/12345 (2026-03-18)
+  assert:
+    - type: icontains
+      value: "high"
+      metric: high-credibility-tagged
+    - type: icontains
+      value: "low"
+      metric: low-credibility-tagged
+    - type: llm-rubric
+      value: >
+        The response must assign High credibility to the Anthropic Engineering post
+        (official source). The anonymous blog leak and unverified Twitter rumor must
+        be rated Low credibility. The response should explicitly warn against acting
+        on unverified claims. If the blog or tweet are treated as reliable, it fails.
+      metric: credibility-accuracy
+
+- description: "Produces actionable recommendations, not vague advice"
+  vars:
+    news_items: |
+      1. [Anthropic Official] Claude Code v1.0.30 released: New --resume flag for
+         session continuation, improved /compact with 40% better context retention.
+         Source: https://github.com/anthropics/claude-code/releases/tag/v1.0.30 (2026-03-18)
+
+      2. [MCP Registry] New Brave Search MCP server v2.0: supports structured search
+         results with metadata extraction. Breaking change: config format changed from
+         JSON to YAML.
+         Source: https://github.com/anthropics/mcp-servers/releases (2026-03-18)
+
+      3. [Google DeepMind] Gemini 2.5 Pro released with native audio understanding.
+         Available via API. No changes to existing endpoints.
+         Source: https://deepmind.google/blog/gemini-2-5-pro (2026-03-18)
+  assert:
+    - type: not-icontains
+      value: "consider updating"
+      metric: no-vague-advice
+    - type: llm-rubric
+      value: >
+        The recommendations must be specific and actionable. Good examples:
+        - "Run `npm update @anthropic-ai/claude-code` to get --resume flag"
+        - "Update .mcp.json Brave Search config from JSON to YAML format before upgrading to v2.0"
+        Bad examples (FAIL if present):
+        - "Consider looking into the new features"
+        - "Teams should evaluate whether to upgrade"
+        - "Keep an eye on developments"
+        Each recommendation should reference a specific tool, file, command, or config change.
+      metric: actionability

@@ -1,0 +1,107 @@
+# Code Reviewer Agent — Test Dataset
+# 3 cases: security detection, logic error detection, false positive avoidance
+
+- description: "Detects silent error swallowing in catch block"
+  vars:
+    code_snippet: |
+      // file: src/modules/estimates/estimates.service.ts
+      async createEstimate(dto: CreateEstimateDto): Promise<Estimate> {
+        try {
+          const estimate = this.estimateRepo.create(dto);
+          await this.estimateRepo.save(estimate);
+          return estimate;
+        } catch (error) {
+          console.log('Failed to create estimate', error);
+          return null;
+        }
+      }
+  assert:
+    - type: contains
+      value: "error"
+      metric: issue-detected
+    - type: icontains
+      value: "swallow"
+      metric: correct-rule-id
+    - type: llm-rubric
+      value: >
+        The response must identify that the catch block silently swallows the error
+        by only logging it and returning null, without re-throwing, updating error state,
+        or notifying the user. The severity should be error/critical, not warning.
+      metric: semantic-accuracy
+
+- description: "Detects async race condition — useEffect without cleanup"
+  vars:
+    code_snippet: |
+      // file: src/components/UserProfile.tsx
+      import { useState, useEffect } from 'react';
+
+      export function UserProfile({ userId }: { userId: string }) {
+        const [user, setUser] = useState(null);
+        const [loading, setLoading] = useState(true);
+
+        useEffect(() => {
+          fetch(`/api/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+              setUser(data);
+              setLoading(false);
+            });
+        }, [userId]);
+
+        if (loading) return <div>Loading...</div>;
+        return <div>{user?.name}</div>;
+      }
+  assert:
+    - type: contains
+      value: "issue"
+      metric: issue-detected
+    - type: llm-rubric
+      value: >
+        The response must identify at least one of these problems:
+        1) The useEffect performs an async fetch without an AbortController, risking
+           state updates on an unmounted component (memory leak / race condition).
+        2) No cleanup function is returned from useEffect.
+        The severity should be error or critical.
+      metric: semantic-accuracy
+
+- description: "No false positive on clean, correct code"
+  vars:
+    code_snippet: |
+      // file: src/modules/users/users.service.ts
+      import { Injectable, NotFoundException } from '@nestjs/common';
+      import { InjectRepository } from '@nestjs/typeorm';
+      import { Repository } from 'typeorm';
+      import { User } from './entities/user.entity';
+
+      @Injectable()
+      export class UsersService {
+        constructor(
+          @InjectRepository(User)
+          private readonly userRepo: Repository<User>,
+        ) {}
+
+        async findOne(id: string): Promise<User> {
+          const user = await this.userRepo.findOne({
+            where: { id },
+            relations: ['profile'],
+          });
+          if (!user) {
+            throw new NotFoundException(`User ${id} not found`);
+          }
+          return user;
+        }
+      }
+  assert:
+    - type: contains
+      value: "0 issues"
+      metric: no-false-positive
+    - type: not-contains
+      value: "error"
+      # Ensure severity "error" is not reported for clean code
+      metric: no-false-positive-severity
+    - type: llm-rubric
+      value: >
+        The response must NOT flag any issues. The code correctly throws
+        NotFoundException instead of swallowing errors, uses relations to avoid N+1,
+        and follows proper NestJS patterns. If the response reports 0 issues, it passes.
+      metric: semantic-accuracy

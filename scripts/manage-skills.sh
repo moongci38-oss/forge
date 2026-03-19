@@ -23,13 +23,13 @@ usage() {
 Skill Library Manager
 
 Usage:
-  manage-skills.sh list                              List all skills + active status
+  manage-skills.sh list [--json]                      List all skills + active status
   manage-skills.sh enable <source/category/skill>    Activate a skill (symlink)
   manage-skills.sh disable <skill-name>              Deactivate a skill (remove symlink)
   manage-skills.sh install-aitmpl <skill-slug>       Download skill from aitmpl.com
   manage-skills.sh sync <target-project-path>        Sync dev skills to a project
   manage-skills.sh info <skill-name>                 Show skill details
-  manage-skills.sh audit [--usage]                    Find unreferenced skills (disable candidates)
+  manage-skills.sh audit [--usage] [--json]           Find unreferenced skills (disable candidates)
   manage-skills.sh validate [skill-name]             Validate SKILL.md frontmatter fields
   manage-skills.sh build <skill-name>                Generate AGENTS.md from rules/ subdirectory
   manage-skills.sh test <skill-name>                 Run subagent scenario test (placeholder)
@@ -48,8 +48,15 @@ EOF
 
 # ─── LIST ──────────────────────────────────────────────────────────────────
 cmd_list() {
-    echo -e "${CYAN}=== Skill Library ===${NC}"
-    echo ""
+    local json_mode=false
+    for arg in "$@"; do
+        [[ "$arg" == "--json" ]] && json_mode=true
+    done
+
+    if ! $json_mode; then
+        echo -e "${CYAN}=== Skill Library ===${NC}"
+        echo ""
+    fi
 
     # Collect active skill names (symlinks OR real directories)
     declare -A active_targets
@@ -68,6 +75,9 @@ cmd_list() {
         done
     fi
 
+    # JSON mode: collect all skills into an array
+    local json_entries=()
+
     # Walk skills-library
     local total=0
     local active=0
@@ -76,7 +86,7 @@ cmd_list() {
         [ -d "$source_dir" ] || continue
         local source
         source=$(basename "$source_dir")
-        echo -e "${BLUE}[$source]${NC}"
+        $json_mode || echo -e "${BLUE}[$source]${NC}"
 
         # Two-level: source/category/skill or source/skill
         for item in "$source_dir"*/; do
@@ -91,32 +101,52 @@ cmd_list() {
             done
 
             if [ "$has_sub" = true ]; then
-                echo -e "  ${YELLOW}$item_name/${NC}"
+                $json_mode || echo -e "  ${YELLOW}$item_name/${NC}"
                 for sub in "$item"*/; do
                     [ -d "$sub" ] || continue
                     local skill_name
                     skill_name=$(basename "$sub")
                     total=$((total + 1))
 
+                    local is_active=false
                     if [ -d "$ACTIVE_SKILLS/$skill_name" ]; then
-                        echo -e "    ${GREEN}* $skill_name${NC} (active)"
+                        is_active=true
                         active=$((active + 1))
+                    fi
+
+                    if $json_mode; then
+                        local src_type="library"
+                        json_entries+=("{\"name\":\"$skill_name\",\"active\":$is_active,\"source\":\"$src_type\",\"path\":\"$sub\"}")
                     else
-                        echo -e "      $skill_name"
+                        if $is_active; then
+                            echo -e "    ${GREEN}* $skill_name${NC} (active)"
+                        else
+                            echo -e "      $skill_name"
+                        fi
                     fi
                 done
             elif [ -f "$item/SKILL.md" ]; then
                 # Direct skill (no category nesting)
                 total=$((total + 1))
+                local is_active=false
                 if [ -d "$ACTIVE_SKILLS/$item_name" ]; then
-                    echo -e "  ${GREEN}* $item_name${NC} (active)"
+                    is_active=true
                     active=$((active + 1))
+                fi
+
+                if $json_mode; then
+                    local src_type="library"
+                    json_entries+=("{\"name\":\"$item_name\",\"active\":$is_active,\"source\":\"$src_type\",\"path\":\"$item\"}")
                 else
-                    echo -e "    $item_name"
+                    if $is_active; then
+                        echo -e "  ${GREEN}* $item_name${NC} (active)"
+                    else
+                        echo -e "    $item_name"
+                    fi
                 fi
             fi
         done
-        echo ""
+        $json_mode || echo ""
     done
 
     # Show active skills not in library
@@ -140,24 +170,41 @@ cmd_list() {
             done < <(find "$SKILLS_LIBRARY" -name "SKILL.md" -print0 2>/dev/null)
 
             if [ "$found_in_lib" = false ]; then
-                if [ "$extra" -eq 0 ]; then
-                    echo ""
-                    echo -e "${BLUE}[active — not in library]${NC}"
-                fi
-                local kind="dir"
+                local kind="directory"
                 [ -L "${item%/}" ] && kind="symlink"
-                echo -e "  ${GREEN}* $name${NC} ($kind)"
+
+                if $json_mode; then
+                    json_entries+=("{\"name\":\"$name\",\"active\":true,\"source\":\"$kind\",\"path\":\"${item%/}\"}")
+                else
+                    if [ "$extra" -eq 0 ]; then
+                        echo ""
+                        echo -e "${BLUE}[active — not in library]${NC}"
+                    fi
+                    echo -e "  ${GREEN}* $name${NC} ($kind)"
+                fi
                 extra=$((extra + 1))
             fi
         done
     fi
 
-    echo ""
-    echo -e "${CYAN}Library: $total skills, $active linked to active${NC}"
-    if [ "$extra" -gt 0 ]; then
-        echo -e "${CYAN}Active (outside library): $extra skills${NC}"
+    if $json_mode; then
+        # Output JSON array
+        echo -n "["
+        local first=true
+        for entry in "${json_entries[@]}"; do
+            $first || echo -n ","
+            echo -n "$entry"
+            first=false
+        done
+        echo "]"
+    else
+        echo ""
+        echo -e "${CYAN}Library: $total skills, $active linked to active${NC}"
+        if [ "$extra" -gt 0 ]; then
+            echo -e "${CYAN}Active (outside library): $extra skills${NC}"
+        fi
+        echo -e "${CYAN}Total active: $((active + extra))${NC}"
     fi
-    echo -e "${CYAN}Total active: $((active + extra))${NC}"
 }
 
 # ─── ENABLE ────────────────────────────────────────────────────────────────
@@ -357,15 +404,21 @@ cmd_info() {
 # ─── AUDIT ─────────────────────────────────────────────────────────────────
 cmd_audit() {
     local show_usage=false
+    local json_mode=false
     for arg in "$@"; do
         [[ "$arg" == "--usage" ]] && show_usage=true
+        [[ "$arg" == "--json" ]] && json_mode=true
     done
 
-    echo -e "${CYAN}=== Skill Audit: Unreferenced Skills ===${NC}"
-    echo ""
+    $json_mode || echo -e "${CYAN}=== Skill Audit: Unreferenced Skills ===${NC}"
+    $json_mode || echo ""
 
     if [ ! -d "$ACTIVE_SKILLS" ]; then
-        echo -e "${YELLOW}No active skills directory${NC}"
+        if $json_mode; then
+            echo '{"referenced":[],"unreferenced":[],"total":0}'
+        else
+            echo -e "${YELLOW}No active skills directory${NC}"
+        fi
         return
     fi
 
@@ -418,6 +471,27 @@ cmd_audit() {
             unreferenced=$((unreferenced + 1))
         fi
     done
+
+    if $json_mode; then
+        # Build JSON output
+        echo -n "{\"referenced\":["
+        local first=true
+        for s in "${referenced_by_pipeline[@]}"; do
+            $first || echo -n ","
+            echo -n "\"$s\""
+            first=false
+        done
+        echo -n "],\"unreferenced\":["
+        first=true
+        for s in "${unreferenced_skills[@]}"; do
+            $first || echo -n ","
+            echo -n "\"$s\""
+            first=false
+        done
+        echo -n "],\"total\":$total}"
+        echo ""
+        return
+    fi
 
     echo -e "${GREEN}Referenced by pipeline/commands/agents: ${#referenced_by_pipeline[@]}${NC}"
     for s in "${referenced_by_pipeline[@]}"; do
@@ -674,7 +748,7 @@ main() {
 
     case "$cmd" in
         list)
-            cmd_list
+            cmd_list "$@"
             ;;
         enable)
             [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh enable <source/category/skill>${NC}"; exit 1; }
