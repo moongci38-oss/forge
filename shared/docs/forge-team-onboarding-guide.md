@@ -237,6 +237,21 @@ bash ~/.claude/forge/shared/scripts/setup-mcp.sh
 > Sentry, Notion, Lighthouse, Draw.io, Magic UI는 API 키 없이 동작한다.
 > API 키는 `forge/.env`에서 관리한다. `.env.example`을 참고한다.
 
+#### Step 4: CLI 도구 설치 (MCP 병행)
+
+Sentry, Lighthouse는 MCP와 CLI를 용도별로 병행 사용한다.
+CLI는 스크립트/CI/배치용, MCP는 대화 내 인터랙티브 탐색용.
+
+```bash
+bash ~/.claude/forge/shared/scripts/setup-cli.sh
+```
+
+| CLI 도구 | 용도 | MCP 용도 |
+|---------|------|---------|
+| `sentry-cli` | 릴리스 관리, CI/CD | 이슈 조회, AI 근본원인 분석 |
+| `lighthouse` | CI/배치 감사, JSON 리포트 | 대화 내 인터랙티브 감사 |
+| Brave Search (curl) | 스크립트/hook 내 검색 | 대화 내 인터랙티브 검색 |
+
 `setup.mjs`가 7단계를 자동으로 수행한다:
 
 ```text

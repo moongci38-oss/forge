@@ -45,7 +45,11 @@ cp .env.example .env
 bash shared/scripts/setup-mcp.sh
 # → ~/.claude.json에 10개 전역 MCP 서버 자동 등록 (멱등)
 
-# 5. Claude Code 실행
+# 5. CLI 도구 설치 (MCP와 병행 사용)
+bash shared/scripts/setup-cli.sh
+# → Lighthouse, Sentry CLI 설치 (CI/배치용)
+
+# 6. Claude Code 실행
 claude
 ```
 

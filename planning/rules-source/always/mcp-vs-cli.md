@@ -30,14 +30,30 @@ enforcement: flexible
 | 도구 | 유형 | 선택 사유 |
 |------|:----:|---------|
 | Notion | MCP | DB CRUD, 멀티스텝 페이지 조작 |
-| Sentry | MCP | 이슈 조회 + AI 분석 연계 |
-| Brave Search | MCP | 검색 + 결과 구조화 |
 | Draw.io | MCP | 다이어그램 생성 (복잡한 입출력) |
 | NanoBanana | MCP | 이미지 생성/편집 (바이너리 처리) |
 | Stitch | MCP | UI 목업 생성 (프로젝트 관리) |
-| Lighthouse | MCP | 성능/접근성 감사 (다중 메트릭) |
+| Ludo | MCP | 게임 에셋 생성 (API 전용) |
+| Replicate | MCP | AI 모델 실행 (API 전용) |
+| Magic UI | MCP | UI 컴포넌트 레지스트리 |
 | Playwright | **CLI** | 스크린샷 캡처 (단일 명령, 토큰 4x 절감) |
 | Gemini Vision | **CLI** | 이미지/영상 분석 (analyze-screenshot.sh, analyze-video.sh) |
+
+### 혼합 도구 (CLI + MCP)
+
+CLI와 MCP를 용도별로 분리하여 병행 사용하는 도구.
+
+| 도구 | CLI 용도 | MCP 용도 |
+|------|---------|---------|
+| **Sentry** | `sentry-cli` — 릴리스 관리, 소스맵 업로드, CI/CD | MCP — 이슈 조회, 이벤트 분석, AI 근본원인(Seer) |
+| **Lighthouse** | `lighthouse` — CI/배치 감사, JSON 리포트 생성 | MCP — 대화 내 인터랙티브 감사, 메트릭 탐색 |
+| **Brave Search** | `curl` API — 스크립트/hook 내 빠른 검색 | MCP — 대화 내 인터랙티브 검색, 결과 구조화 |
+
+**CLI + MCP 선택 기준:**
+- 스크립트/자동화/CI → CLI
+- 대화 내 인터랙티브 탐색 → MCP
+- 배치 처리 (다건 반복) → CLI
+- 단건 조회 + 후속 분석 → MCP
 
 ## AI 행동 규칙
 
