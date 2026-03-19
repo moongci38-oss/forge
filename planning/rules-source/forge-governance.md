@@ -84,13 +84,21 @@ pipeline-orchestrator (Lead)    → Opus 4.6   (판단, 종합, 회의 심판)
 ```markdown
 ## Gate Log — {프로젝트명}
 
-| Stage | 결과 | 일자 | 세션 | 조건 | humanDecision | 비고 |
-|:-----:|:----:|------|:----:|------|:------------:|------|
-| S1 | ✅ AUTO | YYYY-MM-DD | 1 | DoD 자동 검증 통과 | auto | 신뢰도 High 72% |
-| S2 | ✅ PASS | YYYY-MM-DD | 1 | Go/No-Go 85점 | approved | |
-| S3 | — | — | — | — | — | |
-| S4 | — | — | — | — | — | |
+| Stage | 결과 | 일자 | 세션 | 조건 | humanDecision | humanOverride | reviewDuration | 비고 |
+|:-----:|:----:|------|:----:|------|:------------:|:---:|:---:|------|
+| S1 | ✅ AUTO | YYYY-MM-DD | 1 | DoD 자동 검증 통과 | auto | false | — | 신뢰도 High 72% |
+| S2 | ✅ PASS | YYYY-MM-DD | 1 | Go/No-Go 85점 | approved | true | reviewed | AI 추천 수정 후 승인 |
+| S3 | — | — | — | — | — | — | — | |
+| S4 | — | — | — | — | — | — | — | |
 ```
+
+**필드 설명**:
+- `humanOverride`: true = Human이 AI 추천을 수정 후 승인 / false = AI 추천 그대로 승인
+- `reviewDuration`: "instant" (<30초) 또는 "reviewed" (30초+) — 고무도장 승인 감지용
+
+**월간 리뷰 지표**:
+- Override Rate = humanOverride=true 건수 / 전체 [STOP] 게이트 수
+- Rubber-Stamp Rate = reviewDuration="instant" 건수 / 전체 [STOP] 게이트 수
 
 ## Stage별 DoD (Definition of Done)
 

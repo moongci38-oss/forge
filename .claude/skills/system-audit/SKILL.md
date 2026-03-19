@@ -11,7 +11,7 @@ user-invocable: true
 # 5축 통합 시스템 감사 (ACHCE)
 
 > ACHCE: Agentic · Context · Harness · Cost · Human-AI Escalation
-> 참조: `docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
+> 참조: `forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
 
 ## 인자
 
@@ -174,7 +174,7 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 - 정기 감사: 분기 1회 권장
 
 ## 참조
-- docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
+- forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
 ```
 
 ---

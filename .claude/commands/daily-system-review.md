@@ -2,6 +2,7 @@
 description: "AI 시스템 일일 분석 — 6-Tier 소스 수집 + 우리 시스템과 갭 분석 + 적용 계획서 생성"
 argument-hint: "[YYYY-MM-DD]"
 allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
+model: sonnet
 ---
 
 # AI 시스템 일일 분석 파이프라인

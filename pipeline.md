@@ -420,6 +420,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
 3. **결과 분기**:
    - ✅ PASS → Phase 11 진입 가능
    - ❌ FAIL → GitHub Issue 자동 생성 → AI 분석 + 수정 → develop 재push
+     - **재시도 한도: 최대 2회.** 2회 연속 FAIL 시 자동 수정 중단 → **[STOP]** Human 에스컬레이션 필수
 4. PASS 확인 후 `/forge-release` 커맨드로 Phase 11 진입
 
    ─── Check 8: develop-integration.yml 자동 ───

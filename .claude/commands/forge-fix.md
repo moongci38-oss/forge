@@ -2,6 +2,7 @@
 description: 알려진 버그/이슈를 Hotfix 흐름으로 빠르게 처리
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent
 argument-hint: <이슈 설명 또는 Notion task URL>
+model: sonnet
 ---
 
 # /forge-fix

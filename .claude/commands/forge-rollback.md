@@ -1,5 +1,6 @@
 ---
 description: "Forge Dev Phase 7 — 롤백 실행 (L1/L2/L3)"
+model: sonnet
 ---
 
 Forge Dev Phase 7 롤백을 실행합니다. 배포 실패 시 아래 레벨 중 선택하세요.

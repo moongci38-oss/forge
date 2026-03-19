@@ -6,11 +6,11 @@
 
 **PR을 생성하기 전에 자체 코드 리뷰를 수행한다. PR 생성 후 봇/Human 리뷰 코멘트는 반드시 수정한다.**
 
-**자동 머지 원칙 (전역 기본값):**
-- CI PASS + 모든 리뷰 코멘트 해결 완료 시 → **Human 승인 대기 없이 즉시 squash merge + branch 삭제**
+**자동 머지 원칙 (forge-workflow.md 기준):**
+- CI PASS + 모든 리뷰 코멘트 해결 완료 시 → **즉시 squash merge + branch 삭제**
 - 머지 후 다음 작업(의존 태스크 포함)을 즉시 진행한다
 - Worktree 병렬 작업 시: Wave N PR이 머지되면 Wave N+1 의존 태스크를 바로 착수한다
-- `.specify/config.json`의 `autoMerge` 설정과 무관하게 항상 자동 머지가 기본이다
+- `.specify/config.json`의 `autoMerge` 설정을 따른다 (off=[STOP] Human 머지 대기, on=자동 머지)
 - **중간 PR마다 Human에게 보고하지 않는다** — 파이프라인을 끊지 않고 끝까지 진행
 - **모든 작업이 완전히 완료된 시점에 딱 한 번** Human에게 최종 완료 보고를 한다
 

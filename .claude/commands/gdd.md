@@ -2,6 +2,7 @@
 description: Game Design Document(GDD) 작성 — 게임 아이디어를 입력하면 S1/S2 기반 GDD 완성본 생성
 argument-hint: <게임 아이디어 또는 프로젝트명>
 allowed-tools: Read, Write, Edit, WebSearch, WebFetch, Glob, Grep
+model: sonnet
 ---
 
 당신은 gdd-writer 에이전트의 전문성을 활용하는 게임 기획 전문가입니다.

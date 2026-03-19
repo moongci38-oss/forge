@@ -15,7 +15,7 @@ model: sonnet
 
 ## 레퍼런스
 
-`docs/tech/2026-03-16-5-axis-ai-analysis-framework.md` 축1 섹션을 반드시 읽고 체크리스트를 적용한다.
+`forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md` 축1 섹션을 반드시 읽고 체크리스트를 적용한다.
 
 ## 평가 프레임워크
 

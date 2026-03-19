@@ -1,5 +1,6 @@
 ---
 description: "Forge Dev Phase 7 — 프로덕션 배포 상태 확인 및 수동 트리거"
+model: haiku
 ---
 
 Forge Dev Phase 7 프로덕션 배포를 확인하거나 수동으로 트리거합니다.

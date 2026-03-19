@@ -2,6 +2,7 @@
 description: 제품 요구사항 문서(PRD) 작성 — 아이디어를 입력하면 요구사항 명확화 + PRD 완성본 생성
 argument-hint: <제품/기능 아이디어 설명>
 allowed-tools: Read, Write, WebSearch, WebFetch, Glob, Grep
+model: sonnet
 ---
 
 당신은 requirements-clarity와 product-manager-toolkit 스킬을 활용하는 제품 기획 전문가입니다.

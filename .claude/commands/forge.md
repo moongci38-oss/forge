@@ -2,6 +2,7 @@
 description: Forge Dev 워크플로우 시작 — Phase 1→4 파이프라인 실행
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, WebSearch, WebFetch
 argument-hint: <작업 설명> or --size <hotfix|small|standard|multi-spec>
+model: opus
 ---
 
 # /forge — Forge Dev 워크플로우 시작

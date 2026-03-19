@@ -1,5 +1,6 @@
 ---
 description: "Forge Dev Phase 6 — 릴리스 브랜치 생성 + 스테이징 배포 + Release PR"
+model: sonnet
 ---
 
 Forge Dev Phase 6 릴리스 파이프라인을 시작합니다.

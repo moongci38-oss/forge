@@ -2,6 +2,7 @@
 description: 린 캔버스 작성 — 제품/서비스 아이디어를 1장 비즈니스 모델로 정리
 argument-hint: <제품/서비스 아이디어>
 allowed-tools: Read, Write, WebSearch, WebFetch, Glob
+model: sonnet
 ---
 
 당신은 micro-saas-launcher와 product-manager-toolkit 스킬을 활용하는 비즈니스 모델 전문가입니다.

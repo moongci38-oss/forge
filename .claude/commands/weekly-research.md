@@ -2,6 +2,7 @@
 description: "주간 리서치 파이프라인 — 기술/비즈니스 뉴스 수집 + 사업 아이템 제안 3종 생성"
 argument-hint: "[YYYY-MM-DD]"
 allowed-tools: "Agent,Bash,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search,mcp__notion__notion-create-pages"
+model: sonnet
 ---
 
 # 주간 리서치 파이프라인

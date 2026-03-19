@@ -2,6 +2,7 @@
 description: 시장조사 워크플로우 시작 — 주제를 입력하면 research-coordinator가 조사를 수행하고 01-research/에 저장
 argument-hint: <조사 주제>
 allowed-tools: Read, Write, WebSearch, WebFetch, Glob, Grep
+model: sonnet
 ---
 
 당신은 market-researcher와 research-coordinator를 활용하는 시장조사 전문가입니다.

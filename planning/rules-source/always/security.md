@@ -40,7 +40,7 @@ secrets/
 
 ### 절대 삭제/이동/덮어쓰기 금지 경로
 아래 경로는 어떤 상황에서도 삭제(`rm`), 이동(`mv`), 덮어쓰기, symlink 교체를 수행하지 않는다:
-- `~/.claude/forge-dev/` — Forge Dev 중앙 저장소 (WSL 원본, Windows로 복사되는 소스)
+- `forge/dev/` — Forge Dev 중앙 저장소 (WSL 원본, Windows로 복사되는 소스)
 - `~/.claude/rules/` — 전역 규칙
 - `~/.claude/scripts/` — 운영 스크립트
 
@@ -103,7 +103,7 @@ Claude Code가 인식하는 MCP 설정 파일은 **2곳뿐**이다:
 - **SECURITY-IRON-1**: 민감 정보(.env, credentials, API 키)를 절대 커밋하지 않는다
 - **SECURITY-IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용을 외부로 출력하지 않는다
 - **SECURITY-IRON-3**: 하드코딩된 시크릿을 코드에 포함하지 않는다
-- **SECURITY-IRON-4**: `~/.claude/forge-dev/`, `~/.claude/rules/`, `~/.claude/scripts/`를 삭제/이동/덮어쓰기하지 않는다
+- **SECURITY-IRON-4**: `forge/dev/`, `~/.claude/rules/`, `~/.claude/scripts/`를 삭제/이동/덮어쓰기하지 않는다
 
 ## Rationalization Table
 

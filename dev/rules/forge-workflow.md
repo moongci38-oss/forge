@@ -140,7 +140,7 @@ Hotfix:  Phase 1(경량) → Phase 3 → Check 3 → Phase 4
 | Check 4-5 | PR 생성 전후 | 커밋/브랜치 규칙 + PR Health | 필수 |
 | Check 3.6 | Check 3.7 후 | AI가 `ui-quality-checker` 에이전트 스폰 (FE 변경 시) | 프론트엔드 PR |
 | Check 6 | develop push 후 | `develop-integration.yml` GitHub Actions | Phase 5 자동 |
-| Check 6.5 | Check 6 실패 시 | GitHub Issue 자동 생성 → AI 분석 + 수정 | Phase 5 실패 대응 |
+| Check 6.5 | Check 6 실패 시 | GitHub Issue 자동 생성 → AI 분석 + 수정 (최대 2회 재시도; 초과 시 **[STOP]** Human 에스컬레이션) | Phase 10 실패 대응 |
 | Check 7 | 릴리스 브랜치 생성 후 | `release-staging.yml` — staging deploy(조건부) + E2E | Phase 6 자동 |
 | Check 7.5 | Check 7 완료 후 | Release PR 생성 + Human 승인 대기 | Phase 6 **[STOP]** |
 | Check 8 | main push 후 | `production-deploy.yml` — deploy + health check + smoke test | Phase 7 자동 |
