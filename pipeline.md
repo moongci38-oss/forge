@@ -22,6 +22,16 @@ Session   Spec      Implement  PR+Merge  Develop    Release    Production
  (auto)  [STOP]    (auto-fix)  [STOP]    (auto)     [STOP]     (auto)
 ```
 
+### 브랜치 ↔ 환경 매핑
+
+| Git 브랜치 | 서버 환경 | Phase |
+|-----------|----------|:-----:|
+| `develop` | Develop | 10 |
+| `release/*` | Staging | 11 |
+| `main` | Production | 12 |
+
+> 본 문서에서 `main`과 `production`은 각각 Git 브랜치와 서버 환경을 가리키며, 같은 배포 단계를 의미한다.
+
 ## 진입 경로 (5가지)
 
 | 시나리오 | 시작 Phase | 필요 입력 | 스킵 |
