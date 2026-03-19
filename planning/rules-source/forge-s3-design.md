@@ -21,6 +21,9 @@ enforcement: rigid
 | 게임 | gdd-writer 에이전트 | GDD (.md + **.pptx 필수**) |
 
 - **에이전트 회의**: Competing Hypotheses — 기획 에이전트 2~3명 독립 초안 → 최적안 선택/병합
+
+> **환각 전파 방지**: 에이전트 회의 완료 후 Lead가 초안 간 구조적 유사도를 체크한다.
+> 핵심 섹션 3개 이상이 80% 이상 동일하면 [STOP] — Groupthink 의심으로 Human에게 보고.
 - **필수 방법론** (유형별):
 
 | 유형 | 필수 방법론 |

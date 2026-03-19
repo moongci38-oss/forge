@@ -32,6 +32,8 @@ Usage:
   forge-telemetry.sh summary [--days N] [--log <path>]    도구 사용 빈도 + Check 통과율
   forge-telemetry.sh checks  [--days N] [--log <path>]    Check 결과(PASS/FAIL) 상세
   forge-telemetry.sh raw     [--days N] [--log <path>]    필터링된 JSONL 원본 출력
+  forge-telemetry.sh cost    [--days N] [--log <path>]    모델별 도구 호출 빈도 (비용 추정)
+  forge-telemetry.sh pass    [--days N] [--log <path>]    pass@1/pass@k 체크 통과율
 
 Options:
   --days N    기간 필터 (기본: 7일)
@@ -232,6 +234,97 @@ cmd_raw() {
     echo "$filtered"
 }
 
+cmd_cost() {
+    local cutoff
+    cutoff=$(date_cutoff "$DAYS")
+    local today
+    today=$(date -u +%Y-%m-%d)
+
+    echo -e "${BOLD}=== Model Usage & Cost Estimate ===${NC}"
+    echo -e "Period: ${CYAN}$cutoff${NC} ~ ${CYAN}$today${NC} ($DAYS days)"
+    echo ""
+
+    local filtered
+    filtered=$(filter_by_date "$cutoff" "$LOG_FILE")
+
+    if [[ -z "$filtered" ]]; then
+        echo -e "  ${YELLOW}No events in the specified period.${NC}"
+        return
+    fi
+
+    local total
+    total=$(echo "$filtered" | wc -l)
+
+    # Count by subtype
+    local agent_count tool_count skill_count
+    agent_count=$(echo "$filtered" | grep -c '"subtype":"agent"' || true)
+    skill_count=$(echo "$filtered" | grep -c '"subtype":"skill"' || true)
+    tool_count=$(( total - agent_count - skill_count ))
+
+    echo -e "${BOLD}[Call Distribution]${NC}"
+    printf "  %-22s %d calls\n" "Direct tool" "$tool_count"
+    printf "  %-22s %d calls\n" "Agent (subagent)" "$agent_count"
+    printf "  %-22s %d calls\n" "Skill" "$skill_count"
+    echo ""
+    echo -e "  Total calls: ${BOLD}$total${NC}"
+    echo ""
+
+    # Top 10 tools
+    local top_tools
+    top_tools=$(echo "$filtered" | grep -o '"tool":"[^"]*"' | sed 's/"tool":"//;s/"$//' | sort | uniq -c | sort -rn | head -10)
+
+    if [[ -n "$top_tools" ]]; then
+        echo -e "${BOLD}[Top 10 Tools]${NC}"
+        while IFS= read -r line; do
+            local cnt name
+            cnt=$(echo "$line" | awk '{print $1}')
+            name=$(echo "$line" | awk '{$1=""; print $0}' | sed 's/^ *//')
+            printf "  %-30s %d\n" "$name" "$cnt"
+        done <<< "$top_tools"
+        echo ""
+    fi
+
+    echo -e "${YELLOW}Note: Token-level cost tracking requires usage-logger v2 with model field.${NC}"
+}
+
+cmd_pass() {
+    local cutoff
+    cutoff=$(date_cutoff "$DAYS")
+    local today
+    today=$(date -u +%Y-%m-%d)
+
+    echo -e "${BOLD}=== pass@k Check Metrics ===${NC}"
+    echo -e "Period: ${CYAN}$cutoff${NC} ~ ${CYAN}$today${NC} ($DAYS days)"
+    echo ""
+
+    local filtered
+    filtered=$(filter_by_date "$cutoff" "$LOG_FILE")
+    local checks
+    checks=$(echo "$filtered" | grep '"event":"check_run"' || true)
+
+    if [[ -z "$checks" ]]; then
+        echo -e "  ${YELLOW}No check events in the specified period.${NC}"
+        return
+    fi
+
+    local total_checks pass_first fail_first
+    total_checks=$(echo "$checks" | wc -l)
+    pass_first=$(echo "$checks" | grep -c '"autoFixAttempts":0' || true)
+    # If autoFixAttempts field not present, count PASS as first-try
+    [[ $pass_first -eq 0 ]] && pass_first=$(echo "$checks" | grep -ci '"result":"pass"' || true)
+    fail_first=$(( total_checks - pass_first ))
+
+    local pass1_pct=0
+    [[ $total_checks -gt 0 ]] && pass1_pct=$(( pass_first * 100 / total_checks ))
+
+    echo -e "${BOLD}[pass@1 Rate]${NC}"
+    echo -e "  First-try PASS: ${GREEN}${pass_first}${NC} / $total_checks (${BOLD}${pass1_pct}%${NC})"
+    echo -e "  Required fix:   ${YELLOW}${fail_first}${NC} / $total_checks"
+    echo ""
+
+    echo -e "${YELLOW}Note: Detailed pass@k requires autoFixAttempts field in usage.log events.${NC}"
+}
+
 # ─── ARG PARSING ─────────────────────────────────────────────────────────────
 
 COMMAND="${1:-}"
@@ -277,6 +370,12 @@ case "$COMMAND" in
         ;;
     raw)
         cmd_raw
+        ;;
+    cost)
+        cmd_cost
+        ;;
+    pass)
+        cmd_pass
         ;;
     --help|-h|"")
         usage
