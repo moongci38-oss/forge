@@ -172,16 +172,22 @@ _build_scope() {
 
     case "$scope" in
         business)
-            # always + cross-project rules → business-core.md
+            # business-core.md is now a passive summary (manually maintained)
             output_file="$ACTIVE_RULES/business-core.md"
-            echo -e "${BLUE}Compiling: always + cross-project → business-core.md${NC}"
-            _compile_files "$output_file" "always" "cross-project"
+            echo -e "${BLUE}Compiling: always + cross-project → business-core.md (passive summary)${NC}"
+            echo -e "${YELLOW}NOTE: Passive summary is manually maintained. Skipping auto-compile.${NC}"
+            echo -e "${YELLOW}Edit .claude/rules/business-core.md directly for passive summary changes.${NC}"
+            echo -e "${YELLOW}Deep originals: 09-tools/rules-source/always/ + cross-project/${NC}"
+            return
             ;;
         sigil)
-            # sigil rules → sigil-compiled.md (progressive disclosure)
+            # sigil rules → sigil-compiled.md (passive summary for progressive loading)
             output_file="$ACTIVE_RULES/sigil-compiled.md"
-            echo -e "${BLUE}Compiling: sigil → sigil-compiled.md (progressive disclosure)${NC}"
-            _compile_progressive "$output_file" "sigil"
+            echo -e "${BLUE}Compiling: sigil → sigil-compiled.md (passive summary)${NC}"
+            echo -e "${YELLOW}NOTE: Passive summary is manually maintained. Skipping auto-compile.${NC}"
+            echo -e "${YELLOW}Edit .claude/rules/sigil-compiled.md directly for passive summary changes.${NC}"
+            echo -e "${YELLOW}Deep originals: 09-tools/rules-source/sigil/*.md${NC}"
+            return
             ;;
         trine)
             echo -e "${BLUE}Trine rules are managed at ~/.claude/trine/rules/${NC}"

@@ -35,6 +35,8 @@ enforcement: flexible
 | 게이트 로그 | `product` | `{project}/gate-log.md` |
 | Todo | `product` | `todo.md` |
 | Handoff 문서 | `handoff` | `{target-project}/YYYY-MM-DD-sigil-handoff.md` |
+| **시안 이미지** | `product` | `{project}/_assets/*.png` |
+| **영상 분석** | `product` | `{project}/docs/assets/video-refs/YYYY-MM-DD-*-analysis.md` |
 
 ## 템플릿
 

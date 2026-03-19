@@ -132,8 +132,39 @@ todo.md 갱신이 항상 **먼저** 완료된 후 Notion Tasks를 갱신한다. 
 | todo.md (⬜→🔄 Doing) | GitHub Actions (자동) | branch create | todo-tracker.yml |
 | todo.md (🔄→🧪 QA) | trine-pm-updater (AI) | Check 3 진입 | AI 세션 내 |
 | todo.md (🧪→✅ Done) | GitHub Actions (자동) | PR merge | todo-tracker.yml |
-| Notion Tasks 상태 전환 | trine-pm-updater (AI) | Trine 이벤트 후 | todo.md 갱신 완료 후에만 |
+| Notion Tasks (⬜→🔄) | **GitHub Actions (자동)** | branch create | sync-notion-tasks.py `doing` |
+| Notion Tasks (→✅) | **GitHub Actions (자동)** | PR merge | sync-notion-tasks.py `done` |
+| Notion Tasks (초기 등록) | AI 또는 수동 | S4 Gate PASS | sync-notion-tasks.py `register` |
 | Notion Tasks (Hotfix) | AI 직접 | Hotfix 등록 시 | P0-긴급 강제 |
+
+### GitHub Actions 자동 Notion 동기화
+
+`todo-tracker.yml` 워크플로가 todo.md 갱신 직후 `sync-notion-tasks.py`를 호출하여 Notion Tasks DB를 자동 동기화한다.
+
+**전제 조건:**
+1. GitHub Secrets에 `NOTION_API_TOKEN` 설정 (Notion Internal Integration 토큰)
+2. 프로젝트 `.specify/config.json`에 `notion.tasksDbId`와 `notion.projectName` 설정
+3. Notion Tasks DB에 해당 Integration 연결 (1회)
+
+**토큰 미설정 시:** Notion 동기화만 스킵, todo.md 갱신은 정상 동작 (graceful degradation)
+
+**스크립트 액션:**
+
+| 액션 | 트리거 | 동작 |
+|------|--------|------|
+| `register` | S4 Gate PASS (로컬 실행) | todo.md 전체 행을 Notion에 일괄 등록 (idempotent) |
+| `doing` | GitHub Actions (branch create) | 해당 태스크 상태를 "진행중"으로 변경 + 브랜치명 기록 |
+| `done` | GitHub Actions (PR merge) | 해당 태스크 상태를 "완료"로 변경 + PR URL + 완료일 기록 |
+
+**설정 파일 구조 (`.specify/config.json`):**
+```json
+{
+  "notion": {
+    "projectName": "GodBlade",
+    "tasksDbId": "afe1ec3c2cce4123ab91d1ec381f0c2c"
+  }
+}
+```
 
 ## 담당자 역할
 
