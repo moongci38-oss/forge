@@ -81,7 +81,12 @@
             "type": "command",
             "command": "bash .claude/hooks/block-sensitive-files.sh",
             "timeout": 5
-          },
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
           {
             "type": "command",
             "command": "bash .claude/hooks/require-date-prefix.sh",

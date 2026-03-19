@@ -109,6 +109,8 @@
 
 - 멀티스텝/함수호출 → MCP | 단일명령/고빈도 → CLI
 - 고빈도 단순 작업에 MCP 사용 중이면 CLI 전환 검토
+- 혼합 도구: Sentry(`sentry-cli`=릴리스/CI, MCP=이슈조회), Lighthouse(`lighthouse`=배치감사, MCP=인터랙티브), Brave Search(`curl`=스크립트, MCP=대화내검색)
+- CLI+MCP 선택: 스크립트/자동화/CI→CLI | 대화내 인터랙티브→MCP
 
 > Deep: `planning/rules-source/always/mcp-vs-cli.md`
 
