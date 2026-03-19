@@ -46,13 +46,8 @@ __pycache__/
 .venv/
 
 # === Tool artifacts ===
-.playwright/
 .playwright-mcp/
 generated_imgs/
-
-# === OpenViking (local API keys) ===
-ov.conf
-.openviking/
 
 # === Personal-only features (not shared) ===
 .claude/commands/yt.md
