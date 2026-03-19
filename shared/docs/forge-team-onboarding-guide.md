@@ -203,7 +203,7 @@ git clone https://github.com/moongci38-oss/forge.git ~/.claude/forge
 > git clone git@github.com:moongci38-oss/forge.git "$HOME\.claude\forge"
 > ```
 
-#### Step 2: Setup 실행 (이것만 실행하면 끝)
+#### Step 2: Setup 실행
 
 ```bash
 node ~/.claude/forge/scripts/setup.mjs
@@ -215,7 +215,29 @@ PowerShell의 경우:
 node "$HOME\.claude\forge\scripts\setup.mjs"
 ```
 
-`setup.mjs`가 7단계를 자동으로 수행합니다:
+#### Step 3: MCP 서버 전역 등록
+
+전역 MCP 서버(Brave Search, Sentry, Notion 등 10개)를 `~/.claude.json`에 등록한다.
+이미 등록된 서버는 건너뛴다 (멱등성 보장).
+
+```bash
+bash ~/.claude/forge/shared/scripts/setup-mcp.sh
+```
+
+등록 후 필요한 API 키를 환경변수로 설정한다:
+
+| 환경변수 | MCP 서버 | 필수 여부 |
+|---------|---------|:--------:|
+| `BRAVE_API_KEY` | Brave Search | 필수 |
+| `GEMINI_API_KEY` | NanoBanana (이미지 생성) | 필수 |
+| `REPLICATE_API_TOKEN` | Replicate (AI 모델) | 선택 |
+| `STITCH_API_KEY` | Stitch (UI 목업) | 선택 |
+| `LUDO_API_KEY` | Ludo (게임 에셋) | 선택 |
+
+> Sentry, Notion, Lighthouse, Draw.io, Magic UI는 API 키 없이 동작한다.
+> API 키는 `forge/.env`에서 관리한다. `.env.example`을 참고한다.
+
+`setup.mjs`가 7단계를 자동으로 수행한다:
 
 ```text
 ========================================

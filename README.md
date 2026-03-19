@@ -41,9 +41,32 @@ cp forge-workspace.example.json forge-workspace.json
 cp .env.example .env
 # → .env에 API 키 설정
 
-# 4. Claude Code 실행
+# 4. MCP 서버 전역 등록
+bash shared/scripts/setup-mcp.sh
+# → ~/.claude.json에 10개 전역 MCP 서버 자동 등록 (멱등)
+
+# 5. Claude Code 실행
 claude
 ```
+
+### MCP 서버
+
+`setup-mcp.sh`가 등록하는 전역 MCP 서버:
+
+| 서버 | 용도 | API 키 |
+|------|------|:------:|
+| Brave Search | 웹 검색 | `BRAVE_API_KEY` |
+| NanoBanana | Gemini 이미지 생성 | `GEMINI_API_KEY` |
+| Replicate | AI 모델 실행 | `REPLICATE_API_TOKEN` |
+| Stitch | UI 목업 생성 | `STITCH_API_KEY` |
+| Ludo | 게임 에셋 생성 | `LUDO_API_KEY` |
+| Sentry | 에러 추적 | - |
+| Notion | 노션 연동 | - |
+| Lighthouse | 웹 성능 감사 | - |
+| Draw.io | 다이어그램 생성 | - |
+| Magic UI | UI 컴포넌트 | - |
+
+> 프로젝트별 MCP(DB, Unity 등)는 각 프로젝트의 `.mcp.json`에서 관리합니다.
 
 ## Structure
 

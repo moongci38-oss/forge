@@ -4,6 +4,18 @@
 # docs/ 하위 새 .md 파일 생성 시 날짜 prefix (YYYY-MM-DD-) 규칙 강제
 
 INPUT=$(cat)
+
+# tool_name 추출 — Edit(기존 파일 수정)은 스킵, Write(새 파일 생성)만 체크
+TOOL_NAME=$(echo "$INPUT" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+print(data.get('tool_name', ''))
+" 2>/dev/null)
+
+if [ "$TOOL_NAME" = "Edit" ]; then
+  exit 0
+fi
+
 FILE_PATH=$(echo "$INPUT" | python3 -c "
 import sys, json
 data = json.load(sys.stdin)
