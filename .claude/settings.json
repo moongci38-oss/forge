@@ -11,6 +11,35 @@
             "type": "command",
             "command": "bash .claude/hooks/session-context.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/session-start.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/stop.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/session-end.sh",
+            "timeout": 20
           }
         ]
       }
