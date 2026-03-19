@@ -1,5 +1,5 @@
 {
-  "_comment": "Trine Phase 6 릴리스 설정 템플릿. 프로젝트 루트에 release-config.json으로 복사하여 사용.",
+  "_comment": "Forge Dev Phase 6 릴리스 설정 템플릿. 프로젝트 루트에 release-config.json으로 복사하여 사용.",
   "version": "1.0",
   "project": {
     "name": "my-app",

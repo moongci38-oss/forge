@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Trine Pre-Phase Transition Hook
+# Forge Dev Pre-Phase Transition Hook
 # Phase 전환 전 컨텍스트 예산 확인 + 세션 상태 자동 저장
 # Graceful degradation: 에러 시 빈 출력
 
@@ -18,4 +18,4 @@ fi
 mkdir -p "$STATE_DIR"
 
 # Phase 전환 권고 메시지
-echo "[Trine Phase 전환] 컨텍스트 사용량이 높으면 /compact를 실행하세요. Phase 전환 전 세션 상태가 자동 저장됩니다."
+echo "[Forge Dev Phase 전환] 컨텍스트 사용량이 높으면 /compact를 실행하세요. Phase 전환 전 세션 상태가 자동 저장됩니다."

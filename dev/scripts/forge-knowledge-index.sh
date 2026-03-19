@@ -147,9 +147,9 @@ cmd_build() {
         echo -e "  ${YELLOW}forge-rules${NC}: directory not found (skipped)"
     fi
 
-    # Location 2: ~/forge/09-tools/rules-source/**/*.md
+    # Location 2: ~/forge/planning/rules-source/**/*.md
     local loc2_count=0
-    local rules_source="$FORGE_ROOT/09-tools/rules-source"
+    local rules_source="$FORGE_ROOT/planning/rules-source"
     if [[ -d "$rules_source" ]]; then
         while IFS= read -r file; do
             [[ -f "$file" ]] || continue

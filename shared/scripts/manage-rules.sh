@@ -5,10 +5,10 @@
 set -euo pipefail
 
 FORGE_ROOT="${FORGE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/forge")}"
-RULES_SOURCE="$FORGE_ROOT/09-tools/rules-source"
-BUILD_OUTPUT="$FORGE_ROOT/09-tools/build-output"
+RULES_SOURCE="$FORGE_ROOT/planning/rules-source"
+BUILD_OUTPUT="$FORGE_ROOT/.claude/build-output"
 ACTIVE_RULES="$FORGE_ROOT/.claude/rules"
-SCRIPTS_DIR="$FORGE_ROOT/09-tools/scripts"
+SCRIPTS_DIR="$FORGE_ROOT/shared/scripts"
 
 # Colors
 RED='\033[0;31m'
@@ -33,12 +33,12 @@ Usage:
   manage-rules.sh manifest                      Generate rules-manifest.json + test-cases.json
   manage-rules.sh audit                         Detect duplicates, contradictions, stale dates
 
-Scopes: always, forge, forge, cowork
+Scopes: always, planning, dev, cowork
 
 Examples:
   manage-rules.sh list
   manage-rules.sh validate
-  manage-rules.sh build --scope business
+  manage-rules.sh build --scope always
   manage-rules.sh build --all
   manage-rules.sh stats
   manage-rules.sh sync {YOUR_PORTFOLIO_PATH}
@@ -53,8 +53,8 @@ cmd_list() {
 
     local total=0
     local by_scope_always=0
-    local by_scope_forge=0
-    local by_scope_forge=0
+    local by_scope_planning=0
+    local by_scope_dev=0
     local by_scope_cowork=0
 
     for scope_dir in "$RULES_SOURCE"/*/; do
@@ -129,11 +129,11 @@ cmd_build() {
     done
 
     if [ "$target_scope" = "--all" ] || [ "$target_scope" = "all" ]; then
-        _build_scope "business"
+        _build_scope "always"
         echo ""
-        _build_scope "forge"
+        _build_scope "planning"
         echo ""
-        _build_scope "forge"
+        _build_scope "dev"
     else
         _build_scope "$target_scope"
     fi
@@ -171,26 +171,26 @@ _build_scope() {
     local output_file
 
     case "$scope" in
-        business)
+        always)
             # forge-core.md is now a passive summary (manually maintained)
             output_file="$ACTIVE_RULES/forge-core.md"
             echo -e "${BLUE}Compiling: always + cross-project → forge-core.md (passive summary)${NC}"
             echo -e "${YELLOW}NOTE: Passive summary is manually maintained. Skipping auto-compile.${NC}"
             echo -e "${YELLOW}Edit .claude/rules/forge-core.md directly for passive summary changes.${NC}"
-            echo -e "${YELLOW}Deep originals: planning/rules-source/always/ + cross-project/${NC}"
+            echo -e "${YELLOW}Deep originals: planning/rules-source/always/ + shared/cross-project/${NC}"
             return
             ;;
-        forge)
-            # forge rules → forge-compiled.md (passive summary for progressive loading)
-            output_file="$ACTIVE_RULES/forge-compiled.md"
-            echo -e "${BLUE}Compiling: forge → forge-compiled.md (passive summary)${NC}"
+        planning)
+            # planning rules → forge-planning.md (passive summary for progressive loading)
+            output_file="$ACTIVE_RULES/forge-planning.md"
+            echo -e "${BLUE}Compiling: planning → forge-planning.md (passive summary)${NC}"
             echo -e "${YELLOW}NOTE: Passive summary is manually maintained. Skipping auto-compile.${NC}"
-            echo -e "${YELLOW}Edit .claude/rules/forge-compiled.md directly for passive summary changes.${NC}"
-            echo -e "${YELLOW}Deep originals: planning/rules-source/forge/*.md${NC}"
+            echo -e "${YELLOW}Edit .claude/rules/forge-planning.md directly for passive summary changes.${NC}"
+            echo -e "${YELLOW}Deep originals: planning/rules-source/*.md${NC}"
             return
             ;;
-        forge)
-            echo -e "${BLUE}Forge Dev rules are managed at ~/.claude/forge/rules/${NC}"
+        dev)
+            echo -e "${BLUE}Forge Dev rules are managed at forge/dev/rules/${NC}"
             echo -e "Use 'manage-rules.sh sync <project>' to deploy to dev projects"
             return
             ;;
@@ -201,7 +201,7 @@ _build_scope() {
             ;;
         *)
             echo -e "${RED}Unknown scope: $scope${NC}"
-            echo "Valid scopes: business, forge, forge, cowork"
+            echo "Valid scopes: always, planning, dev, cowork"
             exit 1
             ;;
     esac
@@ -421,7 +421,7 @@ cmd_stats() {
     echo ""
     echo -e "${BLUE}Auto Memory:${NC}"
     local memory_total=0
-    local mem_dir="$HOME/.claude/projects/-home-damools-business/memory"
+    local mem_dir="$HOME/.claude/projects/-home-damools-forge/memory"
     if [ -d "$mem_dir" ]; then
       for f in "$mem_dir"/*.md; do
         [ -f "$f" ] || continue
@@ -637,7 +637,7 @@ main() {
             ;;
         build)
             local scope="${1:---all}"
-            [ "$scope" = "--scope" ] && scope="${2:-business}"
+            [ "$scope" = "--scope" ] && scope="${2:-always}"
             cmd_build "$scope"
             ;;
         stats)

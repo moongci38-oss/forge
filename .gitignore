@@ -15,7 +15,7 @@ secrets/
 .claude/settings.local.json
 .claude/state/
 .claude/memory/
-.claude/trine-sync-state.json
+.claude/forge-sync-state.json
 
 # === OS files ===
 .DS_Store
@@ -53,6 +53,13 @@ generated_imgs/
 # === OpenViking (local API keys) ===
 ov.conf
 .openviking/
+
+# === Personal-only features (not shared) ===
+.claude/commands/yt.md
+.claude/commands/yt-analyze.md
+.claude/skills/yt/
+.claude/skills/yt-analyze/
+shared/scripts/yt-analyzer/
 
 # === Script logs (per-user) ===
 shared/scripts/daily-review/logs/

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Trine Session Context — SessionStart Hook
+# Forge Dev Session Context — SessionStart Hook
 # 마지막 세션 상태를 읽어 additional_context로 주입
 # Graceful degradation: 에러 시 빈 출력 (세션 시작 차단 안 함)
 # 토큰 예산: ≤500 tokens
@@ -10,7 +10,7 @@ PROJECT_ROOT="${PWD}"
 SPECIFY_DIR="${PROJECT_ROOT}/.specify"
 STATE_DIR="${SPECIFY_DIR}/sessions"
 
-# .specify 디렉토리 없으면 Trine 프로젝트 아님 — 조용히 종료
+# .specify 디렉토리 없으면 Forge Dev 프로젝트 아님 — 조용히 종료
 if [[ ! -d "$SPECIFY_DIR" ]]; then
   exit 0
 fi
@@ -41,7 +41,7 @@ if [[ -n "$LATEST_SESSION" ]]; then
     SCALE=$(grep -o '"scale"[[:space:]]*:[[:space:]]*"[^"]*"' "$LATEST_SESSION" 2>/dev/null | head -1 | sed 's/.*: *"//;s/"//' || echo "unknown")
   fi
 
-  OUTPUT="[Trine 세션 복원] 세션: ${SESSION_NAME} | 규모: ${SCALE} | Phase: ${CURRENT_PHASE} | AutoFix: ${AUTOFIX_COUNT}/3 | 마지막 Check: ${LAST_CHECK}"
+  OUTPUT="[Forge Dev 세션 복원] 세션: ${SESSION_NAME} | 규모: ${SCALE} | Phase: ${CURRENT_PHASE} | AutoFix: ${AUTOFIX_COUNT}/3 | 마지막 Check: ${LAST_CHECK}"
 
   # 미완료 Spec 확인
   if [[ -d "$SPECIFY_DIR/specs" ]]; then
@@ -51,7 +51,7 @@ if [[ -n "$LATEST_SESSION" ]]; then
     fi
   fi
 else
-  OUTPUT="[Trine] 이전 세션 없음. /forge 또는 코드 변경 요청으로 시작하세요."
+  OUTPUT="[Forge Dev] 이전 세션 없음. /forge 또는 코드 변경 요청으로 시작하세요."
 fi
 
 # usage.log 기록 (측정 인프라)

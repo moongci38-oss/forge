@@ -9,7 +9,7 @@
   사용 시점: GitHub에서 PR을 생성할 때 자동으로 이 템플릿이 본문에 삽입됨.
              (수동 선택 불필요 — .github/ 경로에 있으면 자동 적용)
 
-  Trine 파이프라인 연계:
+  Forge Dev 파이프라인 연계:
     - Phase 4 (PR 생성) 에서 AI가 이 템플릿을 기반으로 PR 본문 작성
     - "Spec Compliance Checklist" = Check 3.5 트레이서빌리티 검증 결과 반영
     - "Testing" = Check 3 (test/lint/build) 결과 반영
@@ -26,7 +26,7 @@
   When used: Automatically inserted as PR body when creating a PR on GitHub.
              (No manual selection needed — auto-applied when placed in .github/)
 
-  Trine pipeline integration:
+  Forge Dev pipeline integration:
     - In Phase 4 (PR creation), AI fills this template as PR body
     - "Spec Compliance Checklist" reflects Check 3.5 traceability results
     - "Testing" reflects Check 3 (test/lint/build) results

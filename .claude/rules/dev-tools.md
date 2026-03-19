@@ -1,7 +1,7 @@
 # Developer Productivity Tools (전역)
 
 > AI 코딩 어시스턴트의 컨텍스트를 풍부하게 만드는 두 도구.
-> react-grab + Sentry MCP를 Trine 워크플로우에 공식 통합.
+> react-grab + Sentry MCP를 Forge Dev 워크플로우에 공식 통합.
 
 ---
 
@@ -56,7 +56,7 @@
   → Sentry MCP list_issues → 해당 에러 식별
   → get_issue → 스택트레이스 + 발생 컨텍스트 확인
   → trigger_seer_analysis → AI 근본 원인 분석
-  → 분석 결과 기반 Hotfix 구현 (Trine Hotfix 플로우 진입)
+  → 분석 결과 기반 Hotfix 구현 (Forge Dev Hotfix 플로우 진입)
 ```
 
 ### Standard 플로우 (구현 후 검증)

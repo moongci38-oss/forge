@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# manage-skills.sh — Skill library manager for business workspace
+# manage-skills.sh — Skill library manager for forge workspace
 # Usage: bash scripts/manage-skills.sh <command> [args]
 
 set -euo pipefail
 
 FORGE_ROOT="${FORGE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/forge")}"
-SKILLS_LIBRARY="$FORGE_ROOT/09-tools/skills-library"
+SKILLS_LIBRARY="$FORGE_ROOT/.claude/skills"
 ACTIVE_SKILLS="$FORGE_ROOT/.claude/skills"
 ACTIVE_RULES="$FORGE_ROOT/.claude/rules"
 
@@ -431,7 +431,7 @@ cmd_audit() {
     local search_dirs=()
     [ -d "$FORGE_ROOT/.claude/commands" ] && search_dirs+=("$FORGE_ROOT/.claude/commands")
     [ -d "$FORGE_ROOT/.claude/agents" ] && search_dirs+=("$FORGE_ROOT/.claude/agents")
-    [ -d "$FORGE_ROOT/09-tools/rules-source" ] && search_dirs+=("$FORGE_ROOT/09-tools/rules-source")
+    [ -d "$FORGE_ROOT/planning/rules-source" ] && search_dirs+=("$FORGE_ROOT/planning/rules-source")
     [ -d "$ACTIVE_RULES" ] && search_dirs+=("$ACTIVE_RULES")
 
     # Parallel arrays for usage data

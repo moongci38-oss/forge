@@ -47,7 +47,7 @@ case "$folder_choice" in
     design="05-design/projects"
     content="04-content/projects"
     operations="10-operations"
-    templates="09-tools/templates"
+    templates="planning/templates"
     handoff="10-operations/handoff-to-dev"
     ;;
   2)
@@ -56,7 +56,7 @@ case "$folder_choice" in
     design="planning/design"
     content="planning/content"
     operations="operations"
-    templates="templates"
+    templates="planning/templates"
     handoff="operations/handoff"
     ;;
   3)
@@ -71,7 +71,7 @@ case "$folder_choice" in
     read -p "운영 경로 (operations): " operations
     operations="${operations:-operations}"
     read -p "템플릿 경로 (templates): " templates
-    templates="${templates:-templates}"
+    templates="${templates:-planning/templates}"
     read -p "핸드오프 경로 (handoff): " handoff
     handoff="${handoff:-operations/handoff}"
     ;;
@@ -82,7 +82,7 @@ case "$folder_choice" in
     design="05-design/projects"
     content="04-content/projects"
     operations="10-operations"
-    templates="09-tools/templates"
+    templates="planning/templates"
     handoff="10-operations/handoff-to-dev"
     ;;
 esac

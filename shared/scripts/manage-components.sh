@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# manage-components.sh — Component library manager for business workspace
+# manage-components.sh — Component library manager for forge workspace
 # Manages agents, commands, hooks, MCPs, settings (skills handled by manage-skills.sh)
 # Usage: bash scripts/manage-components.sh <command> [args]
 
 set -euo pipefail
 
 FORGE_ROOT="${FORGE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/forge")}"
-COMPONENTS_LIBRARY="$FORGE_ROOT/09-tools/components-library"
-SKILLS_LIBRARY="$FORGE_ROOT/09-tools/skills-library"
+COMPONENTS_LIBRARY="$FORGE_ROOT/.claude"
+SKILLS_LIBRARY="$FORGE_ROOT/.claude/skills"
 CLAUDE_DIR="$FORGE_ROOT/.claude"
 
 # Component type → library subdir mapping
