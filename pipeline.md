@@ -244,6 +244,11 @@ Phase 4 작성 중 "대량 아이콘 필요"
 
 > Check 5: AUTO-PASS (Handoff 완성도 자동 검증)
 
+### 전제조건
+
+- 서버 인프라 미구축 시 `forge-outputs/docs/infrastructure/server-setup.md` 참조하여 사전 구축
+- Phase 11(Release+Staging), Phase 12(Production Deploy) 실행에 서버 인프라 필수
+
 ### 신규 프로젝트 (devTarget 폴더 미존재)
 
 1. Phase 4 기술 스택 기반 프로젝트 scaffolding

@@ -220,7 +220,7 @@ jobs:
               '- [ ] CHANGELOG reviewed',
               '- [ ] QA sign-off',
               '',
-              '> **Trine Phase 6** — Approve and merge to main to trigger Phase 7 production deploy.',
+              '> **Forge Phase 11** — Approve and merge to main to trigger Phase 7 production deploy.',
             ].join('\n');
 
             const { data: pr } = await github.rest.pulls.create({
@@ -232,5 +232,5 @@ jobs:
               body,
             });
             console.log('Release PR created:', pr.html_url);
-            core.summary.addRaw(`## Release PR\n[${pr.html_url}](${pr.html_url})\n\n**Trine Check 7.5** — [STOP] Human 승인 필요`);
+            core.summary.addRaw(`## Release PR\n[${pr.html_url}](${pr.html_url})\n\n**Forge Check 9.5** — [STOP] Human 승인 필요`);
             await core.summary.write();

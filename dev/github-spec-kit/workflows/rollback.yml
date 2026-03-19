@@ -159,7 +159,7 @@ jobs:
           echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
           echo "1. Checkout \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
           echo "2. Apply fix" >> $GITHUB_STEP_SUMMARY
-          echo "3. Run Trine Hotfix 플로우 (Phase 3 → Check 3 → Phase 4 PR → Phase 7)" >> $GITHUB_STEP_SUMMARY
+          echo "3. Run Forge Hotfix 플로우 (Phase 3 → Check 3 → Phase 4 PR → Phase 7)" >> $GITHUB_STEP_SUMMARY
 
   rollback-summary:
     name: Rollback Summary
@@ -175,7 +175,7 @@ jobs:
           L2="${{ needs.rollback-l2.result }}"
           L3="${{ needs.rollback-l3.result }}"
 
-          echo "## Trine Rollback Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Forge Rollback Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
