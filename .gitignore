@@ -83,6 +83,7 @@ scripts/daily-system-review/logs/
 02-product/projects/*/
 !02-product/projects/.gitkeep
 !02-product/projects/godblade/
+!02-product/projects/baduki/
 02-product/business-plans/
 02-product/gtm-strategy/
 02-product/lean-canvas/
