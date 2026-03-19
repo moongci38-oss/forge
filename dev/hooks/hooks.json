@@ -1,0 +1,30 @@
+{
+  "description": "Trine Hook 기본 세트(baseline) — forge-sync가 프로젝트별 settings에 설치. 프로젝트별 확장/커스터마이징 허용. forge-sync는 기본 세트 누락만 경고하고 프로젝트 고유 훅은 보존한다.",
+  "version": "1.1.0",
+  "hooks": [
+    {
+      "event": "SessionStart",
+      "triggers": ["resume", "startup"],
+      "script": "session-context.sh",
+      "description": "세션 시작 시 마지막 세션 상태 + Passive 컨텍스트 자동 주입",
+      "timeout": 5000,
+      "failurePolicy": "ignore"
+    },
+    {
+      "event": "PreToolUse",
+      "triggers": ["phase-transition"],
+      "script": "pre-phase-transition.sh",
+      "description": "Phase 전환 전 컨텍스트 예산 확인 + /compact 권고",
+      "timeout": 3000,
+      "failurePolicy": "ignore"
+    },
+    {
+      "event": "PostToolUse",
+      "triggers": ["Agent", "Skill", "check"],
+      "script": "usage-logger.sh",
+      "description": "도구 사용 이벤트를 usage.log에 JSONL로 기록",
+      "timeout": 3000,
+      "failurePolicy": "ignore"
+    }
+  ]
+}

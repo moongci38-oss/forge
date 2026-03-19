@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "my-app",
+    "packageManager": "pnpm",
+    "monorepo": false,
+    "webFilter": ""
+  },
+  "environments": {
+    "local": {
+      "backend": {
+        "startCommand": "npm run start:dev",
+        "port": 3001,
+        "healthEndpoint": "/health",
+        "healthTimeout": 60
+      },
+      "cache": {
+        "steps": []
+      },
+      "e2e": {
+        "runCommand": "npx playwright test",
+        "baseURL": "http://localhost:3000"
+      }
+    },
+    "staging": {
+      "backend": null,
+      "cache": null,
+      "e2e": {
+        "runCommand": "npx playwright test",
+        "baseURL": "https://staging.example.com",
+        "healthEndpoint": "https://staging.example.com/health"
+      }
+    },
+    "production": {
+      "backend": null,
+      "cache": null,
+      "e2e": {
+        "runCommand": "npx playwright test --project=chromium",
+        "baseURL": "https://example.com",
+        "healthEndpoint": "https://example.com/health",
+        "_note": "프로덕션 E2E는 smoke test 수준만 실행 (전체 스위트 금지). baseURL과 healthEndpoint를 실제 도메인으로 변경하세요."
+      }
+    }
+  },
+  "envFile": ".env.local"
+}

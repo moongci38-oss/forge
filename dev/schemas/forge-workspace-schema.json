@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SIGIL Workspace Configuration",
+  "description": "SIGIL 파이프라인의 워크스페이스 폴더 구조와 프로젝트 매핑을 정의한다. 마켓플레이스 배포 시 사용자가 자신의 폴더 구조에 맞게 설정.",
+  "type": "object",
+  "required": ["version", "folderMap"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "설정 스키마 버전"
+    },
+    "name": {
+      "type": "string",
+      "description": "워크스페이스 식별자 (예: my-business, team-planning)"
+    },
+    "folderMap": {
+      "type": "object",
+      "description": "SIGIL 산출물 폴더 구조 매핑. 워크스페이스 루트 기준 상대 경로.",
+      "required": ["research", "product", "design", "handoff"],
+      "properties": {
+        "research": {
+          "type": "string",
+          "description": "S1 리서치 산출물 경로 (예: 01-research/projects)"
+        },
+        "product": {
+          "type": "string",
+          "description": "S2~S4 제품 기획 산출물 경로 (예: 02-product/projects)"
+        },
+        "design": {
+          "type": "string",
+          "description": "UI/UX 기획서 산출물 경로 (예: 05-design/projects)"
+        },
+        "content": {
+          "type": "string",
+          "description": "콘텐츠 트랙 산출물 경로 (예: 04-content/projects)"
+        },
+        "operations": {
+          "type": "string",
+          "description": "운영 문서 경로 (예: 10-operations)"
+        },
+        "templates": {
+          "type": "string",
+          "description": "SIGIL 템플릿 경로 (예: 09-tools/templates)"
+        },
+        "handoff": {
+          "type": "string",
+          "description": "Trine Handoff 문서 경로 (예: 10-operations/handoff-to-dev)"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "projects": {
+      "type": "object",
+      "description": "프로젝트별 개발 환경 매핑",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["devTarget", "symlinkBase"],
+        "properties": {
+          "devTarget": {
+            "type": "string",
+            "description": "개발 프로젝트 절대 경로"
+          },
+          "symlinkBase": {
+            "type": "string",
+            "description": "개발 프로젝트 내 symlink 생성 위치 (상대 경로)",
+            "default": "docs/planning/active/forge"
+          }
+        }
+      }
+    },
+    "defaults": {
+      "type": "object",
+      "description": "프로젝트 등록 시 기본값",
+      "properties": {
+        "symlinkBase": {
+          "type": "string",
+          "default": "docs/planning/active/forge"
+        },
+        "datePrefix": {
+          "type": "boolean",
+          "default": true,
+          "description": "산출물 파일명에 YYYY-MM-DD 접두사 사용 여부"
+        }
+      }
+    }
+  }
+}

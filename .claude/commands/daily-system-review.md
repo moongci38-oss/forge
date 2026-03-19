@@ -72,7 +72,7 @@ RAW_JSON="01-research/daily/{date}/raw-data.json"
 - 출력: 논문 목록 + 핵심 요약 (최대 800 토큰)
 
 **Subagent E (Sonnet): 우리 시스템 현황 스냅샷**
-- Read: `~/.claude/trine/rules/`, `~/.claude/rules/`
+- Read: `~/.claude/forge/rules/`, `~/.claude/rules/`
 - Read: `.claude/skills/`, `.claude/agents/`, `.claude/rules/`
 - Read: `docs/planning/active/plans/` 최근 계획서 (미처리 액션 확인)
 - 현재 시스템 구조, 버전, 패턴, 이전 미해결 갭 정리

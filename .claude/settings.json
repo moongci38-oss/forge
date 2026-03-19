@@ -11,35 +11,6 @@
             "type": "command",
             "command": "bash .claude/hooks/session-context.sh",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/session-start.sh",
-            "timeout": 15
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/stop.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "CLAUDE_PLUGIN_ROOT=09-tools/openviking-pilot bash 09-tools/openviking-pilot/hooks/session-end.sh",
-            "timeout": 20
           }
         ]
       }
@@ -52,6 +23,42 @@
             "type": "command",
             "command": "bash .claude/hooks/auto-build-rules.sh",
             "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/claude-notify.sh complete '응답 완료'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/claude-notify.sh complete '에이전트 완료'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/claude-notify.sh attention '입력이 필요합니다'",
+            "timeout": 5
           }
         ]
       }

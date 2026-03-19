@@ -9,7 +9,7 @@ model: haiku
 
 ## Core Mission
 
-SIGIL S1 리서치에서 수집된 데이터의 사실 여부를 검증한다. research-coordinator의 Fan-out 구성원으로 병렬 실행.
+Forge S1 리서치에서 수집된 데이터의 사실 여부를 검증한다. research-coordinator의 Fan-out 구성원으로 병렬 실행.
 
 ## 입력
 

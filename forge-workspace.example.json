@@ -1,0 +1,22 @@
+{
+  "$schema": "./dev/schemas/forge-workspace-schema.json",
+  "version": "2.0.0",
+  "name": "my-workspace",
+  "outputsRoot": "/path/to/forge-outputs",
+  "folderMap": {
+    "_note": "outputs/ 접두사 = outputsRoot 기준, 없으면 forge/ 기준",
+    "research": "outputs/01-research/projects",
+    "product": "outputs/02-product/projects",
+    "design": "outputs/05-design/projects",
+    "content": "outputs/04-content/projects",
+    "operations": "outputs/10-operations",
+    "docs": "outputs/docs",
+    "handoff": "outputs/10-operations/handoff-to-dev",
+    "templates": "planning/templates"
+  },
+  "projects": {},
+  "defaults": {
+    "symlinkBase": "docs/planning/active/forge",
+    "datePrefix": true
+  }
+}

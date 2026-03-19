@@ -9,7 +9,7 @@ model: sonnet
 
 ## Core Mission
 
-SIGIL S1 리서치에서 학술 소스를 탐색하고 분석한다. research-coordinator의 Fan-out 구성원으로 병렬 실행.
+Forge S1 리서치에서 학술 소스를 탐색하고 분석한다. research-coordinator의 Fan-out 구성원으로 병렬 실행.
 
 ## 검색 전략
 

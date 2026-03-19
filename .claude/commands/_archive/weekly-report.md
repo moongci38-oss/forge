@@ -29,9 +29,9 @@ allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 - "Micro SaaS" / "solo founder" / "indie hacker" / "1인 기업"
 - Product Hunt 이번 주 주목 제품
 
-### 3. 사업 아이템 제안 (SIGIL S1 방식)
+### 3. 사업 아이템 제안 (Forge S1 방식)
 
-SIGIL S1 리서치 방법론을 적용합니다:
+Forge S1 리서치 방법론을 적용합니다:
 1. **경쟁 가설 3개** 수립 — 각각 웹 검색으로 근거 수집
 2. **TAM/SAM/SOM 간이 추정** — 시장 규모 범위 제시
 3. **최종 1개 선정** — 선정 기준: **1인 개발자가 내달 1,000만원+ 수익 달성 가능성**

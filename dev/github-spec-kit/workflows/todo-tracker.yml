@@ -1,0 +1,163 @@
+# =============================================================================
+# Todo Tracker — todo.md 자동 갱신 + Notion Tasks 동기화 (범용)
+# =============================================================================
+#
+# [한글]
+# 기능: 브랜치 생성 시 ⬜ Todo → 🔄 Doing, PR merge 시 🔄 Doing → ✅ Done
+#       + Notion Tasks DB 자동 동기화 (NOTION_API_TOKEN 설정 시)
+# 트리거: branch 생성 (create) + PR merge (pull_request closed)
+# 매칭: 브랜치명에서 키워드 추출 → todo.md Spec 칼럼과 fuzzy match
+# 모든 브랜치에서 동작 (main, develop, gh-pages 제외)
+#
+# Notion 동기화: NOTION_API_TOKEN secret이 설정되면 자동 활성화.
+# DB ID와 프로젝트명은 .specify/config.json의 notion 섹션에서 읽음.
+# 미설정 시 todo.md만 갱신하고 Notion은 스킵 (graceful degradation).
+#
+# [English]
+# Purpose: Auto-update todo.md + sync Notion Tasks DB
+# Notion sync: Activated when NOTION_API_TOKEN secret is set.
+# DB ID and project name are read from .specify/config.json -> notion section.
+# If not configured, only todo.md is updated (graceful skip).
+#
+# 배포 위치: 프로젝트의 .github/workflows/todo-tracker.yml 에 복사하여 사용
+# 의존 스크립트:
+#   - scripts/update-todo.py        (todo.md 갱신)
+#   - scripts/sync-notion-tasks.py  (Notion 동기화)
+# =============================================================================
+
+name: Todo Tracker
+
+on:
+  create:  # branch created → Doing
+  pull_request:
+    types: [closed]  # PR merged → Done
+    branches: [develop, main]
+
+permissions:
+  contents: write
+
+jobs:
+  mark-doing:
+    runs-on: ubuntu-latest
+    # 모든 브랜치 트리거 (main, develop, gh-pages 제외). 매칭은 Python 스크립트가 판단.
+    if: >-
+      github.event_name == 'create' &&
+      github.ref_type == 'branch' &&
+      github.ref_name != 'main' &&
+      github.ref_name != 'develop' &&
+      github.ref_name != 'gh-pages'
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and update todo.md
+        id: update
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          # -type f (regular file) + -type l (symlink) 모두 탐지
+          TODO_FILE=$(find docs/planning -name "todo.md" \( -type f -o -type l \) 2>/dev/null | head -1)
+          if [ -z "$TODO_FILE" ]; then
+            echo "todo.md not found, skipping"
+            echo "updated=false" >> $GITHUB_OUTPUT
+            echo "todo_file=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "todo_file=$TODO_FILE" >> $GITHUB_OUTPUT
+          python3 scripts/update-todo.py doing "$BRANCH" "$TODO_FILE"
+
+          if git diff --quiet "$TODO_FILE"; then
+            echo "updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Sync to Notion
+        if: steps.update.outputs.todo_file != ''
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          TODO_FILE="${{ steps.update.outputs.todo_file }}"
+          if [ -f scripts/sync-notion-tasks.py ]; then
+            python3 scripts/sync-notion-tasks.py doing "$BRANCH" "$TODO_FILE"
+          else
+            echo "sync-notion-tasks.py not found, skipping Notion sync"
+          fi
+
+      - name: Commit and push
+        if: steps.update.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/
+          git commit -m "chore: auto-update todo.md — mark Doing [skip ci]"
+          git push
+
+  mark-done:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and update todo.md
+        id: update
+        env:
+          BRANCH: ${{ github.head_ref }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          # -type f (regular file) + -type l (symlink) 모두 탐지
+          TODO_FILE=$(find docs/planning -name "todo.md" \( -type f -o -type l \) 2>/dev/null | head -1)
+          if [ -z "$TODO_FILE" ]; then
+            echo "todo.md not found, skipping"
+            echo "updated=false" >> $GITHUB_OUTPUT
+            echo "todo_file=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "todo_file=$TODO_FILE" >> $GITHUB_OUTPUT
+          python3 scripts/update-todo.py done "$BRANCH" "$PR_NUM" "$PR_URL" "$TODO_FILE"
+
+          if git diff --quiet "$TODO_FILE"; then
+            echo "updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Sync to Notion
+        if: steps.update.outputs.todo_file != ''
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          BRANCH: ${{ github.head_ref }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          TODO_FILE="${{ steps.update.outputs.todo_file }}"
+          if [ -f scripts/sync-notion-tasks.py ]; then
+            python3 scripts/sync-notion-tasks.py done "$BRANCH" "$PR_NUM" "$PR_URL" "$TODO_FILE"
+          else
+            echo "sync-notion-tasks.py not found, skipping Notion sync"
+          fi
+
+      - name: Commit and push
+        if: steps.update.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/
+          git commit -m "chore: auto-update todo.md — mark Done [skip ci]"
+          git push

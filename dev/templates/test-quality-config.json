@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "프로젝트 루트의 .specify/test-quality-config.json에 배치. Check 3.5T 활성화 조건.",
+
+  "enabled": true,
+
+  "integrationTestPatterns": [
+    "**/*.e2e-spec.ts",
+    "**/*.integration.spec.ts",
+    "**/*.integration.test.ts",
+    "**/test/**/*.e2e-spec.ts"
+  ],
+
+  "unitTestPatterns": [
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ],
+
+  "excludePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**"
+  ],
+
+  "axes": {
+    "T-1": {
+      "enabled": true,
+      "severity": "critical"
+    },
+    "T-2": {
+      "enabled": true,
+      "severity": "critical"
+    },
+    "T-3": {
+      "enabled": true,
+      "severity": "warning",
+      "specTestMappingThreshold": 80
+    },
+    "T-4": {
+      "enabled": true,
+      "severity": "warning"
+    },
+    "T-5": {
+      "enabled": false,
+      "coverageThreshold": {
+        "lines": 80,
+        "branches": 70,
+        "functions": 80,
+        "statements": 80
+      },
+      "coverageReportPath": "coverage/coverage-summary.json"
+    }
+  }
+}

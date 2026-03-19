@@ -1,6 +1,7 @@
-# Business Workspace - AI Assistant Instructions
+# Forge — Unified Planning + Dev Pipeline
 
-> 1인 기업 전체 업무를 위한 AI 워크스페이스. 개발 외 시장조사, 기획, 디자인, 마케팅, 콘텐츠 업무를 커버한다.
+> Phase 1~12 통합 파이프라인.
+> `planning/` (Phase 1~4 기획) + `dev/` (Phase 6~12 개발) + `shared/` (공통 도구).
 
 ---
 
@@ -13,34 +14,78 @@
 
 | 프로젝트 | 경로 | 설명 |
 |---------|------|------|
-| **BUSINESS** | `./` | 비즈니스/기획 문서 (현재) |
+| **Forge** | `./` | 통합 파이프라인 (현재) |
+| **Forge Outputs** | `/home/damools/forge-outputs/` | 산출물 저장소 (private) |
 | **Portfolio** | `{YOUR_PORTFOLIO_PATH}` | Next.js + NestJS 웹 개발 |
 | **GODBLADE** | `{YOUR_GAME_PROJECT_PATH}` | Unity 게임 프로젝트 (C#) |
 
----
-
-## 3-트랙 폴더 구조
+### 디렉토리 구조
 
 ```
-A. 제품 사업 (01~05, 10)  → 수익 활동 (시장조사, 기획, 마케팅, 콘텐츠, 디자인, 운영)
-B. 회사 경영 (06~08)      → 민감 영역 (재무, 법무, 경영관리) — AI 직접 작업 금지
-C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
+forge/
+├── pipeline.md       ← 통합 파이프라인 (Phase 1~12)
+├── planning/         ← Phase 1~4 기획 파이프라인
+│   ├── rules-source/ ← 기획 규칙 원본
+│   ├── templates/    ← 기획 템플릿 (PRD, GDD, Spec 등)
+│   └── prompts/      ← 기획 메서드 프롬프트
+├── dev/              ← Phase 6~12 개발+배포 파이프라인
+│   ├── rules/        ← 개발 규칙
+│   ├── templates/    ← 개발 템플릿
+│   ├── scripts/      ← 개발 스크립트
+│   ├── schemas/      ← JSON 스키마
+│   ├── github-spec-kit/ ← GitHub 연동
+│   └── prompts/      ← 개발 파이프라인 프롬프트
+├── shared/           ← 양쪽 공통
+│   ├── docs/         ← 공유 문서
+│   ├── scripts/      ← 관리 스크립트 (manage-rules, manage-skills 등)
+│   └── cross-project/ ← 크로스 프로젝트 규칙
+├── .claude/          ← Claude Code 설정 (팀 공유)
+│   ├── rules/        ← 컴파일 규칙 (forge-planning.md, forge-core.md)
+│   ├── agents/       ← 에이전트 정의
+│   ├── skills/       ← 스킬 정의
+│   ├── commands/     ← 슬래시 커맨드
+│   ├── hooks/        ← 보안/자동화 훅
+│   └── prompts/      ← 오케스트레이션 프롬프트
+└── forge-workspace.json ← 프로젝트 매핑 + Notion DB
+
+forge-outputs/          ← 산출물 (private repo)
+├── 01-research/      ← 리서치 결과
+├── 02-product/       ← 제품 기획 산출물
+├── 03-marketing/     ← 마케팅 콘텐츠
+├── 04-content/       ← 콘텐츠
+├── 05-design/        ← 디자인 에셋
+├── 10-operations/    ← 운영/핸드오프
+└── docs/             ← 문서 (planning, reviews, tech)
 ```
 
 ---
 
 ## Golden Rules
 
+### Core Principle
+- **forge/ = 시스템** (파이프라인, 규칙, 도구, 스킬, 스크립트)
+- **forge-outputs/ = 결과물** (리서치, 기획서, 에셋, 리뷰, 문서 등 모든 산출물)
+- **forge/에 산출물 저장 금지.** 모든 산출물은 forge-outputs/로.
+- 통합 파이프라인: `forge/pipeline.md` (Phase 1~12)
+
 ### Do's
 - 리서치 결과는 출처(URL, 날짜) 반드시 포함
 - 문서 작성 시 한국어 기본, 전문 용어는 영어 병기
 - 병렬 처리 가능한 작업은 Subagent 사용을 우선 검토
-- Cowork 세션 시작 시 `09-tools/templates/project-context-brief.md` 참조 (프로젝트별 브리프 존재 시)
 
 ### Don'ts
-- B 영역 접근/출력 금지 (상세: `business-core.md` 보안 체크리스트)
+- B 영역 접근/출력 금지 (06-finance, 07-legal, 08-admin — forge-outputs에 보관)
 - 검증 없는 시장 데이터를 사실로 단정 금지
 - 스킬/컴포넌트 라이브러리 원본 직접 수정 금지
+
+---
+
+## 팀 온보딩
+
+1. 레포 클론: `git clone git@github.com:moongci38-oss/forge.git`
+2. `.env.example` → `.env` 복사 후 API 키 설정
+3. `forge-workspace.json`에서 프로젝트 경로 확인
+4. Claude Code에서 `/forge` 등 슬래시 커맨드 사용
 
 ---
 
@@ -48,25 +93,18 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 
 | 타입 | 위치 | 관리 |
 |------|------|------|
-| Skills | `.claude/skills/` | `manage-skills.sh` |
-| Agents | `.claude/agents/` | `manage-components.sh` |
-| Commands | `.claude/commands/` | `manage-components.sh` |
-| 라이브러리 원본 | `09-tools/` | 원본 보관 |
+| Skills | `.claude/skills/` | `shared/scripts/manage-skills.sh` |
+| Agents | `.claude/agents/` | `shared/scripts/manage-components.sh` |
+| Commands | `.claude/commands/` | `shared/scripts/manage-components.sh` |
+| Rules | `.claude/rules/` | `shared/scripts/manage-rules.sh` |
 
 ### 도구 관리 CLI
 
 | 도구 | 명령 |
 |------|------|
-| 스킬 | `bash scripts/manage-skills.sh {list\|enable\|disable\|audit}` |
-| 컴포넌트 | `bash scripts/manage-components.sh {list\|enable\|disable\|token-estimate}` |
-| 규칙 | `bash scripts/manage-rules.sh {list\|validate\|build\|stats}` |
-
----
-
-## 병렬 실행 (Subagent 기본)
-
-> Subagent가 기본 병렬 도구. Agent Teams는 Competing Hypotheses/Watchdog 전용.
-> 상세: `business-core.md` 내 parallel-execution 섹션 참조
+| 스킬 | `bash shared/scripts/manage-skills.sh {list\|enable\|disable\|audit}` |
+| 컴포넌트 | `bash shared/scripts/manage-components.sh {list\|enable\|disable\|token-estimate}` |
+| 규칙 | `bash shared/scripts/manage-rules.sh {list\|validate\|build\|stats}` |
 
 ---
 
@@ -75,9 +113,17 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 | 위치 | 내용 |
 |------|------|
 | `.claude/rules/` | 컴파일된 규칙 (세션 시작 시 자동 로드) |
-| `09-tools/rules-source/` | 규칙 원본 (Frontmatter 포함, 빌드 소스) |
-| `~/.claude/rules/` | 전역 규칙 (3파일: docs-structure, opus-best-practices, analysis-to-implementation-gate) |
-| `~/.claude/trine/rules/` | Trine 개발 규칙 (14파일, 개발 프로젝트에 symlink 배포) |
+| `planning/rules-source/` | 기획 규칙 원본 (Frontmatter 포함) |
+| `planning/rules-source/always/` | 항상 적용 규칙 원본 |
+| `shared/cross-project/` | 크로스 프로젝트 규칙 |
+| `dev/rules/` | 개발 규칙 (개발 프로젝트에 배포) |
+| `~/.claude/rules/` | 전역 규칙 |
+
+---
+
+## 병렬 실행 (Subagent 기본)
+
+> Subagent가 기본 병렬 도구. Agent Teams는 Competing Hypotheses/Watchdog 전용.
 
 ---
 
@@ -95,49 +141,37 @@ C. 시스템 (09-tools)      → AI 워크스페이스 운영 도구
 | **Claude Code (CLI)** | 개발자 | Subagent 병렬 실행, 스크립트 실행, Git 작업 |
 | **Claude Desktop Cowork** | 비개발자 | 리서치, 문서 작성, 콘텐츠 기획 |
 
-> Cowork 환경 상세(MCP 매핑, Hooks 대체, 보안)는 `business-core.md` 규칙에 포함.
-
 ---
 
----
+# 세션 정보 (Dynamic)
 
-# 📌 세션 정보 (Dynamic — 세션마다 변경)
-
-> 아래 섹션은 세션마다 변경될 수 있습니다. 위의 Workspace Context, Golden Rules, Component System은 정적(Static) 내용입니다.
-
-## MCP Servers & Plugins
-
-### MCP Servers
+## MCP Servers
 
 | 서버 | Scope | 설명 |
 |------|:-----:|------|
-| **filesystem** | project | 워크스페이스 파일 접근 (Cowork용) |
+| **filesystem** | project | 워크스페이스 파일 접근 |
 | **Sequential Thinking** | project | 복잡한 전략 계획 수립 |
 | **Notion** | project | Notion 페이지/DB 연동 |
 | **NanoBanana** | user | Google Gemini AI 이미지 생성/편집 |
 | **Stitch** | user | AI UI 목업 생성 |
 | **Lighthouse** | user | 웹 성능/접근성/SEO 감사 |
 | **Sentry** | user | 프로덕션 에러 추적 |
-| **Brave Search** | user | 웹 검색 (내장 WebSearch 보완) |
-| **Draw.io** | user | 다이어그램 생성 (PPT/Spec 시각 자료) |
+| **Brave Search** | user | 웹 검색 |
+| **Draw.io** | user | 다이어그램 생성 |
 
-> 제거됨: a11y (lighthouse에 통합), playwright (CLI 전환 완료), notion user-level (project와 중복)
+## Plugins
 
-### Plugins
-
-| 플러그인 | 마켓플레이스 | 용도 | 상태 |
-|---------|------------|------|:----:|
-| **product-management** | knowledge-work-plugins | 기획, PRD, 로드맵 | ✅ |
-| **marketing** | knowledge-work-plugins | 캠페인, 콘텐츠, SEO | ✅ |
-| **data** | knowledge-work-plugins | 데이터 분석, 대시보드 | ✅ |
-| **playground** | claude-plugins-official | 시각적 탐색 (SIGIL) | ✅ |
-| **code-review** | claude-plugins-official | PR 코드 리뷰 | ✅ |
-| **security-guidance** | claude-plugins-official | 보안 가이드 | ✅ |
-| **superpowers** | claude-plugins-official | 워크플로 스킬 | ✅ |
-| **skill-creator** | claude-plugins-official | 스킬 생성/평가/개선 | ✅ |
-| finance | knowledge-work-plugins | 06-finance (B트랙) | ⛔ |
-| legal | knowledge-work-plugins | 07-legal (B트랙) | ⛔ |
+| 플러그인 | 용도 | 상태 |
+|---------|------|:----:|
+| **product-management** | 기획, PRD, 로드맵 | ✅ |
+| **marketing** | 캠페인, 콘텐츠, SEO | ✅ |
+| **data** | 데이터 분석, 대시보드 | ✅ |
+| **playground** | 시각적 탐색 | ✅ |
+| **code-review** | PR 코드 리뷰 | ✅ |
+| **security-guidance** | 보안 가이드 | ✅ |
+| **superpowers** | 워크플로 스킬 | ✅ |
+| **skill-creator** | 스킬 생성/평가/개선 | ✅ |
 
 ---
 
-*Last Updated: 2026-03-13 (MCP 감사: a11y/playwright/notion중복 제거, brave-search/drawio/skill-creator 추가)*
+*Last Updated: 2026-03-19 (Forge 통합 마이그레이션)*

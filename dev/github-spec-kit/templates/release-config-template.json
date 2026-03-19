@@ -1,0 +1,41 @@
+{
+  "_comment": "Trine Phase 6 릴리스 설정 템플릿. 프로젝트 루트에 release-config.json으로 복사하여 사용.",
+  "version": "1.0",
+  "project": {
+    "name": "my-app",
+    "packageManager": "pnpm",
+    "versionFile": "package.json"
+  },
+  "release": {
+    "branchPrefix": "release/",
+    "tagPrefix": "v",
+    "changelogFile": "CHANGELOG.md"
+  },
+  "environments": {
+    "staging": {
+      "deployCommand": "",
+      "_deployCommand_note": "빈 문자열이면 deploy 단계를 skip하고 build/test만 실행합니다. 예: 'pnpm run deploy:staging'",
+      "healthEndpoint": "",
+      "healthTimeout": 120,
+      "e2eBaseURL": "https://staging.example.com"
+    },
+    "production": {
+      "deployCommand": "",
+      "_deployCommand_note": "빈 문자열이면 deploy 단계를 skip합니다. 예: 'pnpm run deploy:production'",
+      "healthEndpoint": "",
+      "healthTimeout": 120,
+      "e2eBaseURL": "https://example.com",
+      "smokeTestURL": "https://example.com/health"
+    }
+  },
+  "rollback": {
+    "enabled": true,
+    "strategy": "revert",
+    "_strategy_note": "revert(git revert) | tag(이전 태그로 재배포) | hotfix(hotfix 브랜치 생성)"
+  },
+  "notifications": {
+    "enabled": false,
+    "slackWebhook": "",
+    "_note": "슬랙 알림이 필요하면 enabled: true + slackWebhook 설정"
+  }
+}

@@ -11,7 +11,7 @@ $ARGUMENTS
 
 ## 수행 절차
 
-1. **sigil-workspace.json 확인**: `sigil-workspace.json`에서 프로젝트 경로 해석
+1. **forge-workspace.json 확인**: `forge-workspace.json`에서 프로젝트 경로 해석
 2. **기존 문서 확인**: `{folderMap.product}/projects/{project}/` 하위에서 S1 리서치, S2 컨셉 문서 존재 여부 확인
 3. **GDD 템플릿 로드**: `{folderMap.templates}/gdd-template.md` 참조
 4. **시장 검증**: 유사 게임/경쟁작 조사 (출처 URL, 날짜 포함)

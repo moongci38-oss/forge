@@ -1,21 +1,21 @@
-# 전체 파이프라인 워크플로우 (SIGIL → Trine)
+# 전체 파이프라인 워크플로우 (Forge → Forge Dev)
 
-> **SIGIL**: 전략 수립 + 기획 자동화 파이프라인 (S1→S4)
-> **Trine**: 구현 + 배포 자동화 파이프라인 (Phase 1→7)
-> **연결 지점**: SIGIL S4 Handoff 문서 → Trine Phase 1 세션 이해
+> **Forge**: 전략 수립 + 기획 자동화 파이프라인 (S1→S4)
+> **Forge Dev**: 구현 + 배포 자동화 파이프라인 (Phase 1→7)
+> **연결 지점**: Forge S4 Handoff 문서 → Forge Dev Phase 1 세션 이해
 > **운영 모델**: AI가 현재 위치를 인지하고 완료 시 다음 단계를 제안. Human이 [STOP] 게이트에서 승인.
 
 ## 전체 흐름
 
 ```
-[SIGIL 파이프라인 — 기획]
+[Forge 파이프라인 — 기획]
 S1 Research → S2 Concept → S3 Design Document → S4 Planning Package
      ↓              ↓               ↓                      ↓
 [AUTO-PASS]      [STOP]          [STOP]             [AUTO-PASS]
                                                           ↓
                                               Handoff 문서 + symlink 생성
                                                           ↓
-[Trine 파이프라인 — 구현 + 배포]
+[Forge Dev 파이프라인 — 구현 + 배포]
 Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7
   (auto)    (auto)    [STOP]     (auto)   [STOP]/auto  (자동)   [STOP]    (자동)
 세션 이해   요구사항   Spec 승인   구현+검증   PR+Merge   통합검증  스테이징   프로덕션
@@ -25,17 +25,17 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 
 | 상황 | 시작 위치 | 스킵 |
 |------|----------|------|
-| 아이디어만 있음 | SIGIL S1 | 없음 |
-| 리서치 자료 있음 | SIGIL S2 | S1 |
-| 컨셉 확정됨 | SIGIL S3 | S1+S2 |
-| 기획서(PRD/GDD) 있음 | SIGIL S4 | S1+S2+S3 |
-| S4 기획 패키지 있음 | Trine Phase 1 | SIGIL 전체 |
+| 아이디어만 있음 | Forge S1 | 없음 |
+| 리서치 자료 있음 | Forge S2 | S1 |
+| 컨셉 확정됨 | Forge S3 | S1+S2 |
+| 기획서(PRD/GDD) 있음 | Forge S4 | S1+S2+S3 |
+| S4 기획 패키지 있음 | Forge Dev Phase 1 | Forge 전체 |
 
 ---
 
-# Part 1. SIGIL 파이프라인
+# Part 1. Forge 파이프라인
 
-> Hard 의존성: S3→S4, S4→Trine (반드시 순서 유지)
+> Hard 의존성: S3→S4, S4→Forge Dev (반드시 순서 유지)
 > Soft 의존성: S1→S2, S2→S3 (기존 자료 있으면 스킵 가능)
 
 ## S1. Research (리서치)
@@ -43,7 +43,7 @@ Phase 1 → Phase 1.5 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 
 > 방법론: AI-augmented Research + JTBD + Competitive Intelligence + Evidence-Based Management
 
 1. 프로젝트 유형 식별 (앱/웹/게임)
-2. `sigil-workspace.json`에서 `folderMap` 경로 확인
+2. `forge-workspace.json`에서 `folderMap` 경로 확인
 3. **research-coordinator** Subagent 스폰 (Fan-out 병렬):
    - market-researcher, academic-researcher, fact-checker 3명 동시 투입
    - 시장 규모(TAM/SAM/SOM), 경쟁사 분석, 기술 트렌드 독립 조사
@@ -152,7 +152,7 @@ S2 디렉션 5축 요약 프롬프트 주입 (~5줄)
 | # | 산출물 | 파일명 | 내용 |
 |:-:|--------|--------|------|
 | 1 | **상세 기획서** | s4-detailed-plan.md | 화면별 동작 + 데이터 흐름 + 사이트맵 |
-| 2 | **개발 계획** | s4-development-plan.md | 기술 스택 + C4 아키텍처 + ADR + Trine 세션 로드맵 + WBS + **테스트 전략** |
+| 2 | **개발 계획** | s4-development-plan.md | 기술 스택 + C4 아키텍처 + ADR + Forge Dev 세션 로드맵 + WBS + **테스트 전략** |
 | 3 | **UI/UX 기획서** | s4-uiux-spec.md | 와이어프레임 + 컴포넌트 스펙 + 인터랙션 패턴 |
 
 > S3에 관리자 기능 포함 시: `s4-admin-detailed-plan.md`, `s4-admin-uiux-spec.md` 추가 필수
@@ -191,36 +191,36 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ### AUTO-PASS 조건 (모두 충족)
 
-1. `sigil-gate-check.sh S4` → PASS
+1. `forge-gate-check.sh S4` → PASS
 2. Wave 2A: 누락 FR/NFR 0건
 3. Wave 2B: CRITICAL 0건 (Don't 태그 위반 없음)
 4. Wave 3: CRITICAL 0건
 
 하나라도 FAIL → [STOP] 에스컬레이션.
 
-**사용 도구**: Stitch(MCP), NanoBanana(MCP), Draw.io(MCP), Notion(MCP), `/screenshot-analyze`(CLI), `/game-logic-visualize`(스킬), `sigil-gate-check.sh`(CLI), Mermaid(인라인)
+**사용 도구**: Stitch(MCP), NanoBanana(MCP), Draw.io(MCP), Notion(MCP), `/screenshot-analyze`(CLI), `/game-logic-visualize`(스킬), `forge-gate-check.sh`(CLI), Mermaid(인라인)
 
    ─── [AUTO-PASS] S4 Gate: Wave 검증 통과 시 자동 진행 / 실패 시 [STOP] ───
 
 ---
 
-## SIGIL → Trine 전환 (Handoff)
+## Forge → Forge Dev 전환 (Handoff)
 
 > S4 Gate PASS 확인 후 실행. gate-log.md에 S4 PASS 없으면 [STOP].
 
 1. **Handoff 문서 자동 생성**:
-   - 경로: `{folderMap.handoff}/{project}/YYYY-MM-DD-sigil-handoff.md`
-   - 내용: 산출물 인덱스, 기술 스택, Trine 세션 로드맵, ADR 요약, 우선순위
-2. **symlink 일괄 생성** (`sigil-workspace.json` `devTarget`/`symlinkBase` 기준):
-   - 개발 프로젝트 `docs/planning/active/sigil/{domain}/`에 S3/S4 산출물 symlink
+   - 경로: `{folderMap.handoff}/{project}/YYYY-MM-DD-forge-handoff.md`
+   - 내용: 산출물 인덱스, 기술 스택, Forge Dev 세션 로드맵, ADR 요약, 우선순위
+2. **symlink 일괄 생성** (`forge-workspace.json` `devTarget`/`symlinkBase` 기준):
+   - 개발 프로젝트 `docs/planning/active/forge/{domain}/`에 S3/S4 산출물 symlink
    - `todo.md`는 실제 파일로 생성 (symlink 금지 — GitHub Actions 호환)
 3. **Tier 2 Todo 자동 생성** (Notion MCP 미연결 시):
    - `{folderMap.product}/todo.md`에 Spec 칸반 행 추가
-4. Human에게 Trine 진입 안내 → Human이 개발 프로젝트로 이동하면 Trine 자동 발동
+4. Human에게 Forge Dev 진입 안내 → Human이 개발 프로젝트로 이동하면 Forge Dev 자동 발동
 
-### SIGIL 산출물 → Trine 매핑
+### Forge 산출물 → Forge Dev 매핑
 
-| SIGIL 산출물 | Trine 활용 시점 |
+| Forge 산출물 | Forge Dev 활용 시점 |
 |-------------|----------------|
 | S1 리서치 | Phase 1 — 프로젝트 컨텍스트 |
 | S3 PRD/GDD | Phase 1.5 — FR/NFR 추출 + Phase 2 Spec 입력 |
@@ -230,15 +230,15 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ---
 
-# Part 2. Trine 파이프라인
+# Part 2. Forge Dev 파이프라인
 
 > .specify/ 디렉토리 감지 시 자동 발동 (Implicit Entry)
-> SIGIL S4 산출물이 symlink로 개발 프로젝트에 연결된 상태에서 시작
+> Forge S4 산출물이 symlink로 개발 프로젝트에 연결된 상태에서 시작
 
 ## Phase 1: 작업 요청 및 세션 이해
 
 1. Handoff 문서 + S4 개발 계획에서 해당 세션 내용 숙지 + 세션 요약 출력
-2. 세션 상태 초기화: `node ~/.claude/trine/scripts/session-state.mjs init --name <name>`
+2. 세션 상태 초기화: `node ~/.claude/forge/scripts/session-state.mjs init --name <name>`
 3. **작업 규모 자동 분류** (재분류 필요 시만 [STOP]):
 
    | 분류 | 기준 | Phase 스킵 |
@@ -258,7 +258,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ## Phase 1.5: 요구사항 분석
 
-> S3 PRD/GDD에서 모호한 요구사항을 구현 전에 해소. → `trine-requirements-analysis.md` 규칙 참조.
+> S3 PRD/GDD에서 모호한 요구사항을 구현 전에 해소. → `forge-requirements-analysis.md` 규칙 참조.
 
 1. S3 기획서 읽기 + 불명확점 식별
 2. 질문 수 판정: 0개(스킵) / 1~3개(Q&A) / 4~5개(Q&A+보완 권고) / 6+개([STOP] 반려)
@@ -370,7 +370,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 3. **결과 분기**:
    - ✅ PASS → Step Summary 출력 → Phase 6 진입 가능
    - ❌ FAIL → **Check 6.5**: GitHub Issue 자동 생성 → AI 분석 + 수정 → develop 재push
-4. PASS 확인 후 `/trine-release` 커맨드로 Phase 6 진입
+4. PASS 확인 후 `/forge-release` 커맨드로 Phase 6 진입
 
    ─── Check 6: develop-integration.yml 자동 ───
 
@@ -378,9 +378,9 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ## Phase 6: 릴리스 브랜치 + 스테이징 (수동 트리거)
 
-> `/trine-release {version}` 커맨드로 진입. `release-staging.yml`이 자동화.
+> `/forge-release {version}` 커맨드로 진입. `release-staging.yml`이 자동화.
 
-1. Human이 `/trine-release {version}` 실행
+1. Human이 `/forge-release {version}` 실행
 2. `release-staging.yml` workflow_dispatch 트리거:
    - `release/{version}` 브랜치 생성 + version bump + CHANGELOG
    - `deploy-runner.sh --env staging` (빈 값이면 skip)
@@ -395,7 +395,7 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
 
 ## Phase 7: 프로덕션 배포 + 롤백 (자동)
 
-> `main` push 시 `production-deploy.yml` 자동 트리거. 실패 시 `/trine-rollback`으로 롤백.
+> `main` push 시 `production-deploy.yml` 자동 트리거. 실패 시 `/forge-rollback`으로 롤백.
 
 1. Release PR merge to main → `production-deploy.yml` 자동 트리거
 2. **Check 8** 자동 실행:
@@ -404,17 +404,17 @@ Wave 4 (최종): technical-writer → Wave 2-3 반영 최종본
    - GitHub Release 자동 생성 (tag + changelog)
    - `release/{version}` 브랜치 자동 삭제
 3. **결과 분기**:
-   - ✅ PASS → Phase 7 완료. `trine-pm-updater`로 todo.md 상태 갱신
-   - ❌ FAIL → **[STOP]** Human이 `/trine-rollback` 실행:
+   - ✅ PASS → Phase 7 완료. `forge-pm-updater`로 todo.md 상태 갱신
+   - ❌ FAIL → **[STOP]** Human이 `/forge-rollback` 실행:
 
      | 레벨 | 방법 | 기준 |
      |------|------|------|
      | L1 Quick Revert | `git revert` — 최근 커밋만 | < 30분 |
      | L2 Release Revert | 이전 릴리스 태그로 재배포 | < 2시간 |
-     | L3 Hotfix Forward | `hotfix/*` → Trine Hotfix 재진입 | > 2시간 |
+     | L3 Hotfix Forward | `hotfix/*` → Forge Dev Hotfix 재진입 | > 2시간 |
 
    ─── Check 8: production-deploy.yml 자동 ───
-   ─── Check 8.5: **[STOP]** 롤백 필요 시 Human이 /trine-rollback 실행 ───
+   ─── Check 8.5: **[STOP]** 롤백 필요 시 Human이 /forge-rollback 실행 ───
 
 ---
 
@@ -438,30 +438,30 @@ P4 (수렴): 품질 검증 → 일관성 + 크리틱 루프    도구: /screensh
 
 | # | 게이트 | 위치 | 유형 | 주체 |
 |:-:|--------|------|:----:|:----:|
-| 1 | S1 DoD 자동 검증 | SIGIL S1 완료 | AUTO-PASS | AI |
-| 2 | 비전/타겟/차별점 + 5축 승인 | SIGIL S2 완료 | **[STOP]** | Human |
-| 3 | 기획서(.md+.pptx) 승인 | SIGIL S3 완료 | **[STOP]** | Human |
-| 4 | Wave 2A/2B/3 검증 통과 | SIGIL S4 완료 | AUTO-PASS | AI |
-| 5 | Spec(+Plan) 승인 | Trine Phase 2 완료 | **[STOP]** | Human |
-| 6 | Check 3/3.5/3.7 | Trine Phase 3 완료 | auto-fix→[STOP] | AI→Human |
-| 7 | PR 검토 + Merge | Trine Phase 4 | **[STOP]** or auto-merge | Human or AI |
-| 8 | Develop 통합 검증 | Trine Phase 5 | 자동 / FAIL→[STOP] | AI |
-| 9 | Release PR 승인 | Trine Phase 6 | **[STOP]** | Human |
-| 10 | 프로덕션 배포 검증 | Trine Phase 7 | 자동 / FAIL→[STOP] 롤백 | AI→Human |
+| 1 | S1 DoD 자동 검증 | Forge S1 완료 | AUTO-PASS | AI |
+| 2 | 비전/타겟/차별점 + 5축 승인 | Forge S2 완료 | **[STOP]** | Human |
+| 3 | 기획서(.md+.pptx) 승인 | Forge S3 완료 | **[STOP]** | Human |
+| 4 | Wave 2A/2B/3 검증 통과 | Forge S4 완료 | AUTO-PASS | AI |
+| 5 | Spec(+Plan) 승인 | Forge Dev Phase 2 완료 | **[STOP]** | Human |
+| 6 | Check 3/3.5/3.7 | Forge Dev Phase 3 완료 | auto-fix→[STOP] | AI→Human |
+| 7 | PR 검토 + Merge | Forge Dev Phase 4 | **[STOP]** or auto-merge | Human or AI |
+| 8 | Develop 통합 검증 | Forge Dev Phase 5 | 자동 / FAIL→[STOP] | AI |
+| 9 | Release PR 승인 | Forge Dev Phase 6 | **[STOP]** | Human |
+| 10 | 프로덕션 배포 검증 | Forge Dev Phase 7 | 자동 / FAIL→[STOP] 롤백 | AI→Human |
 
 ---
 
 # 모델 계층화
 
 ```
-SIGIL pipeline-orchestrator (Lead)  → Opus 4.6   (판단, 종합, 게이트 심판)
-SIGIL 기획서 작성 (gdd/prd)          → Sonnet 4.6 (문서 작성, 분석)
-SIGIL 기획 패키지 (technical-writer) → Sonnet 4.6 (S4 산출물 작성)
-SIGIL 리서치/검색 Teammates          → Haiku 4.5  (검색, 팩트체크, 트렌드 수집)
+Forge pipeline-orchestrator (Lead)  → Opus 4.6   (판단, 종합, 게이트 심판)
+Forge 기획서 작성 (gdd/prd)          → Sonnet 4.6 (문서 작성, 분석)
+Forge 기획 패키지 (technical-writer) → Sonnet 4.6 (S4 산출물 작성)
+Forge 리서치/검색 Teammates          → Haiku 4.5  (검색, 팩트체크, 트렌드 수집)
 
-Trine Lead                           → Opus 4.6   (아키텍처 판단, 오케스트레이션)
-Trine 구현 Teammate                  → Sonnet 4.6 (코딩, 테스트, 문서)
-Trine 탐색 Teammate                  → Haiku 4.5  (파일 탐색, 패턴 확인)
+Forge Dev Lead                           → Opus 4.6   (아키텍처 판단, 오케스트레이션)
+Forge Dev 구현 Teammate                  → Sonnet 4.6 (코딩, 테스트, 문서)
+Forge Dev 탐색 Teammate                  → Haiku 4.5  (파일 탐색, 패턴 확인)
 ```
 
 ---
@@ -469,12 +469,12 @@ Trine 탐색 Teammate                  → Haiku 4.5  (파일 탐색, 패턴 확
 # Iron Laws
 
 - S3 기획서 없이 S4 진입 금지 (Hard 의존성)
-- S4 기획 패키지 없이 Trine 진입 금지 (Hard 의존성)
-- Handoff 문서 없이 Trine 세션 시작 금지
+- S4 기획 패키지 없이 Forge Dev 진입 금지 (Hard 의존성)
+- Handoff 문서 없이 Forge Dev 세션 시작 금지
 - S3에 관리자 기능 포함 시 S4에도 관리자 산출물 필수
 - S2 기획 디렉션 5축의 Axis 1/3은 Human 확인 없이 확정 금지
 - S4 Wave 2B Don't 태그 위반 = CRITICAL → [STOP]
-- Trine Phase 2 Spec 승인 없이 구현 시작 금지
+- Forge Dev Phase 2 Spec 승인 없이 구현 시작 금지
 - Phase 5 Check 6 PASS 없이 Phase 6 진입 금지
 - Phase 6 Release PR 승인 없이 Phase 7 진입 금지
-- 기획/계획 문서 수정은 SIGIL 워크스페이스 원본에서만 (symlink 자동 반영)
+- 기획/계획 문서 수정은 Forge 워크스페이스 원본에서만 (symlink 자동 반영)

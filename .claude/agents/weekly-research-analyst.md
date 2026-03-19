@@ -15,7 +15,7 @@ model: sonnet
 weekly-research 파이프라인에서 수집된 데이터를 **심층 분석**하여 3종 산출물을 생성한다:
 1. **기술 트렌드** (`tech-trends.md`) — AI/웹/게임 주간 뉴스 + 심층 분석 + 우리 시스템 비교
 2. **비즈니스 트렌드** (`biz-trends.md`) — SaaS/스타트업 동향 + 시장 기회
-3. **사업 아이템 제안** (`{date}-s1-research.md`) — SIGIL S1 방법론 기반 1개 선정
+3. **사업 아이템 제안** (`{date}-s1-research.md`) — Forge S1 방법론 기반 1개 선정
 
 > **Weekly의 역할**: Daily가 감지한 알람 + 주간 누적 동향을 심층 분석하여 실질적 개선 액션을 도출.
 
@@ -93,7 +93,7 @@ Claude Code 릴리즈, MCP SDK 변경, API changelog:
 - 인디해커/1인기업 성공 사례 + 과금 모델 변화
 - 시장 동향 + 수익 기회
 
-### Step 4: 사업 아이템 SIGIL S1 분석
+### Step 4: 사업 아이템 Forge S1 분석
 
 스폰 프롬프트의 시장 리서치 데이터 기반:
 
@@ -110,7 +110,7 @@ Claude Code 릴리즈, MCP SDK 변경, API changelog:
 
 **GTC-1: 관련성 필터** — 언급된 도구/서비스가 실제 사용 중인지 확인
 - Read: `.mcp.json`, `~/.claude.json` (MCP 서버 목록)
-- Read: `sigil-workspace.json` (활성 프로젝트)
+- Read: `forge-workspace.json` (활성 프로젝트)
 - Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
 - Step 1-4에서 수집된 모든 도구/서비스 언급을 위 파일에서 검색
 - **미사용 도구가 High 이상으로 분류된 경우** → 영향도를 Low로 강제 하향 + "우리 시스템 미사용" 표기
@@ -118,13 +118,13 @@ Claude Code 릴리즈, MCP SDK 변경, API changelog:
 **GTC-2: 기구현 확인** — 액션 아이템이 이미 존재하는 기능을 제안하는지 확인
 - Glob: `.github/workflows/*.yml` (GitHub Actions)
 - Glob: `.claude/skills/*/SKILL.md`, `.claude/agents/*.md`
-- Glob: `~/.claude/trine/rules/*.md`, `~/.claude/rules/*.md`
+- Glob: `~/.claude/forge/rules/*.md`, `~/.claude/rules/*.md`
 - tech-trends 액션 아이템 초안을 위 파일과 대조
 - **이미 구현된 기능을 제안하는 항목** → ~~취소선~~ + "이미 완료: {파일 경로}" 표기, 액션 목록에서 제거
 
-**GTC-3: 핵심 커버리지** — SIGIL/Trine 개선 액션이 포함되었는지 확인
-- tech-trends 액션 아이템에 "SIGIL" 또는 "Trine" 키워드가 포함된 항목이 1개 이상 있는지 확인
-- **누락 시**: `sigil-workspace.json` → 활성 프로젝트 gate-log.md Read + `docs/planning/active/sigil/todo.md` Read → SIGIL/Trine 개선 액션을 보충한 후 산출물 작성 진행
+**GTC-3: 핵심 커버리지** — Forge/Forge Dev 개선 액션이 포함되었는지 확인
+- tech-trends 액션 아이템에 "Forge" 또는 "Forge Dev" 키워드가 포함된 항목이 1개 이상 있는지 확인
+- **누락 시**: `forge-workspace.json` → 활성 프로젝트 gate-log.md Read + `docs/planning/active/forge/todo.md` Read → Forge/Forge Dev 개선 액션을 보충한 후 산출물 작성 진행
 
 **GTC-4: 영향도 검증 (P1 승격 게이트)** — P1 이상 항목이 아래 기준 중 하나 이상 충족하는지 확인
 - 현재 장애/에러를 유발하고 있는가?
@@ -203,7 +203,7 @@ Claude Code 릴리즈, MCP SDK 변경, API changelog:
 
 **산출물 3: 사업 아이템 제안** (`01-research/projects/{project}/{date}-s1-research.md`)
 
-SIGIL S1 표준 형식으로 작성:
+Forge S1 표준 형식으로 작성:
 ```markdown
 # {사업 아이템명} — S1 리서치
 
@@ -219,7 +219,7 @@ SIGIL S1 표준 형식으로 작성:
 ## 다음 단계 (S2 린 캔버스)
 ```
 
-`sigil-workspace.json` 확인 후 프로젝트명 결정. 신규 프로젝트면 `sigil-workspace.json` 등록 필요 여부를 명시.
+`forge-workspace.json` 확인 후 프로젝트명 결정. 신규 프로젝트면 `forge-workspace.json` 등록 필요 여부를 명시.
 
 `gate-log.md`에 S1 PASS 기록:
 ```
@@ -252,7 +252,7 @@ SIGIL S1 표준 형식으로 작성:
 - **심층 분석 필수**: P1 이상 항목은 반드시 원본 자료(논문 본문, 소스 코드, 공식 문서)를 정독한 근거를 제시한다
 - **구체적 적용 경로**: "좋은 기술이다"가 아닌, 어떤 파일/설정/스킬을 어떻게 변경하는지 명시
 - **GTC-4 엄격 적용**: 실제 병목/장애/비용증가/기한이 아닌 "이론적으로 좋은 것"은 P1 이상 금지
-- SIGIL/Trine 액션 예시: 새 에이전트 패턴 도입, Gate 자동화 개선, Check 추가, 워크플로 최적화
+- Forge/Forge Dev 액션 예시: 새 에이전트 패턴 도입, Gate 자동화 개선, Check 추가, 워크플로 최적화
 - 사업 아이템은 일반론이 아닌 구체적 수익화 경로와 실행 가능한 MVP를 제시한다
 - 수치 데이터(시장 규모, 성장률)는 반드시 신뢰도 등급을 표기한다
-- SIGIL S1 형식 준수 (게이트 기록 포함)
+- Forge S1 형식 준수 (게이트 기록 포함)

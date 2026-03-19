@@ -13,12 +13,12 @@ user-invocable: false
 
 # UX Audit Skill (Check 3.6 — UX Quality Gate)
 
-> Trine Check 3.6에서 자동 트리거. 프론트엔드 변경이 포함된 PR에서 UI/UX 품질을 9항목으로 검증한다.
+> Forge Dev Check 3.6에서 자동 트리거. 프론트엔드 변경이 포함된 PR에서 UI/UX 품질을 9항목으로 검증한다.
 > 출처: "디자인 오류 90%를 해결한 방법" 영상 기반 체크리스트.
 
 ## 실행 조건
 
-- Trine Phase 3 Check 3.5 이후, PR 생성 전
+- Forge Dev Phase 3 Check 3.5 이후, PR 생성 전
 - 변경 파일에 `.tsx`, `.jsx`, `.css`, `.scss`, `.html` 포함 시 트리거
 - 변경 파일이 백엔드만(`.service.ts`, `.controller.ts` 등)이면 **SKIP**
 
@@ -265,7 +265,7 @@ user-invocable: false
 
 ## autoFix 규칙
 
-- Check 3.6 autoFix는 Trine 전체 autoFix 카운터와 **별도** 관리 (UI 수정은 로직 수정과 독립)
+- Check 3.6 autoFix는 Forge Dev 전체 autoFix 카운터와 **별도** 관리 (UI 수정은 로직 수정과 독립)
 - Check 3.6 autoFix 최대 **1회**
 - 1회 실패 → WARN으로 보고하고 진행 (CRITICAL도 Human 에스컬레이션 대신 WARN 보고)
 - 이유: UI 수정은 디자인 의도를 AI가 100% 파악할 수 없으므로, 블로킹보다 보고 우선

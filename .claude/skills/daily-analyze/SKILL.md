@@ -53,18 +53,18 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 ## Step 3: 우리 시스템 현황 스냅샷
 
 **인프라 레이어:**
-- Read: `~/.claude/trine/rules/` (최근 수정 파일)
+- Read: `~/.claude/forge/rules/` (최근 수정 파일)
 - Read: `.claude/skills/`, `.claude/agents/`
 - Read: `docs/planning/active/plans/` (미처리 액션 확인)
 
-**SIGIL 파이프라인 현황 (필수):**
-- Read: `sigil-workspace.json` → 활성 프로젝트 목록 + folderMap 경로 확인
+**Forge 파이프라인 현황 (필수):**
+- Read: `forge-workspace.json` → 활성 프로젝트 목록 + folderMap 경로 확인
 - 각 프로젝트의 `gate-log.md` Read → 현재 Gate 위치 (S1/S2/S3/S4) 확인
-- Read: `02-product/projects/todo.md` (있으면) → SIGIL 전체 프로젝트 진행 현황
+- Read: `02-product/projects/todo.md` (있으면) → Forge 전체 프로젝트 진행 현황
 
-**Trine 파이프라인 현황 (필수):**
+**Forge Dev 파이프라인 현황 (필수):**
 - Glob: `**/.claude/state/sessions/*.json` → 활성/미완료 세션 목록
-- Read: `docs/planning/active/sigil/todo.md` → Spec별 진행 상태 (⬜/🔄/🧪/✅)
+- Read: `docs/planning/active/forge/todo.md` → Spec별 진행 상태 (⬜/🔄/🧪/✅)
 - Glob: `docs/walkthroughs/` → 최근 작성된 walkthrough (완료 Spec 파악)
 
 ## Step 4: 분석 + 산출물 생성

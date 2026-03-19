@@ -15,13 +15,13 @@ user-invocable: true
 
 ## 인자
 
-- `$ARGUMENTS` = 감사 대상. 미입력 시 `system` (SIGIL+Trine).
+- `$ARGUMENTS` = 감사 대상. 미입력 시 `system` (Forge+Forge Dev).
 
 ## 대상 경로 매핑
 
 | target | 감사 경로 |
 |--------|----------|
-| `system` | `~/.claude/trine/rules/` + `.claude/rules/` + `.claude/agents/` + `.claude/skills/` |
+| `system` | `~/.claude/forge/rules/` + `.claude/rules/` + `.claude/agents/` + `.claude/skills/` |
 | `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `apps/`, `test/`, `.claude/`) |
 | `godblade` | godblade 프로젝트 경로 (`Assets/`, `.claude/`) |
 

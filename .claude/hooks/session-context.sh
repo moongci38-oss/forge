@@ -52,7 +52,7 @@ if [ -n "$GATE_LOGS" ]; then
     LAST_PASS=$(grep "✅ PASS" "$gl" 2>/dev/null | tail -1 | awk -F'|' '{print $2}' | tr -d ' ')
     printf "║     %-15s 마지막 Gate: %s\n" "$PROJECT" "${LAST_PASS:-없음}  ║"
   done <<< "$GATE_LOGS"
-  echo "║     → /research /prd /trine 커맨드 사용 가능      ║"
+  echo "║     → /research /prd /forge 커맨드 사용 가능      ║"
 fi
 
 echo "╚══════════════════════════════════════════════════╝"

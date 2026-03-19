@@ -41,7 +41,7 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 
 **사업 아이템 리서치 (WebSearch + WebFetch):**
 - 시장 데이터 + 경쟁사 현황
-- SIGIL S1 방법론: 경쟁 가설 3개 → TAM/SAM/SOM → JTBD → 최종 1개 선정
+- Forge S1 방법론: 경쟁 가설 3개 → TAM/SAM/SOM → JTBD → 최종 1개 선정
 - 1인 개발자 기준 내달 1,000만원+ 수익 달성 가능성 평가
 
 검색 도구 우선순위: `mcp__brave-search__brave_web_search` → WebSearch → WebFetch

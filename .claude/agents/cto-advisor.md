@@ -1,7 +1,7 @@
 ---
 name: cto-advisor
 description: |
-  SIGIL S4 Wave 3 기술 검토 전문 에이전트.
+  Forge S4 Wave 3 기술 검토 전문 에이전트.
   S4 산출물(개발 계획(테스트 전략 포함), 아키텍처, ADR)을 기술적 관점에서 검토하고
   CRITICAL/HIGH/MEDIUM/LOW 등급의 이슈 리포트를 생성한다.
 

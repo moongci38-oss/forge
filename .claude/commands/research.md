@@ -12,7 +12,7 @@ $ARGUMENTS
 ## 수행 절차
 
 1. **사전 확인**: 이전에 같은 주제를 조사한 적 있는지 확인 (기존 파일 참조)
-2. **방법론 참조**: `09-tools/prompts/sigil-methodologies.md`의 S1 리서치 방법론 적용
+2. **방법론 참조**: `09-tools/prompts/forge-methodologies.md`의 S1 리서치 방법론 적용
    - 필수: AI-augmented Research + JTBD + Competitive Intelligence + Evidence-Based Management
    - 선택: SOAR, PESTLE (규제 산업/글로벌 진출 시)
 3. **시장 조사**: 웹에서 최신 정보 수집 (출처 URL, 날짜 반드시 포함)

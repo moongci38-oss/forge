@@ -1,7 +1,7 @@
 #!/bin/bash
 # auto-build-rules.sh
 # PostToolUse: Edit | Write
-# 09-tools/rules-source/ 파일 편집 시 자동으로 manage-rules.sh build 실행
+# planning/rules-source/ 파일 편집 시 자동으로 manage-rules.sh build 실행
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | python3 -c "
@@ -16,15 +16,15 @@ fi
 
 # rules-source 경로가 아니면 무시
 case "$FILE_PATH" in
-  *09-tools/rules-source/*)
+  *planning/rules-source/*)
     ;;
   *)
     exit 0
     ;;
 esac
 
-BUSINESS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-MANAGE_RULES="$BUSINESS_ROOT/scripts/manage-rules.sh"
+FORGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+MANAGE_RULES="$FORGE_ROOT/shared/scripts/manage-rules.sh"
 
 if [ ! -f "$MANAGE_RULES" ]; then
   exit 0
@@ -32,9 +32,9 @@ fi
 
 # scope 판단
 case "$FILE_PATH" in
-  *rules-source/sigil/*)
-    echo "auto-build-rules: sigil scope detected"
-    bash "$MANAGE_RULES" build --scope sigil 2>&1
+  *rules-source/forge/*)
+    echo "auto-build-rules: forge scope detected"
+    bash "$MANAGE_RULES" build --scope forge 2>&1
     ;;
   *rules-source/always/*|*rules-source/cross-project/*)
     echo "auto-build-rules: business scope detected"

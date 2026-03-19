@@ -1,7 +1,7 @@
 ---
 name: ux-researcher
 description: |
-  SIGIL S4 Wave 3 UX 검증 전문 에이전트.
+  Forge S4 Wave 3 UX 검증 전문 에이전트.
   S4 산출물(UI/UX 기획서, 상세 기획서)의 사용성을 검토하고
   CRITICAL/HIGH/MEDIUM/LOW 등급의 UX 이슈 리포트를 생성한다.
 

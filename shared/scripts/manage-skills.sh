@@ -1,0 +1,798 @@
+#!/usr/bin/env bash
+# manage-skills.sh — Skill library manager for business workspace
+# Usage: bash scripts/manage-skills.sh <command> [args]
+
+set -euo pipefail
+
+FORGE_ROOT="${FORGE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/forge")}"
+SKILLS_LIBRARY="$FORGE_ROOT/09-tools/skills-library"
+ACTIVE_SKILLS="$FORGE_ROOT/.claude/skills"
+ACTIVE_RULES="$FORGE_ROOT/.claude/rules"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+usage() {
+    cat <<'EOF'
+Skill Library Manager
+
+Usage:
+  manage-skills.sh list [--json]                      List all skills + active status
+  manage-skills.sh enable <source/category/skill>    Activate a skill (symlink)
+  manage-skills.sh disable <skill-name>              Deactivate a skill (remove symlink)
+  manage-skills.sh install-aitmpl <skill-slug>       Download skill from aitmpl.com
+  manage-skills.sh sync <target-project-path>        Sync dev skills to a project
+  manage-skills.sh info <skill-name>                 Show skill details
+  manage-skills.sh audit [--usage] [--json]           Find unreferenced skills (disable candidates)
+  manage-skills.sh validate [skill-name]             Validate SKILL.md frontmatter fields
+  manage-skills.sh build <skill-name>                Generate AGENTS.md from rules/ subdirectory
+  manage-skills.sh test <skill-name>                 Run subagent scenario test (placeholder)
+
+Examples:
+  manage-skills.sh enable aitmpl/forge-marketing/product-strategist
+  manage-skills.sh disable product-strategist
+  manage-skills.sh install-aitmpl product-strategist
+  manage-skills.sh sync {YOUR_PORTFOLIO_PATH}
+  manage-skills.sh validate
+  manage-skills.sh validate nextjs-best-practices
+  manage-skills.sh build my-skill
+  manage-skills.sh test my-skill
+EOF
+}
+
+# ─── LIST ──────────────────────────────────────────────────────────────────
+cmd_list() {
+    local json_mode=false
+    for arg in "$@"; do
+        [[ "$arg" == "--json" ]] && json_mode=true
+    done
+
+    if ! $json_mode; then
+        echo -e "${CYAN}=== Skill Library ===${NC}"
+        echo ""
+    fi
+
+    # Collect active skill names (symlinks OR real directories)
+    declare -A active_targets
+    if [ -d "$ACTIVE_SKILLS" ]; then
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
+            local name
+            name=$(basename "${item%/}")
+            if [ -L "${item%/}" ]; then
+                local target
+                target=$(readlink -f "${item%/}" 2>/dev/null || echo "broken")
+                active_targets["$name"]="symlink:$target"
+            else
+                active_targets["$name"]="directory"
+            fi
+        done
+    fi
+
+    # JSON mode: collect all skills into an array
+    local json_entries=()
+
+    # Walk skills-library
+    local total=0
+    local active=0
+
+    for source_dir in "$SKILLS_LIBRARY"/*/; do
+        [ -d "$source_dir" ] || continue
+        local source
+        source=$(basename "$source_dir")
+        $json_mode || echo -e "${BLUE}[$source]${NC}"
+
+        # Two-level: source/category/skill or source/skill
+        for item in "$source_dir"*/; do
+            [ -d "$item" ] || continue
+            local item_name
+            item_name=$(basename "$item")
+
+            # Check if this is a category (has subdirectories with SKILL.md)
+            local has_sub=false
+            for sub in "$item"*/; do
+                [ -d "$sub" ] && [ -f "$sub/SKILL.md" ] && has_sub=true && break
+            done
+
+            if [ "$has_sub" = true ]; then
+                $json_mode || echo -e "  ${YELLOW}$item_name/${NC}"
+                for sub in "$item"*/; do
+                    [ -d "$sub" ] || continue
+                    local skill_name
+                    skill_name=$(basename "$sub")
+                    total=$((total + 1))
+
+                    local is_active=false
+                    if [ -d "$ACTIVE_SKILLS/$skill_name" ]; then
+                        is_active=true
+                        active=$((active + 1))
+                    fi
+
+                    if $json_mode; then
+                        local src_type="library"
+                        json_entries+=("{\"name\":\"$skill_name\",\"active\":$is_active,\"source\":\"$src_type\",\"path\":\"$sub\"}")
+                    else
+                        if $is_active; then
+                            echo -e "    ${GREEN}* $skill_name${NC} (active)"
+                        else
+                            echo -e "      $skill_name"
+                        fi
+                    fi
+                done
+            elif [ -f "$item/SKILL.md" ]; then
+                # Direct skill (no category nesting)
+                total=$((total + 1))
+                local is_active=false
+                if [ -d "$ACTIVE_SKILLS/$item_name" ]; then
+                    is_active=true
+                    active=$((active + 1))
+                fi
+
+                if $json_mode; then
+                    local src_type="library"
+                    json_entries+=("{\"name\":\"$item_name\",\"active\":$is_active,\"source\":\"$src_type\",\"path\":\"$item\"}")
+                else
+                    if $is_active; then
+                        echo -e "  ${GREEN}* $item_name${NC} (active)"
+                    else
+                        echo -e "    $item_name"
+                    fi
+                fi
+            fi
+        done
+        $json_mode || echo ""
+    done
+
+    # Show active skills not in library
+    local extra=0
+    if [ -d "$ACTIVE_SKILLS" ]; then
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
+            local name
+            name=$(basename "${item%/}")
+            # Check if this skill was already counted from library
+            local found_in_lib=false
+            while IFS= read -r -d '' skill_md; do
+                local dir
+                dir=$(dirname "$skill_md")
+                local lib_name
+                lib_name=$(basename "$dir")
+                if [ "$lib_name" = "$name" ]; then
+                    found_in_lib=true
+                    break
+                fi
+            done < <(find "$SKILLS_LIBRARY" -name "SKILL.md" -print0 2>/dev/null)
+
+            if [ "$found_in_lib" = false ]; then
+                local kind="directory"
+                [ -L "${item%/}" ] && kind="symlink"
+
+                if $json_mode; then
+                    json_entries+=("{\"name\":\"$name\",\"active\":true,\"source\":\"$kind\",\"path\":\"${item%/}\"}")
+                else
+                    if [ "$extra" -eq 0 ]; then
+                        echo ""
+                        echo -e "${BLUE}[active — not in library]${NC}"
+                    fi
+                    echo -e "  ${GREEN}* $name${NC} ($kind)"
+                fi
+                extra=$((extra + 1))
+            fi
+        done
+    fi
+
+    if $json_mode; then
+        # Output JSON array
+        echo -n "["
+        local first=true
+        for entry in "${json_entries[@]}"; do
+            $first || echo -n ","
+            echo -n "$entry"
+            first=false
+        done
+        echo "]"
+    else
+        echo ""
+        echo -e "${CYAN}Library: $total skills, $active linked to active${NC}"
+        if [ "$extra" -gt 0 ]; then
+            echo -e "${CYAN}Active (outside library): $extra skills${NC}"
+        fi
+        echo -e "${CYAN}Total active: $((active + extra))${NC}"
+    fi
+}
+
+# ─── ENABLE ────────────────────────────────────────────────────────────────
+cmd_enable() {
+    local skill_path="$1"
+    local full_path="$SKILLS_LIBRARY/$skill_path"
+
+    if [ ! -d "$full_path" ]; then
+        echo -e "${RED}Error: Skill not found at $full_path${NC}"
+        echo "Run 'manage-skills.sh list' to see available skills."
+        exit 1
+    fi
+
+    if [ ! -f "$full_path/SKILL.md" ]; then
+        echo -e "${RED}Error: No SKILL.md found in $full_path${NC}"
+        echo "This may be a category directory, not a skill."
+        exit 1
+    fi
+
+    local skill_name
+    skill_name=$(basename "$full_path")
+    local target="$ACTIVE_SKILLS/$skill_name"
+
+    if [ -L "$target" ]; then
+        echo -e "${YELLOW}Already active: $skill_name${NC}"
+        return 0
+    fi
+
+    mkdir -p "$ACTIVE_SKILLS"
+    ln -s "$full_path" "$target"
+    echo -e "${GREEN}Enabled: $skill_name${NC} -> $full_path"
+}
+
+# ─── DISABLE ───────────────────────────────────────────────────────────────
+cmd_disable() {
+    local skill_name="$1"
+    local target="$ACTIVE_SKILLS/$skill_name"
+
+    if [ -L "$target" ]; then
+        rm "$target"
+        echo -e "${GREEN}Disabled (symlink removed): $skill_name${NC}"
+    elif [ -d "$target" ]; then
+        echo -e "${YELLOW}Warning: '$skill_name' is a real directory (not a symlink).${NC}"
+        echo -e "This will permanently delete the skill directory."
+        read -p "Continue? [y/N] " confirm
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
+            rm -rf "$target"
+            echo -e "${GREEN}Disabled (directory removed): $skill_name${NC}"
+        else
+            echo -e "${YELLOW}Cancelled.${NC}"
+        fi
+    else
+        echo -e "${RED}Error: '$skill_name' is not an active skill${NC}"
+        exit 1
+    fi
+}
+
+# ─── INSTALL-AITMPL ───────────────────────────────────────────────────────
+cmd_install_aitmpl() {
+    local skill_slug="$1"
+    local url="https://aitmpl.com/api/skills/${skill_slug}/download"
+
+    echo -e "${CYAN}Downloading from aitmpl.com: $skill_slug${NC}"
+
+    # Try to detect category from slug name
+    local category="uncategorized"
+    case "$skill_slug" in
+        *nest*|*next*|*react*|*postgres*|*typescript*|*docker*|*git*)
+            category="development" ;;
+        *market*|*product*|*pricing*|*growth*|*brand*)
+            category="business-marketing" ;;
+        *security*|*pentest*|*vuln*)
+            category="security" ;;
+        *ai*|*ml*|*llm*|*prompt*)
+            category="ai-research" ;;
+    esac
+
+    local dest="$SKILLS_LIBRARY/aitmpl/$category/$skill_slug"
+    mkdir -p "$dest"
+
+    # Download SKILL.md from aitmpl
+    local http_code
+    http_code=$(curl -s -o "$dest/SKILL.md" -w "%{http_code}" "$url" 2>/dev/null || echo "000")
+
+    if [ "$http_code" = "200" ]; then
+        echo -e "${GREEN}Downloaded: $dest/SKILL.md${NC}"
+        echo -e "Activate with: ${YELLOW}manage-skills.sh enable aitmpl/$category/$skill_slug${NC}"
+    else
+        # Fallback: try the HTML page and extract skill content
+        echo -e "${YELLOW}Direct API download failed (HTTP $http_code).${NC}"
+        echo -e "Trying alternative download method..."
+
+        local page_url="https://aitmpl.com/skills/${skill_slug}"
+        http_code=$(curl -sL -o /tmp/aitmpl-skill.html -w "%{http_code}" "$page_url" 2>/dev/null || echo "000")
+
+        if [ "$http_code" = "200" ]; then
+            echo -e "${YELLOW}Page downloaded. Manual extraction may be needed.${NC}"
+            echo -e "Page saved to: /tmp/aitmpl-skill.html"
+            echo -e "Create SKILL.md manually at: $dest/SKILL.md"
+        else
+            rmdir "$dest" 2>/dev/null || true
+            echo -e "${RED}Failed to download skill '$skill_slug' (HTTP $http_code).${NC}"
+            echo -e "Check the skill slug at https://aitmpl.com and try again."
+            exit 1
+        fi
+    fi
+}
+
+# ─── SYNC ──────────────────────────────────────────────────────────────────
+cmd_sync() {
+    local target_project="$1"
+    local target_skills="$target_project/.claude/skills"
+
+    if [ ! -d "$target_project" ]; then
+        echo -e "${RED}Error: Project directory not found: $target_project${NC}"
+        exit 1
+    fi
+
+    mkdir -p "$target_skills"
+
+    echo -e "${CYAN}Syncing dev skills to: $target_project${NC}"
+    echo ""
+
+    local synced=0
+    local dev_path="$SKILLS_LIBRARY/aitmpl/development"
+
+    if [ ! -d "$dev_path" ]; then
+        echo -e "${YELLOW}No development skills found in library.${NC}"
+        return 0
+    fi
+
+    for skill_dir in "$dev_path"/*/; do
+        [ -d "$skill_dir" ] || continue
+        [ -f "$skill_dir/SKILL.md" ] || continue
+
+        local skill_name
+        skill_name=$(basename "$skill_dir")
+        local link="$target_skills/$skill_name"
+
+        if [ -L "$link" ]; then
+            echo -e "  ${YELLOW}skip${NC} $skill_name (already linked)"
+        elif [ -d "$link" ]; then
+            echo -e "  ${YELLOW}skip${NC} $skill_name (directory exists, not a symlink)"
+        else
+            ln -s "$skill_dir" "$link"
+            echo -e "  ${GREEN}link${NC} $skill_name -> $skill_dir"
+            synced=$((synced + 1))
+        fi
+    done
+
+    echo ""
+    echo -e "${CYAN}Synced $synced new skills to $target_project${NC}"
+}
+
+# ─── INFO ──────────────────────────────────────────────────────────────────
+cmd_info() {
+    local skill_name="$1"
+
+    # Search in library
+    local found=""
+    while IFS= read -r -d '' skill_md; do
+        local dir
+        dir=$(dirname "$skill_md")
+        local name
+        name=$(basename "$dir")
+        if [ "$name" = "$skill_name" ]; then
+            found="$dir"
+            break
+        fi
+    done < <(find "$SKILLS_LIBRARY" -name "SKILL.md" -print0 2>/dev/null)
+
+    if [ -z "$found" ]; then
+        echo -e "${RED}Skill '$skill_name' not found in library.${NC}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}=== $skill_name ===${NC}"
+    echo -e "Path: $found"
+
+    if [ -L "$ACTIVE_SKILLS/$skill_name" ]; then
+        echo -e "Status: ${GREEN}active${NC}"
+    else
+        echo -e "Status: inactive"
+    fi
+
+    echo ""
+    echo -e "${YELLOW}--- SKILL.md ---${NC}"
+    head -30 "$found/SKILL.md"
+
+    local lines
+    lines=$(wc -l < "$found/SKILL.md")
+    if [ "$lines" -gt 30 ]; then
+        echo -e "\n${YELLOW}... ($((lines - 30)) more lines)${NC}"
+    fi
+}
+
+# ─── AUDIT ─────────────────────────────────────────────────────────────────
+cmd_audit() {
+    local show_usage=false
+    local json_mode=false
+    for arg in "$@"; do
+        [[ "$arg" == "--usage" ]] && show_usage=true
+        [[ "$arg" == "--json" ]] && json_mode=true
+    done
+
+    $json_mode || echo -e "${CYAN}=== Skill Audit: Unreferenced Skills ===${NC}"
+    $json_mode || echo ""
+
+    if [ ! -d "$ACTIVE_SKILLS" ]; then
+        if $json_mode; then
+            echo '{"referenced":[],"unreferenced":[],"total":0}'
+        else
+            echo -e "${YELLOW}No active skills directory${NC}"
+        fi
+        return
+    fi
+
+    local total=0
+    local unreferenced=0
+    local referenced_by_pipeline=()
+    local unreferenced_skills=()
+
+    # Search directories for references
+    local search_dirs=()
+    [ -d "$FORGE_ROOT/.claude/commands" ] && search_dirs+=("$FORGE_ROOT/.claude/commands")
+    [ -d "$FORGE_ROOT/.claude/agents" ] && search_dirs+=("$FORGE_ROOT/.claude/agents")
+    [ -d "$FORGE_ROOT/09-tools/rules-source" ] && search_dirs+=("$FORGE_ROOT/09-tools/rules-source")
+    [ -d "$ACTIVE_RULES" ] && search_dirs+=("$ACTIVE_RULES")
+
+    # Parallel arrays for usage data
+    declare -A skill_ref_count
+    declare -A skill_ref_files
+
+    # Collect all active skill names
+    for item in "$ACTIVE_SKILLS"/*/; do
+        [ -d "${item%/}" ] || continue
+        local name
+        name=$(basename "${item%/}")
+        total=$((total + 1))
+
+        local found=false
+        local ref_files=()
+
+        for search_dir in "${search_dirs[@]}"; do
+            local matches
+            matches=$(grep -rl "$name" "$search_dir" 2>/dev/null || true)
+            if [ -n "$matches" ]; then
+                found=true
+                while IFS= read -r match_file; do
+                    # Show relative path from FORGE_ROOT
+                    local rel_path="${match_file#$FORGE_ROOT/}"
+                    ref_files+=("$rel_path")
+                done <<< "$matches"
+            fi
+        done
+
+        skill_ref_count["$name"]="${#ref_files[@]}"
+        skill_ref_files["$name"]=$(IFS=', '; echo "${ref_files[*]}")
+
+        if [ "$found" = "true" ]; then
+            referenced_by_pipeline+=("$name")
+        else
+            unreferenced_skills+=("$name")
+            unreferenced=$((unreferenced + 1))
+        fi
+    done
+
+    if $json_mode; then
+        # Build JSON output
+        echo -n "{\"referenced\":["
+        local first=true
+        for s in "${referenced_by_pipeline[@]}"; do
+            $first || echo -n ","
+            echo -n "\"$s\""
+            first=false
+        done
+        echo -n "],\"unreferenced\":["
+        first=true
+        for s in "${unreferenced_skills[@]}"; do
+            $first || echo -n ","
+            echo -n "\"$s\""
+            first=false
+        done
+        echo -n "],\"total\":$total}"
+        echo ""
+        return
+    fi
+
+    echo -e "${GREEN}Referenced by pipeline/commands/agents: ${#referenced_by_pipeline[@]}${NC}"
+    for s in "${referenced_by_pipeline[@]}"; do
+        if $show_usage; then
+            echo "  [ok] $s (${skill_ref_count[$s]} refs: ${skill_ref_files[$s]})"
+        else
+            echo "  [ok] $s"
+        fi
+    done
+
+    echo ""
+    if [ "$unreferenced" -gt 0 ]; then
+        echo -e "${YELLOW}Unreferenced (disable candidates): $unreferenced${NC}"
+        for s in "${unreferenced_skills[@]}"; do
+            if $show_usage; then
+                echo "  [?] $s (0 refs)"
+            else
+                echo "  [?] $s"
+            fi
+        done
+        echo ""
+        echo -e "${YELLOW}Run 'manage-skills.sh disable <name>' to deactivate${NC}"
+    else
+        echo -e "${GREEN}All skills are referenced. No disable candidates.${NC}"
+    fi
+
+    echo ""
+    echo -e "${BOLD}Total: $total active | $((total - unreferenced)) referenced | $unreferenced unreferenced${NC}"
+}
+
+# ─── VALIDATE ──────────────────────────────────────────────────────────────
+cmd_validate() {
+    local skill_filter="${1:-}"
+
+    local required_fields=("name" "description")
+    local recommended_fields=("version" "category" "domain" "enforcement")
+
+    validate_one_skill() {
+        local skill_dir="$1"
+        local skill_name
+        skill_name=$(basename "$skill_dir")
+        local skill_md="$skill_dir/SKILL.md"
+
+        if [ ! -f "$skill_md" ]; then
+            echo -e "  ${RED}[ERROR]${NC} $skill_name: SKILL.md not found"
+            return 1
+        fi
+
+        # Extract frontmatter (between --- markers)
+        local frontmatter
+        frontmatter=$(awk '/^---$/{if(++n==1){found=1; next} if(n==2){exit}} found{print}' "$skill_md")
+
+        local errors=0
+        local warnings=0
+
+        # Check required fields
+        for field in "${required_fields[@]}"; do
+            if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo -e "  ${RED}[ERROR]${NC} $skill_name: missing required field '$field'"
+                errors=$((errors + 1))
+            fi
+        done
+
+        # Check recommended fields
+        for field in "${recommended_fields[@]}"; do
+            if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo -e "  ${YELLOW}[WARN]${NC}  $skill_name: missing recommended field '$field'"
+                warnings=$((warnings + 1))
+            fi
+        done
+
+        if [ "$errors" -eq 0 ] && [ "$warnings" -eq 0 ]; then
+            echo -e "  ${GREEN}[OK]${NC}   $skill_name"
+        elif [ "$errors" -eq 0 ]; then
+            echo -e "  ${YELLOW}[WARN]${NC}  $skill_name ($warnings warning(s))"
+        fi
+
+        return "$errors"
+    }
+
+    echo -e "${CYAN}=== Skill Frontmatter Validation ===${NC}"
+    echo ""
+
+    local total=0
+    local passed=0
+    local failed=0
+
+    if [ -n "$skill_filter" ]; then
+        # Validate single skill — search in library and active
+        local found_dir=""
+        while IFS= read -r -d '' skill_md; do
+            local dir
+            dir=$(dirname "$skill_md")
+            if [ "$(basename "$dir")" = "$skill_filter" ]; then
+                found_dir="$dir"
+                break
+            fi
+        done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+        if [ -z "$found_dir" ]; then
+            echo -e "${RED}Skill '$skill_filter' not found.${NC}"
+            exit 1
+        fi
+
+        total=1
+        if validate_one_skill "$found_dir"; then
+            passed=1
+        else
+            failed=1
+        fi
+    else
+        # Validate all active skills
+        if [ ! -d "$ACTIVE_SKILLS" ]; then
+            echo -e "${YELLOW}No active skills directory${NC}"
+            return
+        fi
+
+        for item in "$ACTIVE_SKILLS"/*/; do
+            [ -d "${item%/}" ] || continue
+            total=$((total + 1))
+            if validate_one_skill "${item%/}"; then
+                passed=$((passed + 1))
+            else
+                failed=$((failed + 1))
+            fi
+        done
+    fi
+
+    echo ""
+    echo -e "${BOLD}Total: $total | ${GREEN}Passed: $passed${NC}${BOLD} | ${RED}Failed: $failed${NC}"
+    [ "$failed" -eq 0 ] || exit 1
+}
+
+# ─── BUILD ──────────────────────────────────────────────────────────────────
+cmd_build() {
+    local skill_name="${1:-}"
+    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh build <skill-name>${NC}"; exit 1; }
+
+    # Find skill directory in library or active
+    local found_dir=""
+    while IFS= read -r -d '' skill_md; do
+        local dir
+        dir=$(dirname "$skill_md")
+        if [ "$(basename "$dir")" = "$skill_name" ]; then
+            found_dir="$dir"
+            break
+        fi
+    done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+    if [ -z "$found_dir" ]; then
+        echo -e "${RED}Skill '$skill_name' not found.${NC}"
+        exit 1
+    fi
+
+    local rules_dir="$found_dir/rules"
+    if [ ! -d "$rules_dir" ]; then
+        echo -e "${YELLOW}No rules/ directory found in $found_dir${NC}"
+        echo "Skipping AGENTS.md generation (no rule files to concatenate)."
+        return 0
+    fi
+
+    local rule_files=()
+    while IFS= read -r -d '' f; do
+        rule_files+=("$f")
+    done < <(find "$rules_dir" -name "*.md" -print0 2>/dev/null | sort -z)
+
+    if [ "${#rule_files[@]}" -eq 0 ]; then
+        echo -e "${YELLOW}rules/ directory is empty. No AGENTS.md generated.${NC}"
+        return 0
+    fi
+
+    local agents_md="$found_dir/AGENTS.md"
+    {
+        echo "# AGENTS.md — $skill_name"
+        echo ""
+        echo "> Auto-generated by manage-skills.sh build. Do not edit directly."
+        echo "> Source: rules/"
+        echo ""
+        echo "---"
+        echo ""
+        for rule_file in "${rule_files[@]}"; do
+            local rule_name
+            rule_name=$(basename "$rule_file" .md)
+            echo "## $rule_name"
+            echo ""
+            cat "$rule_file"
+            echo ""
+            echo "---"
+            echo ""
+        done
+    } > "$agents_md"
+
+    echo -e "${GREEN}Built AGENTS.md for '$skill_name'${NC}"
+    echo "  Source: $rules_dir (${#rule_files[@]} file(s))"
+    echo "  Output: $agents_md"
+}
+
+# ─── TEST ───────────────────────────────────────────────────────────────────
+cmd_test() {
+    local skill_name="${1:-}"
+    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
+
+    # Find skill directory
+    local found_dir=""
+    while IFS= read -r -d '' skill_md; do
+        local dir
+        dir=$(dirname "$skill_md")
+        if [ "$(basename "$dir")" = "$skill_name" ]; then
+            found_dir="$dir"
+            break
+        fi
+    done < <(find "$SKILLS_LIBRARY" "$ACTIVE_SKILLS" -name "SKILL.md" -print0 2>/dev/null)
+
+    if [ -z "$found_dir" ]; then
+        echo -e "${RED}Skill '$skill_name' not found.${NC}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}=== Skill Test: $skill_name ===${NC}"
+    echo ""
+
+    # Extract name and description from frontmatter for display
+    local skill_md="$found_dir/SKILL.md"
+    local frontmatter
+    frontmatter=$(awk '/^---$/{if(++n==1){found=1; next} if(n==2){exit}} found{print}' "$skill_md")
+
+    local name_val description_val
+    name_val=$(echo "$frontmatter" | grep "^name:" | sed 's/^name:[[:space:]]*//' | tr -d '"')
+    description_val=$(echo "$frontmatter" | grep "^description:" | sed 's/^description:[[:space:]]*//' | tr -d '"')
+
+    echo -e "  ${BOLD}Name:${NC}        $name_val"
+    echo -e "  ${BOLD}Description:${NC} $description_val"
+    echo ""
+    echo -e "${YELLOW}Subagent testing will be available in a future update.${NC}"
+    echo ""
+    echo "Planned behavior:"
+    echo "  1. Load skill into a subagent context"
+    echo "  2. Run TDD scenarios defined in the skill's test suite"
+    echo "  3. Report pass/fail for each scenario"
+    echo ""
+    echo "For now, test manually by loading the skill in a Claude Code subagent"
+    echo "and running the scenarios from the Rationalization Table / Red Flags sections."
+}
+
+# ─── MAIN ──────────────────────────────────────────────────────────────────
+main() {
+    if [ $# -eq 0 ]; then
+        usage
+        exit 0
+    fi
+
+    local cmd="$1"
+    shift
+
+    case "$cmd" in
+        list)
+            cmd_list "$@"
+            ;;
+        enable)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh enable <source/category/skill>${NC}"; exit 1; }
+            cmd_enable "$1"
+            ;;
+        disable)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh disable <skill-name>${NC}"; exit 1; }
+            cmd_disable "$1"
+            ;;
+        install-aitmpl)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh install-aitmpl <skill-slug>${NC}"; exit 1; }
+            cmd_install_aitmpl "$1"
+            ;;
+        sync)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh sync <target-project-path>${NC}"; exit 1; }
+            cmd_sync "$1"
+            ;;
+        info)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh info <skill-name>${NC}"; exit 1; }
+            cmd_info "$1"
+            ;;
+        audit)
+            cmd_audit "$@"
+            ;;
+        validate)
+            cmd_validate "${1:-}"
+            ;;
+        build)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh build <skill-name>${NC}"; exit 1; }
+            cmd_build "$1"
+            ;;
+        test)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
+            cmd_test "$1"
+            ;;
+        help|--help|-h)
+            usage
+            ;;
+        *)
+            echo -e "${RED}Unknown command: $cmd${NC}"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
