@@ -4,7 +4,6 @@ description: >
   Weekly Research JSON → 심층 분석. raw-data.json이 존재할 때
   수집 단계를 스킵하고 분석만 실행하는 재분석 진입점.
 argument-hint: "<YYYY-MM-DD>"
-allowed-tools: "Read,Write,Glob,WebSearch,WebFetch,mcp__brave-search__brave_web_search"
 user-invocable: true
 ---
 

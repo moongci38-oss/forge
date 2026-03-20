@@ -4,7 +4,6 @@ description: >
   AI 비용 효율 감사. 모델 라우팅, 프롬프트 캐싱, 배치 처리, 토큰 예산 관리,
   RouteLLM/CEBench 기준으로 비용 최적화 현황을 평가한다.
 argument-hint: "[target: system|portfolio|godblade]"
-allowed-tools: "Agent,Read,Glob,Grep,WebSearch,Write"
 user-invocable: true
 ---
 

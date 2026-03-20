@@ -4,7 +4,6 @@ description: >
   매주 실행하는 주간 리서치 파이프라인. 기술 뉴스, 비즈니스 뉴스,
   사업 아이템 제안 3종을 Subagent 병렬로 생성한다.
 argument-hint: "[YYYY-MM-DD]"
-allowed-tools: "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search"
 user-invocable: true
 disable-model-invocation: true
 context: fork

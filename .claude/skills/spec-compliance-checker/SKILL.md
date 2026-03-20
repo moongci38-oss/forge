@@ -2,7 +2,6 @@
 name: spec-compliance-checker
 description: "Spec 문서와 구현 코드 간의 추적성(Traceability)을 검증하는 전문 스킬. FR별 구현 파일 매핑, 테스트 존재 여부, API 계약 일치, 데이터 모델 일치를 체크하고 PASS/WARN/FAIL JSON을 반환한다. Forge Dev Phase 3 구현 완료 후 Check 3.5에서 자동 실행."
 context: fork
-allowed-tools: "Read, Grep, Glob"
 ---
 
 # Spec Compliance Checker

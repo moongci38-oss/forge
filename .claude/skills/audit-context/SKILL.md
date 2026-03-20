@@ -4,7 +4,6 @@ description: >
   컨텍스트 엔지니어링 역량 감사. 7-Layer Context Architecture, RAG 성숙도, 메모리 시스템,
   컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot)을 RAGAS 기준으로 평가한다.
 argument-hint: "[target: system|portfolio|godblade]"
-allowed-tools: "Agent,Read,Glob,Grep,WebSearch,Write"
 user-invocable: true
 ---
 

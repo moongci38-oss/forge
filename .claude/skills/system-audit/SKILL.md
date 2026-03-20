@@ -4,7 +4,6 @@ description: >
   5축 통합 시스템 감사 (ACHCE). Agentic/Context/Harness/Cost/Human-AI 5개 축 에이전트를
   병렬 스폰하고 Lead가 종합 + 축간 트레이드오프 분석 + 통합 개선 로드맵을 생성한다.
 argument-hint: "[target: system|portfolio|godblade]"
-allowed-tools: "Agent,Read,Glob,Grep,WebSearch,Write"
 user-invocable: true
 ---
 

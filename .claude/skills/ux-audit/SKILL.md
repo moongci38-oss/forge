@@ -1,11 +1,6 @@
 ---
 name: ux-audit
 description: "Runs a 9-item UX quality audit (Color Contrast, Font Size, Touch Target, Layout Consistency, Navigation, 3-State Coverage, Responsive, Accessibility, Interaction Feedback) on frontend changes. Returns structured JSON with PASS/WARN/FAIL per item and auto-fix suggestions. Auto-triggered in Forge Dev Check 3.6 when .tsx/.jsx/.css files are changed."
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Agent
 user-invocable: false
 ---
 

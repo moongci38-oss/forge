@@ -4,7 +4,6 @@ description: >
   Human-AI 경계 설계 감사. 5-Level Autonomy, 에스컬레이션 트리거 5유형, 게이트 설계 8패턴,
   Sterz 4조건, Override/Rubber-Stamp Rate를 기준으로 자율성-감독 최적 경계를 평가한다.
 argument-hint: "[target: system|portfolio|godblade]"
-allowed-tools: "Agent,Read,Glob,Grep,WebSearch,Write"
 user-invocable: true
 ---
 

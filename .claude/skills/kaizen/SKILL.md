@@ -1,7 +1,6 @@
 ---
 name: kaizen
 description: "Encodes continuous improvement principles (Kaizen, Poka-Yoke, Standardized Work, Just-In-Time) as coding guidelines. Use when improving code quality, refactoring existing code, or discussing process standardization. Guides toward smallest viable change, error-proofing at design time, and YAGNI-based scope control."
-allowed-tools: "Read, Grep, Glob"
 ---
 
 # Kaizen: Continuous Improvement

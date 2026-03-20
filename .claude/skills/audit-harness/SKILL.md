@@ -4,7 +4,6 @@ description: >
   AI 하네스 엔지니어링 감사. CLEAR 프레임워크, 3-Layer 테스트 아키텍처, OWASP Agentic Top 10,
   가드레일 패턴, OTel GenAI 옵저버빌리티를 기준으로 측정·제어 역량을 평가한다.
 argument-hint: "[target: system|portfolio|godblade]"
-allowed-tools: "Agent,Read,Glob,Grep,WebSearch,Write"
 user-invocable: true
 ---
 
