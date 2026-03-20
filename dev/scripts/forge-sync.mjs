@@ -616,6 +616,40 @@ function cmdInit(args) {
   manifest.targets[name] = target;
   saveManifest(manifest);
 
+  // Generate .specify/config.json if not exists (scope: all only)
+  if (scope === 'all') {
+    const specifyDir = join(resolvedPath, '.specify');
+    const configPath = join(specifyDir, 'config.json');
+    if (!existsSync(configPath)) {
+      ensureDir(specifyDir);
+      const forgeWorkspacePath = join(dirname(dirname(FORGE_DEV_ROOT)), 'forge-workspace.json');
+      let tasksDbId = '';
+      if (existsSync(forgeWorkspacePath)) {
+        try {
+          const fw = JSON.parse(readFileSync(forgeWorkspacePath, 'utf8'));
+          const tasksUrl = fw.notionDBs?.tasks || '';
+          // Extract DB ID from Notion URL
+          const match = tasksUrl.match(/([a-f0-9]{32})/);
+          if (match) {
+            const raw = match[1];
+            tasksDbId = `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`;
+          }
+        } catch { /* ignore */ }
+      }
+      const config = {
+        projectName: name.charAt(0).toUpperCase() + name.slice(1),
+        projectType: 'web',
+        notion: {
+          projectName: name.charAt(0).toUpperCase() + name.slice(1),
+          tasksDbId: tasksDbId,
+        },
+        autoMerge: false,
+      };
+      writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf8');
+      console.log(`  + .specify/config.json (generated — edit projectName/type as needed)`);
+    }
+  }
+
   console.log(`✅ Registered '${name}' → ${normalResolved}`);
   if (description) console.log(`   Description: ${description}`);
   if (workspace) console.log(`   Workspace: ${workspace}`);

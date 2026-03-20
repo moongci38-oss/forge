@@ -30,6 +30,7 @@ def load_mapping(todo_file: str, branch: str) -> dict | None:
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(todo_file)))
     mapping_path = os.path.join(project_root, ".claude", "todo-mapping.json")
     if not os.path.exists(mapping_path):
+        print(f"Warning: {mapping_path} not found — falling back to keyword fuzzy match")
         return None
     try:
         with open(mapping_path, "r") as f:

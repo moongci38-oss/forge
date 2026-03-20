@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 """
-Sync todo.md status changes to Notion Tasks DB.
-
-Runs after update-todo.py in the same GitHub Actions workflow.
-Also supports standalone 'register' action for initial bulk registration.
+Notion Tasks DB — single source of truth for task tracking.
 
 Actions:
-  register  — Initial bulk registration (all todo.md rows → Notion)
-  doing     — Branch created: find/create task, set status to 진행중
-  done      — PR merged: update status to 완료 + PR URL + completion date
+  register  — Bulk import todo.md rows → Notion (one-time, S4 Gate PASS)
+  doing     — Branch created: find task in Notion, set status to 진행중
+  done      — PR merged: find task in Notion, set status to 완료 + PR URL + date
 
 Env vars (all optional — graceful skip if missing):
   NOTION_API_TOKEN     — Notion Internal Integration token
@@ -21,10 +18,10 @@ Config fallback:
 
 Usage:
   python3 sync-notion-tasks.py register <todo-file>
-  python3 sync-notion-tasks.py doing <branch-name> <todo-file>
-  python3 sync-notion-tasks.py done <branch-name> <pr-number> <pr-url> <todo-file>
+  python3 sync-notion-tasks.py doing <branch-name>
+  python3 sync-notion-tasks.py done <branch-name> <pr-number> <pr-url>
 
-Source of truth: ~/.claude/forge/github-spec-kit/scripts/sync-notion-tasks.py
+Source of truth: forge/dev/github-spec-kit/scripts/sync-notion-tasks.py
 Deployment: Copy to .github/scripts/sync-notion-tasks.py via forge-sync
 """
 import json
@@ -38,7 +35,7 @@ from datetime import datetime, timezone
 NOTION_API_URL = "https://api.notion.com/v1"
 NOTION_VERSION = "2022-06-28"
 
-# todo.md status emoji → Notion status value
+# todo.md status emoji → Notion status value (used by register only)
 STATUS_MAP = {
     "⬜": "할 일",
     "Todo": "할 일",
@@ -59,10 +56,9 @@ TYPE_MAP = {
 }
 
 
-def get_config(todo_file: str) -> tuple[str | None, str | None]:
-    """Read Notion config from .specify/config.json as fallback."""
-    # Walk up from todo_file to find .specify/config.json
-    search = os.path.dirname(os.path.abspath(todo_file))
+def get_config_from_file(search_start: str) -> tuple[str | None, str | None]:
+    """Read Notion config from .specify/config.json."""
+    search = os.path.abspath(search_start)
     for _ in range(10):
         config_path = os.path.join(search, ".specify", "config.json")
         if os.path.exists(config_path):
@@ -80,14 +76,14 @@ def get_config(todo_file: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def resolve_env(todo_file: str) -> tuple[str | None, str | None, str | None]:
+def resolve_env(config_search_path: str | None = None) -> tuple[str | None, str | None, str | None]:
     """Resolve NOTION_API_TOKEN, DB ID, and project name from env + config."""
     token = os.environ.get("NOTION_API_TOKEN")
     db_id = os.environ.get("NOTION_TASKS_DB_ID")
     project = os.environ.get("NOTION_PROJECT_NAME")
 
-    if not db_id or not project:
-        cfg_db, cfg_proj = get_config(todo_file)
+    if (not db_id or not project) and config_search_path:
+        cfg_db, cfg_proj = get_config_from_file(config_search_path)
         db_id = db_id or cfg_db
         project = project or cfg_proj
 
@@ -122,71 +118,13 @@ def notion_request(method: str, url: str, headers: dict, payload: dict | None = 
 
 
 # ---------------------------------------------------------------------------
-# todo.md parsing
+# Helpers
 # ---------------------------------------------------------------------------
-
-def parse_todo_table(todo_file: str) -> list[dict]:
-    """Parse the '## Trine 개발 진행' kanban table into list of row dicts."""
-    with open(todo_file, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-
-    rows: list[dict] = []
-    headers: list[str] = []
-    in_table = False
-
-    for line in lines:
-        stripped = line.strip()
-
-        # Detect header row by presence of key columns
-        if not in_table and "|" in stripped and "Spec" in stripped and "Status" in stripped:
-            headers = [h.strip() for h in stripped.split("|") if h.strip()]
-            in_table = True
-            continue
-
-        # Skip separator row
-        if in_table and re.match(r"^\|[\s:-]+\|", stripped):
-            continue
-
-        # Data row
-        if in_table and stripped.startswith("|") and "|" in stripped[1:]:
-            cells = [c.strip() for c in stripped.split("|") if c.strip()]
-            if len(cells) >= len(headers):
-                row = dict(zip(headers, cells[: len(headers)]))
-                rows.append(row)
-            continue
-
-        # End of table
-        if in_table and not stripped.startswith("|"):
-            in_table = False
-
-    return rows
-
 
 def extract_keywords(branch: str) -> list[str]:
     """Extract meaningful keywords from branch name."""
     spec = branch.split("/", 1)[-1] if "/" in branch else branch
     return [k.lower() for k in spec.split("-") if len(k) > 1]
-
-
-def match_row(rows: list[dict], keywords: list[str], statuses: list[str] | None = None) -> dict | None:
-    """Find the best matching row by keywords, optionally filtered by status."""
-    best_row = None
-    best_score = 0
-
-    for row in rows:
-        spec = row.get("Spec", "").lower()
-        status = row.get("Status", "")
-
-        if statuses:
-            if not any(s in status for s in statuses):
-                continue
-
-        score = sum(1 for k in keywords if k in spec)
-        if score > best_score:
-            best_score = score
-            best_row = row
-
-    return best_row if best_score >= 1 else None
 
 
 def status_to_notion(status_text: str) -> str:
@@ -208,11 +146,53 @@ def parse_sp(sp_text: str) -> int:
     return int(match.group()) if match else 0
 
 
+def get_page_title(page: dict) -> str:
+    """Extract title text from a Notion page."""
+    props = page.get("properties", {})
+    title_prop = props.get("제목", {})
+    if title_prop.get("title"):
+        return "".join(t.get("plain_text", "") for t in title_prop["title"])
+    return ""
+
+
+def get_page_spec(page: dict) -> str:
+    """Extract Spec text from a Notion page."""
+    props = page.get("properties", {})
+    spec_prop = props.get("Spec", {})
+    if spec_prop.get("rich_text"):
+        return "".join(t.get("plain_text", "") for t in spec_prop["rich_text"])
+    return ""
+
+
+def is_human_override(page: dict, expected_status: str) -> bool:
+    """Check if a Notion page was manually edited by a human with a different status.
+
+    PM-IRON-1: Human 수동 변경한 Notion 상태를 AI가 덮어쓰기 금지.
+    - last_edited_by.type == "person" (not "bot") AND
+    - current status != expected status → Human Override detected
+    """
+    last_edited = page.get("last_edited_by", {})
+    if last_edited.get("type") != "person":
+        return False
+
+    props = page.get("properties", {})
+    status_prop = props.get("상태", {})
+    current_status = ""
+    if status_prop.get("select"):
+        current_status = status_prop["select"].get("name", "")
+
+    if current_status and current_status != expected_status:
+        print(f"  ⚠ Human Override detected: Notion status='{current_status}', "
+              f"expected='{expected_status}' — skipping (PM-IRON-1)")
+        return True
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Notion CRUD
 # ---------------------------------------------------------------------------
 
-def query_tasks(db_id: str, spec_name: str, project_name: str, headers: dict) -> list[dict]:
+def query_tasks_by_spec(db_id: str, spec_name: str, project_name: str, headers: dict) -> list[dict]:
     """Find existing tasks by Spec name and project."""
     payload = {
         "filter": {
@@ -224,6 +204,38 @@ def query_tasks(db_id: str, spec_name: str, project_name: str, headers: dict) ->
     }
     result = notion_request("POST", f"{NOTION_API_URL}/databases/{db_id}/query", headers, payload)
     return result.get("results", []) if result else []
+
+
+def query_tasks_by_status(db_id: str, project_name: str, status: str, headers: dict) -> list[dict]:
+    """Query all tasks for a project filtered by status."""
+    payload = {
+        "filter": {
+            "and": [
+                {"property": "프로젝트", "select": {"equals": project_name}},
+                {"property": "상태", "select": {"equals": status}},
+            ]
+        }
+    }
+    result = notion_request("POST", f"{NOTION_API_URL}/databases/{db_id}/query", headers, payload)
+    return result.get("results", []) if result else []
+
+
+def match_task_by_keywords(tasks: list[dict], keywords: list[str]) -> dict | None:
+    """Match tasks by keyword scoring against task title and Spec fields."""
+    best_task = None
+    best_score = 0
+
+    for task in tasks:
+        title = get_page_title(task).lower()
+        spec = get_page_spec(task).lower()
+        search_text = f"{title} {spec}"
+
+        score = sum(1 for k in keywords if k in search_text)
+        if score > best_score:
+            best_score = score
+            best_task = task
+
+    return best_task if best_score >= 1 else None
 
 
 def create_task(db_id: str, row: dict, project_name: str, headers: dict) -> dict | None:
@@ -263,14 +275,51 @@ def update_task(page_id: str, updates: dict, headers: dict) -> dict | None:
 
 
 # ---------------------------------------------------------------------------
+# todo.md parsing (register action only)
+# ---------------------------------------------------------------------------
+
+def parse_todo_table(todo_file: str) -> list[dict]:
+    """Parse the kanban table from todo.md into list of row dicts."""
+    with open(todo_file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    rows: list[dict] = []
+    headers: list[str] = []
+    in_table = False
+
+    for line in lines:
+        stripped = line.strip()
+
+        if not in_table and "|" in stripped and "Spec" in stripped and "Status" in stripped:
+            headers = [h.strip() for h in stripped.split("|") if h.strip()]
+            in_table = True
+            continue
+
+        if in_table and re.match(r"^\|[\s:-]+\|", stripped):
+            continue
+
+        if in_table and stripped.startswith("|") and "|" in stripped[1:]:
+            cells = [c.strip() for c in stripped.split("|") if c.strip()]
+            if len(cells) >= len(headers):
+                row = dict(zip(headers, cells[: len(headers)]))
+                rows.append(row)
+            continue
+
+        if in_table and not stripped.startswith("|"):
+            in_table = False
+
+    return rows
+
+
+# ---------------------------------------------------------------------------
 # Actions
 # ---------------------------------------------------------------------------
 
 def do_register(todo_file: str, db_id: str, project_name: str, headers: dict) -> None:
-    """Register all todo.md rows in Notion (idempotent — skips existing)."""
+    """Import all todo.md rows to Notion (idempotent — skips existing)."""
     rows = parse_todo_table(todo_file)
     if not rows:
-        print("No rows found in todo.md Trine table")
+        print("No rows found in todo.md table")
         return
 
     print(f"Registering {len(rows)} rows for project '{project_name}'...")
@@ -280,20 +329,22 @@ def do_register(todo_file: str, db_id: str, project_name: str, headers: dict) ->
         if not spec_name or spec_name == "—":
             continue
 
-        existing = query_tasks(db_id, spec_name, project_name, headers)
+        existing = query_tasks_by_spec(db_id, spec_name, project_name, headers)
         if existing:
+            page = existing[0]
+            expected = status_to_notion(row.get("Status", "⬜"))
+            if is_human_override(page, expected):
+                continue
             print(f"  Exists: {spec_name} — syncing status")
-            page_id = existing[0]["id"]
+            page_id = page["id"]
             updates: dict = {
-                "상태": {"select": {"name": status_to_notion(row.get("Status", "⬜"))}},
+                "상태": {"select": {"name": expected}},
             }
-            # Sync PR if present
             pr = row.get("PR", "").strip()
             if pr and pr != "—":
                 match = re.search(r"\((https?://[^)]+)\)", pr)
                 if match:
                     updates["PR"] = {"url": match.group(1)}
-            # Sync completion date
             done_date = row.get("완료일", "").strip()
             if done_date and done_date != "—":
                 updates["완료일"] = {"date": {"start": done_date}}
@@ -304,71 +355,66 @@ def do_register(todo_file: str, db_id: str, project_name: str, headers: dict) ->
     print("Registration complete")
 
 
-def do_doing(branch: str, todo_file: str, db_id: str, project_name: str, headers: dict) -> None:
-    """Branch created → find matching task → set 진행중."""
-    rows = parse_todo_table(todo_file)
+def do_doing(branch: str, db_id: str, project_name: str, headers: dict) -> None:
+    """Branch created → find matching task in Notion → set 진행중."""
     keywords = extract_keywords(branch)
-    row = match_row(rows, keywords, statuses=["⬜", "Todo"])
+    print(f"Branch '{branch}' → keywords: {keywords}")
 
-    if not row:
-        print(f"No matching Todo row for branch: {branch} (keywords: {keywords})")
+    # Query Notion for tasks with status "할 일"
+    tasks = query_tasks_by_status(db_id, project_name, "할 일", headers)
+    task = match_task_by_keywords(tasks, keywords)
+
+    if not task:
+        print(f"No matching '할 일' task in Notion for keywords: {keywords}")
         return
 
-    spec_name = row.get("Spec", "").strip()
-    print(f"Branch '{branch}' matched Spec: {spec_name}")
+    spec = get_page_spec(task) or get_page_title(task)
+    print(f"Matched Spec: {spec}")
 
-    existing = query_tasks(db_id, spec_name, project_name, headers)
-    if existing:
-        update_task(existing[0]["id"], {
-            "상태": {"select": {"name": "진행중"}},
-            "브랜치": {"rich_text": [{"text": {"content": branch}}]},
-        }, headers)
-    else:
-        # Auto-create if not registered yet
-        row["Status"] = "🔄 Doing"
-        task = create_task(db_id, row, project_name, headers)
-        if task:
-            update_task(task["id"], {
-                "브랜치": {"rich_text": [{"text": {"content": branch}}]},
-            }, headers)
+    if is_human_override(task, "진행중"):
+        return
+
+    update_task(task["id"], {
+        "상태": {"select": {"name": "진행중"}},
+        "브랜치": {"rich_text": [{"text": {"content": branch}}]},
+    }, headers)
 
 
-def do_done(branch: str, pr_num: str, pr_url: str, todo_file: str,
+def do_done(branch: str, pr_num: str, pr_url: str,
             db_id: str, project_name: str, headers: dict) -> None:
-    """PR merged → find matching task → set 완료 + PR + date."""
-    rows = parse_todo_table(todo_file)
+    """PR merged → find matching task in Notion → set 완료 + PR + date."""
     keywords = extract_keywords(branch)
-    row = match_row(rows, keywords, statuses=["🔄", "Doing", "🧪", "QA"])
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    print(f"PR #{pr_num} merged, branch '{branch}' → keywords: {keywords}")
 
-    if not row:
-        # Fallback: if only one active row, use it
-        active = [r for r in rows if any(s in r.get("Status", "") for s in ["🔄", "🧪"])]
-        if len(active) == 1:
-            row = active[0]
+    # Query Notion for "진행중" and "QA" tasks
+    tasks_doing = query_tasks_by_status(db_id, project_name, "진행중", headers)
+    tasks_qa = query_tasks_by_status(db_id, project_name, "QA", headers)
+    all_active = tasks_doing + tasks_qa
+
+    task = match_task_by_keywords(all_active, keywords)
+
+    if not task:
+        # Fallback: if only one active task, use it
+        if len(all_active) == 1:
+            task = all_active[0]
+            spec = get_page_spec(task) or get_page_title(task)
+            print(f"Single active task fallback: {spec}")
         else:
-            print(f"No matching Doing/QA row for branch: {branch}")
+            print(f"No matching active task in Notion for keywords: {keywords}")
             return
 
-    spec_name = row.get("Spec", "").strip()
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    print(f"PR #{pr_num} merged for Spec: {spec_name}")
+    spec = get_page_spec(task) or get_page_title(task)
+    print(f"Matched Spec: {spec}")
 
-    existing = query_tasks(db_id, spec_name, project_name, headers)
-    if existing:
-        update_task(existing[0]["id"], {
-            "상태": {"select": {"name": "완료"}},
-            "PR": {"url": pr_url},
-            "완료일": {"date": {"start": today}},
-        }, headers)
-    else:
-        print(f"  Task not found in Notion for '{spec_name}', creating as Done")
-        row["Status"] = "✅ Done"
-        task = create_task(db_id, row, project_name, headers)
-        if task:
-            update_task(task["id"], {
-                "PR": {"url": pr_url},
-                "완료일": {"date": {"start": today}},
-            }, headers)
+    if is_human_override(task, "완료"):
+        return
+
+    update_task(task["id"], {
+        "상태": {"select": {"name": "완료"}},
+        "PR": {"url": pr_url},
+        "완료일": {"date": {"start": today}},
+    }, headers)
 
 
 # ---------------------------------------------------------------------------
@@ -376,28 +422,27 @@ def do_done(branch: str, pr_num: str, pr_url: str, todo_file: str,
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Usage:")
         print("  sync-notion-tasks.py register <todo-file>")
-        print("  sync-notion-tasks.py doing <branch> <todo-file>")
-        print("  sync-notion-tasks.py done <branch> <pr-num> <pr-url> <todo-file>")
+        print("  sync-notion-tasks.py doing <branch>")
+        print("  sync-notion-tasks.py done <branch> <pr-num> <pr-url>")
         sys.exit(1)
 
     action = sys.argv[1]
 
-    # Determine todo_file based on action
+    # Determine config search path
     if action == "register":
+        if len(sys.argv) < 3:
+            print("Usage: sync-notion-tasks.py register <todo-file>")
+            sys.exit(1)
         todo_file = sys.argv[2]
-    elif action == "doing":
-        todo_file = sys.argv[3]
-    elif action == "done":
-        todo_file = sys.argv[5]
+        config_search = os.path.dirname(os.path.abspath(todo_file))
     else:
-        print(f"Unknown action: {action}")
-        sys.exit(1)
+        # For doing/done, search from current working directory
+        config_search = os.getcwd()
 
-    # Resolve config
-    token, db_id, project_name = resolve_env(todo_file)
+    token, db_id, project_name = resolve_env(config_search)
 
     if not token:
         print("NOTION_API_TOKEN not set — skipping Notion sync")
@@ -416,12 +461,15 @@ def main() -> None:
         do_register(todo_file, db_id, project_name, headers)
     elif action == "doing":
         branch = sys.argv[2]
-        do_doing(branch, todo_file, db_id, project_name, headers)
+        do_doing(branch, db_id, project_name, headers)
     elif action == "done":
         branch = sys.argv[2]
         pr_num = sys.argv[3]
         pr_url = sys.argv[4]
-        do_done(branch, pr_num, pr_url, todo_file, db_id, project_name, headers)
+        do_done(branch, pr_num, pr_url, db_id, project_name, headers)
+    else:
+        print(f"Unknown action: {action}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

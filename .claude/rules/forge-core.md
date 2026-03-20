@@ -64,12 +64,11 @@
 
 ## PM 도구 / Notion (HIGH)
 
+- **Notion Tasks = 유일한 Source of Truth** (todo.md는 초기 등록용만)
 - Notion Tasks: Dev 이벤트(브랜치/Check3/PR)에 상태 자동 전환
-- Human override 우선: `등록자=Human` 또는 `last_edited_by=Human` 시 AI가 상태 덮어쓰기 금지
+- Human override 우선: `last_edited_by=person`이고 상태 불일치 시 AI가 덮어쓰기 금지
 - 버그/기능 등록: **명시적 요청**("등록해줘") 시에만. 단순 언급은 트리거 아님
 - Hotfix: P0-긴급 강제, Projects DB 연결 필수
-- Source of Truth: `docs/planning/active/forge/todo.md` (Notion은 대시보드용)
-- Notion MCP 미연결 시 Tier 2 Fallback (todo.md만)
 - DB URL: `forge-workspace.json`의 `notionDBs`에서 참조 (하드코딩 금지)
 
 > Deep: `planning/rules-source/always/pm-tools.md`

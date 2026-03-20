@@ -291,7 +291,7 @@ Forge Dev Session 1부터 순차 진행
     ├─ Plan 작성
     ├─ 구현 + AI Check
     ├─ Walkthrough
-    └─ PR (Merge 시 todo.md 자동 갱신)
+    └─ PR (Merge 시 Notion 자동 갱신)
 ```
 
 ## 관리자 산출물 포함 규칙

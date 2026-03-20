@@ -114,7 +114,7 @@ Portfolio 기준 + GodBlade 차이 병합:
 
 - **spec-writer-base**: 핵심 로직만 (constitution 읽기 → Spec 참조 → 작성 → 검증). 기술 스택 → `{constitution}`, `{template}` 플레이스홀더
 - **code-reviewer-base**: 범용 코드 리뷰 로직
-- **forge-pm-updater**: Phase 전환 시 todo.md + development-plan.md 자동 갱신
+- **forge-pm-updater**: Phase 전환 시 Notion Tasks + development-plan.md 자동 갱신
 
 ### Skills — 신규 생성 2개
 

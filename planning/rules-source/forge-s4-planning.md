@@ -23,7 +23,7 @@ S3 기획서(PRD/GDD) 기반으로 Forge Dev 진입 전 종합 기획 문서를 
 | 2 | **개발 계획** | s4-development-plan.md | 기술 스택 + 아키텍처 + ADR + 세션 로드맵 + 로드맵(Now/Next/Later) + WBS(태스크 분해/규모 추정) + **테스트 전략**(피라미드/커버리지 목표/도구/파일 구조) | Phase 1 컨텍스트 + Phase 3 Check |
 | 3 | **UI/UX 기획서** | s4-uiux-spec.md | 와이어프레임 + 컴포넌트 스펙 + 인터랙션 패턴 + 디자인 가이드 | Phase 2 Spec UI |
 
-> **흡수된 산출물**: 사이트맵 → 상세 기획서에 통합, 로드맵/WBS → 개발 계획에 통합, 테스트 전략서 → 개발 계획에 통합. S4 Gate 통과 시 todo.md도 자동 생성된다.
+> **흡수된 산출물**: 사이트맵 → 상세 기획서에 통합, 로드맵/WBS → 개발 계획에 통합, 테스트 전략서 → 개발 계획에 통합. S4 Gate 통과 시 todo.md 생성 후 `sync-notion-tasks.py register`로 Notion에 일괄 등록한다.
 > **E2E 시나리오 상세**는 S4에서 제거 → Forge Dev Spec Section 10에서만 작성한다.
 
 - **에이전트**: technical-writer (작성) + cto-advisor (기술 검토) + ux-researcher (UX 검증)

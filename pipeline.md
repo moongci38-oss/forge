@@ -472,7 +472,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
    - GitHub Release 자동 생성 (tag + changelog)
    - `release/{version}` 브랜치 자동 삭제
 3. **결과 분기**:
-   - ✅ PASS → 완료. `forge-pm-updater`로 todo.md 상태 갱신
+   - ✅ PASS → 완료. `forge-pm-updater`로 Notion + development-plan.md 상태 갱신
    - ❌ FAIL → **[STOP]** Human이 `/forge-rollback` 실행:
 
      | 레벨 | 방법 | 기준 |
