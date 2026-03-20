@@ -1,25 +1,34 @@
 # Forge — Unified AI Pipeline System
 
-> **Planning + Development in one repo**
->
-> 아이디어에서 프로덕션까지, AI Subagent가 Phase 1~12 통합 파이프라인을 자동화.
+[한국어](README.ko.md)
+
+> **From idea to production — AI Subagents automate the full Phase 1~12 pipeline.**
 
 ```
-Part A (기획):  Phase 1 Research → Phase 2 Concept → Phase 3 Design Doc → Phase 4 Planning
+Planning:  Phase 1 Research → Phase 2 Concept → Phase 3 Design Doc → Phase 4 Planning Package
                                                                                 ↓
                                                                    Phase 5 Handoff + Setup
                                                                                 ↓
-Part B (개발):  Phase 6 Session → Phase 7 Spec → Phase 8 Implement → Phase 9~12 Deploy
+Dev:       Phase 6 Session → Phase 7 Spec → Phase 8 Implement → Phase 9~12 Deploy
 ```
 
 ## What is Forge?
 
-Forge는 **1인 기업/소규모 팀**이 AI Agent를 활용하여 기획부터 개발까지 체계적으로 수행하기 위한 통합 파이프라인입니다.
+Forge is a unified pipeline for **solo developers and small teams** to systematically go from ideation to deployment using AI agents.
 
-- **Planning** (Phase 1~4): 기획 파이프라인 — 리서치, 컨셉, 기획서, 기획패키지
-- **Dev** (Phase 6~12): 개발+배포 파이프라인 — SDD+DDD+TDD
-- **13개 전문 AI 에이전트**, **40+ 스킬**, **10개 슬래시 커맨드**
-- **Rules-as-Code**: 컴파일 가능한 규칙 시스템으로 파이프라인 거버넌스 자동화
+- **Planning** (Phase 1~4): Research, concept validation, design docs, planning packages
+- **Dev** (Phase 6~12): Spec-driven development with SDD+DDD+TDD
+- **13 specialized AI agents**, **40+ skills**, **10 slash commands**
+- **Rules-as-Code**: Compilable rule system for automated pipeline governance
+- **Notion as single source of truth** for task tracking
+
+### Core Workflow
+
+```
+Spec → Notion Registration → Branch → In Progress → PR → Done
+```
+
+Every task — including hotfixes — requires a Spec document before branch creation. No exceptions.
 
 ## Prerequisites
 
@@ -33,83 +42,99 @@ Forge는 **1인 기업/소규모 팀**이 AI Agent를 활용하여 기획부터 
 git clone git@github.com:moongci38-oss/forge.git ~/forge
 cd ~/forge
 
-# 2. 워크스페이스 설정
+# 2. Workspace config
 cp forge-workspace.example.json forge-workspace.json
-# → forge-workspace.json에서 프로젝트 경로 설정
+# → Set project paths in forge-workspace.json
 
-# 3. 환경 변수
+# 3. Environment variables
 cp .env.example .env
-# → .env에 API 키 설정
+# → Set API keys in .env
 
-# 4. MCP 서버 전역 등록
+# 4. Register global MCP servers
 bash shared/scripts/setup-mcp.sh
-# → ~/.claude.json에 10개 전역 MCP 서버 자동 등록 (멱등)
+# → Registers 10 global MCP servers to ~/.claude.json (idempotent)
 
-# 5. CLI 도구 설치 (MCP와 병행 사용)
+# 5. Install CLI tools (used alongside MCP)
 bash shared/scripts/setup-cli.sh
-# → Lighthouse, Sentry CLI 설치 (CI/배치용)
+# → Installs Lighthouse, Sentry CLI (for CI/batch)
 
-# 6. Claude Code 실행
+# 6. Run Claude Code
 claude
 ```
-
-### MCP 서버
-
-`setup-mcp.sh`가 등록하는 전역 MCP 서버:
-
-| 서버 | 용도 | API 키 |
-|------|------|:------:|
-| Brave Search | 웹 검색 | `BRAVE_API_KEY` |
-| NanoBanana | Gemini 이미지 생성 | `GEMINI_API_KEY` |
-| Replicate | AI 모델 실행 | `REPLICATE_API_TOKEN` |
-| Stitch | UI 목업 생성 | `STITCH_API_KEY` |
-| Ludo | 게임 에셋 생성 | `LUDO_API_KEY` |
-| Sentry | 에러 추적 | - |
-| Notion | 노션 연동 | - |
-| Lighthouse | 웹 성능 감사 | - |
-| Draw.io | 다이어그램 생성 | - |
-| Magic UI | UI 컴포넌트 | - |
-
-> 프로젝트별 MCP(DB, Unity 등)는 각 프로젝트의 `.mcp.json`에서 관리합니다.
 
 ## Structure
 
 ```
 forge/
-├── pipeline.md         ← 통합 파이프라인 (Phase 1~12)
-├── planning/           ← Phase 1~4 기획 파이프라인
-│   ├── rules-source/   ← 기획 규칙 원본
-│   ├── templates/      ← 기획 템플릿 (PRD, GDD, Spec 등)
-│   └── prompts/        ← 기획 메서드 프롬프트
-├── dev/                ← Phase 6~12 개발+배포 파이프라인
-│   ├── rules/          ← 개발 규칙
-│   ├── templates/      ← 개발 템플릿
-│   ├── scripts/        ← 개발 스크립트
-│   └── schemas/        ← JSON 스키마
-├── shared/             ← 양쪽 공통
-│   ├── docs/           ← 공유 문서
-│   ├── scripts/        ← 관리 스크립트
-│   └── cross-project/  ← 크로스 프로젝트 규칙
-├── .claude/            ← Claude Code 설정 (팀 공유)
-│   ├── agents/         ← AI 에이전트 (13개)
-│   ├── skills/         ← 스킬 패키지 (40+개)
-│   ├── commands/       ← 슬래시 커맨드 (10개)
-│   ├── hooks/          ← 보안/자동화 훅 (6개)
-│   └── rules/          ← 컴파일된 규칙
+├── pipeline.md         ← Unified pipeline (Phase 1~12)
+├── planning/           ← Phase 1~4 planning pipeline
+│   ├── rules-source/   ← Planning rule sources
+│   ├── templates/      ← Planning templates (PRD, GDD, Spec)
+│   └── prompts/        ← Planning method prompts
+├── dev/                ← Phase 6~12 dev + deploy pipeline
+│   ├── rules/          ← Dev rules (deployed to projects)
+│   ├── templates/      ← Dev templates
+│   ├── scripts/        ← Dev scripts (forge-sync, etc.)
+│   ├── schemas/        ← JSON schemas
+│   └── github-spec-kit/← GitHub workflows + scripts
+├── shared/             ← Shared between planning & dev
+│   ├── docs/           ← Shared documentation
+│   ├── scripts/        ← Management scripts
+│   └── cross-project/  ← Cross-project rules
+├── .claude/            ← Claude Code config (team-shared)
+│   ├── agents/         ← AI agents (13)
+│   ├── skills/         ← Skill packages (40+)
+│   ├── commands/       ← Slash commands (10)
+│   ├── hooks/          ← Security/automation hooks (6)
+│   └── rules/          ← Compiled rules
 ├── forge-workspace.json
 ├── .env.example
 └── CLAUDE.md
 ```
 
+## Task Management
+
+**Notion Tasks DB is the single source of truth.** `todo.md` is only used for initial bulk registration at S4 Gate PASS.
+
+| Action | Trigger | Mechanism |
+|--------|---------|-----------|
+| Initial registration | S4 Gate PASS | `sync-notion-tasks.py register <todo-file>` |
+| Mark in-progress | Branch creation | GitHub Actions → Notion API |
+| Mark done | PR merge | GitHub Actions → Notion API |
+| Manual registration | On request | AI via Notion MCP or direct Notion entry |
+
+**Registration criteria:** Only tasks that require a Spec document and a branch are registered.
+
+**Human Override:** If `last_edited_by` is a person and the status differs from expected, AI skips the update (PM-IRON-1).
+
+## MCP Servers
+
+`setup-mcp.sh` registers these global MCP servers:
+
+| Server | Purpose | API Key |
+|--------|---------|:-------:|
+| Brave Search | Web search | `BRAVE_API_KEY` |
+| NanoBanana | Gemini image generation | `GEMINI_API_KEY` |
+| Replicate | AI model execution | `REPLICATE_API_TOKEN` |
+| Stitch | UI mockup generation | `STITCH_API_KEY` |
+| Ludo | Game asset generation | `LUDO_API_KEY` |
+| Sentry | Error tracking | - |
+| Notion | Notion integration | - |
+| Lighthouse | Web performance audit | - |
+| Draw.io | Diagram generation | - |
+| Magic UI | UI components | - |
+
+> Project-specific MCPs (DB, Unity, etc.) are managed in each project's `.mcp.json`.
+
 ## CLI Scripts
 
 ```bash
-# 파이프라인
+# Pipeline
 bash shared/scripts/forge.sh                    # Forge CLI
-bash shared/scripts/forge-gate-check.sh         # Gate 통과 검증
-bash shared/scripts/forge-validate-workspace.sh # 워크스페이스 검증
+bash shared/scripts/forge-gate-check.sh         # Gate pass verification
+bash shared/scripts/forge-validate-workspace.sh # Workspace validation
 
-# 컴포넌트 관리
+# Component management
 bash shared/scripts/manage-rules.sh {list|validate|build|stats}
 bash shared/scripts/manage-skills.sh {list|enable|disable|audit}
 bash shared/scripts/manage-components.sh {list|enable|disable}
@@ -117,22 +142,39 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 
 ## Slash Commands
 
-| 커맨드 | 설명 |
-|--------|------|
-| `/prd` | PRD 작성 (앱/웹) |
-| `/gdd` | GDD 작성 (게임) |
-| `/research` | 시장조사 시작 |
-| `/lean-canvas` | Lean Canvas 작성 |
-| `/forge` | Planning → Dev 핸드오프 |
-| `/daily-system-review` | AI 시스템 일일 분석 |
-| `/weekly-research` | 주간 리서치 파이프라인 |
-| `/yt` | YouTube 영상 분석 |
+| Command | Description |
+|---------|-------------|
+| `/prd` | Write a PRD (app/web) |
+| `/gdd` | Write a GDD (game) |
+| `/research` | Start market research |
+| `/lean-canvas` | Write a Lean Canvas |
+| `/forge` | Planning → Dev handoff |
+| `/daily-system-review` | Daily AI system analysis |
+| `/weekly-research` | Weekly research pipeline |
+| `/yt` | YouTube video analysis |
+
+## Project Sync
+
+Forge deploys rules, templates, workflows, and scripts to registered projects via `forge-sync.mjs`.
+
+```bash
+# Register a new project
+node ~/.claude/scripts/forge-sync.mjs init /path/to/project --name my-project
+
+# Sync all projects
+node ~/.claude/scripts/forge-sync.mjs sync
+
+# Check sync status
+node ~/.claude/scripts/forge-sync.mjs status
+```
+
+On `init`, a `.specify/config.json` is auto-generated with Notion DB configuration.
 
 ## Customization
 
-### 프로젝트 추가
+### Adding a project
 
-`forge-workspace.json`에 프로젝트를 추가합니다:
+Add to `forge-workspace.json`:
 
 ```json
 {
@@ -145,35 +187,34 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 }
 ```
 
-### 규칙 커스터마이징
+### Customizing rules
 
 ```bash
-# 규칙 소스 수정
+# Edit rule source
 vim planning/rules-source/always/my-rule.md
 
-# 빌드
+# Build compiled rules
 bash shared/scripts/manage-rules.sh build
 ```
 
 ## Public vs Private
 
-| 구분 | 상태 | 내용 |
-|------|:----:|------|
+| Scope | Status | Contents |
+|-------|:------:|----------|
 | **PUBLIC** | tracked | agents, skills, commands, hooks, rules, templates, scripts |
-| **PRIVATE** | gitignored | forge-workspace.json, .mcp.json, .env, 프로젝트 산출물 |
+| **PRIVATE** | gitignored | forge-workspace.json, .mcp.json, .env, project outputs |
 
-산출물은 별도 private repo (`forge-outputs`)에서 관리합니다.
+Outputs are managed in a separate private repo (`forge-outputs`).
 
 ## Prefab Visual Library
 
-에셋 재사용을 위한 Prefab Library를 별도 클론합니다:
+Clone the prefab library for asset reuse:
 
 ```bash
 git clone git@github.com:moongci38-oss/prefab-visual-library.git ~/prefab-visual-library
 ```
 
-`forge-workspace.json`의 `prefabLibraryRoot`에서 경로를 참조합니다.
-`library-search` 스킬로 기존 에셋을 검색하여 MCP 생성 비용을 절감합니다.
+Referenced via `prefabLibraryRoot` in `forge-workspace.json`. Use the `library-search` skill to find existing assets before generating new ones.
 
 ## License
 
