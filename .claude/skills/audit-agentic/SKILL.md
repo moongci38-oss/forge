@@ -3,7 +3,7 @@ name: audit-agentic
 description: >
   에이전틱 AI 역량 감사. 자율성, 도구 사용, 멀티에이전트 조정, 성숙도 레벨(Sema4.ai L0-L5)을
   CLEAR 프레임워크 + Anthropic Composable Patterns 기준으로 평가한다.
-argument-hint: "[target: system|portfolio|godblade]"
+argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 ---
 
@@ -21,8 +21,7 @@ user-invocable: true
 | target | 감사 경로 |
 |--------|----------|
 | `system` | `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
-| `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `apps/`, `.claude/`) |
-| `godblade` | godblade 프로젝트 경로 (`Assets/`, `.claude/`) |
+| `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `apps/`, `.claude/` 등) |
 
 ## 실행 흐름
 

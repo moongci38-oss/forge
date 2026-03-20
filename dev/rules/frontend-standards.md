@@ -1,6 +1,6 @@
 # Frontend Standards (Global)
 
-> All frontend projects (Portfolio, Business, GodBlade web) follow these standards.
+> All frontend projects registered in `forge-workspace.json` follow these standards.
 
 ## Smooth Scroll: Lenis
 

@@ -75,9 +75,9 @@ docs/assets/playground/{phase}-{name}.html
 
 ### Forge Dev 파이프라인 연동 (개발 프로젝트)
 
-| 템플릿 | Portfolio | GodBlade | Business |
-|--------|:--------:|:--------:|:--------:|
-| **code-map** | Phase 1 (Next.js/NestJS) | Phase 1 (Unity 시스템) | - |
+| 템플릿 | 웹 프로젝트 | 게임 프로젝트 | 비즈니스 |
+|--------|:----------:|:-----------:|:--------:|
+| **code-map** | Phase 1 (프레임워크 구조) | Phase 1 (엔진 시스템) | - |
 | **concept-map** | Phase 1.5 (요구사항) | Phase 1.5 (게임 메커닉) | 제품 기획 (02-product) |
 | **design-playground** | Phase 2 (UI 컴포넌트) | - | 브랜드/UI (05-design) |
 

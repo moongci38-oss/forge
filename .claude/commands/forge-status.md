@@ -27,11 +27,11 @@ node ~/.claude/scripts/forge-sync.mjs status --quiet
 ```
 Forge Dev 동기화 상태
 ─────────────────
-  portfolio: ✅ 동기화됨 (7/7 rules, 1/1 prompts, ...)
-  godblade:  ⚠️ 2개 불일치
+  my-web-app: ✅ 동기화됨 (7/7 rules, 1/1 prompts, ...)
+  my-game:    ⚠️ 2개 불일치
     - forge-workflow.md (원본 newer)
-    - forge-todo.md (원본 newer)
-  → 동기화: /forge-sync --target godblade
+    - forge-progress.md (원본 newer)
+  → 동기화: /forge-sync --target my-game
 
 세션 상태
 ─────────

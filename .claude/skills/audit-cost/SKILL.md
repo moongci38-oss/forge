@@ -3,7 +3,7 @@ name: audit-cost
 description: >
   AI 비용 효율 감사. 모델 라우팅, 프롬프트 캐싱, 배치 처리, 토큰 예산 관리,
   RouteLLM/CEBench 기준으로 비용 최적화 현황을 평가한다.
-argument-hint: "[target: system|portfolio|godblade]"
+argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 ---
 
@@ -21,8 +21,7 @@ user-invocable: true
 | target | 감사 경로 |
 |--------|----------|
 | `system` | `~/.claude/forge/rules/` + `.claude/rules/` + `.claude/agents/` + `.claude/skills/` |
-| `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `.claude/`) |
-| `godblade` | godblade 프로젝트 경로 (`.claude/`) |
+| `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `.claude/` 등) |
 
 ## 실행 흐름
 

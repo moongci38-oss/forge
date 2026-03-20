@@ -16,7 +16,7 @@ model: haiku
 node ~/.claude/scripts/forge-sync.mjs sync
 
 # 특정 프로젝트만
-node ~/.claude/scripts/forge-sync.mjs sync --target portfolio
+node ~/.claude/scripts/forge-sync.mjs sync --target my-project
 
 # Recommended 포함
 node ~/.claude/scripts/forge-sync.mjs sync --include-recommended

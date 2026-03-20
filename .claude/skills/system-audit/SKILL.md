@@ -3,7 +3,7 @@ name: system-audit
 description: >
   5축 통합 시스템 감사 (ACHCE). Agentic/Context/Harness/Cost/Human-AI 5개 축 에이전트를
   병렬 스폰하고 Lead가 종합 + 축간 트레이드오프 분석 + 통합 개선 로드맵을 생성한다.
-argument-hint: "[target: system|portfolio|godblade]"
+argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 ---
 
@@ -21,8 +21,7 @@ user-invocable: true
 | target | 감사 경로 |
 |--------|----------|
 | `system` | `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
-| `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `apps/`, `.claude/`) |
-| `godblade` | godblade 프로젝트 경로 (`Assets/`, `.claude/`) |
+| `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `apps/`, `.claude/` 등) |
 
 ## 실행 흐름
 

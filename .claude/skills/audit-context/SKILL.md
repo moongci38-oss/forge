@@ -3,7 +3,7 @@ name: audit-context
 description: >
   컨텍스트 엔지니어링 역량 감사. 7-Layer Context Architecture, RAG 성숙도, 메모리 시스템,
   컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot)을 RAGAS 기준으로 평가한다.
-argument-hint: "[target: system|portfolio|godblade]"
+argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 ---
 
@@ -21,8 +21,7 @@ user-invocable: true
 | target | 감사 경로 |
 |--------|----------|
 | `system` | `~/.claude/forge/rules/` + `.claude/rules/` + `.claude/skills/` + `memory/` |
-| `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `.claude/`, `docs/`) |
-| `godblade` | godblade 프로젝트 경로 (`.claude/`, `docs/`) |
+| `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `.claude/`, `docs/` 등) |
 
 ## 실행 흐름
 

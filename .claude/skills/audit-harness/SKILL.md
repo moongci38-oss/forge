@@ -3,7 +3,7 @@ name: audit-harness
 description: >
   AI 하네스 엔지니어링 감사. CLEAR 프레임워크, 3-Layer 테스트 아키텍처, OWASP Agentic Top 10,
   가드레일 패턴, OTel GenAI 옵저버빌리티를 기준으로 측정·제어 역량을 평가한다.
-argument-hint: "[target: system|portfolio|godblade]"
+argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 ---
 
@@ -21,8 +21,7 @@ user-invocable: true
 | target | 감사 경로 |
 |--------|----------|
 | `system` | `~/.claude/forge/rules/` + `.claude/rules/` + `.claude/agents/` + `.claude/skills/` |
-| `portfolio` | portfolio 프로젝트 경로 (`.specify/`, `apps/`, `test/`, `.claude/`) |
-| `godblade` | godblade 프로젝트 경로 (`Assets/`, `.claude/`) |
+| `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `apps/`, `.claude/` 등) |
 
 ## 실행 흐름
 

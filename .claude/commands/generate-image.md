@@ -58,7 +58,7 @@ NanoBanana의 `generate_image` 도구를 호출합니다.
 - 첫 번째 인자: 프롬프트 텍스트
 - `--model`: `pro` (고품질) 또는 `normal` (기본, 빠름)
 - `--aspect`: `16:9` (히어로/배너), `1:1` (정사각), `9:16` (모바일)
-- `--output`: 저장 경로 (기본: `05-design/portfolio/images/`)
+- `--output`: 저장 경로 (기본: `05-design/images/`)
 
 **예시:**
 ```
@@ -78,7 +78,7 @@ NanoBanana의 `edit_image` 도구를 호출합니다.
 
 **예시:**
 ```
-/generate-image edit 05-design/portfolio/images/albanow/albanow-thumbnail.png "해상도 개선, 색감 보정"
+/generate-image edit 05-design/images/my-project/thumbnail.png "해상도 개선, 색감 보정"
 /generate-image edit 03-marketing/assets/banner.png "텍스트 제거하고 배경만"
 ```
 
@@ -86,7 +86,7 @@ NanoBanana의 `edit_image` 도구를 호출합니다.
 
 | 용도 | 경로 |
 |------|------|
-| 포트폴리오 갤러리 | `05-design/portfolio/images/` |
+| 프로젝트 갤러리 | `05-design/images/` |
 | 마케팅 비주얼 | `03-marketing/assets/` |
 | 블로그 이미지 | `04-content/images/` |
 | 디자인 목업 | `05-design/mockups/` |

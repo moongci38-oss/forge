@@ -70,7 +70,7 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 ## Step 5: Notion 자동 등록 + 블로그 발행
 
 완료 후 순차 실행:
-1. Portfolio 블로그 자동 발행 (tech-trends.md → `/api/v1/blog/auto-publish`)
+1. 블로그 자동 발행 (tech-trends.md → `/api/v1/blog/auto-publish`, 선택적)
 2. Notion "Weekly Research" DB 자동 등록
    - Data Source ID: `d7ba2bc1-4c7b-400d-872f-8d78bfeea213`
    - Notion MCP 미연결 시 경고 후 스킵

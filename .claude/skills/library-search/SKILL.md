@@ -85,8 +85,8 @@ user-invocable: true
 
 ### 프로젝트 필터링
 ```
-/library-search --project godblade
-→ GodBlade 전용 에셋만 검색
+/library-search --project my-game
+→ 해당 프로젝트 전용 에셋만 검색
 ```
 
 ## 검색 결과 출력 형식
@@ -96,7 +96,7 @@ user-invocable: true
 
 | # | 매칭 | 에셋명 | Layer | 경로 | 점수 | 태그 |
 |:-:|:----:|--------|:-----:|------|:----:|------|
-| 1 | 완전 | L1-btn-gold-primary | L1 | game/godblade/components/buttons/ | 4.5 | button, gold, cta |
+| 1 | 완전 | L1-btn-gold-primary | L1 | game/{project}/components/buttons/ | 4.5 | button, gold, cta |
 | 2 | 부분 | L1-btn-stone-primary | L1 | game/_shared/components/buttons/ | 3.8 | button, stone, rpg |
 | 3 | — | 매칭 없음 | — | — | — | — |
 
