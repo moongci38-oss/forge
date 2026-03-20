@@ -23,6 +23,11 @@
             "type": "command",
             "command": "bash .claude/hooks/auto-build-rules.sh",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-forge-sync.sh",
+            "timeout": 15
           }
         ]
       },

@@ -33,6 +33,8 @@ Phase 6 진입은 아래 **모든 조건**을 충족해야 한다:
 1. Phase 4 Gate가 `PASS` 또는 `AUTO`로 기록됨 (`gate-log.md`)
 2. Phase 4 필수 산출물 3종이 존재함
 3. Todo Tracker가 존재함 (`{folderMap.product}/todo.md`)
+4. 개발 프로젝트에 forge dev rules가 배포됨 (`forge-sync status` 확인)
+5. 개발 프로젝트에 CLAUDE.md가 존재함
 
 ## Handoff 문서 구조
 
@@ -278,9 +280,21 @@ todo.md는 개발 프로젝트당 1개, forge/ 루트에 실제 파일로 관리
 ```
 Forge S4 완료
     ↓
+[신규 프로젝트?]
+    ├─ Yes → /forge-onboard 자동 호출 (4단계 온보딩)
+    │         1. forge-sync init (manifest 등록)
+    │         2. forge-sync sync --include-recommended (규칙/템플릿 배포)
+    │         3. 프로젝트 스캐폴딩 (CLAUDE.md, constitution, agent-teams, verify.sh, docs/)
+    │         4. forge-workspace.json 연결
+    │         5. git init + initial commit
+    │
+    └─ No → forge-sync sync --target <name> (규칙 최신화)
+    ↓
 Handoff 문서 자동 생성 ({folderMap.handoff}/{project}/)
     ↓
 개발 프로젝트 {symlinkBase}/ 에 전체 symlink 생성
+    ↓
+[AUTO-PASS] Check 5: Handoff 완성도 + forge-sync status + CLAUDE.md 존재 검증
     ↓
 Human이 개발 프로젝트 환경으로 이동
     ↓

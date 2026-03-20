@@ -261,15 +261,20 @@ Phase 4 작성 중 "대량 아이콘 필요"
 
 ### 신규 프로젝트 (devTarget 폴더 미존재)
 
-1. Phase 4 기술 스택 기반 프로젝트 scaffolding
-2. `.claude/` 구조 배포 (forge-sync)
-3. `git init` + initial commit
+`/forge-onboard` 스킬을 자동 호출하여 4단계 온보딩 실행:
+
+1. **forge-sync 등록**: `forge-sync init` → manifest.json + `.specify/config.json`
+2. **forge-sync 배포**: `forge-sync sync --target <name> --include-recommended` → 규칙/템플릿/GitHub Spec Kit
+3. **프로젝트 스캐폴딩**: CLAUDE.md, constitution.md, agent-teams.md, verify.sh, docs/ 구조
+4. **forge-workspace.json 등록**: devTarget + symlinkBase 연결
+5. `git init` + initial commit
 
 ### 기존 프로젝트
 
-1. symlink만 생성
+1. `forge-sync sync --target <name>` — 규칙/템플릿 최신화
+2. symlink 생성 (누락분만 추가)
 
-### 공통
+### 공통 (신규/기존 모두)
 
 1. **Handoff 문서 자동 생성**:
    - 경로: `{folderMap.handoff}/{project}/YYYY-MM-DD-forge-handoff.md`
@@ -291,6 +296,11 @@ Phase 4 작성 중 "대량 아이콘 필요"
 | Phase 4 UI/UX 기획서 | Phase 7 — Spec UI 섹션 참조 |
 
    ─── [AUTO-PASS] Check 5: Handoff 완성도 자동 검증 ───
+   검증 항목:
+   1. Handoff 문서 존재 (`{folderMap.handoff}/{project}/`)
+   2. forge-sync status — 개발 프로젝트 규칙 최신 (`node ~/.claude/scripts/forge-sync.mjs status --quiet`)
+   3. 개발 프로젝트 CLAUDE.md 존재 (`{devTarget}/CLAUDE.md`)
+   4. symlink 유효성 — 최소 1개 이상 정상 연결
 
 ---
 
