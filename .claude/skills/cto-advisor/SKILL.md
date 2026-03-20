@@ -1,6 +1,6 @@
 ---
 name: cto-advisor
-description: Technical leadership guidance for engineering teams, architecture decisions, and technology strategy. Includes tech debt analyzer, team scaling calculator, engineering metrics frameworks, technology evaluation tools, and ADR templates. Use when assessing technical debt, scaling engineering teams, evaluating technologies, making architecture decisions, establishing engineering metrics, or when user mentions CTO, tech debt, technical debt, team scaling, architecture decisions, technology evaluation, engineering metrics, DORA metrics, or technology strategy.
+description: Provides CTO-level strategic guidance with automated tools for tech debt analysis (tech_debt_analyzer.py), team scaling calculations, and technology evaluation. Includes ADR templates and DORA metrics frameworks. Use when making architecture decisions, planning team growth, assessing technical debt, or developing technology strategy.
 license: MIT
 metadata:
   version: 1.0.0

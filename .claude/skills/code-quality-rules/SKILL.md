@@ -1,6 +1,6 @@
 ---
 name: code-quality-rules
-description: "시맨틱 코드 품질 룰 10개. Hook(정적)이 잡지 못하는 로직/아키텍처/UX 이슈를 Agent가 검출."
+description: "Detects semantic code quality issues (logic, architecture, UX) that static hooks cannot catch. Provides 10 rules across 4 categories: API patterns, HTML/accessibility, architecture, and logic. Auto-triggered in Forge Dev Check 3.7Q and referenced during code review."
 user-invocable: false
 metadata:
   version: 1.1.0

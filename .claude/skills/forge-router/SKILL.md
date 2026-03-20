@@ -1,10 +1,9 @@
 ---
 name: forge-router
 description: >
-  코드 변경이 필요한 개발 작업(기능 구현, 버그 수정, 리팩토링,
-  테스트 추가, API 개발, UI 구현, 배포) 요청 시 자동 실행.
-  .specify/ 디렉토리가 있는 개발 프로젝트에서 Forge Dev 파이프라인을
-  자동으로 시작한다.
+  자동 라우터: .specify/ 디렉토리가 있는 개발 프로젝트에서 코드 변경 요청(기능 구현, 버그 수정,
+  리팩토링, API 개발, UI 구현)을 감지하여 Forge Dev 파이프라인을 자동 시작한다. Hotfix/Standard
+  규모를 자동 분류하고, 기존 세션 재개 여부도 감지. user-invocable: false — 시스템 자동 실행 전용.
 user-invocable: false
 disable-model-invocation: true
 ---

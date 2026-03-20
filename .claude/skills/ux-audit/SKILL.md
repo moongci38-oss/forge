@@ -1,8 +1,6 @@
 ---
 name: ux-audit
-description: |
-  UX 품질 감사 9항목 체크리스트. 디자인 오류 90%를 사전 차단하는 체계적 검증 스킬.
-  9-item UX quality audit checklist. Systematically catches 90% of common design errors before release.
+description: "Runs a 9-item UX quality audit (Color Contrast, Font Size, Touch Target, Layout Consistency, Navigation, 3-State Coverage, Responsive, Accessibility, Interaction Feedback) on frontend changes. Returns structured JSON with PASS/WARN/FAIL per item and auto-fix suggestions. Auto-triggered in Forge Dev Check 3.6 when .tsx/.jsx/.css files are changed."
 allowed-tools:
   - Read
   - Grep

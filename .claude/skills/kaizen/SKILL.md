@@ -1,6 +1,6 @@
 ---
 name: kaizen
-description: "Guide for continuous improvement, error proofing, and standardization. Use this skill when the user wants to improve code quality, refactor, or discuss process improvements. 코드 개선, 리팩토링, 프로세스 개선, 품질 향상, 표준화"
+description: "Encodes continuous improvement principles (Kaizen, Poka-Yoke, Standardized Work, Just-In-Time) as coding guidelines. Use when improving code quality, refactoring existing code, or discussing process standardization. Guides toward smallest viable change, error-proofing at design time, and YAGNI-based scope control."
 allowed-tools: "Read, Grep, Glob"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: concise-planning
-description: Use when a user asks for a plan for a coding task, to generate a clear, actionable, and atomic checklist.
+description: Generates a clear, actionable, atomic implementation checklist when a user requests a plan for a coding task. Produces structured output with Approach, Scope, Action Items (6-10 steps), and Validation. Minimizes blocking questions by making reasonable assumptions.
 ---
 
 # Concise Planning

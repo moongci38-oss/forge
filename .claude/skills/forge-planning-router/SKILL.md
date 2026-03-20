@@ -1,10 +1,9 @@
 ---
 name: forge-planning-router
 description: >
-  비개발 업무(시장조사, 기획, 컨셉, PRD/GDD 작성, 린 캔버스, 마케팅 전략,
-  콘텐츠 기획, 경쟁사 분석, SEO, 디자인) 요청 시 자동 실행.
-  코드 변경이 필요 없는 리서치, 기획, 전략, 콘텐츠, 마케팅 업무를
-  Forge 파이프라인으로 라우팅한다.
+  자동 라우터: 코드 변경이 없는 비개발 요청(시장조사, 기획, PRD/GDD, 린 캔버스, 마케팅, 콘텐츠, 디자인)을
+  감지하여 적절한 Forge 파이프라인 스킬로 자동 분기한다. forge-workspace.json과 gate-log.md 기반으로
+  현재 Forge 진행 상태를 확인하고 라우팅 실행. user-invocable: false — 시스템 자동 실행 전용.
 user-invocable: false
 disable-model-invocation: true
 ---

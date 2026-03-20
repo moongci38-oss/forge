@@ -1,6 +1,6 @@
 ---
 name: inspection-checklist
-description: "Forge Dev 파이프라인의 모든 Check를 통합한 최종 검수 체크리스트. PR 생성 전 최종 점검."
+description: "Forge Dev 파이프라인 모든 Check(3, 3.5, 3.6, 3.7, 3.8)를 통합한 최종 검수 체크리스트를 생성한다. Phase 3 모든 Check 완료 후 PR 생성 직전 또는 릴리스 전 최종 점검 시 실행. 빌드/테스트, Spec 추적성, UI 품질, 코드 리뷰, 보안 5개 영역을 종합 판정한다."
 context: fork
 allowed-tools: "Read, Grep, Glob, Bash"
 ---
