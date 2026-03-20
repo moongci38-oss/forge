@@ -257,7 +257,7 @@ Check 3.5 (Spec compliance)
 
 todo.md는 개발 프로젝트당 1개, forge/ 루트에 실제 파일로 관리한다:
 - 경로: `docs/planning/active/forge/todo.md` (도메인 하위 아님)
-- 유형: 실제 파일 (symlink 아님) — GitHub Actions 호환 필수
+- 유형: 실제 파일 (symlink 아님) — GitLab CI 호환 필수
 - 새 Forge 프로젝트 S4 Gate PASS 시 기존 todo.md에 Spec 행을 추가 (새 파일 생성 아님)
 - 모든 Forge 프로젝트의 Forge Dev Spec을 한 파일에서 통합 추적
 

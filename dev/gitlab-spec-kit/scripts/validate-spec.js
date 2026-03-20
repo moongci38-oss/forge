@@ -10,7 +10,7 @@
 //       제목 형식, 요구사항 항목 수, 코드 블록, 체크리스트를 검증한다.
 // 트리거 시점:
 //   1. Forge Phase 6-7 (Spec 작성) 완료 후 — spec-writer가 작성한 Spec을 검증
-//   2. spec-check.yml 워크플로우에서 호출 가능 (GitHub Actions CI)
+//   2. spec-check.yml 워크플로우에서 호출 가능 (GitLab CI)
 //   3. 개발자가 로컬에서 수동 실행: node validate-spec.js --spec=<name>
 //
 // 사용법:
@@ -37,14 +37,14 @@
 //   - spec-check.yml 워크플로우에서도 동일 검증 로직 사용 (패턴 일치)
 //
 // 배포 위치: 프로젝트의 .specify/scripts/validate-spec.js 또는
-//           .github/scripts/validate-spec.js 에 복사하여 사용
+//           .gitlab/scripts/validate-spec.js 에 복사하여 사용
 //
 // [English]
 // Purpose: Reads .specify/specs/{name}.md and validates required sections,
 //          title format, requirement item count, code blocks, and checklists.
 // Trigger points:
 //   1. After Forge Phase 6-7 (Spec writing) — validates Spec written by spec-writer
-//   2. Can be called from spec-check.yml workflow (GitHub Actions CI)
+//   2. Can be called from spec-check.yml workflow (GitLab CI)
 //   3. Manual local execution: node validate-spec.js --spec=<name>
 //
 // Usage:
@@ -71,7 +71,7 @@
 //   - spec-check.yml workflow uses the same validation patterns
 //
 // Deployment: Copy to .specify/scripts/validate-spec.js or
-//             .github/scripts/validate-spec.js in your project
+//             .gitlab/scripts/validate-spec.js in your project
 // =============================================================================
 
 const fs = require('fs');

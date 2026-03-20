@@ -1,0 +1,132 @@
+# =============================================================================
+# Todo Tracker — Notion Tasks DB 자동 갱신 (범용)
+# =============================================================================
+#
+# [한글]
+# 기능: 브랜치 생성 시 할 일 → 진행중, MR merge 시 진행중/QA → 완료
+# 트리거:
+#   - 브랜치 생성은 GitLab에서 `on: create` 이벤트를 직접 지원하지 않음.
+#     대신 모든 파이프라인에서 $CI_COMMIT_BRANCH가 새 브랜치인 경우를 감지하거나,
+#     push 이벤트를 활용한다. 여기서는 push 파이프라인을 활용해 브랜치 첫 push 감지.
+#   - MR merge: develop/main 브랜치에 push될 때 ($CI_COMMIT_TITLE에 Merge 포함)
+# 매칭: 브랜치명 키워드 → Notion Tasks DB Spec 칼럼 fuzzy match
+# Notion이 유일한 Source of Truth (todo.md는 초기 등록용만)
+#
+# [English]
+# Purpose: Auto-update Notion Tasks DB on branch/MR events
+# Notion is the single source of truth for task tracking.
+# todo.md is only used for initial bulk registration (register action).
+#
+# Triggers:
+#   - Branch creation: GitLab does not natively support "on: create" like GitHub.
+#     We detect first push to a non-default branch as a proxy for branch creation.
+#   - MR merge: Detected on push to develop/main when commit title contains "Merge".
+#
+# 배포 위치: 프로젝트의 .gitlab-ci.yml 또는 .gitlab/ci/todo-tracker.yml 에 포함하여 사용
+# 의존 스크립트:
+#   - scripts/sync-notion-tasks.py  (Notion 갱신)
+# =============================================================================
+
+stages:
+  - notify
+
+# [한글] push 이벤트 또는 MR merge 감지 (develop/main 브랜치 push)
+# [English] Trigger on push events or MR merge detection (push to develop/main)
+workflow:
+  rules:
+    # [한글] MR 이벤트는 처리하지 않음 (push 이벤트로 merge 감지)
+    # [English] Skip MR pipeline events — detect merges via push to default branches
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
+
+# ─────────────────────────────────────────────
+# Job 1: Mark Doing (브랜치 첫 push 감지)
+# ─────────────────────────────────────────────
+mark-doing:
+  stage: notify
+  image: python:3.11-slim
+  tags:
+    - docker
+  # [한글] main, develop, gh-pages가 아닌 브랜치에 push될 때 실행
+  #   GitLab은 브랜치 생성 이벤트가 없으므로 push 이벤트로 대체.
+  #   브랜치 첫 push인지 여부는 스크립트에서 처리 (Notion 상태가 '할 일'인 경우만 업데이트).
+  # [English] Runs on push to non-default branches.
+  #   GitLab has no native branch creation event, so we use push events.
+  #   The script should handle idempotency (only update if status is 'To Do').
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "develop" && $CI_COMMIT_BRANCH != "gh-pages"
+      when: on_success
+  script:
+    - |
+      if [ -z "$NOTION_API_TOKEN" ]; then
+        echo "NOTION_API_TOKEN not set — skipping"
+        exit 0
+      fi
+      if [ -f scripts/sync-notion-tasks.py ]; then
+        python3 scripts/sync-notion-tasks.py doing "${CI_COMMIT_BRANCH}"
+      else
+        echo "sync-notion-tasks.py not found — skipping"
+      fi
+  variables:
+    NOTION_API_TOKEN: $NOTION_API_TOKEN
+
+# ─────────────────────────────────────────────
+# Job 2: Mark Done (MR merge 감지)
+# ─────────────────────────────────────────────
+mark-done:
+  stage: notify
+  image: python:3.11-slim
+  tags:
+    - docker
+  # [한글] develop 또는 main 브랜치에 push될 때, 커밋 메시지에 "Merge"가 포함된 경우
+  #   GitLab MR squash merge의 커밋 제목은 MR 제목이 사용됨.
+  #   merge commit 방식일 경우 "Merge branch" 패턴으로 감지.
+  #   $CI_MERGE_REQUEST_IID는 push 파이프라인에서 사용 불가 — GitLab API로 조회.
+  # [English] Runs on push to develop or main when commit message contains "Merge".
+  #   GitLab MR squash merge uses MR title as commit title.
+  #   For merge commits, detect "Merge branch" pattern.
+  #   $CI_MERGE_REQUEST_IID is unavailable in push pipelines — query via GitLab API.
+  rules:
+    - if: ($CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "main") && $CI_PIPELINE_SOURCE == "push"
+      when: on_success
+  script:
+    - |
+      if [ -z "$NOTION_API_TOKEN" ]; then
+        echo "NOTION_API_TOKEN not set — skipping"
+        exit 0
+      fi
+
+      # [한글] 커밋 메시지에 Merge가 포함된 경우에만 처리
+      # [English] Only process if commit message indicates a merge
+      COMMIT_TITLE="${CI_COMMIT_TITLE}"
+      if ! echo "$COMMIT_TITLE" | grep -qi "merge\|Merge"; then
+        echo "Not a merge commit — skipping mark-done"
+        exit 0
+      fi
+
+      # [한글] GitLab API로 최근 MR 조회 (merge된 MR 기준)
+      # [English] Query GitLab API for recently merged MR
+      MERGED_MR=$(curl --silent \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?state=merged&order_by=updated_at&sort=desc&per_page=1")
+
+      MR_IID=$(echo "$MERGED_MR" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0]['iid'] if d else '')" 2>/dev/null || true)
+      MR_URL=$(echo "$MERGED_MR" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0].get('web_url','') if d else '')" 2>/dev/null || true)
+      SOURCE_BRANCH=$(echo "$MERGED_MR" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0].get('source_branch','') if d else '')" 2>/dev/null || true)
+
+      if [ -z "$SOURCE_BRANCH" ]; then
+        echo "Could not determine source branch from merged MR — skipping"
+        exit 0
+      fi
+
+      echo "Detected merged MR #${MR_IID} from branch: ${SOURCE_BRANCH}"
+
+      if [ -f scripts/sync-notion-tasks.py ]; then
+        python3 scripts/sync-notion-tasks.py done "$SOURCE_BRANCH" "$MR_IID" "$MR_URL"
+      else
+        echo "sync-notion-tasks.py not found — skipping"
+      fi
+  variables:
+    NOTION_API_TOKEN: $NOTION_API_TOKEN
+    GITLAB_TOKEN: $GITLAB_TOKEN

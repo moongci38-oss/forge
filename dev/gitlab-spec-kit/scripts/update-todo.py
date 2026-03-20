@@ -9,8 +9,8 @@ Usage:
   python3 update-todo.py doing <branch-name> <todo-file>
   python3 update-todo.py done  <branch-name> <pr-number> <pr-url> <todo-file>
 
-Deployment: Copy to .github/scripts/update-todo.py in your project.
-Source of truth: ~/.claude/forge/github-spec-kit/scripts/update-todo.py
+Deployment: Copy to scripts/update-todo.py in your project.
+Source of truth: ~/.claude/forge/gitlab-spec-kit/scripts/update-todo.py
 """
 import json
 import os

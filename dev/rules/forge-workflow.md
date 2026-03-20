@@ -26,9 +26,9 @@ enforcement: rigid
 | 7 | 구2 | Spec/Plan/Task 작성 | `.specify/specs/`, `.specify/plans/` | **[STOP]** Spec 승인 | L3 |
 | 8 | 구3 | 구현 + AI 자동 검증 | 코드 + Walkthrough | - | L4 |
 | 9 | 구4 | PR 생성 | PR URL | autoMerge 설정에 따름: off=**[STOP]** / on=자동 merge | L4 |
-| 10 | 구5 | develop 통합 검증 | Integration Report | **[AUTO-PASS]** GitHub Actions 자동 | L5 |
+| 10 | 구5 | develop 통합 검증 | Integration Report | **[AUTO-PASS]** GitLab CI 자동 | L5 |
 | 11 | 구6 | 릴리스 + 스테이징 | release/* + Release PR | **[STOP]** Release PR Human 승인 | L2 |
-| 12 | 구7 | 프로덕션 배포 + 롤백 | GitHub Release + Health Check | **[AUTO-PASS]** 성공 시 / **[STOP]** 실패 시 | L3 |
+| 12 | 구7 | 프로덕션 배포 + 롤백 | GitLab Release + Health Check | **[AUTO-PASS]** 성공 시 / **[STOP]** 실패 시 | L3 |
 
 > **자율성 레벨**: L2=Human 승인 후 실행, L3=AI 제안+Human 확인, L4=AI 자율 실행+사후 보고, L5=완전 자동화.
 > Phase 12 배포 전: 비가역적 행동(DB 마이그레이션, 프로덕션 데이터 변경)이 포함된 경우 반드시 L2로 강등하여 Human 명시 승인을 받는다.
@@ -139,15 +139,15 @@ Hotfix:  Phase 1(경량) → Phase 3 → Check 3 → Phase 4
 | Check 3.7 | Check 3.5 후 | AI가 `code-reviewer` 에이전트 스폰 | 필수 |
 | Check 4-5 | PR 생성 전후 | 커밋/브랜치 규칙 + PR Health | 필수 |
 | Check 3.6 | Check 3.7 후 | AI가 `ui-quality-checker` 에이전트 스폰 (FE 변경 시) | 프론트엔드 PR |
-| Check 6 | develop push 후 | `develop-integration.yml` GitHub Actions | Phase 5 자동 |
-| Check 6.5 | Check 6 실패 시 | GitHub Issue 자동 생성 → AI 분석 + 수정 (최대 2회 재시도; 초과 시 **[STOP]** Human 에스컬레이션) | Phase 10 실패 대응 |
+| Check 6 | develop push 후 | `develop-integration.yml` GitLab CI | Phase 5 자동 |
+| Check 6.5 | Check 6 실패 시 | GitLab Issue 자동 생성 → AI 분석 + 수정 (최대 2회 재시도; 초과 시 **[STOP]** Human 에스컬레이션) | Phase 10 실패 대응 |
 | Check 7 | 릴리스 브랜치 생성 후 | `release-staging.yml` — staging deploy(조건부) + E2E | Phase 6 자동 |
 | Check 7.5 | Check 7 완료 후 | Release PR 생성 + Human 승인 대기 | Phase 6 **[STOP]** |
 | Check 8 | main push 후 | `production-deploy.yml` — deploy + health check + smoke test | Phase 7 자동 |
 | Check 8.5 | Check 8 실패 시 | `rollback.yml` — L1/L2/L3 롤백 분기 | Phase 7 실패 대응 |
 
 > 확장 체크(3.5T, 3.7P, 3.8)는 수요 확인 후 단계적 추가. 인증/결제 PR에서 3.8 활성화.
-> Phase 5-7은 GitHub Actions 기반 자동화. `release-config.json`의 `deployCommand`가 빈 값이면 배포 단계 skip.
+> Phase 5-7은 GitLab CI 기반 자동화. `release-config.json`의 `deployCommand`가 빈 값이면 배포 단계 skip.
 
 ## 모델 계층화 (Teammate 스폰)
 

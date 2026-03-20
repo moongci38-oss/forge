@@ -65,7 +65,7 @@ Forge 프로젝트: `forge-workspace.json`의 `folderMap`으로 경로를 해석
 ### 4. 세션 완료 (`complete`)
 
 **todo.md:**
-- Merged PRs 테이블에 PR 정보 추가 (`gh pr list` 또는 전달받은 데이터)
+- Merged MRs 테이블에 MR 정보 추가 (`glab mr list` 또는 전달받은 데이터)
 - 완료 상태 표시 (🔄 → ✅)
 - **Mermaid Gantt 최종 갱신** (모든 Phase `done`)
 
@@ -224,7 +224,7 @@ gantt
 **주의사항:**
 - Mermaid 블록이 이미 존재하면 내용만 교체 (블록 삭제 후 재생성하지 않음)
 - 세션이 여러 날에 걸치는 경우 날짜 포맷을 `YYYY-MM-DD`로 변경
-- GitHub, VS Code 모두 Mermaid Gantt를 네이티브 렌더링
+- GitLab, VS Code 모두 Mermaid Gantt를 네이티브 렌더링
 
 ---
 
@@ -341,7 +341,7 @@ enforcement: flexible
 - 기존 내용을 삭제하지 않고 추가/업데이트만 수행
 - 문서가 존재하지 않으면 템플릿 기반으로 생성
 - 날짜 형식: YYYY-MM-DD, 시간 형식: HH:mm
-- PR 번호는 `gh pr list` 또는 세션 상태에서 가져옴
+- MR 번호는 `glab mr list` 또는 세션 상태에서 가져옴
 - Mermaid 블록 갱신 시 기존 블록을 찾아 교체 (중복 생성 금지)
 - 메트릭스 계산 시 session-state.json을 먼저 읽고, 없으면 SKIP
 - 자동 회고는 session_complete 이벤트에서만 생성 (중간 Phase에서 생성 금지)

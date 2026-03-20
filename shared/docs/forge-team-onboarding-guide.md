@@ -38,10 +38,10 @@ v1.4.0부터 **전역 배포 모델**을 사용한다. 대부분의 파일을 `~
 | 카테고리 | 소스 경로 | 배포 경로 | 설명 |
 |---------|----------|----------|------|
 | templates | `forge/templates/` | `.specify/templates/` | Spec, Plan, Task 템플릿 (scope: all만) |
-| github-spec-kit/workflows | `forge/github-spec-kit/workflows/` | `.github/workflows/` | GitHub Actions (spec-check, spec-change-detector) |
-| github-spec-kit/issue-templates | `forge/github-spec-kit/issue-templates/` | `.github/ISSUE_TEMPLATE/` | Issue 템플릿 (spec-request, bug-report) |
-| github-spec-kit/pr-template | `forge/github-spec-kit/pr-template/` | `.github/` | PR 템플릿 (pull_request_template.md) |
-| github-spec-kit/scripts | `forge/github-spec-kit/scripts/` | `scripts/` | Spec 검증 스크립트 (validate-spec.js) |
+| gitlab-spec-kit/workflows | `forge/gitlab-spec-kit/workflows/` | `.gitlab/ci/` | GitLab CI (spec-check, spec-change-detector) |
+| gitlab-spec-kit/issue-templates | `forge/gitlab-spec-kit/issue-templates/` | `.gitlab/issue_templates/` | Issue 템플릿 (spec-request, bug-report) |
+| gitlab-spec-kit/mr-template | `forge/gitlab-spec-kit/mr-template/` | `.gitlab/merge_request_templates/` | MR 템플릿 (merge_request_template.md) |
+| gitlab-spec-kit/scripts | `forge/gitlab-spec-kit/scripts/` | `scripts/` | Spec 검증 스크립트 (validate-spec.js) |
 | recommended/hooks | `forge/recommended/hooks/` | `.claude/hooks/` | 추천 hooks (프로젝트별 설정 의존) |
 
 #### 배포 중단 (소스에서 직접 참조)
@@ -103,15 +103,15 @@ v1.4.0부터 **전역 배포 모델**을 사용한다. 대부분의 파일을 `~
 │   ├── todo-template.md        ← 진행 상태 템플릿
 │   └── development-plan-template.md ← 개발 계획서 템플릿
 │
-├── github-spec-kit/                ← → 프로젝트 .github/ + scripts/에 배포 (v1.5.0)
-│   ├── workflows/                  ← GitHub Actions workflows
-│   │   ├── spec-check.yml          ← PR 시 Spec 파일 검증
+├── gitlab-spec-kit/                ← → 프로젝트 .gitlab/ + scripts/에 배포 (v1.6.0)
+│   ├── workflows/                  ← GitLab CI workflows
+│   │   ├── spec-check.yml          ← MR 시 Spec 파일 검증
 │   │   └── spec-change-detector.yml ← Spec 변경 감지 + Issue 생성
-│   ├── issue-templates/            ← GitHub Issue 템플릿
+│   ├── issue-templates/            ← GitLab Issue 템플릿
 │   │   ├── spec-request.md         ← Spec 요청 템플릿
 │   │   └── bug-report.md           ← 버그 리포트 템플릿
-│   ├── pr-template/                ← PR 템플릿
-│   │   └── pull_request_template.md ← SDD 준수 PR 템플릿
+│   ├── mr-template/                ← MR 템플릿
+│   │   └── merge_request_template.md ← SDD 준수 MR 템플릿
 │   └── scripts/                    ← Spec 검증 스크립트
 │       └── validate-spec.js        ← 로컬 Spec 유효성 검사
 │
@@ -162,10 +162,10 @@ v1.4.0부터 **전역 배포 모델**을 사용한다. 대부분의 파일을 `~
 | `setup.mjs` | manifest.example.json | `manifest.json` 생성 | 최초 1회 (인터랙티브) |
 | `forge-sync` | 전역 컴포넌트 (위와 동일) | `~/.claude/` | 동기화 시 |
 | `forge-sync` | templates | 프로젝트 `.specify/templates/` | 동기화 시 (scope: all만) |
-| `forge-sync` | github-spec-kit | 프로젝트 `.github/` + `scripts/` | 동기화 시 (scope: all만, v1.5.0) |
+| `forge-sync` | gitlab-spec-kit | 프로젝트 `.gitlab/` + `scripts/` | 동기화 시 (scope: all만, v1.6.0) |
 | `forge-sync` | recommended/hooks | 프로젝트 `.claude/hooks/` | 동기화 시 (기존 파일 스킵) |
 
-> **v1.5.0 변경**: GitHub Spec Kit (workflows, issue templates, PR template, validate-spec.js)을 프로젝트에 배포.
+> **v1.6.0 변경**: GitLab Spec Kit (CI workflows, issue templates, MR template, validate-spec.js)을 프로젝트에 배포.
 > **v1.4.0 변경**: docs, shared-docs는 더 이상 프로젝트에 배포하지 않음. `~/.claude/forge/`에서 직접 참조.
 
 ---
@@ -187,20 +187,20 @@ v1.4.0부터 **전역 배포 모델**을 사용한다. 대부분의 파일을 `~
 #### Step 1: Clone
 
 ```bash
-git clone git@github.com:moongci38-oss/forge.git ~/.claude/forge
+git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git ~/.claude/forge
 ```
 
 HTTPS를 사용하는 경우:
 
 ```bash
-git clone https://github.com/moongci38-oss/forge.git ~/.claude/forge
+git clone https://lumir-ai.com/lumir/forge.git ~/.claude/forge
 ```
 
 > **Windows PowerShell 사용자**: PowerShell에서 `~`가 홈 디렉토리로 확장되지 않아, 현재 폴더에 리터럴 `~` 디렉토리가 생성됩니다.
 > 반드시 `$HOME`을 사용하세요:
 >
 > ```powershell
-> git clone git@github.com:moongci38-oss/forge.git "$HOME\.claude\forge"
+> git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git "$HOME\.claude\forge"
 > ```
 
 #### Step 2: Setup 실행
@@ -464,7 +464,7 @@ node ~/.claude/forge/scripts/setup.mjs --wsl-path "Z:/ws" --win-path "E:/ws"    
 
 ### 6.1 개요
 
-v1.5.0부터 **templates와 github-spec-kit이 Override Tracking 대상**이다 (agents, skills, commands, prompts는 전역 배포로 전환).
+v1.6.0부터 **templates와 gitlab-spec-kit이 Override Tracking 대상**이다 (agents, skills, commands, prompts는 전역 배포로 전환).
 
 프로젝트에서 forge이 배포한 templates 파일을 수정하면, 이후 전역 소스가 변경되더라도 프로젝트의 커스텀 버전이 유지된다. 반대로, 수정하지 않은 파일은 전역 변경이 자동으로 반영된다.
 
@@ -714,11 +714,11 @@ v1.4.0부터 `~/.claude/`에 전역 배포. 이미 존재하는 파일은 스킵
 
 | 변경 | 설명 |
 |------|------|
-| GitHub Spec Kit 전역화 | `github-spec-kit/` → 프로젝트 `.github/` + `scripts/`에 배포 (scope: all) |
-| Override Tracking 확장 | templates + github-spec-kit 모두 프로젝트별 커스터마이징 추적 |
-| 범용 workflows | Portfolio + GodBlade 장점 결합한 범용 spec-check.yml, spec-change-detector.yml |
-| 범용 validate-spec.js | 번호 매김 + 한국어/영어 패턴 지원, Node.js 런타임 불필요 workflow |
-| manifest.json v1.2.0 | core 섹션에 github-spec-kit 파일 목록 추가 |
+| GitLab Spec Kit 전역화 | `gitlab-spec-kit/` → 프로젝트 `.gitlab/` + `scripts/`에 배포 (scope: all) |
+| Override Tracking 확장 | templates + gitlab-spec-kit 모두 프로젝트별 커스터마이징 추적 |
+| 범용 CI configs | Portfolio + GodBlade 장점 결합한 범용 spec-check.yml, spec-change-detector.yml |
+| 범용 validate-spec.js | 번호 매김 + 한국어/영어 패턴 지원, Node.js 런타임 불필요 CI job |
+| manifest.json v1.2.0 | core 섹션에 gitlab-spec-kit 파일 목록 추가 |
 
 ### 10.2 v1.4.0 변경사항 (2026-02-23)
 
@@ -831,9 +831,9 @@ Phase 3에서 UI 구현 시 컴포넌트 단위로 아래 사이클을 반복:
 | Walkthrough + Check 3 병렬 | 구현 완료 후 Walkthrough와 Check 3를 동시 실행 가능 |
 | spec-compliance-checker JSON | Check 3.5 출력 형식을 Markdown → JSON으로 변경 (Subagent 격리 규칙 준수) |
 
-### 10.4 GitHub Repository
+### 10.4 GitLab Repository
 
-- **URL**: `git@github.com:moongci38-oss/forge.git`
+- **URL**: `ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git`
 - **Visibility**: Private
 - **Branch**: master
 
@@ -890,7 +890,7 @@ Cloning into '~/.claude/forge'...    ← 리터럴 ~ 폴더 생성!
 Remove-Item -Recurse -Force "~"
 
 # 2. $HOME으로 다시 clone
-git clone git@github.com:moongci38-oss/forge.git "$HOME\.claude\forge"
+git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git "$HOME\.claude\forge"
 
 # 3. setup 실행
 node "$HOME\.claude\forge\scripts\setup.mjs"

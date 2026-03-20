@@ -684,7 +684,7 @@ Provide:
 - Suggested PR body (markdown)
 - Branch name suggestion
 
-Do NOT run git push or gh pr create — the human will do that.`,
+Do NOT run git push or glab mr create — the human will do that.`,
     model: 'claude-sonnet-4-6',
     tools: ['Read', 'Glob', 'Grep', 'Bash'],
     maxTurns: 10,

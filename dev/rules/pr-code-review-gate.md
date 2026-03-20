@@ -41,16 +41,16 @@ PR 생성 직전, 변경된 파일에 대해 아래 항목을 검증한다:
 
 PR 생성 후 **2단계 전략**으로 CI + 리뷰를 처리한다:
 
-### Step 1: CI 완료 대기 (`gh run watch` — 블로킹)
+### Step 1: CI 완료 대기 (`glab ci view --wait` — 블로킹)
 
 ```bash
-# PR의 CI run ID를 확인하고 완료까지 블로킹 대기 (sleep 폴링 없음)
-gh run watch {RUN_ID} --repo {owner}/{repo}
+# MR의 CI pipeline ID를 확인하고 완료까지 블로킹 대기 (sleep 폴링 없음)
+glab ci view {PIPELINE_ID} --wait
 ```
 
 - CI pending 중 불필요한 폴링을 제거한다
 - CI 완료 시 즉시 Step 2로 전환한다
-- CI FAIL 시 → 코드 수정 → push → `gh run watch`로 재대기
+- CI FAIL 시 → 코드 수정 → push → `glab ci view --wait`로 재대기
 
 ### Step 2: 리뷰 코멘트 폴링 (`/loop 2m`)
 
@@ -58,17 +58,17 @@ CI 전체 PASS 확인 후 `/loop 2m`으로 리뷰 대응을 시작한다:
 
 ```
 1. /loop 2m 으로 아래를 자동 반복:
-   - gh api repos/{owner}/{repo}/pulls/{PR}/reviews → 리뷰 본문 확인
-   - gh api repos/{owner}/{repo}/pulls/{PR}/comments → 인라인 코멘트 확인
-   - gh api repos/{owner}/{repo}/issues/{PR}/comments → 봇 코멘트 체크박스 확인
+   - glab api projects/:id/merge_requests/{MR}/approval_state → 리뷰 본문 확인
+   - glab api projects/:id/merge_requests/{MR}/notes → 인라인 코멘트 확인
+   - glab api projects/:id/merge_requests/{MR}/notes → 봇 코멘트 체크박스 확인
    - 코멘트 없음 → 체크박스 자동 체크 → 완료 보고 후 루프 종료
    - 코멘트 발견 → 아래 2-3단계 수행 후 루프 계속
 2. WARN/BLOCK 코멘트 → 코드 수정 → 새 커밋 push
 3. 각 코멘트에 "Fixed in {hash} — {요약}" 회신 (**중복 회신 방지 필수** — 아래 규칙 참조)
-4. 코드 수정 push 후 → `gh run watch`로 CI 재대기 → PASS 후 루프 복귀
+4. 코드 수정 push 후 → `glab ci view --wait`로 CI 재대기 → PASS 후 루프 복귀
 5. CI 전체 PASS + 코멘트 0건 시 PR body + 봇 코멘트의 미체크 체크박스를 자동 체크:
-   - PR body: `gh api repos/{owner}/{repo}/pulls/{PR} -X PATCH -f body="..."`
-   - 봇 코멘트: `gh api repos/{owner}/{repo}/issues/comments/{ID} -X PATCH -f body="..."`
+   - MR body: `glab api projects/:id/merge_requests/{MR} -X PUT -f description="..."`
+   - 봇 코멘트: `glab api projects/:id/merge_requests/{MR}/notes/{ID} -X PUT -f body="..."`
    - `[ ]` → `[x]` 일괄 변환 (For Reviewers 포함)
 ```
 
@@ -80,29 +80,29 @@ CI 전체 통과 + 리뷰 코멘트 처리 완료 후, PR의 **모든 미체크 
 
 | 위치 | 체크 대상 | 방법 |
 |------|----------|------|
-| PR body | Review Checklist, Test plan, For Reviewers 등 모든 `[ ]` | `gh api pulls/{PR} -X PATCH -f body=...` |
-| 봇 코멘트 (issue comments) | Spec Check 봇 등의 체크리스트 `[ ]` | `gh api issues/comments/{ID} -X PATCH -f body=...` |
+| MR body | Review Checklist, Test plan, For Reviewers 등 모든 `[ ]` | `glab api projects/:id/merge_requests/{MR} -X PUT -f description=...` |
+| 봇 코멘트 (MR notes) | Spec Check 봇 등의 체크리스트 `[ ]` | `glab api projects/:id/merge_requests/{MR}/notes/{ID} -X PUT -f body=...` |
 
 ### 자동 체크 스크립트 패턴
 
 ```bash
 # PR body 체크박스 전체 체크
-BODY=$(gh api repos/{owner}/{repo}/pulls/{PR} --jq '.body')
+BODY=$(glab api projects/:id/merge_requests/{MR} --jq '.description')
 UPDATED=$(echo "$BODY" | sed 's/- \[ \]/- [x]/g')
-gh api repos/{owner}/{repo}/pulls/{PR} -X PATCH -f body="$UPDATED"
+glab api projects/:id/merge_requests/{MR} -X PUT -f description="$UPDATED"
 
 # 봇 코멘트 체크박스 전체 체크
-gh api repos/{owner}/{repo}/issues/{PR}/comments --jq '.[] | select(.body | test("\\[ \\]")) | {id: .id, body: .body}' | \
+glab api projects/:id/merge_requests/{MR}/notes --jq '.[] | select(.body | test("\\[ \\]")) | {id: .id, body: .body}' | \
   jq -c '.' | while read -r item; do
     ID=$(echo "$item" | jq -r '.id')
     BODY=$(echo "$item" | jq -r '.body' | sed 's/- \[ \]/- [x]/g')
-    gh api repos/{owner}/{repo}/issues/comments/$ID -X PATCH -f body="$BODY"
+    glab api projects/:id/merge_requests/{MR}/notes/$ID -X PUT -f body="$BODY"
   done
 ```
 
 ### 실행 조건
 
-- CI 전체 PASS (`gh pr checks` 모든 항목 pass/skipping)
+- CI 전체 PASS (`glab ci view` 모든 항목 pass/skipping)
 - 리뷰 코멘트 미해결 건 없음
 - 위 조건 미충족 시 체크박스 자동 체크 하지 않음
 
@@ -112,8 +112,8 @@ gh api repos/{owner}/{repo}/issues/{PR}/comments --jq '.[] | select(.body | test
 
 ```bash
 # 회신 전 기존 회신 확인 (필수)
-gh api repos/{owner}/{repo}/pulls/{PR}/comments \
-  --jq '.[] | select(.user.login != "gemini-code-assist[bot]") | {id: .id, in_reply_to: .in_reply_to_id, body: (.body | split("\n")[0])}'
+glab api projects/:id/merge_requests/{MR}/notes \
+  --jq '.[] | select(.author.username != "gemini-code-assist") | {id: .id, body: (.body | split("\n")[0])}'
 ```
 
 | 상황 | 행동 |
@@ -124,7 +124,7 @@ gh api repos/{owner}/{repo}/pulls/{PR}/comments \
 
 ## 체크박스 체크 타이밍 (필수)
 
-체크박스를 체크한 후 새 커밋을 push하면, GitHub Actions 봇이 코멘트를 재생성/업데이트하면서 **체크박스가 리셋**될 수 있다. 따라서:
+체크박스를 체크한 후 새 커밋을 push하면, GitLab CI 봇이 코멘트를 재생성/업데이트하면서 **체크박스가 리셋**될 수 있다. 따라서:
 
 1. **체크박스 체크는 모든 push가 완료된 후, CI 전체 PASS 확인 후에만 실행**한다
 2. 코드 수정 push → CI 대기 → CI PASS → **그때** 체크박스 체크
@@ -145,9 +145,9 @@ gh api repos/{owner}/{repo}/pulls/{PR}/comments \
 
 ## AI 행동 규칙
 
-1. `gh pr create` 실행 전 위 보안 패턴을 자체 검증
+1. `glab mr create` 실행 전 위 보안 패턴을 자체 검증
 2. Blocking 이슈 발견 시 PR 생성하지 않고 수정 먼저
-3. **PR 생성 직후 `gh run watch`로 CI 대기 → PASS 후 `/loop 2m`으로 리뷰 폴링** (2단계 전략)
+3. **MR 생성 직후 `glab ci view --wait`로 CI 대기 → PASS 후 `/loop 2m`으로 리뷰 폴링** (2단계 전략)
 4. 봇 리뷰(Gemini 등)도 Human 리뷰와 동일하게 대응
 5. CI + 리뷰 코멘트 확인을 **스킵하지 않는다** — 어떤 상황에서도 건너뛰기 금지
 6. **CI 전체 PASS + 리뷰 코멘트 0건 → 즉시 squash merge + branch 삭제 → 다음 작업 착수**
@@ -171,33 +171,33 @@ gh api repos/{owner}/{repo}/pulls/{PR}/comments \
 
 | 이벤트 | 행동 |
 |--------|------|
-| `gh pr create` 직후 | **즉시** `gh run watch`로 CI 대기 시작 |
+| `glab mr create` 직후 | **즉시** `glab ci view --wait`로 CI 대기 시작 |
 | CI 전체 PASS 후 | `/loop 2m`으로 리뷰 코멘트 폴링 시작 |
-| 워크트리 에이전트 PR 생성 | 에이전트 프롬프트에 2단계 전략 지시 포함 필수 |
-| 코드 수정 후 push | `gh run watch`로 CI 재대기 → PASS 후 `/loop` 복귀 |
+| 워크트리 에이전트 MR 생성 | 에이전트 프롬프트에 2단계 전략 지시 포함 필수 |
+| 코드 수정 후 push | `glab ci view --wait`로 CI 재대기 → PASS 후 `/loop` 복귀 |
 
 ### Step 1: CI 대기
 
 ```bash
-# CI run ID 확인 후 블로킹 대기 (sleep 폴링 없음)
-RUN_ID=$(gh run list --branch {BRANCH} --limit 1 --json databaseId --jq '.[0].databaseId')
-gh run watch $RUN_ID
+# CI pipeline ID 확인 후 블로킹 대기 (sleep 폴링 없음)
+PIPELINE_ID=$(glab ci list --branch {BRANCH} | awk 'NR==2{print $1}')
+glab ci view $PIPELINE_ID --wait
 ```
 
 ### Step 2: `/loop` 폴링 내용 (CI PASS 후)
 
 ```bash
 # 매 2분마다 반복 (CI 체크 제외 — 이미 PASS 확인됨):
-gh api repos/{owner}/{repo}/pulls/{PR}/reviews  # 리뷰 본문
-gh api repos/{owner}/{repo}/pulls/{PR}/comments # 인라인 코멘트
-gh api repos/{owner}/{repo}/issues/{PR}/comments # 봇 코멘트
+glab api projects/:id/merge_requests/{MR}/approval_state  # 리뷰 본문
+glab api projects/:id/merge_requests/{MR}/notes # 인라인 코멘트
+glab api projects/:id/merge_requests/{MR}/notes # 봇 코멘트
 ```
 
 ### 종료 조건
 
 | 조건 | 행동 |
 |------|------|
-| CI PASS + 코멘트 0건 | 체크박스 체크 → `gh pr merge --squash --delete-branch` → 완료 보고 → **의존 다음 작업 즉시 착수** |
+| CI PASS + 코멘트 0건 | 체크박스 체크 → `glab mr merge --squash --remove-source-branch` → 완료 보고 → **의존 다음 작업 즉시 착수** |
 | CI FAIL | 코드 수정 → push → 루프 계속 |
 | 리뷰 코멘트 발견 | 코드 수정 → push → CI 재대기 → 루프 계속 |
 | merge conflict | **[STOP]** Human 에스컬레이션 |
@@ -205,7 +205,7 @@ gh api repos/{owner}/{repo}/issues/{PR}/comments # 봇 코멘트
 
 ### 금지 사항
 
-- ❌ PR 생성 후 `gh run watch` 없이 `sleep` 폴링으로 CI 대기
+- ❌ MR 생성 후 `glab ci view --wait` 없이 `sleep` 폴링으로 CI 대기
 - ❌ CI pending 중 `/loop`로 불필요한 리뷰 폴링 시작
 - ❌ CI 결과를 수동으로 한 번만 확인하고 끝내기
 - ❌ CI + 리뷰 확인 없이 "CI 확인해주세요"라고 Human에게 떠넘기기

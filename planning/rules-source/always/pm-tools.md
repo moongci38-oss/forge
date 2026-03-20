@@ -114,18 +114,18 @@ content = {ai-system-analysis.md 전체} + "\n\n---\n\n" + {system-improvement-p
 
 | 대상 | 갱신 주체 | 시점 | 비고 |
 |------|----------|------|------|
-| Notion Tasks (할 일→진행중) | GitHub Actions (자동) | branch create | sync-notion-tasks.py `doing` |
+| Notion Tasks (할 일→진행중) | GitLab CI (자동) | branch create | sync-notion-tasks.py `doing` |
 | Notion Tasks (진행중→QA) | AI (세션 내) | Check 3 진입 | notion-update-page 직접 호출 |
-| Notion Tasks (→완료) | GitHub Actions (자동) | PR merge | sync-notion-tasks.py `done` |
+| Notion Tasks (→완료) | GitLab CI (자동) | PR merge | sync-notion-tasks.py `done` |
 | Notion Tasks (초기 등록) | AI 또는 수동 | S4 Gate PASS | sync-notion-tasks.py `register` |
 | Notion Tasks (Hotfix) | AI 직접 | Hotfix 등록 시 | P0-긴급 강제 |
 
-### GitHub Actions 자동 Notion 갱신
+### GitLab CI 자동 Notion 갱신
 
 `todo-tracker.yml` 워크플로가 브랜치/PR 이벤트 시 `sync-notion-tasks.py`를 호출하여 Notion Tasks DB를 직접 갱신한다.
 
 **전제 조건:**
-1. GitHub Secrets에 `NOTION_API_TOKEN` 설정 (Notion Internal Integration 토큰)
+1. GitLab CI/CD Variables에 `NOTION_API_TOKEN` 설정 (Notion Internal Integration 토큰)
 2. 프로젝트 `.specify/config.json`에 `notion.tasksDbId`와 `notion.projectName` 설정
 3. Notion Tasks DB에 해당 Integration 연결 (1회)
 
@@ -136,8 +136,8 @@ content = {ai-system-analysis.md 전체} + "\n\n---\n\n" + {system-improvement-p
 | 액션 | 트리거 | 동작 |
 |------|--------|------|
 | `register` | S4 Gate PASS (로컬 실행) | todo.md 전체 행을 Notion에 일괄 등록 (idempotent) |
-| `doing` | GitHub Actions (branch create) | Notion에서 키워드 매칭 → 상태 "진행중" + 브랜치명 기록 |
-| `done` | GitHub Actions (PR merge) | Notion에서 키워드 매칭 → 상태 "완료" + PR URL + 완료일 기록 |
+| `doing` | GitLab CI (branch create) | Notion에서 키워드 매칭 → 상태 "진행중" + 브랜치명 기록 |
+| `done` | GitLab CI (PR merge) | Notion에서 키워드 매칭 → 상태 "완료" + PR URL + 완료일 기록 |
 
 **설정 파일 구조 (`.specify/config.json`):**
 ```json

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * forge-sync.mjs v1.5.0
+ * forge-sync.mjs v1.6.0
  * Forge Dev Global + Project Sync Engine
  *
- * v1.5.0: GitHub Spec Kit global deployment
- *   - github-spec-kit/ → project .github/ + scripts/ (scope: all)
- *   - Override tracking for workflows, templates, scripts
+ * v1.6.0: GitLab Spec Kit migration (GitHub → GitLab)
+ *   - gitlab-spec-kit/ → project .gitlab/ + scripts/ (scope: all)
+ *   - Override tracking for CI configs, templates, scripts
  *
  * v1.4.0: Global deployment model
  *   - rules, agents, skills, commands, prompts → ~/.claude/ (global, all projects)
@@ -73,10 +73,10 @@ const GLOBAL_RECOMMENDED_MAPPINGS = [
 const PROJECT_MAPPINGS = [
   { src: 'rules',     dst: '.claude/rules' },  // Forge Dev dev rules → project .claude/rules/
   { src: 'templates', dst: '.specify/templates' },
-  { src: 'github-spec-kit/workflows', dst: '.github/workflows' },
-  { src: 'github-spec-kit/issue-templates', dst: '.github/ISSUE_TEMPLATE' },
-  { src: 'github-spec-kit/pr-template', dst: '.github' },
-  { src: 'github-spec-kit/scripts', dst: 'scripts' },
+  { src: 'gitlab-spec-kit/workflows', dst: '.gitlab/ci' },
+  { src: 'gitlab-spec-kit/issue-templates', dst: '.gitlab/issue_templates' },
+  { src: 'gitlab-spec-kit/mr-template', dst: '.gitlab/merge_request_templates' },
+  { src: 'gitlab-spec-kit/scripts', dst: 'scripts' },
 ];
 
 // Project-only recommended (hooks are project-specific)
@@ -84,13 +84,13 @@ const PROJECT_RECOMMENDED_MAPPINGS = [
   { src: 'recommended/hooks', dst: '.claude/hooks' },
 ];
 
-// Override policy: templates + github-spec-kit use state-based tracking
+// Override policy: templates + gitlab-spec-kit use state-based tracking
 const OVERRIDE_CATEGORIES = new Set([
   'templates',
-  'github-spec-kit/workflows',
-  'github-spec-kit/issue-templates',
-  'github-spec-kit/pr-template',
-  'github-spec-kit/scripts',
+  'gitlab-spec-kit/workflows',
+  'gitlab-spec-kit/issue-templates',
+  'gitlab-spec-kit/mr-template',
+  'gitlab-spec-kit/scripts',
 ]);
 
 // ---------------------------------------------------------------------------
@@ -766,7 +766,7 @@ function main() {
       cmdRemove(args);
       break;
     default:
-      console.log(`Forge Dev Sync Engine v1.5.0 (Global Deployment Model)
+      console.log(`Forge Dev Sync Engine v1.6.0 (Global Deployment Model)
 
 Usage: node ~/.claude/scripts/forge-sync.mjs <command>
 
@@ -783,7 +783,7 @@ Commands:
 Deployment:
   Global (all projects):  rules, agents, skills, commands, prompts → ~/.claude/
   Project (scope: all):   templates → .specify/templates/
-                          github-spec-kit → .github/ + scripts/
+                          gitlab-spec-kit → .gitlab/ + scripts/
   Reference only:         docs, shared-docs → /home/damools/forge/dev/ (not deployed)
 
 Source: ${normalPath(FORGE_DEV_ROOT)}

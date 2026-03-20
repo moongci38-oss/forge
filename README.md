@@ -39,7 +39,7 @@ Every task — including hotfixes — requires a Spec document before branch cre
 
 ```bash
 # 1. Clone
-git clone git@github.com:moongci38-oss/forge.git ~/forge
+git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git ~/forge
 cd ~/forge
 
 # 2. Workspace config
@@ -76,7 +76,7 @@ forge/
 │   ├── templates/      ← Dev templates
 │   ├── scripts/        ← Dev scripts (forge-sync, etc.)
 │   ├── schemas/        ← JSON schemas
-│   └── github-spec-kit/← GitHub workflows + scripts
+│   └── gitlab-spec-kit/← GitLab CI pipelines + scripts
 ├── shared/             ← Shared between planning & dev
 │   ├── docs/           ← Shared documentation
 │   ├── scripts/        ← Management scripts
@@ -99,8 +99,8 @@ forge/
 | Action | Trigger | Mechanism |
 |--------|---------|-----------|
 | Initial registration | S4 Gate PASS | `sync-notion-tasks.py register <todo-file>` |
-| Mark in-progress | Branch creation | GitHub Actions → Notion API |
-| Mark done | PR merge | GitHub Actions → Notion API |
+| Mark in-progress | Branch creation | GitLab CI → Notion API |
+| Mark done | PR merge | GitLab CI → Notion API |
 | Manual registration | On request | AI via Notion MCP or direct Notion entry |
 
 **Registration criteria:** Only tasks that require a Spec document and a branch are registered.

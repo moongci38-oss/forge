@@ -150,9 +150,9 @@ function checkPrerequisites() {
     console.error('    1. 잘못된 폴더 삭제');
     console.error('    2. 다시 clone:');
     if (PLATFORM === 'win32') {
-      console.error(`       git clone git@github.com:moongci38-oss/forge.git "$HOME\\.claude\\forge"`);
+      console.error(`       git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git "$HOME\\.claude\\forge"`);
     } else {
-      console.error('       git clone git@github.com:moongci38-oss/forge.git /home/damools/forge/dev');
+      console.error('       git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git /home/damools/forge/dev');
     }
     process.exit(1);
   }

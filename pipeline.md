@@ -264,7 +264,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
 `/forge-onboard` 스킬을 자동 호출하여 4단계 온보딩 실행:
 
 1. **forge-sync 등록**: `forge-sync init` → manifest.json + `.specify/config.json`
-2. **forge-sync 배포**: `forge-sync sync --target <name> --include-recommended` → 규칙/템플릿/GitHub Spec Kit
+2. **forge-sync 배포**: `forge-sync sync --target <name> --include-recommended` → 규칙/템플릿/GitLab Spec Kit
 3. **프로젝트 스캐폴딩**: CLAUDE.md, constitution.md, agent-teams.md, verify.sh, docs/ 구조
 4. **forge-workspace.json 등록**: devTarget + symlinkBase 연결
 5. `git init` + initial commit
@@ -281,7 +281,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
    - 내용: 산출물 인덱스, 기술 스택, 세션 로드맵, ADR 요약
 2. **symlink 일괄 생성** (`forge-workspace.json`의 `devTarget` + `symlinkBase` 기준):
    - 개발 프로젝트 `docs/planning/active/forge/{domain}/`에 산출물 symlink
-   - `todo.md`는 실제 파일로 생성 (symlink 금지 — GitHub Actions 호환)
+   - `todo.md`는 실제 파일로 생성 (symlink 금지 — GitLab CI 호환)
 3. **todo.md 행 추가** (Notion MCP 미연결 시 Tier 2 Fallback)
 4. Human에게 프로젝트 폴더 이동 안내
 
@@ -417,14 +417,14 @@ Phase 4 작성 중 "대량 아이콘 필요"
 ### PR 생성 절차
 
 1. AI가 커밋 생성 (Conventional Commits)
-2. AI가 `gh pr create` → PR URL 반환
+2. AI가 `glab mr create` → MR URL 반환
 3. **Check 7 (PR Health Check)** — 2단계:
-   - **Step 1**: `gh run watch {RUN_ID}` — CI 완료까지 블로킹 대기
+   - **Step 1**: `glab ci view {PIPELINE_ID} --wait` — CI 완료까지 블로킹 대기
    - **Step 2**: 리뷰 코멘트 인라인 폴링
      - 코멘트 없음 → 완료 / CI 실패·코멘트 발견 → 수정 → push → Step 1 재시작
 4. **완료 분기**:
    - `autoMerge=false` → **[STOP]** Human merge 대기
-   - `autoMerge=true` → CI+리뷰 PASS 시 `gh pr merge --squash --delete-branch`
+   - `autoMerge=true` → CI+리뷰 PASS 시 `glab mr merge --squash --remove-source-branch`
 5. (조건부) 리뷰 코멘트 → `superpowers:receiving-code-review` 프로토콜
 
 **도구**: `gh` CLI, `code-review`(플러그인, 선택), Notion(MCP)
@@ -435,7 +435,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
 
 ## Phase 10: Develop Integration
 
-> `develop-integration.yml` GitHub Actions 자동 실행. 수동 개입 불필요.
+> `develop-integration.yml` GitLab CI 자동 실행. 수동 개입 불필요.
 > Check 8: 자동
 
 1. PR merge to develop → `develop-integration.yml` 자동 트리거
@@ -444,7 +444,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
    - `e2e-runner.sh --env local` (`.specify/e2e-pipeline.json` 존재 시만)
 3. **결과 분기**:
    - ✅ PASS → Phase 11 진입 가능
-   - ❌ FAIL → GitHub Issue 자동 생성 → AI 분석 + 수정 → develop 재push
+   - ❌ FAIL → GitLab Issue 자동 생성 → AI 분석 + 수정 → develop 재push
      - **재시도 한도: 최대 2회.** 2회 연속 FAIL 시 자동 수정 중단 → **[STOP]** Human 에스컬레이션 필수
 4. PASS 확인 후 `/forge-release` 커맨드로 Phase 11 진입
 
@@ -479,7 +479,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
 2. **Check 10** 자동 실행:
    - `deploy-runner.sh --env production` (빈 값이면 skip)
    - Health check + Smoke test (설정 시)
-   - GitHub Release 자동 생성 (tag + changelog)
+   - GitLab Release 자동 생성 (tag + changelog)
    - `release/{version}` 브랜치 자동 삭제
 3. **결과 분기**:
    - ✅ PASS → 완료. `forge-pm-updater`로 Notion + development-plan.md 상태 갱신

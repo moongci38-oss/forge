@@ -33,7 +33,7 @@ forge/
 │   ├── templates/    ← 개발 템플릿
 │   ├── scripts/      ← 개발 스크립트
 │   ├── schemas/      ← JSON 스키마
-│   ├── github-spec-kit/ ← GitHub 연동
+│   ├── gitlab-spec-kit/ ← GitLab 연동
 │   └── prompts/      ← 개발 파이프라인 프롬프트
 ├── shared/           ← 양쪽 공통
 │   ├── docs/         ← 공유 문서
@@ -82,7 +82,7 @@ forge-outputs/          ← 산출물 (private repo)
 
 ## 팀 온보딩
 
-1. 레포 클론: `git clone git@github.com:moongci38-oss/forge.git`
+1. 레포 클론: `git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git`
 2. `.env.example` → `.env` 복사 후 API 키 설정
 3. `forge-workspace.json`에서 프로젝트 경로 확인
 4. Claude Code에서 `/forge` 등 슬래시 커맨드 사용

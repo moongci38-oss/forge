@@ -74,7 +74,7 @@ Check 3.7: code-reviewer 에이전트 스폰 (역할 분리 병렬)
 ```bash
 # 브랜치: hotfix/{issue-summary}
 # PR 생성 후 CI 대기
-gh run watch {RUN_ID}
+glab ci view {PIPELINE_ID} --wait
 # CI PASS → 리뷰 폴링 3종 실행
 ```
 
