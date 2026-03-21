@@ -1,0 +1,5 @@
+iteration	date	pass_rate	delta	status	change_description
+0	2026-03-21	0%	0	baseline	initial measurement
+1	2026-03-21	0%	0	revert	"when possible"이 너무 약한 조건이라 파일 경로가 생략됨 → 최소 1개 파일 경로 포함을 강제 요건으로 변경
+2	2026-03-21	0%	0	revert	Plan Template에 명시적 `## Approach` 섹션 헤더를 추가하고 Action Items 예시를 6개로 확장하여 Criterion 1(Approach 미감지)·3(항목 수 부족) 동시 해결
+3	2026-03-21	0%	0	revert	템플릿의 Action Items 예시가 5개(기준 미달)이고 파일 경로가 없어서, 6개+파일경로 포함 예시로 교체해 두 실패 패턴을 한 번에 수정

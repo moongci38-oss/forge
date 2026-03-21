@@ -1,0 +1,26 @@
+{
+  "title": "클로드 코드 + 오토리서치 = 자기 개선 AI입니다",
+  "channel": "Tech Bridge",
+  "channel_url": "https://www.youtube.com/@TechBridge-KR",
+  "thumbnail": "https://i.ytimg.com/vi/HaAZu5lUkWI/hqdefault.jpg",
+  "published": "2026-03-15",
+  "duration": "26:45",
+  "view_count": "3.6K",
+  "view_count_raw": 3647,
+  "like_count": "119",
+  "like_count_raw": 119,
+  "comment_count": "1",
+  "comment_count_raw": 1,
+  "tags": [
+    "AI",
+    "개발",
+    "프로그래밍",
+    "한국어 번역"
+  ],
+  "description": "클로드 코드(Claude Code)와 카르파티의 오토리서치(Autoresearch)를 결합하면 AI가 스스로 실험하고 개선하는 자기 개선 AI 파이프라인을 구축할 수 있습니다. 비즈니스에 실제로 적용하는 방법을 단계별로 안내합니다.\n\n🔑 주요 포인트\n- 안드레 카르파티(Andre Karpathy)의 오픈소스 오토리서치(Autoresearch) 레포 소개\n- 이메일 최적화, 광고 카피, 프롬프트 개선 등 실전 비즈니스 적용 사례\n- 클로드 코드(Claude Code) 안에서 자율 실험 시스템 구축하는 방법\n- 결과 시각화 및 모니터링 방법\n- 자동 최적화의 한계와 활용 시 주의사항\n\n#클로드코드 #AI자동화 #오토리서치 #자기개선AI #카르파티 #Claude #LLM #AI에이전트 #비즈니스자동화 #머신러닝\n\n📎 관련 링크:\nhttps://github.com/karpathy/autoresearch\nhttps://www.youtube.com/watch?v=QoQBzR1NIqI\nhttps://www.skool.com/makerschool/about\nhttps://drive.google.com/drive/folders/1TYXOUhy4k0nFUXqcgHKTKj5gPGCIZxDu?usp=sharing\nhttps://www.youtube.com/watch?v=gcuR_-rzlDw\nhttps://www.youtube.com/watch?v=MxyRjL7NG18\nhttps://www.youtube.com/watch?v=2GZ2SNXWK-c",
+  "description_links": [
+    "https://github.com/karpathy/autoresearch",
+    "https://www.skool.com/makerschool/about",
+    "https://drive.google.com/drive/folders/1TYXOUhy4k0nFUXqcgHKTKj5gPGCIZxDu?usp=sharing"
+  ]
+}
