@@ -32,7 +32,7 @@ Usage:
   manage-skills.sh audit [--usage] [--json]           Find unreferenced skills (disable candidates)
   manage-skills.sh validate [skill-name]             Validate SKILL.md frontmatter fields
   manage-skills.sh build <skill-name>                Generate AGENTS.md from rules/ subdirectory
-  manage-skills.sh test <skill-name>                 Run subagent scenario test (placeholder)
+  manage-skills.sh assess <skill-name> [--runs N]     Run skill assessment with Yes/No criteria
 
 Examples:
   manage-skills.sh enable aitmpl/forge-marketing/product-strategist
@@ -690,15 +690,26 @@ cmd_build() {
 }
 
 # ─── TEST ───────────────────────────────────────────────────────────────────
-cmd_test() {
+cmd_assess() {
     local skill_name="${1:-}"
-    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
+    shift || true
+    local runs=3
+
+    # Parse --runs flag
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --runs) runs="${2:-3}"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+
+    [ -n "$skill_name" ] || { echo -e "${RED}Usage: manage-skills.sh assess <skill-name> [--runs N]${NC}"; exit 1; }
 
     # Find skill directory
     local found_dir=""
-    while IFS= read -r -d '' skill_md; do
+    while IFS= read -r -d '' skill_md_file; do
         local dir
-        dir=$(dirname "$skill_md")
+        dir=$(dirname "$skill_md_file")
         if [ "$(basename "$dir")" = "$skill_name" ]; then
             found_dir="$dir"
             break
@@ -710,30 +721,26 @@ cmd_test() {
         exit 1
     fi
 
-    echo -e "${CYAN}=== Skill Test: $skill_name ===${NC}"
+    # Check for assessment.md
+    local assessment_file="$found_dir/assessment.md"
+    if [ ! -f "$assessment_file" ]; then
+        echo -e "${RED}No assessment.md found in $found_dir${NC}"
+        echo -e "${YELLOW}Create one using: dev/templates/skill-assessment-template.md${NC}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}=== Skill Assessment: $skill_name ===${NC}"
+    echo -e "  Runs per input: $runs"
     echo ""
 
-    # Extract name and description from frontmatter for display
-    local skill_md="$found_dir/SKILL.md"
-    local frontmatter
-    frontmatter=$(awk '/^---$/{if(++n==1){found=1; next} if(n==2){exit}} found{print}' "$skill_md")
+    # Delegate to runner script
+    local runner_script="$FORGE_ROOT/shared/scripts/skill-assess-runner.sh"
+    if [ ! -f "$runner_script" ]; then
+        echo -e "${RED}Runner script not found: $runner_script${NC}"
+        exit 1
+    fi
 
-    local name_val description_val
-    name_val=$(echo "$frontmatter" | grep "^name:" | sed 's/^name:[[:space:]]*//' | tr -d '"')
-    description_val=$(echo "$frontmatter" | grep "^description:" | sed 's/^description:[[:space:]]*//' | tr -d '"')
-
-    echo -e "  ${BOLD}Name:${NC}        $name_val"
-    echo -e "  ${BOLD}Description:${NC} $description_val"
-    echo ""
-    echo -e "${YELLOW}Subagent testing will be available in a future update.${NC}"
-    echo ""
-    echo "Planned behavior:"
-    echo "  1. Load skill into a subagent context"
-    echo "  2. Run TDD scenarios defined in the skill's test suite"
-    echo "  3. Report pass/fail for each scenario"
-    echo ""
-    echo "For now, test manually by loading the skill in a Claude Code subagent"
-    echo "and running the scenarios from the Rationalization Table / Red Flags sections."
+    bash "$runner_script" "$skill_name" "$assessment_file" "$runs"
 }
 
 # ─── MAIN ──────────────────────────────────────────────────────────────────
@@ -780,9 +787,9 @@ main() {
             [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh build <skill-name>${NC}"; exit 1; }
             cmd_build "$1"
             ;;
-        test)
-            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh test <skill-name>${NC}"; exit 1; }
-            cmd_test "$1"
+        assess)
+            [ $# -ge 1 ] || { echo -e "${RED}Usage: manage-skills.sh assess <skill-name> [--runs N]${NC}"; exit 1; }
+            cmd_assess "$@"
             ;;
         help|--help|-h)
             usage
