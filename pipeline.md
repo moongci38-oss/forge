@@ -550,3 +550,119 @@ Phase 4 작성 중 "대량 아이콘 필요"
 ---
 
 *Last Updated: 2026-03-19 (Phase 1~12 통합)*
+
+---
+
+# Part C: 정부지원사업 (forge-outputs/09-grants/)
+
+> 정부기관 지원사업 라이프사이클 관리. Part A/B와 인프라(Subagent, Notion, Cron)를 공유하되 Phase/Gate는 독립 운영.
+> Check GR: 각 Phase별 게이트
+
+## 전체 흐름
+
+```
+Phase GR-1: 공고 분석 & 적격성   → Phase GR-2: 전략 & Go/No-Go → Phase GR-3: 서류 작성
+  [AUTO-PASS]                        [STOP]                          [STOP]
+                                                                        ↓
+Phase GR-4: 제출 패키지 완성     → Phase GR-5: 제출 & 대기        → Phase GR-6: 수행 관리
+  [STOP]                             [ASYNC]                         [주기적 체크포인트]
+```
+
+## Phase GR-1: 공고 분석 & 적격성 검토
+
+> 공고문 파싱 → _grant-info.md 자동 생성 → 적격성 판정
+> Check GR-1: AUTO-PASS (자격 요건 충족 시)
+
+1. 트리거: `/grants {agency} {사업명}` 또는 공고 파일 경로 제공
+2. 원본 파일을 `_source/`로 복사 (E:\정부지원\에서)
+3. Subagent Wave 1 (3명 병렬):
+   - Subagent A: 공고문 파싱 → `_grant-info.md` 자동 생성 (기본정보, 일정, 제출서류 체크리스트, 평가기준)
+   - Subagent B: 지원 자격 체크 → `eligibility-check.md`
+   - Subagent C: 과거 선정 사례 웹 리서치 → `competition-analysis.md`
+4. 산출물: `_grant-info.md`, `00-research/*`
+5. Notion Grants DB에 사업 등록
+
+**도구**: Read(PDF/HWP), Brave Search(MCP), WebSearch(내장)
+
+   ─── [AUTO-PASS] Check GR-1: 자격 요건 충족 시 자동 진행 ───
+
+---
+
+## Phase GR-2: 전략 수립 & Go/No-Go
+
+> 시장조사 + 평가기준 기반 고득점 전략 수립
+> Check GR-2: STOP (Human Go/No-Go 결정)
+
+1. Subagent Wave 1 (2명 병렬):
+   - 시장조사 Subagent → `market-research/`
+   - 평가기준 분석 Subagent → `evaluation-criteria.md` + `strategy.md`
+2. Human에게 분석 결과 보고
+3. Go/No-Go 판단:
+   - Go → GR-3 진행
+   - No-Go → `_archive/`로 이동 + 사유 기록
+
+**도구**: Brave Search(MCP), WebSearch(내장), Sequential Thinking(MCP)
+
+   ─── **[STOP]** Check GR-2: Human Go/No-Go 결정 ───
+
+---
+
+## Phase GR-3: 서류 작성
+
+> _grant-info.md 체크리스트 기반 서류 작성
+> Check GR-3: STOP (Human 검토 승인)
+
+1. `_grant-info.md`의 제출서류 체크리스트 확인
+2. `_source/신청양식/`에서 양식 파일 참조
+3. Subagent 작업:
+   - Writer Subagent: 사업수행계획서 초안 (평가기준 고득점 영역 집중)
+   - Budget Subagent: 예산편성 규칙 기반 예산서 초안
+4. 반복 루프: Human 피드백 → 수정 → 체크리스트 업데이트 (최대 3회)
+5. 산출물: `01-preparation/drafts/`, `budget/`
+
+   ─── **[STOP]** Check GR-3: Human 검토 승인 ───
+
+---
+
+## Phase GR-4: 제출 패키지 완성
+
+> 최종 검증 + 제출 확정본 격리
+> Check GR-4: STOP (최종 확인)
+
+1. 자동 검증:
+   - `_grant-info.md` 체크리스트 vs `02-submission/final/` 파일 대조
+   - 파일명 규칙 확인 (e나라도움 규격 등)
+   - 용량 확인 (50MB 이하 등 기관별 제한)
+2. 발표 자료 준비 (2단계 평가 대비)
+3. 산출물: `02-submission/final/`, `presentation/`
+
+   ─── **[STOP]** Check GR-4: Human 최종 확인 ───
+
+---
+
+## Phase GR-5: 제출 & 결과 대기
+
+> 제출 기록 + Notion 상태 업데이트
+> ASYNC (결과 발표 대기)
+
+1. 제출 기록 → `submission-log.md` (제출 일시, 접수번호)
+2. Notion Grants DB 상태 → "GR-5 제출완료"
+3. 발표 평가 준비 (서면 통과 시)
+
+---
+
+## Phase GR-6: 수행 관리
+
+> 선정 후 협약~정산~사후관리 또는 탈락 처리
+
+### 선정 시:
+1. 협약 체결 → `03-selection/agreement/`
+2. 마일스톤 일정 등록 (Notion + Cron 알림)
+3. 중간보고/실적보고 → `04-execution/reports/`
+4. 정산 → `05-settlement/`
+5. 사후관리 → `06-postcare/`
+
+### 탈락 시:
+1. 심사평 기록 → `03-selection/result.md`
+2. `_archive/`로 이동
+3. `_common/knowledge-base/lessons-learned.md` 업데이트
