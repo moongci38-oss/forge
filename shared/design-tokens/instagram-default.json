@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "name": "Instagram Design Tokens",
+    "version": "1.0.0",
+    "reference": "라이브소설 vs Instagram 디자인토큰 비교 문서",
+    "date": "2026-03-23",
+    "description": "Forge 파이프라인 기본 디자인 토큰. 신규 프로젝트의 style-guide, uiux-spec 템플릿 기본값으로 사용."
+  },
+  "colors": {
+    "background": {
+      "primary": "#FFFFFF",
+      "secondary": "#FAFAFA",
+      "tertiary": "#EFEFEF",
+      "dark": "#000000"
+    },
+    "brand": {
+      "yellow": "#FEDA75",
+      "orange": "#FA7E1E",
+      "pink": "#D62976",
+      "purple": "#962FBF",
+      "blue": "#4F5BD5"
+    },
+    "ui": {
+      "linkBlue": "#0095F6",
+      "errorRed": "#ED4956",
+      "textLink": "#00376B",
+      "success": "#00C853"
+    },
+    "text": {
+      "primary": "#262626",
+      "secondary": "#8E8E8E",
+      "placeholder": "#C7C7C7"
+    },
+    "border": {
+      "default": "#DBDBDB",
+      "light": "#EFEFEF"
+    }
+  },
+  "gradients": {
+    "default": "linear-gradient(45deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5)",
+    "storyRing": "conic-gradient(from 180deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5, #FEDA75)",
+    "threeColor": "linear-gradient(to right, #833AB4, #FD1D1D, #FCB045)"
+  },
+  "typography": {
+    "fontStack": "\"SF Pro Display\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+    "koreanAux": "KoPub돋움체 Medium",
+    "baseSize": "14-16px",
+    "letterSpacing": "-0.02em",
+    "scale": {
+      "h1": { "size": "28px", "lineHeight": "1.2", "weight": "Bold" },
+      "h2": { "size": "22px", "lineHeight": "1.3", "weight": "SemiBold" },
+      "body": { "size": "14px", "lineHeight": "1.5", "weight": "Regular" },
+      "caption": { "size": "12px", "lineHeight": "1.4", "weight": "Regular" }
+    }
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "24px"
+  },
+  "radius": {
+    "sm": "3px",
+    "md": "8px",
+    "lg": "16px",
+    "avatar": "50%",
+    "squircle": "22%"
+  },
+  "layout": {
+    "headerHeight": "60px",
+    "navWidth": { "expanded": "244px", "collapsed": "73px" },
+    "postMaxWidth": "470px"
+  }
+}

@@ -43,15 +43,17 @@ user-invocable: false
 |------|------|
 | **설명** | 본문 텍스트 최소 크기와 줄 간격이 가독성 기준을 충족하는지 검증 |
 | **심각도** | **HIGH** |
-| **PASS 기준** | 본문(body) 텍스트 >= 16px, line-height >= 1.4, 캡션/보조 텍스트 >= 12px |
-| **FAIL 기준** | 본문 텍스트가 16px 미만이거나 line-height가 1.2 미만 |
+| **PASS 기준** | 본문(body) 텍스트 >= 14px (데스크톱) / >= 16px (모바일), line-height >= 1.4, 캡션/보조 텍스트 >= 12px |
+| **FAIL 기준** | 본문 텍스트가 14px 미만이거나 line-height가 1.2 미만 |
 | **검증 방법** | 글로벌 스타일, Tailwind config, CSS에서 font-size/line-height 추출 |
-| **자동 수정** | `font-size` 값을 16px(1rem)으로 상향. `line-height`를 1.5로 조정. Tailwind인 경우 `text-base leading-relaxed` 클래스로 교체 |
+| **자동 수정** | `font-size` 값을 14px(0.875rem)으로 상향 (데스크톱), 16px(1rem) 모바일. `line-height`를 1.5로 조정. Tailwind인 경우 `text-sm leading-relaxed` (데스크톱) / `text-base leading-relaxed` (모바일) |
 
 **검증 패턴:**
 ```
-- font-size: 14px (body) → FAIL
-- text-sm (Tailwind, 14px) on body text → FAIL
+- font-size: 12px (body) → FAIL
+- text-xs (Tailwind, 12px) on body text → FAIL
+- font-size: 14px (body, desktop) → PASS
+- font-size: 14px (body, mobile without responsive override) → WARN
 - text-xs (12px) on caption → PASS (보조 텍스트)
 ```
 

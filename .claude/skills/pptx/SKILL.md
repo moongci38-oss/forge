@@ -83,6 +83,7 @@ Choose colors that match your topic — don't default to generic blue. Use these
 
 | Theme | Primary | Secondary | Accent |
 |-------|---------|-----------|--------|
+| **Instagram Social** | `0095F6` (link-blue) | `FAFAFA` (light gray) | `D62976` (pink) |
 | **Midnight Executive** | `1E2761` (navy) | `CADCFC` (ice blue) | `FFFFFF` (white) |
 | **Forest & Moss** | `2C5F2D` (forest) | `97BC62` (moss) | `F5F5F5` (cream) |
 | **Coral Energy** | `F96167` (coral) | `F9E795` (gold) | `2F3C7E` (navy) |
@@ -121,6 +122,8 @@ Choose colors that match your topic — don't default to generic blue. Use these
 
 | Header Font | Body Font |
 |-------------|-----------|
+| SF Pro Display | SF Pro Text |
+| Segoe UI | Segoe UI Light |
 | Georgia | Calibri |
 | Arial Black | Arial |
 | Calibri | Calibri Light |
@@ -136,6 +139,8 @@ Choose colors that match your topic — don't default to generic blue. Use these
 | Section header | 20-24pt bold |
 | Body text | 14-16pt |
 | Captions | 10-12pt muted |
+
+> **플랫폼별 폰트 가용성**: SF Pro Display는 macOS/iOS 전용. Windows에서는 Segoe UI로 자동 폴백. PptxGenJS는 폰트 파일을 임베드하지 않으므로 뷰어의 설치 폰트에 의존한다.
 
 ### Spacing
 

@@ -30,21 +30,21 @@
 ### 2.1 컬러 시스템
 | 토큰명 | 용도 | Light | Dark |
 |--------|------|-------|------|
-| `--color-primary` | 주요 액션 | | |
-| `--color-secondary` | 보조 액션 | | |
-| `--color-bg` | 배경 | | |
-| `--color-surface` | 카드/패널 | | |
-| `--color-text` | 본문 텍스트 | | |
-| `--color-error` | 에러 | | |
-| `--color-success` | 성공 | | |
+| `--color-primary` | 주요 액션 | `#0095F6` | `#4F5BD5` |
+| `--color-secondary` | 보조 액션 | `#4F5BD5` | `#833AB4` |
+| `--color-bg` | 배경 | `#FFFFFF` | `#000000` |
+| `--color-surface` | 카드/패널 | `#FAFAFA` | `#1C1C1E` |
+| `--color-text` | 본문 텍스트 | `#262626` | `#F5F5F5` |
+| `--color-error` | 에러 | `#ED4956` | `#ED4956` |
+| `--color-success` | 성공 | `#00C853` | `#00C853` |
 
 ### 2.2 타이포그래피
 | 레벨 | 폰트 | 크기 | 행간 | 무게 |
 |------|------|------|------|------|
-| H1 | | | | |
-| H2 | | | | |
-| Body | | | | |
-| Caption | | | | |
+| H1 | SF Pro Display | 28px | 1.2 | Bold |
+| H2 | SF Pro Display | 22px | 1.3 | SemiBold |
+| Body | SF Pro Display | 14px | 1.5 | Regular |
+| Caption | SF Pro Display | 12px | 1.4 | Regular |
 
 > 모바일 본문 최소 폰트 크기: 16px (iOS 자동 확대 방지)
 
@@ -53,16 +53,16 @@
 |------|:--:|------|
 | `--space-xs` | 4px | 인라인 요소 간격 |
 | `--space-sm` | 8px | 컴포넌트 내부 |
-| `--space-md` | 16px | 컴포넌트 간 |
-| `--space-lg` | 24px | 섹션 간 |
-| `--space-xl` | 32px | 페이지 패딩 |
+| `--space-md` | 12px | 컴포넌트 간 |
+| `--space-lg` | 16px | 섹션 간 |
+| `--space-xl` | 24px | 페이지 패딩 |
 
 ### 2.4 Radius & Shadow
 | 토큰 | 값 | 용도 |
 |------|:--:|------|
-| `--radius-sm` | | 버튼, 입력 |
-| `--radius-md` | | 카드 |
-| `--radius-lg` | | 모달 |
+| `--radius-sm` | 3px | 버튼, 입력 |
+| `--radius-md` | 8px | 카드 |
+| `--radius-lg` | 16px | 모달 |
 | `--shadow-sm` | | 떠 있는 요소 |
 | `--shadow-md` | | 카드 |
 | `--shadow-lg` | | 모달/다이얼로그 |

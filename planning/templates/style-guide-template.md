@@ -4,17 +4,17 @@
 
 ## 1. 컬러 팔레트
 
-| 역할 | HEX | 사용처 |
-|------|-----|--------|
-| Primary | `#______` | 주요 UI, CTA, 강조 |
-| Secondary | `#______` | 보조 UI, 배경 악센트 |
-| Accent | `#______` | 알림, 뱃지, 포인트 |
-| Background | `#______` | 전체 배경 |
-| Surface | `#______` | 카드, 패널, 모달 |
-| Text Primary | `#______` | 본문 텍스트 |
-| Text Secondary | `#______` | 보조 텍스트, 캡션 |
-| Error | `#______` | 에러 상태 |
-| Success | `#______` | 성공 상태 |
+| 역할 | HEX | 사용처 | (IG default) |
+|------|-----|--------|-------------|
+| Primary | `#______` | 주요 UI, CTA, 강조 | `#0095F6` |
+| Secondary | `#______` | 보조 UI, 배경 악센트 | `#4F5BD5` |
+| Accent | `#______` | 알림, 뱃지, 포인트 | `#D62976` |
+| Background | `#______` | 전체 배경 | `#FFFFFF` |
+| Surface | `#______` | 카드, 패널, 모달 | `#FAFAFA` |
+| Text Primary | `#______` | 본문 텍스트 | `#262626` |
+| Text Secondary | `#______` | 보조 텍스트, 캡션 | `#8E8E8E` |
+| Error | `#______` | 에러 상태 | `#ED4956` |
+| Success | `#______` | 성공 상태 | `#00C853` |
 
 ## 2. 아트 스타일 키워드
 
@@ -31,9 +31,9 @@
 | 요소 | 규격/규칙 | 비고 |
 |------|----------|------|
 | 테두리 굵기 | {px} | 모든 에셋 동일 |
-| 테두리 반경 | {px} | 카드, 버튼, 아이콘 통일 |
+| 테두리 반경 | {px} (IG Squircle: sm 3px / md 8px / lg 16px) | 카드, 버튼, 아이콘 통일 |
 | 그림자 | {CSS shadow / 없음} | 일관된 깊이감 |
-| 여백 (기본 단위) | {px} | 4px 그리드 기반 |
+| 여백 (기본 단위) | {px} (4px 그리드 기반: xs:4 sm:8 md:12 lg:16 xl:24) | 4px 그리드 기반 |
 | 라인 스타일 | {solid/dashed/none} | 구분선, 외곽선 |
 | 노이즈/텍스처 | {있음/없음/종류} | 배경 텍스처 일관성 |
 
@@ -41,11 +41,11 @@
 
 | 용도 | 폰트 | 크기 | 무게 |
 |------|------|------|------|
-| 제목 (H1) | {font} | {px} | {weight} |
-| 부제목 (H2) | {font} | {px} | {weight} |
-| 본문 | {font} | {px} | {weight} |
-| 캡션 | {font} | {px} | {weight} |
-| UI 라벨 | {font} | {px} | {weight} |
+| 제목 (H1) | {font} (IG: SF Pro Display) | {px} (IG: 28px) | {weight} (IG: Bold) |
+| 부제목 (H2) | {font} (IG: SF Pro Display) | {px} (IG: 22px) | {weight} (IG: SemiBold) |
+| 본문 | {font} (IG: SF Pro Display) | {px} (IG: 14px) | {weight} (IG: Regular) |
+| 캡션 | {font} (IG: SF Pro Display) | {px} (IG: 12px) | {weight} (IG: Regular) |
+| UI 라벨 | {font} (IG: SF Pro Display) | {px} (IG: 11px) | {weight} (IG: Medium) |
 
 ## 5. LoRA 모델 참조
 
