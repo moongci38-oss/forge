@@ -1,0 +1,8 @@
+# Upstream tracking for official Anthropic pptx skill
+source: github.com/anthropics/skills
+path: skills/pptx/
+last-synced: 2026-03-23
+notes: |
+  Company design system is NOT in SKILL.md.
+  Location: ~/.claude/projects/-home-damools-forge/memory/feedback_ppt_design_system.md
+  Do NOT modify official files (SKILL.md, editing.md, pptxgenjs.md, scripts/).
