@@ -110,6 +110,12 @@ Hotfix:  Phase 1(경량) → Phase 3 → Check 3 → Phase 4
 - 3+ 에이전트 동시 작업 필요
 - 복잡한 의존성 그래프
 
+**Element Task Doc 필수 조건:**
+- Spec 9.5/9.9에서 Complex 판정 요소 존재 시 (forge-spec-visual-binding.md D-EXT 기준)
+- 템플릿: `forge/dev/templates/element-task-template-game.md`
+- 저장: `.specify/element-tasks/{spec-name}/{element-name}.md`
+- task-template-base.md(팀 분배용)와 별개 — 연출/UI 요소 명세 전용
+
 ## 병렬 실행 의존성 규칙
 
 **의존성 없는 태스크만 동시 스폰한다.**

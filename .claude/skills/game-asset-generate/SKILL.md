@@ -40,6 +40,12 @@ user-invocable: true
     → 앵커 이미지 경로(§3) 추출
     → 의도적 긴장 규칙(§8) 로드
 
+ 2-EXT. Element Task Doc 참조 (있으면)
+    → .specify/element-tasks/{spec-name}/ 하위 파일 탐색
+    → Section 17 에셋 목록 → 생성 대상 자동 설정 (에셋명, 유형, 크기/스펙, 경로)
+    → Section 10 디자인 토큰 → slot [6] palette에 토큰 값 자동 주입 (style-guide보다 우선)
+    → 없으면 스킵 — style-guide 기본 팔레트 사용
+
  3. 에셋 유형 판별
     → 라우팅 테이블에서 1차 도구 선택
     → 에셋 Tier 판별: T1(핵심)/T2(주요)/T3(대량)
