@@ -5,6 +5,7 @@ description: >
   지식 아키텍처를 7-Layer/RAGAS/ACE-FCA 프레임워크 기반으로 평가한다.
 tools: Read, Grep, Glob, WebSearch
 model: sonnet
+maxTurns: 15
 ---
 
 # Axis-Context Auditor

@@ -68,3 +68,33 @@ AI 생성 → 사실 검증 → 품질 체크 → Human 확인 → 발행
 - 사실 검증 없이 수치/날짜가 포함된 콘텐츠를 발행하지 않는다
 - Executive Summary 없이 뉴스레터를 작성하지 않는다
 - 검증 불가 수식어("최고의", "혁신적")를 근거 없이 사용하지 않는다
+
+## AI Diligence Statement (투명성 고지)
+
+> AI Fluency Framework의 Diligence 역량 기반. 모든 AI 생성/공동 작성 산출물에 투명성 고지를 포함한다.
+
+### 적용 대상
+
+| 산출물 유형 | 고지 필수 | 방식 |
+|------------|:--------:|------|
+| Git commit | 필수 | `Co-Authored-By: Claude {model} <noreply@anthropic.com>` |
+| 기획서 (PRD/GDD/상세기획서) | 필수 | 문서 말미 AI Diligence Statement 섹션 |
+| Spec/개발 계획 | 필수 | 문서 말미 AI Diligence Statement 섹션 |
+| 리서치 리포트/분석 | 필수 | 문서 말미 AI Diligence Statement 섹션 |
+| 블로그/뉴스레터/마케팅 | 권장 | 본문 또는 메타데이터에 고지 |
+| 내부 메모/임시 문서 | 선택 | 생략 가능 |
+
+### 표준 고지 문구
+
+```markdown
+---
+## AI Diligence Statement
+이 문서는 AI 도구(Claude, Anthropic)를 활용하여 작성되었습니다.
+Human 작성자가 비전, 전문 지식, 비판적 판단을 제공하고 최종 검증·승인했습니다.
+```
+
+### AI 행동 규칙
+
+- 기획서/Spec/개발 계획/리포트 작성 완료 시 문서 말미에 AI Diligence Statement를 자동 삽입한다
+- Human이 명시적으로 제외를 요청한 경우 생략한다
+- 고지 문구는 문서의 마지막 섹션으로 배치한다 (본문 흐름을 방해하지 않음)

@@ -1,15 +1,6 @@
 ---
 name: react-best-practices
 description: "React/Next.js 성능 최적화 57룰. async 워터폴 제거, 번들 최적화, RSC 성능, 리렌더 방지 등 8카테고리 프론트엔드 성능 도메인 지식 (React, Next.js, App Router, Server Components)"
-metadata:
-  version: 1.0.0
-  author: Forge Dev System (adapted from Vercel Agent Skills)
-  category: development
-  domain: frontend-performance
-  updated: 2026-03-02
-  frameworks: react, nextjs
-  tech-stack: React 19, Next.js 15, App Router, RSC
-enforcement: rigid
 ---
 
 # React Best Practices

@@ -5,6 +5,7 @@ description: >
   성숙도 레벨을 CLEAR/Sema4.ai 프레임워크 기반으로 평가한다.
 tools: Read, Grep, Glob, WebSearch
 model: sonnet
+maxTurns: 15
 ---
 
 # Axis-Agentic Auditor

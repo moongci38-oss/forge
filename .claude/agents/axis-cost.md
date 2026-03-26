@@ -5,6 +5,7 @@ description: >
   추론 최적화를 RouteLLM/CEBench/Epoch AI 프레임워크 기반으로 평가한다.
 tools: Read, Grep, Glob
 model: haiku
+maxTurns: 15
 ---
 
 # Axis-Cost Auditor

@@ -8,6 +8,7 @@ description: |
   Use for: 게임 디자인 문서 작성, 게임 메커닉 설계, 시스템 밸런싱 문서화
 tools: Read, Write, Edit, WebSearch, WebFetch, Glob, Grep
 model: sonnet
+effort: high
 ---
 
 # GDD Writer Agent

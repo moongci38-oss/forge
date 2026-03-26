@@ -5,6 +5,7 @@ description: >
   게이트 패턴, 신뢰 캘리브레이션을 5-Level Autonomy/TCMM 프레임워크 기반으로 평가한다.
 tools: Read, Grep, Glob, WebSearch
 model: sonnet
+maxTurns: 15
 ---
 
 # Axis-Human-AI Auditor

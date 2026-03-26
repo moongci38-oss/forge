@@ -6,6 +6,8 @@ description: >
   논문 본문 정독, 오픈소스 코드 분석, 우리 시스템과 코드/설정 레벨 비교를 수행한다.
 tools: Read, Write, Glob, Grep, WebSearch, WebFetch, mcp__brave-search__brave_web_search
 model: sonnet
+maxTurns: 30
+effort: high
 ---
 
 # Weekly Research Analyst — 심층 분석 전문

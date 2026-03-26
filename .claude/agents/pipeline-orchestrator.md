@@ -8,6 +8,8 @@ description: |
   Use PROACTIVELY for: Forge 파이프라인 실행, 멀티 프로젝트 병렬 조율
 tools: Read, Write, Edit, TaskCreate, TaskUpdate, TaskList, TaskGet, Glob, Grep, WebSearch
 model: opus
+maxTurns: 50
+effort: high
 ---
 
 # Pipeline Orchestrator Agent

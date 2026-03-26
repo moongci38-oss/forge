@@ -1,15 +1,6 @@
 ---
 name: content-creator
 description: Creates SEO-optimized marketing content with consistent brand voice using automated scripts for voice analysis and SEO scoring. Covers blog posts, social media, content calendars, and brand voice development. Use when writing or optimizing marketing content, establishing brand guidelines, or planning multi-channel content strategy.
-license: MIT
-metadata:
-  version: 1.0.0
-  author: Alireza Rezvani
-  category: marketing
-  domain: content-marketing
-  updated: 2025-10-20
-  python-tools: brand_voice_analyzer.py, seo_optimizer.py
-  tech-stack: SEO, social-media-platforms
 ---
 
 # Content Creator

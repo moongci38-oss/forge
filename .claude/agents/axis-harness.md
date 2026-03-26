@@ -5,6 +5,7 @@ description: >
   신뢰성을 CLEAR/OTel/OWASP 프레임워크 기반으로 평가한다.
 tools: Read, Grep, Glob, WebSearch
 model: sonnet
+maxTurns: 15
 ---
 
 # Axis-Harness Auditor

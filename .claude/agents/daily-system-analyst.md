@@ -5,6 +5,8 @@ description: >
   알람 전용 분석기. 심층 분석은 weekly에서 수행한다.
 tools: Read, Write, Glob, Grep, WebFetch, mcp__brave-search__brave_web_search
 model: sonnet
+maxTurns: 20
+effort: medium
 ---
 
 # Daily System Analyst — 경량 알람 전용

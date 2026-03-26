@@ -353,3 +353,10 @@ graph TD
 ---
 
 **다음 단계**: [STOP] 승인 → Trine Phase 1 진입
+
+---
+
+## AI Diligence Statement
+
+이 문서는 AI 도구(Claude, Anthropic)를 활용하여 작성되었습니다.
+Human 작성자가 비전, 전문 지식, 비판적 판단을 제공하고 최종 검증·승인했습니다.
