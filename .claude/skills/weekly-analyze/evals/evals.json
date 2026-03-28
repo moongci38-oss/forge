@@ -1,0 +1,41 @@
+{
+  "skill_name": "weekly-analyze",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Re-analyze the weekly research raw-data.json for deeper insights",
+      "expected_output": "Deep weekly analysis with tech/biz trends and system comparison",
+      "expectations": [
+        "기술 트렌드 분석이 포함되어 있는가?",
+        "비즈니스 트렌드 분석이 포함되어 있는가?",
+        "우리 시스템과의 비교 또는 적용 가능성이 분석되어 있는가?",
+        "구조화된 문서(섹션, 헤더)로 출력되어 있는가?",
+        "출처 또는 데이터 근거가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Generate tech trends analysis from collected weekly data",
+      "expected_output": "Deep weekly analysis with tech/biz trends and system comparison",
+      "expectations": [
+        "기술 트렌드 분석이 포함되어 있는가?",
+        "비즈니스 트렌드 분석이 포함되어 있는가?",
+        "우리 시스템과의 비교 또는 적용 가능성이 분석되어 있는가?",
+        "구조화된 문서(섹션, 헤더)로 출력되어 있는가?",
+        "출처 또는 데이터 근거가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run deep analysis on this week's research findings",
+      "expected_output": "Deep weekly analysis with tech/biz trends and system comparison",
+      "expectations": [
+        "기술 트렌드 분석이 포함되어 있는가?",
+        "비즈니스 트렌드 분석이 포함되어 있는가?",
+        "우리 시스템과의 비교 또는 적용 가능성이 분석되어 있는가?",
+        "구조화된 문서(섹션, 헤더)로 출력되어 있는가?",
+        "출처 또는 데이터 근거가 명시되어 있는가?"
+      ]
+    }
+  ]
+}

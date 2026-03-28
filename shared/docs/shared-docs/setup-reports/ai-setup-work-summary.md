@@ -77,7 +77,7 @@
 
 ## 3. 워크스페이스별 최종 상태
 
-### 3.1 Portfolio Project (`/home/damools/mywsl_workspace/portfolio-project/`)
+### 3.1 Portfolio Project (`{YOUR_PORTFOLIO_PATH}/`)
 
 | 컴포넌트 | Before | After | 증감 | 비고 |
 |----------|:------:|:-----:|:----:|------|
@@ -103,7 +103,7 @@ Project-specific     █                         1 ( 4%)
 - **Commands**: /feature, /hotfix, /release, /generate-tests (aitmpl), /check-security, /migration, /deploy-check, /optimize-bundle, /generate-docs (커스텀)
 - **Hooks**: conventional-commits.py, validate-branch-name.py, prevent-direct-push.py
 
-### 3.2 Business Workspace (`/home/damools/forge/`)
+### 3.2 Business Workspace (`~/forge/`)
 
 | 컴포넌트 | Before | After | 증감 | 비고 |
 |----------|:------:|:-----:|:----:|------|

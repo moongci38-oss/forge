@@ -1,0 +1,41 @@
+{
+  "skill_name": "spec-compliance-checker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check spec compliance for the comment-system.spec.md against src/modules/comments/",
+      "expected_output": "Spec compliance report with FR mapping, test coverage, and PASS/WARN/FAIL verdicts",
+      "expectations": [
+        "FR(기능 요구사항)별 구현 파일 매핑이 수행되어 있는가?",
+        "테스트 존재 여부가 확인되어 있는가?",
+        "API 계약 일치 또는 데이터 모델 일치가 검증되어 있는가?",
+        "PASS/WARN/FAIL 판정이 항목별로 제시되어 있는가?",
+        "JSON 또는 구조화된 출력 형식으로 결과가 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Verify traceability between auth-middleware.spec.md and the implementation files",
+      "expected_output": "Spec compliance report with FR mapping, test coverage, and PASS/WARN/FAIL verdicts",
+      "expectations": [
+        "FR(기능 요구사항)별 구현 파일 매핑이 수행되어 있는가?",
+        "테스트 존재 여부가 확인되어 있는가?",
+        "API 계약 일치 또는 데이터 모델 일치가 검증되어 있는가?",
+        "PASS/WARN/FAIL 판정이 항목별로 제시되어 있는가?",
+        "JSON 또는 구조화된 출력 형식으로 결과가 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run spec compliance check on file-upload.spec.md",
+      "expected_output": "Spec compliance report with FR mapping, test coverage, and PASS/WARN/FAIL verdicts",
+      "expectations": [
+        "FR(기능 요구사항)별 구현 파일 매핑이 수행되어 있는가?",
+        "테스트 존재 여부가 확인되어 있는가?",
+        "API 계약 일치 또는 데이터 모델 일치가 검증되어 있는가?",
+        "PASS/WARN/FAIL 판정이 항목별로 제시되어 있는가?",
+        "JSON 또는 구조화된 출력 형식으로 결과가 정리되어 있는가?"
+      ]
+    }
+  ]
+}

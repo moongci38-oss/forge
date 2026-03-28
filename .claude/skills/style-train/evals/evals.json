@@ -1,0 +1,41 @@
+{
+  "skill_name": "style-train",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Extract visual style from 5 reference game sprites in /tmp/style-refs/",
+      "expected_output": "Style extraction with palette, art keywords, and style-guide.md structure",
+      "expectations": [
+        "기존 에셋에서 스타일 요소(팔레트, 아트 키워드, 패턴)가 추출되어 있는가?",
+        "style-guide.md 생성 또는 업데이트 계획이 포함되어 있는가?",
+        "컬러 팔레트(Hex 코드)가 구체적으로 나열되어 있는가?",
+        "아트 디렉션 키워드 또는 스타일 특성이 정의되어 있는가?",
+        "Mode A(추출) 또는 Mode B(LoRA 학습) 중 적절한 모드가 선택되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a style-guide.md from existing UI design assets",
+      "expected_output": "Style extraction with palette, art keywords, and style-guide.md structure",
+      "expectations": [
+        "기존 에셋에서 스타일 요소(팔레트, 아트 키워드, 패턴)가 추출되어 있는가?",
+        "style-guide.md 생성 또는 업데이트 계획이 포함되어 있는가?",
+        "컬러 팔레트(Hex 코드)가 구체적으로 나열되어 있는가?",
+        "아트 디렉션 키워드 또는 스타일 특성이 정의되어 있는가?",
+        "Mode A(추출) 또는 Mode B(LoRA 학습) 중 적절한 모드가 선택되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Analyze art style consistency across 10 character illustrations",
+      "expected_output": "Style extraction with palette, art keywords, and style-guide.md structure",
+      "expectations": [
+        "기존 에셋에서 스타일 요소(팔레트, 아트 키워드, 패턴)가 추출되어 있는가?",
+        "style-guide.md 생성 또는 업데이트 계획이 포함되어 있는가?",
+        "컬러 팔레트(Hex 코드)가 구체적으로 나열되어 있는가?",
+        "아트 디렉션 키워드 또는 스타일 특성이 정의되어 있는가?",
+        "Mode A(추출) 또는 Mode B(LoRA 학습) 중 적절한 모드가 선택되어 있는가?"
+      ]
+    }
+  ]
+}

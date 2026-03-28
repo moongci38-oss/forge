@@ -1,0 +1,41 @@
+{
+  "skill_name": "asset-critic",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Evaluate this game sprite asset: a 64x64 pixel warrior character with sword, using cel-shading style on transparent background",
+      "expected_output": "6-axis rubric scoring with 1-5 scale and PASS/BORDERLINE/FAIL verdict",
+      "expectations": [
+        "6축 평가 항목(계층/일관성/안티패턴/브리프/서사/물성)이 모두 언급되어 있는가?",
+        "각 항목에 1-5점 척도의 점수가 명시되어 있는가?",
+        "평균 점수 또는 종합 점수가 계산되어 있는가?",
+        "PASS/BORDERLINE/FAIL 중 하나의 최종 판정이 있는가?",
+        "개선 제안 또는 피드백이 구체적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate this web UI mockup: a dashboard card component with gradient background, showing user stats with chart",
+      "expected_output": "6-axis rubric scoring with 1-5 scale and PASS/BORDERLINE/FAIL verdict",
+      "expectations": [
+        "6축 평가 항목(계층/일관성/안티패턴/브리프/서사/물성)이 모두 언급되어 있는가?",
+        "각 항목에 1-5점 척도의 점수가 명시되어 있는가?",
+        "평균 점수 또는 종합 점수가 계산되어 있는가?",
+        "PASS/BORDERLINE/FAIL 중 하나의 최종 판정이 있는가?",
+        "개선 제안 또는 피드백이 구체적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Evaluate this VFX asset: a fire explosion particle effect sequence, 8 frames, for 2D side-scroller game",
+      "expected_output": "6-axis rubric scoring with 1-5 scale and PASS/BORDERLINE/FAIL verdict",
+      "expectations": [
+        "6축 평가 항목(계층/일관성/안티패턴/브리프/서사/물성)이 모두 언급되어 있는가?",
+        "각 항목에 1-5점 척도의 점수가 명시되어 있는가?",
+        "평균 점수 또는 종합 점수가 계산되어 있는가?",
+        "PASS/BORDERLINE/FAIL 중 하나의 최종 판정이 있는가?",
+        "개선 제안 또는 피드백이 구체적으로 제시되어 있는가?"
+      ]
+    }
+  ]
+}

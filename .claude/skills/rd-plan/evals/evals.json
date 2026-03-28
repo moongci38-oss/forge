@@ -1,0 +1,41 @@
+{
+  "skill_name": "rd-plan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate an R&D grant proposal outline for an AI-powered content creation platform",
+      "expected_output": "R&D grant proposal structure with sections, guidelines, and QA plan",
+      "expectations": [
+        "목차 또는 섹션 구조가 자동 생성되어 있는가?",
+        "기관별 양식(KOCCA, TIPS 등) 또는 평가 기준이 반영되어 있는가?",
+        "기술 설명 또는 사업 내용 섹션이 포함되어 있는가?",
+        "작성 가이드(색상 컨벤션, 분량 기준)가 언급되어 있는가?",
+        "QA 루프 또는 품질 검증 단계가 계획되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a government grant application plan for a game development project using AI tools",
+      "expected_output": "R&D grant proposal structure with sections, guidelines, and QA plan",
+      "expectations": [
+        "목차 또는 섹션 구조가 자동 생성되어 있는가?",
+        "기관별 양식(KOCCA, TIPS 등) 또는 평가 기준이 반영되어 있는가?",
+        "기술 설명 또는 사업 내용 섹션이 포함되어 있는가?",
+        "작성 가이드(색상 컨벤션, 분량 기준)가 언급되어 있는가?",
+        "QA 루프 또는 품질 검증 단계가 계획되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Draft a KOCCA grant proposal structure for an interactive media project",
+      "expected_output": "R&D grant proposal structure with sections, guidelines, and QA plan",
+      "expectations": [
+        "목차 또는 섹션 구조가 자동 생성되어 있는가?",
+        "기관별 양식(KOCCA, TIPS 등) 또는 평가 기준이 반영되어 있는가?",
+        "기술 설명 또는 사업 내용 섹션이 포함되어 있는가?",
+        "작성 가이드(색상 컨벤션, 분량 기준)가 언급되어 있는가?",
+        "QA 루프 또는 품질 검증 단계가 계획되어 있는가?"
+      ]
+    }
+  ]
+}

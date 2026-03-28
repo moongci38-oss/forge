@@ -1,0 +1,41 @@
+{
+  "skill_name": "daily-system-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run the daily AI system review",
+      "expected_output": "Daily review with 6-tier collection, system comparison, and action plan",
+      "expectations": [
+        "6-Tier 소스 수집 계획 또는 결과가 포함되어 있는가?",
+        "분석 문서 구조(섹션, 헤더)가 체계적으로 구성되어 있는가?",
+        "우리 시스템과의 1:1 비교가 포함되어 있는가?",
+        "적용 계획서 또는 액션 아이템이 생성되어 있는가?",
+        "Notion 등록 또는 저장 경로가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Execute daily system scan focusing on Claude Code and LLM framework updates",
+      "expected_output": "Daily review with 6-tier collection, system comparison, and action plan",
+      "expectations": [
+        "6-Tier 소스 수집 계획 또는 결과가 포함되어 있는가?",
+        "분석 문서 구조(섹션, 헤더)가 체계적으로 구성되어 있는가?",
+        "우리 시스템과의 1:1 비교가 포함되어 있는가?",
+        "적용 계획서 또는 액션 아이템이 생성되어 있는가?",
+        "Notion 등록 또는 저장 경로가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Perform daily 6-tier source collection and analysis",
+      "expected_output": "Daily review with 6-tier collection, system comparison, and action plan",
+      "expectations": [
+        "6-Tier 소스 수집 계획 또는 결과가 포함되어 있는가?",
+        "분석 문서 구조(섹션, 헤더)가 체계적으로 구성되어 있는가?",
+        "우리 시스템과의 1:1 비교가 포함되어 있는가?",
+        "적용 계획서 또는 액션 아이템이 생성되어 있는가?",
+        "Notion 등록 또는 저장 경로가 명시되어 있는가?"
+      ]
+    }
+  ]
+}

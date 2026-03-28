@@ -1,0 +1,41 @@
+{
+  "skill_name": "daily-analyze",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Analyze today's AI system scan results from raw-data.json",
+      "expected_output": "Structured daily analysis with gap analysis and improvement plan",
+      "expectations": [
+        "AI 동향 분석 결과가 구조화되어 있는가?",
+        "우리 시스템과의 갭 분석이 포함되어 있는가?",
+        "Critical/Breaking/Deprecated 변경 분류가 있는가?",
+        "적용 계획 또는 개선 제안이 포함되어 있는가?",
+        "출처(URL, 날짜)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Re-analyze the daily system review data focusing on breaking changes",
+      "expected_output": "Structured daily analysis with gap analysis and improvement plan",
+      "expectations": [
+        "AI 동향 분석 결과가 구조화되어 있는가?",
+        "우리 시스템과의 갭 분석이 포함되어 있는가?",
+        "Critical/Breaking/Deprecated 변경 분류가 있는가?",
+        "적용 계획 또는 개선 제안이 포함되어 있는가?",
+        "출처(URL, 날짜)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate improvement plan from daily scan findings",
+      "expected_output": "Structured daily analysis with gap analysis and improvement plan",
+      "expectations": [
+        "AI 동향 분석 결과가 구조화되어 있는가?",
+        "우리 시스템과의 갭 분석이 포함되어 있는가?",
+        "Critical/Breaking/Deprecated 변경 분류가 있는가?",
+        "적용 계획 또는 개선 제안이 포함되어 있는가?",
+        "출처(URL, 날짜)가 명시되어 있는가?"
+      ]
+    }
+  ]
+}

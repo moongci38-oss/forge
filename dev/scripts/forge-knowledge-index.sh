@@ -110,7 +110,7 @@ cmd_build() {
 
     echo "[" > "$INDEX_FILE"
 
-    # Location 1: /home/damools/forge/dev/rules/*.md
+    # Location 1: ${FORGE_ROOT:-$HOME/forge}/dev/rules/*.md
     local loc1_count=0
     if [[ -d "$FORGE_DEV_ROOT/rules" ]]; then
         for file in "$FORGE_DEV_ROOT/rules"/*.md; do

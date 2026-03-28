@@ -123,7 +123,7 @@ SAFE_PROMPT=$(python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$PRO
 # json.dumps는 따옴표 포함 문자열을 출력하므로 앞뒤 따옴표 제거
 SAFE_PROMPT="${SAFE_PROMPT:1:-1}"
 
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}" \
+curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
   -H 'Content-Type: application/json' \
   -d "{
   \"contents\": [{

@@ -57,7 +57,7 @@
 ## Prefab Visual Library 활용
 
 시각화 생성 시 `/library-search` 스킬로 기존 에셋 먼저 탐색:
-- 경로: `/home/damools/prefab-visual-library/`
+- 경로: `~/prefab-visual-library/`
 - 재활용 가능: 아이콘, 다이어그램 템플릿, 차트 스타일
 - 완전매칭 → 그대로 사용 / 부분매칭 → 수정 후 사용 / 없음 → MCP 생성
 

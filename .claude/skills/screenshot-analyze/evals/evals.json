@@ -1,0 +1,41 @@
+{
+  "skill_name": "screenshot-analyze",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Analyze this game screenshot for UI layout and color palette extraction",
+      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "expectations": [
+        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
+        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
+        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
+        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
+        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Compare this competitor app screenshot with our current design",
+      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "expectations": [
+        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
+        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
+        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
+        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
+        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Verify implementation matches the design spec by analyzing this screenshot",
+      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "expectations": [
+        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
+        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
+        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
+        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
+        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+      ]
+    }
+  ]
+}

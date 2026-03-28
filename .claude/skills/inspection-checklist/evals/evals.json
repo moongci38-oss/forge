@@ -1,0 +1,41 @@
+{
+  "skill_name": "inspection-checklist",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate a final inspection checklist for the current PR before merge",
+      "expected_output": "Unified inspection checklist covering 5+ quality categories with verdicts",
+      "expectations": [
+        "빌드/테스트 검수 항목이 포함되어 있는가?",
+        "Spec 추적성(traceability) 검수가 포함되어 있는가?",
+        "UI/UX 품질 검수가 포함되어 있는가?",
+        "코드 리뷰 또는 보안 검수가 포함되어 있는가?",
+        "PASS/WARN/FAIL 판정 또는 체크리스트 형식으로 구조화되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Run pre-release inspection covering all Forge Dev checks",
+      "expected_output": "Unified inspection checklist covering 5+ quality categories with verdicts",
+      "expectations": [
+        "빌드/테스트 검수 항목이 포함되어 있는가?",
+        "Spec 추적성(traceability) 검수가 포함되어 있는가?",
+        "UI/UX 품질 검수가 포함되어 있는가?",
+        "코드 리뷰 또는 보안 검수가 포함되어 있는가?",
+        "PASS/WARN/FAIL 판정 또는 체크리스트 형식으로 구조화되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create unified quality checklist for Check 3, 3.5, 3.6, 3.7, 3.8",
+      "expected_output": "Unified inspection checklist covering 5+ quality categories with verdicts",
+      "expectations": [
+        "빌드/테스트 검수 항목이 포함되어 있는가?",
+        "Spec 추적성(traceability) 검수가 포함되어 있는가?",
+        "UI/UX 품질 검수가 포함되어 있는가?",
+        "코드 리뷰 또는 보안 검수가 포함되어 있는가?",
+        "PASS/WARN/FAIL 판정 또는 체크리스트 형식으로 구조화되어 있는가?"
+      ]
+    }
+  ]
+}

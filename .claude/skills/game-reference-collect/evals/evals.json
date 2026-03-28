@@ -1,0 +1,41 @@
+{
+  "skill_name": "game-reference-collect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Collect visual references for a souls-like action RPG combat system",
+      "expected_output": "Structured reference collection with tool routing and organized output",
+      "expectations": [
+        "레퍼런스 수집 대상(게임명, 장르)이 명시되어 있는가?",
+        "수집 방법(WebSearch, 스크린샷, 영상 분석)이 설명되어 있는가?",
+        "도구 라우팅(video-reference-guide, screenshot-analyze 등)이 결정되어 있는가?",
+        "구조화된 레퍼런스 테이블 또는 목록이 포함되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Gather UI/HUD references from top mobile RPG games",
+      "expected_output": "Structured reference collection with tool routing and organized output",
+      "expectations": [
+        "레퍼런스 수집 대상(게임명, 장르)이 명시되어 있는가?",
+        "수집 방법(WebSearch, 스크린샷, 영상 분석)이 설명되어 있는가?",
+        "도구 라우팅(video-reference-guide, screenshot-analyze 등)이 결정되어 있는가?",
+        "구조화된 레퍼런스 테이블 또는 목록이 포함되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Collect VFX references for magical spell effects in 2D games",
+      "expected_output": "Structured reference collection with tool routing and organized output",
+      "expectations": [
+        "레퍼런스 수집 대상(게임명, 장르)이 명시되어 있는가?",
+        "수집 방법(WebSearch, 스크린샷, 영상 분석)이 설명되어 있는가?",
+        "도구 라우팅(video-reference-guide, screenshot-analyze 등)이 결정되어 있는가?",
+        "구조화된 레퍼런스 테이블 또는 목록이 포함되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    }
+  ]
+}

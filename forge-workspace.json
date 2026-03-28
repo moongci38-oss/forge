@@ -17,15 +17,15 @@
   },
   "projects": {
     "portfolio-admin": {
-      "devTarget": "/home/damools/mywsl_workspace/portfolio-project",
+      "devTarget": "{YOUR_PORTFOLIO_PATH}",
       "symlinkBase": "docs/planning/active/forge/auth-admin"
     },
     "portfolio-blog": {
-      "devTarget": "/home/damools/mywsl_workspace/portfolio-project",
+      "devTarget": "{YOUR_PORTFOLIO_PATH}",
       "symlinkBase": "docs/planning/active/forge/blog"
     },
     "godblade": {
-      "devTarget": "E:/new_workspace/god_Sword/src",
+      "devTarget": "{YOUR_GAME_PROJECT_PATH}",
       "symlinkBase": "docs/planning/active/forge/gacha",
       "projectType": "game",
       "projectScale": "Small"

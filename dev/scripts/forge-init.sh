@@ -113,7 +113,7 @@ done
 # JSON 생성
 cat > "$CONFIG_FILE" << EOF
 {
-  "\$schema": "/home/damools/forge/dev/schemas/forge-workspace-schema.json",
+  "\$schema": "${FORGE_ROOT:-$HOME/forge}/dev/schemas/forge-workspace-schema.json",
   "version": "1.0.0",
   "name": "$ws_name",
   "folderMap": {

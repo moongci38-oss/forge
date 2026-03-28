@@ -1,0 +1,41 @@
+{
+  "skill_name": "soul-prompt-craft",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a 12-element soul prompt for a warrior character sprite in cel-shading style",
+      "expected_output": "12-element soul prompt with model-specific format and tier-appropriate depth",
+      "expectations": [
+        "12요소 슬롯이 모두 채워져 있거나 구조가 설명되어 있는가?",
+        "style-guide.md 또는 art-direction-brief에서 컨텍스트 추출이 언급되어 있는가?",
+        "모델별 포맷(FLUX/Gemini/Replicate) 변환이 포함되어 있는가?",
+        "Hex 색상 코드가 프롬프트에 포함되어 있는가?",
+        "Tier(T1/T2/T3)에 따른 프롬프트 깊이 차등이 적용되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Craft an image generation prompt for a fantasy forest background, Tier 2",
+      "expected_output": "12-element soul prompt with model-specific format and tier-appropriate depth",
+      "expectations": [
+        "12요소 슬롯이 모두 채워져 있거나 구조가 설명되어 있는가?",
+        "style-guide.md 또는 art-direction-brief에서 컨텍스트 추출이 언급되어 있는가?",
+        "모델별 포맷(FLUX/Gemini/Replicate) 변환이 포함되어 있는가?",
+        "Hex 색상 코드가 프롬프트에 포함되어 있는가?",
+        "Tier(T1/T2/T3)에 따른 프롬프트 깊이 차등이 적용되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate a soul-injected prompt for UI button assets in Instagram design style",
+      "expected_output": "12-element soul prompt with model-specific format and tier-appropriate depth",
+      "expectations": [
+        "12요소 슬롯이 모두 채워져 있거나 구조가 설명되어 있는가?",
+        "style-guide.md 또는 art-direction-brief에서 컨텍스트 추출이 언급되어 있는가?",
+        "모델별 포맷(FLUX/Gemini/Replicate) 변환이 포함되어 있는가?",
+        "Hex 색상 코드가 프롬프트에 포함되어 있는가?",
+        "Tier(T1/T2/T3)에 따른 프롬프트 깊이 차등이 적용되어 있는가?"
+      ]
+    }
+  ]
+}

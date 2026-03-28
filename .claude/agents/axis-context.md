@@ -38,34 +38,48 @@ Poisoning | Distraction | Confusion | Clash | Rot
 4. Memory Retrieval Latency (p95)
 5. Token Efficiency Ratio
 
-## 검수 체크리스트
+## 채점 루브릭 (0-3점)
 
-### A. 컨텍스트 레이어 완성도
-- [ ] 7개 레이어 중 활성화된 레이어는?
-- [ ] 각 레이어의 토큰 예산이 관리되고 있는가?
-- [ ] Progressive Disclosure (Passive/Active/Deep) 적용 여부?
+> 0 = 미구현 | 1 = 부분 | 2 = 구현됨 | 3 = 성숙 (동작 + 측정 + 개선 루프)
 
-### B. 컨텍스트 실패 방지
-- [ ] Poisoning 방지: 할루시네이션이 메모리에 전파되지 않는 메커니즘?
-- [ ] Distraction 방지: 불필요한 정보가 컨텍스트를 오염하지 않는가?
-- [ ] Rot 대응: /compact 또는 동등한 압축 전략?
-- [ ] Clash 방지: 모순되는 규칙/메모리 감지?
+### A. 컨텍스트 레이어 완성도 (만점 9)
+- [ ] A1. 7개 레이어 중 활성화된 레이어 비율 (0-3)
+- [ ] A2. 각 레이어 토큰 예산 관리 (0-3)
+- [ ] A3. Progressive Disclosure (Passive/Active/Deep) 적용 (0-3)
 
-### C. 메모리 시스템
-- [ ] 메모리 유형(Factual/Experiential/Working)이 분리 관리되는가?
-- [ ] Cross-session 연속성이 보장되는가?
-- [ ] 메모리 정리/아카이빙 정책?
-- [ ] Context Saturation Gap 양수 검증?
+### B. 컨텍스트 실패 방지 (만점 12)
+- [ ] B1. Poisoning 방지: 할루시네이션 메모리 전파 차단 (0-3)
+- [ ] B2. Distraction 방지: 불필요 정보 컨텍스트 오염 차단 (0-3)
+- [ ] B3. Rot 대응: /compact 또는 동등 압축 전략 (0-3)
+- [ ] B4. Clash 방지: 모순 규칙/메모리 감지 (0-3)
 
-### D. RAG/검색 품질
-- [ ] 하이브리드 검색(Semantic + Lexical) 적용?
-- [ ] Retrieval precision/recall 측정?
-- [ ] Faithfulness (생성 내용이 검색 컨텍스트에 근거)?
+### C. 메모리 시스템 (만점 12)
+- [ ] C1. 메모리 유형(Factual/Experiential/Working) 분리 관리 (0-3)
+- [ ] C2. Cross-session 연속성 (0-3)
+- [ ] C3. 메모리 정리/아카이빙 정책 (0-3)
+- [ ] C4. Context Saturation Gap 양수 검증 (0-3)
 
-### E. 컨텍스트 윈도우 관리
-- [ ] 토큰 사용률 모니터링?
-- [ ] 70% 상한선 관리?
-- [ ] Phase 전환 시 압축 트리거?
+### D. RAG/검색 품질 (만점 9)
+- [ ] D1. 하이브리드 검색(Semantic + Lexical) 적용 (0-3)
+- [ ] D2. Retrieval precision/recall 측정 (0-3)
+- [ ] D3. Faithfulness (생성 ← 검색 컨텍스트 근거) (0-3)
+
+### E. 컨텍스트 윈도우 관리 (만점 9)
+- [ ] E1. 토큰 사용률 모니터링 (0-3)
+- [ ] E2. 70% 상한선 관리 (0-3)
+- [ ] E3. Phase 전환 시 압축 트리거 (0-3)
+
+**축 점수** = (획득 점수 합 / 51) × 100
+
+### 정량 측정 (실측값 보고)
+
+| 지표 | 측정 방법 | 기준값 |
+|------|---------|:-----:|
+| 세션 시작 토큰 | rules + CLAUDE.md + MEMORY.md 합산 (wc -c / 3) | < 12,000 |
+| MEMORY.md 항목 수 | grep "^## " 카운트 | < 30 |
+| 규칙 중복률 | 동일 내용 규칙 수 / 전체 규칙 | < 10% |
+| 조건부 로딩률 | on-demand 규칙 / 전체 규칙 | > 50% |
+| 레이어 커버리지 | 활성 레이어 / 7 | > 5/7 |
 
 ## 출력 형식
 

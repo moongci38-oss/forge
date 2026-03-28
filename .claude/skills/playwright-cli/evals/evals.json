@@ -1,0 +1,41 @@
+{
+  "skill_name": "playwright-cli",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Navigate to http://localhost:3000 and take a screenshot of the homepage",
+      "expected_output": "Playwright CLI execution plan with commands and expected output",
+      "expectations": [
+        "Playwright CLI 명령어 또는 실행 계획이 제시되어 있는가?",
+        "대상 URL 또는 페이지가 명시되어 있는가?",
+        "수행할 액션(navigate, click, fill, screenshot)이 구체적으로 설명되어 있는가?",
+        "결과물(스크린샷, 추출 데이터) 저장 방법이 안내되어 있는가?",
+        "에러 처리 또는 대기 전략이 언급되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Fill out the login form at /login with test credentials and submit",
+      "expected_output": "Playwright CLI execution plan with commands and expected output",
+      "expectations": [
+        "Playwright CLI 명령어 또는 실행 계획이 제시되어 있는가?",
+        "대상 URL 또는 페이지가 명시되어 있는가?",
+        "수행할 액션(navigate, click, fill, screenshot)이 구체적으로 설명되어 있는가?",
+        "결과물(스크린샷, 추출 데이터) 저장 방법이 안내되어 있는가?",
+        "에러 처리 또는 대기 전략이 언급되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Extract all product prices from the /products page",
+      "expected_output": "Playwright CLI execution plan with commands and expected output",
+      "expectations": [
+        "Playwright CLI 명령어 또는 실행 계획이 제시되어 있는가?",
+        "대상 URL 또는 페이지가 명시되어 있는가?",
+        "수행할 액션(navigate, click, fill, screenshot)이 구체적으로 설명되어 있는가?",
+        "결과물(스크린샷, 추출 데이터) 저장 방법이 안내되어 있는가?",
+        "에러 처리 또는 대기 전략이 언급되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -15,7 +15,7 @@
 | 프로젝트 | 경로 | 설명 |
 |---------|------|------|
 | **Forge** | `./` | 통합 파이프라인 (현재) |
-| **Forge Outputs** | `/home/damools/forge-outputs/` | 산출물 저장소 (private) |
+| **Forge Outputs** | `~/forge-outputs/` | 산출물 저장소 (private) |
 | **Portfolio** | `{YOUR_PORTFOLIO_PATH}` | Next.js + NestJS 웹 개발 |
 | **GODBLADE** | `{YOUR_GAME_PROJECT_PATH}` | Unity 게임 프로젝트 (C#) |
 
@@ -62,62 +62,10 @@ forge-outputs/          ← 산출물 (private repo)
 
 ## Golden Rules
 
-### Core Principle
-- **forge/ = 시스템** (파이프라인, 규칙, 도구, 스킬, 스크립트)
-- **forge-outputs/ = 결과물** (리서치, 기획서, 에셋, 리뷰, 문서 등 모든 산출물)
-- **forge/에 산출물 저장 금지.** 모든 산출물은 forge-outputs/로.
-- 통합 파이프라인: `forge/pipeline.md` (Phase 1~12)
+> 상세: `.claude/rules/forge-core.md` 참조
 
-### Do's
-- 리서치 결과는 출처(URL, 날짜) 반드시 포함
-- 문서 작성 시 한국어 기본, 전문 용어는 영어 병기
+- **forge/ = 시스템** / **forge-outputs/ = 결과물** (Iron Law)
 - 병렬 처리 가능한 작업은 Subagent 사용을 우선 검토
-
-### Don'ts
-- B 영역 접근/출력 금지 (06-finance, 07-legal, 08-admin — forge-outputs에 보관)
-- 검증 없는 시장 데이터를 사실로 단정 금지
-- 스킬/컴포넌트 라이브러리 원본 직접 수정 금지
-
----
-
-## 팀 온보딩
-
-1. 레포 클론: `git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git`
-2. `.env.example` → `.env` 복사 후 API 키 설정
-3. `forge-workspace.json`에서 프로젝트 경로 확인
-4. Claude Code에서 `/forge` 등 슬래시 커맨드 사용
-
----
-
-## Component System
-
-| 타입 | 위치 | 관리 |
-|------|------|------|
-| Skills | `.claude/skills/` | `shared/scripts/manage-skills.sh` |
-| Agents | `.claude/agents/` | `shared/scripts/manage-components.sh` |
-| Commands | `.claude/commands/` | `shared/scripts/manage-components.sh` |
-| Rules | `.claude/rules/` | `shared/scripts/manage-rules.sh` |
-
-### 도구 관리 CLI
-
-| 도구 | 명령 |
-|------|------|
-| 스킬 | `bash shared/scripts/manage-skills.sh {list\|enable\|disable\|audit}` |
-| 컴포넌트 | `bash shared/scripts/manage-components.sh {list\|enable\|disable\|token-estimate}` |
-| 규칙 | `bash shared/scripts/manage-rules.sh {list\|validate\|build\|stats}` |
-
----
-
-## 규칙 시스템 (Rules-as-Code)
-
-| 위치 | 내용 |
-|------|------|
-| `.claude/rules/` | 컴파일된 규칙 (세션 시작 시 자동 로드) |
-| `planning/rules-source/` | 기획 규칙 원본 (Frontmatter 포함) |
-| `planning/rules-source/always/` | 항상 적용 규칙 원본 |
-| `shared/cross-project/` | 크로스 프로젝트 규칙 |
-| `dev/rules/` | 개발 규칙 (개발 프로젝트에 배포) |
-| `~/.claude/rules/` | 전역 규칙 |
 
 ---
 

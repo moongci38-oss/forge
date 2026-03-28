@@ -1,0 +1,41 @@
+{
+  "skill_name": "forge-planning-router",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to research the market for AI code review tools",
+      "expected_output": "Correct routing to appropriate Forge skill with phase/gate reference",
+      "expectations": [
+        "요청 유형(리서치/PRD/GDD/기획)이 올바르게 식별되어 있는가?",
+        "적절한 Forge 스킬 또는 파이프라인이 선택되어 있는가?",
+        "라우팅 결정의 근거가 설명되어 있는가?",
+        "다음 단계 또는 실행 계획이 안내되어 있는가?",
+        "Gate 상태(STOP/AUTO-PASS) 또는 Phase가 참조되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a PRD for a new notification feature",
+      "expected_output": "Correct routing to appropriate Forge skill with phase/gate reference",
+      "expectations": [
+        "요청 유형(리서치/PRD/GDD/기획)이 올바르게 식별되어 있는가?",
+        "적절한 Forge 스킬 또는 파이프라인이 선택되어 있는가?",
+        "라우팅 결정의 근거가 설명되어 있는가?",
+        "다음 단계 또는 실행 계획이 안내되어 있는가?",
+        "Gate 상태(STOP/AUTO-PASS) 또는 Phase가 참조되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a GDD for a mobile puzzle game",
+      "expected_output": "Correct routing to appropriate Forge skill with phase/gate reference",
+      "expectations": [
+        "요청 유형(리서치/PRD/GDD/기획)이 올바르게 식별되어 있는가?",
+        "적절한 Forge 스킬 또는 파이프라인이 선택되어 있는가?",
+        "라우팅 결정의 근거가 설명되어 있는가?",
+        "다음 단계 또는 실행 계획이 안내되어 있는가?",
+        "Gate 상태(STOP/AUTO-PASS) 또는 Phase가 참조되어 있는가?"
+      ]
+    }
+  ]
+}

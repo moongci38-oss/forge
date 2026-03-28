@@ -128,8 +128,8 @@ Portfolio 기준 + GodBlade 차이 병합:
   "version": "1.0.0",
   "name": "forge",
   "targets": {
-    "portfolio": { "path": "Z:/home/damools/mywsl_workspace/portfolio-project" },
-    "godblade": { "path": "E:/new_workspace/god_Sword/src" }
+    "portfolio": { "path": "Z:{YOUR_PORTFOLIO_PATH}" },
+    "godblade": { "path": "{YOUR_GAME_PROJECT_PATH}" }
   },
   "toolchain": {
     "tier1": ["memory-mcp", "sequential-thinking-mcp", "context7-mcp", "gh-cli"],

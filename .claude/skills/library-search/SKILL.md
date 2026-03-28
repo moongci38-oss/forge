@@ -62,6 +62,12 @@ context: fork
    → usage_count 증가
    → last_used 날짜 업데이트
    → 변형본은 신규 항목으로 추가
+
+6. Inspector Reference 교차 참조
+   → 매칭된 에셋이 UI/연출/이펙트인 경우
+   → `docs/references/inspector-reference.md`에서 해당 컴포넌트의 검증된 파라미터 조회
+   → 있으면: "검증된 Inspector 값이 있습니다" + 값 표시
+   → 없으면: 스킵 (에셋만 반환)
 ```
 
 ## 검색 방법

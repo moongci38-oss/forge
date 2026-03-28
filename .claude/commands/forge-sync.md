@@ -57,9 +57,9 @@ node ~/.claude/scripts/forge-sync.mjs sync --target my-project --include-recomme
 
 **워크스페이스 키:**
 
-- `wsl` — `Z:/home/damools/mywsl_workspace` (Linux/WSL 프로젝트)
+- `wsl` — `Z:{YOUR_WSL_WORKSPACE}` (Linux/WSL 프로젝트)
 - `windows` — `E:/new_workspace` (Windows 프로젝트)
-- `business` — `Z:/home/damools/forge` (비개발, shared-only)
+- `business` — `Z:~/forge` (비개발, shared-only)
 
 ## 동작 규칙
 

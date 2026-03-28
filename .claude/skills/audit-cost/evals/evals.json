@@ -1,0 +1,41 @@
+{
+  "skill_name": "audit-cost",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run an AI cost efficiency audit on the current Forge system",
+      "expected_output": "Cost audit with routing analysis, caching assessment, and savings opportunities",
+      "expectations": [
+        "모델 라우팅 전략이 평가되어 있는가?",
+        "프롬프트 캐싱 또는 토큰 최적화 현황이 분석되어 있는가?",
+        "비용 절감 기회가 구체적으로 식별되어 있는가?",
+        "정량적 비용 수치 또는 추정치가 포함되어 있는가?",
+        "ROI 또는 비용 효율 점수가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate token usage optimization for a system making 1000+ API calls per day",
+      "expected_output": "Cost audit with routing analysis, caching assessment, and savings opportunities",
+      "expectations": [
+        "모델 라우팅 전략이 평가되어 있는가?",
+        "프롬프트 캐싱 또는 토큰 최적화 현황이 분석되어 있는가?",
+        "비용 절감 기회가 구체적으로 식별되어 있는가?",
+        "정량적 비용 수치 또는 추정치가 포함되어 있는가?",
+        "ROI 또는 비용 효율 점수가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess cost efficiency of a multi-model routing system using GPT-4 and Claude",
+      "expected_output": "Cost audit with routing analysis, caching assessment, and savings opportunities",
+      "expectations": [
+        "모델 라우팅 전략이 평가되어 있는가?",
+        "프롬프트 캐싱 또는 토큰 최적화 현황이 분석되어 있는가?",
+        "비용 절감 기회가 구체적으로 식별되어 있는가?",
+        "정량적 비용 수치 또는 추정치가 포함되어 있는가?",
+        "ROI 또는 비용 효율 점수가 제시되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "skill_name": "audit-agentic",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run an agentic AI capability audit on the current Forge system",
+      "expected_output": "Structured audit report with Sema4.ai level and CLEAR metrics",
+      "expectations": [
+        "Sema4.ai 성숙도 레벨(L0-L5) 중 하나가 명시되어 있는가?",
+        "CLEAR 프레임워크 기준의 평가 항목이 포함되어 있는가?",
+        "자율성, 도구 사용, 멀티에이전트 조정 중 최소 2개 축이 평가되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?",
+        "개선 로드맵 또는 권고사항이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate the agentic maturity level of a chatbot that uses tool calling for database queries and file operations",
+      "expected_output": "Structured audit report with Sema4.ai level and CLEAR metrics",
+      "expectations": [
+        "Sema4.ai 성숙도 레벨(L0-L5) 중 하나가 명시되어 있는가?",
+        "CLEAR 프레임워크 기준의 평가 항목이 포함되어 있는가?",
+        "자율성, 도구 사용, 멀티에이전트 조정 중 최소 2개 축이 평가되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?",
+        "개선 로드맵 또는 권고사항이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess agentic capabilities of a multi-agent system with 3 specialized agents coordinated by a lead agent",
+      "expected_output": "Structured audit report with Sema4.ai level and CLEAR metrics",
+      "expectations": [
+        "Sema4.ai 성숙도 레벨(L0-L5) 중 하나가 명시되어 있는가?",
+        "CLEAR 프레임워크 기준의 평가 항목이 포함되어 있는가?",
+        "자율성, 도구 사용, 멀티에이전트 조정 중 최소 2개 축이 평가되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?",
+        "개선 로드맵 또는 권고사항이 포함되어 있는가?"
+      ]
+    }
+  ]
+}

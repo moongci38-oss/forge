@@ -7,7 +7,7 @@ set -euo pipefail
 # Creates e2e-pipeline.json and hooks directory from template.
 #
 # Usage:
-#   bash /home/damools/forge/dev/scripts/e2e-scaffold.sh --project-root /path --name my-app
+#   bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-scaffold.sh --project-root /path --name my-app
 # =============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -92,4 +92,4 @@ echo ""
 echo "Next steps:"
 echo "  1. Edit e2e-pipeline.json to match your project"
 echo "  2. Add custom hooks in scripts/e2e-hooks/ (optional)"
-echo "  3. Run: bash /home/damools/forge/dev/scripts/e2e-runner.sh"
+echo "  3. Run: bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-runner.sh"
