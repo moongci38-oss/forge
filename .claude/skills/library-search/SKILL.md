@@ -17,9 +17,18 @@ context: fork
 
 ## 전제조건
 
-1. Prefab Visual Library 레포가 로컬에 존재
+1. Prefab Visual Library Git 레포가 로컬에 클론되어 있음
+   - GitLab: `ssh://git@ssh.lumir-ai.com:32361/lumir/prefab-visual-library.git`
+   - 클론: `git clone ssh://git@ssh.lumir-ai.com:32361/lumir/prefab-visual-library.git ~/prefab-visual-library`
 2. 환경변수 `PREFAB_LIBRARY_PATH` 설정 (미설정 시 기본: `~/prefab-visual-library`)
+   - 또는 `forge-workspace.json`의 `prefabLibraryRoot` 경로 참조
 3. `_metadata.json` 파일이 Library 루트에 존재
+
+## 팀 공유
+
+- Library는 GitLab 별도 레포로 관리 (팀원 clone으로 접근)
+- 새 에셋 추가 시 _metadata.json 갱신 후 commit + push
+- 팀원이 `git pull`하면 최신 에셋 카탈로그 자동 동기화
 
 ## 워크플로우
 
