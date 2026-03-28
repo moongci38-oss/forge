@@ -2,6 +2,7 @@
 name: game-asset-generate
 description: 게임 에셋(스프라이트, VFX, 배경, 3D, UI, 아이콘, 오디오)을 대량 생산하는 오케스트레이터. Library-First 탐색으로 MCP 비용을 절감하고, 12요소 Soul 프롬프트와 모델 어댑터(FLUX/Gemini/Replicate)로 품질을 극대화한다. style-guide.md가 준비된 후 게임 에셋 생성 시 사용. 리소스 파이프라인 P3 단계.
 user-invocable: true
+context: fork
 ---
 
 # Game Asset Generate
@@ -144,6 +145,77 @@ user-invocable: true
 - 생성된 에셋 파일 (프로젝트 에셋 경로에 저장)
 - resource-manifest.md 업데이트 (프롬프트 전문 + 시드 + 크리틱 점수)
 - prompt-log.md 업데이트 (성공/실패 기록)
+
+## 에셋 편집 모드 (JSON 분석→치환→생성)
+
+기존 에셋의 특정 속성(색상/재질/패턴)만 변경하여 배리에이션을 생성한다.
+전체 재생성 대비 형태 일관성 100% 보장 + 생성 시간 80% 단축.
+
+### 진입 조건
+
+- 원본 이미지 경로가 제공됨
+- 변경할 속성이 명시됨 (예: "색상: #FFD700, 재질: 금속광택")
+- 또는 "배리에이션", "색상 변경", "편집" 키워드가 포함된 요청
+
+### 편집 파이프라인 (3단계)
+
+```
+Step 1 [분석]: 원본 이미지 → JSON 속성 추출
+  → NanoBanana edit_image로 원본 분석 요청
+  → 프롬프트: "Analyze this image and describe: dominant colors (hex),
+    material/texture, pattern, shape, lighting, background"
+  → 출력: image_attributes (색상, 재질, 패턴, 형태, 조명, 배경)
+
+Step 2 [치환]: 속성 JSON에서 변경 대상만 교체
+  → 원본 속성 중 사용자가 지정한 필드만 새 값으로 치환
+  → 미지정 필드는 원본 값 유지 → 형태 일관성 보장
+  → 색상은 반드시 Hex Code (#RRGGBB)로 지정
+
+Step 3 [재생성]: 원본 이미지 + 치환된 속성으로 편집
+  → NanoBanana edit_image 호출 (원본 이미지 + 편집 프롬프트)
+  → 프롬프트: "Keep the exact same {유지 속성}. Change only: {변경 속성}"
+  → asset-critic 6축 검증 (기존 파이프라인 유지)
+```
+
+### 편집 모드 예시
+
+```
+입력: sword_iron.png + "색상: #FFD700, 재질: 금속광택 강화"
+
+Step 1 → 분석 결과:
+  colors: ["#808080 (iron gray)", "#4A4A4A (dark steel)"]
+  material: "matte brushed metal"
+  pattern: "straight blade, crossguard"
+  shape: "longsword, single-edge"
+
+Step 2 → 치환:
+  colors: ["#FFD700 (gold)", "#B8860B (dark gold)"]  ← 변경
+  material: "polished reflective metal"               ← 변경
+  pattern: "straight blade, crossguard"               ← 유지
+  shape: "longsword, single-edge"                     ← 유지
+
+Step 3 → 편집 프롬프트:
+  "Keep the exact same sword shape, blade pattern, and composition.
+   Change only: colors to #FFD700 gold and #B8860B dark gold,
+   material to polished reflective metal with strong specular highlights"
+
+출력: sword_gold.png
+```
+
+### 배리에이션 일괄 생성
+
+여러 변형을 한 번에 요청할 수 있다:
+
+```
+입력: sword_iron.png + 배리에이션 목록:
+  - Common:  색상 #808080, 재질 무광
+  - Rare:    색상 #0095F6, 재질 광택
+  - Epic:    색상 #9B59B6, 재질 마법 발광
+  - Legend:  색상 #FFD700, 재질 금속광택 + 오라
+
+→ Step 1 (분석)은 1회만 실행
+→ Step 2-3을 배리에이션 수만큼 반복 (순차, 1장씩 Human 확인)
+```
 
 ## Diamond Architecture 단계
 
