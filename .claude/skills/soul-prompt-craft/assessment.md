@@ -1,23 +1,23 @@
 ---
 skill: soul-prompt-craft
-version: 1
+version: 2
 ---
 
 # Assessment: soul-prompt-craft
 
 ## 테스트 입력
 
-- input_1: "Create a 12-element soul prompt for a warrior character sprite in cel-shading style"
-- input_2: "Craft an image generation prompt for a fantasy forest background, Tier 2"
-- input_3: "Generate a soul-injected prompt for UI button assets in Instagram design style"
+- input_1: "Craft a soul-injected prompt for generating a dark fantasy game character sprite"
+- input_2: "Build a 12-element image generation prompt for a Korean traditional pattern background"
+- input_3: "Create a T1-tier soul prompt for the hero banner image of a mobile game landing page"
 
 ## 평가 기준 (Yes/No)
 
-1. 12요소 슬롯이 모두 채워져 있거나 구조가 설명되어 있는가?
-2. style-guide.md 또는 art-direction-brief에서 컨텍스트 추출이 언급되어 있는가?
-3. 모델별 포맷(FLUX/Gemini/Replicate) 변환이 포함되어 있는가?
-4. Hex 색상 코드가 프롬프트에 포함되어 있는가?
-5. Tier(T1/T2/T3)에 따른 프롬프트 깊이 차등이 적용되어 있는가?
+1. Output MUST include all 12 soul prompt elements (subject, style, mood, palette, composition, lighting, detail, medium, reference, negative, technical, context).
+2. Output MUST extract context from style-guide.md and art-direction-brief.md if they exist in the project.
+3. Output MUST apply Tier differentiation (T1=full depth, T2=standard, T3=minimal) based on asset importance.
+4. Output MUST format the prompt for the target model (FLUX/Gemini/Replicate) with model-specific optimizations.
+5. Output MUST include a negative prompt section and technical parameters (resolution, aspect ratio, seed strategy).
 
 ## 채점
 

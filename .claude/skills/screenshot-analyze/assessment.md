@@ -1,23 +1,23 @@
 ---
 skill: screenshot-analyze
-version: 1
+version: 2
 ---
 
 # Assessment: screenshot-analyze
 
 ## 테스트 입력
 
-- input_1: "Analyze this game screenshot for UI layout and color palette extraction"
-- input_2: "Compare this competitor app screenshot with our current design"
-- input_3: "Verify implementation matches the design spec by analyzing this screenshot"
+- input_1: "Analyze this game screenshot for UI layout — decompose each element with position, component type, and Unity Anchor settings"
+- input_2: "Compare this competitor app screenshot with our current design and extract UI element breakdown table"
+- input_3: "Verify implementation matches the design spec by analyzing this screenshot in Task Doc mode"
 
 ## 평가 기준 (Yes/No)
 
-1. 분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?
-2. UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?
-3. 색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?
-4. 구현 가이드 또는 개선 제안이 포함되어 있는가?
-5. 구조화된 출력(테이블, 목록)으로 정리되어 있는가?
+1. Output MUST include a UI element decomposition table with rows for each identified component (버튼, 배경, 아이콘 등) listing position, size ratio, and implementation details.
+2. Output MUST extract a color palette with Hex codes and assign semantic token names for each color.
+3. Output MUST auto-detect and declare the analysis mode (기본 모드 / Task Doc 모드 / 시안 분석 모드 / 구현 검증 모드) before executing.
+4. Output MUST include a Prefab hierarchy tree or Canvas structure table with Anchor/Pivot estimates when analyzing UI layout.
+5. Output MUST provide a structured implementation guide with Canvas settings, Prefab structure notes, and (추정) or (확정) tags on all inferred values.
 
 ## 채점
 
