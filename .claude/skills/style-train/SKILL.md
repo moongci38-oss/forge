@@ -2,6 +2,7 @@
 name: style-train
 description: 기존 에셋 5-10개에서 스타일을 추출하여 style-guide.md를 생성하거나(Mode A), Replicate LoRA 파인튜닝을 오케스트레이션한다(Mode B). 게임/웹 에셋 생성 파이프라인 시작 전 시각적 일관성 기준을 정립할 때 사용. /game-asset-generate 실행 전 필수 선행 스킬. 리소스 파이프라인 P0 단계.
 user-invocable: true
+context: fork
 ---
 
 # Style Train

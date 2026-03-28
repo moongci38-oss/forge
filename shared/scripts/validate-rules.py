@@ -27,7 +27,13 @@ def validate_rule(filepath: str) -> list[dict]:
     parsed = parse_frontmatter(filepath)
 
     if parsed is None:
-        issues.append({"file": filepath, "severity": "error", "message": "No YAML frontmatter found"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "error",
+                "message": "No YAML frontmatter found",
+            }
+        )
         return issues
 
     body = parsed.pop("_body", "")
@@ -36,17 +42,35 @@ def validate_rule(filepath: str) -> list[dict]:
     # Required fields
     for field in REQUIRED_FIELDS:
         if field not in parsed:
-            issues.append({"file": filepath, "severity": "error", "message": f"Missing required field: {field}"})
+            issues.append(
+                {
+                    "file": filepath,
+                    "severity": "error",
+                    "message": f"Missing required field: {field}",
+                }
+            )
 
     # ID format
     rule_id = parsed.get("id", "")
     if rule_id and not all(c.isalnum() or c == "-" for c in rule_id):
-        issues.append({"file": filepath, "severity": "error", "message": f"Invalid ID format: {rule_id} (must be kebab-case)"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "error",
+                "message": f"Invalid ID format: {rule_id} (must be kebab-case)",
+            }
+        )
 
     # Impact enum
     impact = parsed.get("impact", "")
     if impact and impact not in VALID_IMPACTS:
-        issues.append({"file": filepath, "severity": "error", "message": f"Invalid impact: {impact} (must be one of {VALID_IMPACTS})"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "error",
+                "message": f"Invalid impact: {impact} (must be one of {VALID_IMPACTS})",
+            }
+        )
 
     # Scope array
     scopes = parsed.get("scope", [])
@@ -54,35 +78,77 @@ def validate_rule(filepath: str) -> list[dict]:
         scopes = [scopes]
     for scope in scopes:
         if scope not in VALID_SCOPES:
-            issues.append({"file": filepath, "severity": "error", "message": f"Invalid scope: {scope} (must be one of {VALID_SCOPES})"})
+            issues.append(
+                {
+                    "file": filepath,
+                    "severity": "error",
+                    "message": f"Invalid scope: {scope} (must be one of {VALID_SCOPES})",
+                }
+            )
 
     # Audience enum
     audience = parsed.get("audience", "all")
     if audience not in VALID_AUDIENCES:
-        issues.append({"file": filepath, "severity": "warning", "message": f"Invalid audience: {audience}"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "warning",
+                "message": f"Invalid audience: {audience}",
+            }
+        )
 
     # impactDescription: if present, must be a non-empty string
     impact_desc = parsed.get("impactDescription")
     if impact_desc is not None and not isinstance(impact_desc, str):
-        issues.append({"file": filepath, "severity": "error", "message": "impactDescription must be a string"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "error",
+                "message": "impactDescription must be a string",
+            }
+        )
 
     # enforcement: if present, must be "rigid" or "flexible"
     enforcement = parsed.get("enforcement")
     if enforcement is not None and enforcement not in VALID_ENFORCEMENTS:
-        issues.append({"file": filepath, "severity": "error", "message": f"Invalid enforcement: {enforcement} (must be 'rigid' or 'flexible')"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "error",
+                "message": f"Invalid enforcement: {enforcement} (must be 'rigid' or 'flexible')",
+            }
+        )
 
     # Warning if CRITICAL/HIGH lacks impactDescription
     if impact in {"CRITICAL", "HIGH"} and not impact_desc:
-        issues.append({"file": filepath, "severity": "warning", "message": f"CRITICAL/HIGH rule missing impactDescription (recommended)"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "warning",
+                "message": f"CRITICAL/HIGH rule missing impactDescription (recommended)",
+            }
+        )
 
     # Warning if CRITICAL lacks enforcement
     if impact == "CRITICAL" and enforcement is None:
-        issues.append({"file": filepath, "severity": "warning", "message": "CRITICAL rule missing enforcement (recommended: rigid)"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "warning",
+                "message": "CRITICAL rule missing enforcement (recommended: rigid)",
+            }
+        )
 
     # Content sections check
     counts = count_sections(body)
     if counts["doCount"] == 0 and counts["dontCount"] == 0:
-        issues.append({"file": filepath, "severity": "warning", "message": "No Do/Don't sections found (recommended for rules)"})
+        issues.append(
+            {
+                "file": filepath,
+                "severity": "warning",
+                "message": "No Do/Don't sections found (recommended for rules)",
+            }
+        )
 
     return issues
 
@@ -111,11 +177,13 @@ def validate_dependencies(rules_dir: str) -> list[dict]:
     for filepath, (rule_id, requires) in all_requires.items():
         for dep in requires:
             if dep not in all_ids:
-                issues.append({
-                    "file": filepath,
-                    "severity": "error",
-                    "message": f"Rule '{rule_id}' requires '{dep}' but it doesn't exist",
-                })
+                issues.append(
+                    {
+                        "file": filepath,
+                        "severity": "error",
+                        "message": f"Rule '{rule_id}' requires '{dep}' but it doesn't exist",
+                    }
+                )
 
     # Check for duplicate IDs
     seen_ids = {}
@@ -127,11 +195,13 @@ def validate_dependencies(rules_dir: str) -> list[dict]:
             rule_id = parsed.get("id", "")
             if rule_id:
                 if rule_id in seen_ids:
-                    issues.append({
-                        "file": str(md_file),
-                        "severity": "error",
-                        "message": f"Duplicate ID '{rule_id}' (also in {seen_ids[rule_id]})",
-                    })
+                    issues.append(
+                        {
+                            "file": str(md_file),
+                            "severity": "error",
+                            "message": f"Duplicate ID '{rule_id}' (also in {seen_ids[rule_id]})",
+                        }
+                    )
                 else:
                     seen_ids[rule_id] = str(md_file)
 
@@ -185,7 +255,9 @@ def main():
     warnings = [i for i in all_issues if i["severity"] == "warning"]
 
     print(f"\n{'=' * 50}")
-    print(f"Files: {file_count} | Pass: {pass_count} | Errors: {len(errors)} | Warnings: {len(warnings)}")
+    print(
+        f"Files: {file_count} | Pass: {pass_count} | Errors: {len(errors)} | Warnings: {len(warnings)}"
+    )
 
     if errors:
         print("\nRESULT: FAIL")

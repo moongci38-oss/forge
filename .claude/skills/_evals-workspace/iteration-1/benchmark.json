@@ -1,0 +1,66 @@
+{
+  "eval_date": "2026-03-28",
+  "methodology": "inline-execution (headless/Cowork mode)",
+  "model": "claude-sonnet-4-6",
+  "runs_per_input": 3,
+  "inputs_per_skill": 3,
+  "total_runs_per_skill": 9,
+  "skills": {
+    "react-best-practices": {
+      "pass_rate": 1.0,
+      "passes": 9,
+      "total": 9,
+      "variance": 0.0,
+      "sigma": 0.0,
+      "per_input": {
+        "input_1": {"prompt": "Review: useEffect(() => { fetch('/api/data').then(setData) }, []) in a Server Component", "passes": 3, "total": 3},
+        "input_2": {"prompt": "Review: const items = data.filter(x => x.active).map(x => <Item key={x.id} {...x} />) inside render without memo", "passes": 3, "total": 3},
+        "input_3": {"prompt": "Review: import moment from 'moment' in a Next.js page component", "passes": 3, "total": 3}
+      },
+      "consistently_failing_criteria": [],
+      "criteria_names": ["issue_identification", "rule_reference", "code_fix", "performance_impact", "react_nextjs_concept"]
+    },
+    "content-creator": {
+      "pass_rate": 1.0,
+      "passes": 9,
+      "total": 9,
+      "variance": 0.0,
+      "sigma": 0.0,
+      "per_input": {
+        "input_1": {"prompt": "Write a blog post outline about AI-powered code review tools for developers", "passes": 3, "total": 3},
+        "input_2": {"prompt": "Create 3 social media posts announcing a new dark mode feature", "passes": 3, "total": 3},
+        "input_3": {"prompt": "Draft an email newsletter introducing a weekly dev tips series", "passes": 3, "total": 3}
+      },
+      "consistently_failing_criteria": [],
+      "criteria_names": ["structured_format", "target_audience", "seo_or_cta", "content_type_match", "publish_ready"]
+    },
+    "concise-planning": {
+      "pass_rate": 1.0,
+      "passes": 9,
+      "total": 9,
+      "variance": 0.0,
+      "sigma": 0.0,
+      "per_input": {
+        "input_1": {"prompt": "Add dark mode toggle to the settings page", "passes": 3, "total": 3},
+        "input_2": {"prompt": "Refactor the authentication middleware to support JWT refresh tokens", "passes": 3, "total": 3},
+        "input_3": {"prompt": "Create a REST API endpoint for user profile CRUD operations", "passes": 3, "total": 3}
+      },
+      "consistently_failing_criteria": [],
+      "criteria_names": ["approach_section", "scope_in_out", "6_to_10_action_items", "verb_first_items", "file_path_in_items", "validation_step"]
+    },
+    "writing-plans": {
+      "pass_rate": 1.0,
+      "passes": 9,
+      "total": 9,
+      "variance": 0.0,
+      "sigma": 0.0,
+      "per_input": {
+        "input_1": {"prompt": "Implement a comment system with nested replies for a blog...", "passes": 3, "total": 3},
+        "input_2": {"prompt": "Add email notification system...", "passes": 3, "total": 3},
+        "input_3": {"prompt": "Build a file upload service...", "passes": 3, "total": 3}
+      },
+      "consistently_failing_criteria": [],
+      "criteria_names": ["structured_plan", "3plus_tasks", "file_paths_per_task", "test_mention", "task_ordering"]
+    }
+  }
+}

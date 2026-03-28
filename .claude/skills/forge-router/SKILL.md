@@ -6,6 +6,7 @@ description: >
   규모를 자동 분류하고, 기존 세션 재개 여부도 감지. user-invocable: false — 시스템 자동 실행 전용.
 user-invocable: false
 disable-model-invocation: true
+context: fork
 ---
 
 # Forge Dev Auto-Router

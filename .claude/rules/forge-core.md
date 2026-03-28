@@ -10,8 +10,9 @@
 
 ### Iron Laws
 - **OUTPUTS-IRON-1**: forge/에 산출물 저장 금지. 모든 산출물은 forge-outputs/로
+- **OUTPUTS-IRON-2**: `forge-outputs/`는 forge/의 **형제 폴더** (`~/forge-outputs/`). forge/ 안의 하위 폴더가 아니다. 경로 참조 시 반드시 `~/forge-outputs/` 또는 forge-workspace.json의 `outputsRoot` 기준으로 resolve한다. CWD 상대경로 `forge-outputs/...` 사용 금지.
 - forge/ = 시스템 (파이프라인, 규칙, 도구, 스킬, 스크립트)
-- forge-outputs/ = 결과물 (리서치, 기획서, 에셋, 리뷰, 문서 등)
+- forge-outputs/ = 결과물 (리서치, 기획서, 에셋, 리뷰, 문서 등) — 위치: `~/forge-outputs/`
 
 > 통합 파이프라인: `forge/pipeline.md` (Phase 1~12)
 

@@ -1,0 +1,41 @@
+{
+  "skill_name": "subagent-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a code review subagent that checks for security issues and best practices after code changes",
+      "expected_output": "Complete subagent-creator output meeting all 5 criteria",
+      "expectations": [
+        "YAML frontmatter가 코드블록 안에 포함되어 있거나, 에이전트 파일이 생성/이미 존재한다는 안내가 있는가?",
+        "에이전트 이름과 역할(무엇을 하는 에이전트인지)이 출력에 명확히 설명되어 있는가?",
+        "\"proactively\", \"after\", \"when\", \"Use\" 등 에이전트가 언제 실행되는지가 언급되어 있거나, 기존 에이전트의 용도/기능 설명이 포함되어 있는가?",
+        "`.claude/agents/` 또는 `~/.claude/agents/` 경로가 출력에 언급되어 있는가?",
+        "에이전트 파일이 실제 생성되었거나, 기존 에이전트가 존재한다는 안내가 있거나, 생성 방법이 구체적으로 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a documentation writer subagent that generates markdown docs from source code",
+      "expected_output": "Complete subagent-creator output meeting all 5 criteria",
+      "expectations": [
+        "YAML frontmatter가 코드블록 안에 포함되어 있거나, 에이전트 파일이 생성/이미 존재한다는 안내가 있는가?",
+        "에이전트 이름과 역할(무엇을 하는 에이전트인지)이 출력에 명확히 설명되어 있는가?",
+        "\"proactively\", \"after\", \"when\", \"Use\" 등 에이전트가 언제 실행되는지가 언급되어 있거나, 기존 에이전트의 용도/기능 설명이 포함되어 있는가?",
+        "`.claude/agents/` 또는 `~/.claude/agents/` 경로가 출력에 언급되어 있는가?",
+        "에이전트 파일이 실제 생성되었거나, 기존 에이전트가 존재한다는 안내가 있거나, 생성 방법이 구체적으로 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a test runner subagent that runs the test suite and reports failures with context",
+      "expected_output": "Complete subagent-creator output meeting all 5 criteria",
+      "expectations": [
+        "YAML frontmatter가 코드블록 안에 포함되어 있거나, 에이전트 파일이 생성/이미 존재한다는 안내가 있는가?",
+        "에이전트 이름과 역할(무엇을 하는 에이전트인지)이 출력에 명확히 설명되어 있는가?",
+        "\"proactively\", \"after\", \"when\", \"Use\" 등 에이전트가 언제 실행되는지가 언급되어 있거나, 기존 에이전트의 용도/기능 설명이 포함되어 있는가?",
+        "`.claude/agents/` 또는 `~/.claude/agents/` 경로가 출력에 언급되어 있는가?",
+        "에이전트 파일이 실제 생성되었거나, 기존 에이전트가 존재한다는 안내가 있거나, 생성 방법이 구체적으로 안내되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ description: >
   assessment.md가 없으면 자동 생성을 제안한다.
 user-invocable: true
 argument-hint: "<skill-name> [--assess-only] [--iterations N] [--budget N]"
+context: fork
 ---
 
 # Skill AutoResearch

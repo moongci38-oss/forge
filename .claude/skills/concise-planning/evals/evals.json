@@ -1,0 +1,44 @@
+{
+  "skill_name": "concise-planning",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add dark mode toggle to the settings page",
+      "expected_output": "Complete concise-planning output meeting all 6 criteria",
+      "expectations": [
+        "출력에 \"Approach\" 또는 고수준 접근법을 설명하는 1-3문장 섹션이 있는가?",
+        "\"Scope\" 섹션에 \"In\"과 \"Out\" (또는 동등한 포함/제외) 항목이 모두 존재하는가?",
+        "Action Items(체크리스트 항목)가 6개 이상 10개 이하인가?",
+        "Action Items의 80% 이상이 동사로 시작하는가? (Add, Create, Refactor, Verify, Update, Test, Write, Configure 등)",
+        "Action Items 중 최소 1개가 구체적 파일 경로(예: src/components/Settings.tsx)를 포함하는가?",
+        "테스트/검증 단계가 최소 1개 존재하는가? (Validation 섹션 또는 Action Items 내 검증 스텝)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Refactor the authentication middleware to support JWT refresh tokens",
+      "expected_output": "Complete concise-planning output meeting all 6 criteria",
+      "expectations": [
+        "출력에 \"Approach\" 또는 고수준 접근법을 설명하는 1-3문장 섹션이 있는가?",
+        "\"Scope\" 섹션에 \"In\"과 \"Out\" (또는 동등한 포함/제외) 항목이 모두 존재하는가?",
+        "Action Items(체크리스트 항목)가 6개 이상 10개 이하인가?",
+        "Action Items의 80% 이상이 동사로 시작하는가? (Add, Create, Refactor, Verify, Update, Test, Write, Configure 등)",
+        "Action Items 중 최소 1개가 구체적 파일 경로(예: src/components/Settings.tsx)를 포함하는가?",
+        "테스트/검증 단계가 최소 1개 존재하는가? (Validation 섹션 또는 Action Items 내 검증 스텝)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a REST API endpoint for user profile CRUD operations",
+      "expected_output": "Complete concise-planning output meeting all 6 criteria",
+      "expectations": [
+        "출력에 \"Approach\" 또는 고수준 접근법을 설명하는 1-3문장 섹션이 있는가?",
+        "\"Scope\" 섹션에 \"In\"과 \"Out\" (또는 동등한 포함/제외) 항목이 모두 존재하는가?",
+        "Action Items(체크리스트 항목)가 6개 이상 10개 이하인가?",
+        "Action Items의 80% 이상이 동사로 시작하는가? (Add, Create, Refactor, Verify, Update, Test, Write, Configure 등)",
+        "Action Items 중 최소 1개가 구체적 파일 경로(예: src/components/Settings.tsx)를 포함하는가?",
+        "테스트/검증 단계가 최소 1개 존재하는가? (Validation 섹션 또는 Action Items 내 검증 스텝)"
+      ]
+    }
+  ]
+}

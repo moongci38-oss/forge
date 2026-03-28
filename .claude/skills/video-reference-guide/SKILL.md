@@ -2,6 +2,7 @@
 name: video-reference-guide
 description: 게임 영상(로컬 mp4/mov, YouTube URL)을 Gemini로 프레임 분석하여 연출 구현 가이드를 생성하는 스킬. 무성 영상(게임 연출, 이펙트, UI 전환)의 시각 분석 전문.
 user-invocable: true
+context: fork
 ---
 
 # Video Reference Guide

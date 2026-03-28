@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Testimonials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #07070f;
+  --surface:   #0e0e1a;
+  --surface-hi:#13131f;
+  --gold:      #c9a84c;
+  --gold-lt:   #e4c97a;
+  --gold-dim:  rgba(201,168,76,0.10);
+  --gold-glow: rgba(201,168,76,0.22);
+  --border:    rgba(201,168,76,0.13);
+  --border-hi: rgba(201,168,76,0.32);
+  --white:     #f5f3ee;
+  --muted:     #6b6b7e;
+  --subtle:    #2a2a3e;
+  --serif:     'Playfair Display', Georgia, serif;
+  --sans:      'DM Sans', system-ui, sans-serif;
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: var(--sans);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+/* ── Ambient background ─────────────────────── */
+.ambient { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.amb { position: absolute; border-radius: 50%; filter: blur(80px); }
+.amb-1 {
+  width: 700px; height: 700px; top: -220px; left: -180px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06), transparent 70%);
+}
+.amb-2 {
+  width: 550px; height: 550px; bottom: -180px; right: -120px;
+  background: radial-gradient(circle, rgba(120,60,220,0.07), transparent 70%);
+}
+.amb-3 {
+  width: 320px; height: 320px; top: 35%; right: 5%;
+  background: radial-gradient(circle, rgba(201,168,76,0.04), transparent 70%);
+}
+
+/* ── Layout ─────────────────────────────────── */
+.section { position: relative; z-index: 1; width: 100%; max-width: 860px; }
+
+/* ── Header ─────────────────────────────────── */
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem;
+}
+.eyebrow::before,
+.eyebrow::after { content: ''; display: block; width: 36px; height: 1px; }
+.eyebrow::before { background: linear-gradient(90deg, transparent, var(--gold)); }
+.eyebrow::after  { background: linear-gradient(90deg, var(--gold), transparent); }
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.9rem);
+  font-weight: 400;
+  line-height: 1.28;
+  color: var(--white);
+}
+.section-title .accent { font-style: italic; color: var(--gold-lt); }
+
+/* ── Stage ───────────────────────────────────── */
+.card-stage { position: relative; transition: height 500ms var(--ease); }
+
+/* ── Card ────────────────────────────────────── */
+.t-card {
+  position: absolute; inset: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem 3.5rem 2.75rem;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 2rem;
+  transition: opacity 480ms var(--ease), transform 480ms var(--ease);
+  will-change: opacity, transform;
+}
+.t-card.s-idle   { opacity: 0; pointer-events: none; }
+.t-card.s-enter  { opacity: 0; transform: translateY(22px) scale(0.985); }
+.t-card.s-active { opacity: 1; transform: translateY(0) scale(1); border-color: var(--border-hi); background: var(--surface-hi); }
+.t-card.s-exit   { opacity: 0; transform: translateY(-22px) scale(0.985); }
+
+/* ── Deco quote glyph ────────────────────────── */
+.deco-q {
+  position: absolute; top: -1.2rem; right: 2.5rem;
+  font-family: var(--serif); font-size: 11rem; line-height: 1;
+  color: var(--gold); opacity: 0.065;
+  pointer-events: none; user-select: none; font-style: italic;
+}
+
+/* ── Stars ───────────────────────────────────── */
+.stars { display: flex; gap: 4px; margin-bottom: 1.2rem; }
+.star  { width: 15px; height: 15px; fill: var(--gold); }
+
+/* ── Quote text ──────────────────────────────── */
+.quote-text {
+  font-family: var(--serif);
+  font-size: 1.18rem; line-height: 1.82;
+  color: var(--white); font-style: italic;
+  position: relative; z-index: 1;
+}
+
+/* ── Author ──────────────────────────────────── */
+.card-author {
+  display: flex; align-items: center; gap: 1.25rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--border);
+}
+
+/* ── Avatar ──────────────────────────────────── */
+.avatar-wrap { position: relative; flex-shrink: 0; width: 64px; height: 64px; }
+.avatar-ring {
+  position: absolute; inset: -3px; border-radius: 50%;
+  background: conic-gradient(
+    var(--gold) 0deg, transparent 110deg,
+    var(--gold-lt) 220deg, transparent 290deg,
+    var(--gold) 360deg
+  );
+  animation: ring-spin 4s linear infinite;
+}
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+.avatar-bg {
+  position: absolute; inset: 2px; border-radius: 50%;
+  background: var(--bg); padding: 2px; z-index: 1;
+}
+.avatar-inner {
+  width: 100%; height: 100%; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 600;
+  color: #fff; letter-spacing: -0.02em;
+}
+
+/* ── Author text ─────────────────────────────── */
+.author-info { flex: 1; min-width: 0; }
+.author-name { font-weight: 500; font-size: 0.94rem; color: var(--white); margin-bottom: 0.22rem; }
+.author-meta { font-size: 0.79rem; color: var(--muted); }
+.author-meta .company { color: var(--gold); font-weight: 500; }
+
+/* ── Progress bar ────────────────────────────── */
+.progress-track {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--subtle);
+  border-radius: 0 0 24px 24px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+  border-radius: 0 0 24px 24px;
+}
+
+/* ── Navigation ──────────────────────────────── */
+.carousel-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 2rem; margin-top: 2.25rem;
+}
+.nav-btn {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--border-hi); background: var(--gold-dim);
+  color: var(--gold); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 220ms ease, border-color 220ms ease, transform 150ms ease;
+  outline: none;
+}
+.nav-btn:hover { background: var(--gold-glow); border-color: var(--gold); transform: scale(1.09); }
+.nav-btn:active { transform: scale(0.95); }
+.nav-btn svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; stroke-width: 1.8;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── Dots ────────────────────────────────────── */
+.dots-row { display: flex; gap: 8px; align-items: center; }
+.dot {
+  height: 7px; border-radius: 4px;
+  background: var(--subtle); cursor: pointer;
+  border: none; outline: none; padding: 0;
+  transition: width 380ms var(--ease), background 280ms ease;
+}
+.dot:not(.active) { width: 7px; }
+.dot.active       { width: 28px; background: var(--gold); }
+.dot:hover:not(.active) { background: var(--muted); }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 580px) {
+  .t-card { padding: 2rem 1.75rem 2.25rem; }
+  .deco-q { font-size: 7rem; right: 1.5rem; }
+  .quote-text { font-size: 1.05rem; }
+  .section-title { font-size: 1.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="amb amb-1"></div>
+  <div class="amb amb-2"></div>
+  <div class="amb amb-3"></div>
+</div>
+
+<section class="section" aria-label="Customer testimonials">
+  <header class="section-header">
+    <p class="eyebrow" aria-hidden="true">Testimonials</p>
+    <h2 class="section-title">
+      Trusted by teams who<br>
+      <span class="accent">demand the best</span>
+    </h2>
+  </header>
+
+  <div class="card-stage" id="stage" aria-live="polite" aria-atomic="true"></div>
+
+  <nav class="carousel-nav" aria-label="Carousel navigation">
+    <button class="nav-btn" id="prevBtn" aria-label="Previous testimonial">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="dots-row" id="dots" role="tablist" aria-label="Go to testimonial"></div>
+    <button class="nav-btn" id="nextBtn" aria-label="Next testimonial">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </nav>
+</section>
+
+<script>
+const DATA = [
+  {
+    initials: 'SM', bg: '#4338ca',
+    name: 'Sarah Mitchell', role: 'Product Manager', company: 'TechFlow',
+    rating: 5,
+    quote: 'This platform completely transformed how our team operates. What used to take days now takes hours, and the quality of our output has never been higher. An absolute revelation for modern teams.'
+  },
+  {
+    initials: 'JK', bg: '#047857',
+    name: 'James Kowalski', role: 'Chief Technology Officer', company: 'Meridian Labs',
+    rating: 5,
+    quote: 'The performance gains were immediately measurable. We reduced operational overhead by 40% in the first quarter alone. I recommend it to every founder I meet \u2014 without a single reservation.'
+  },
+  {
+    initials: 'ER', bg: '#b91c1c',
+    name: 'Elena Reyes', role: 'Creative Director', company: 'Lumina Studio',
+    rating: 5,
+    quote: 'I have evaluated dozens of tools in this space. Nothing comes close. The attention to detail and the thoughtfulness of the experience are in a league entirely their own.'
+  },
+  {
+    initials: 'MT', bg: '#92400e',
+    name: 'Marcus Thompson', role: 'Founder & CEO', company: 'Axiom Ventures',
+    rating: 5,
+    quote: 'ROI was evident within the first month. Our team adopted it overnight \u2014 no lengthy onboarding, no resistance. Just results. It has become completely indispensable to how we work.'
+  },
+  {
+    initials: 'PS', bg: '#6d28d9',
+    name: 'Priya Sharma', role: 'Head of Engineering', company: 'Nexus Systems',
+    rating: 5,
+    quote: 'The API design is brilliantly intuitive. Integration took less than a day, and the documentation is genuinely enjoyable to read. A rare combination of raw power and true elegance.'
+  }
+];
+
+const NS_SVG  = 'http://www.w3.org/2000/svg';
+const STAR_D  = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+const DURATION = 6000;
+
+const stage   = document.getElementById('stage');
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+let current      = 0;
+let busy         = false;
+let autoTimer    = null;
+let progRaf      = null;
+let progStart    = null;
+let progFrozenAt = 0;
+let progPaused   = false;
+
+/* ── DOM helpers ─────────────────────────────── */
+function el(tag, cls) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  return e;
+}
+function elSVG(tag) { return document.createElementNS(NS_SVG, tag); }
+function attr(node, pairs) {
+  for (const [k, v] of Object.entries(pairs)) node.setAttribute(k, v);
+}
+
+/* ── Build star SVG ──────────────────────────── */
+function makeStar() {
+  const svg = elSVG('svg');
+  attr(svg, { class: 'star', viewBox: '0 0 24 24' });
+  const path = elSVG('path');
+  path.setAttribute('d', STAR_D);
+  svg.appendChild(path);
+  return svg;
+}
+
+/* ── Build card DOM ──────────────────────────── */
+function makeCard(d, i) {
+  const card = el('article', 't-card ' + (i === 0 ? 's-active' : 's-idle'));
+  attr(card, { 'aria-hidden': i !== 0 ? 'true' : 'false' });
+
+  /* card-top */
+  const top = el('div', 'card-top');
+
+  const decoQ = el('span', 'deco-q');
+  attr(decoQ, { 'aria-hidden': 'true' });
+  decoQ.textContent = '\u201c';
+  top.appendChild(decoQ);
+
+  const starsDiv = el('div', 'stars');
+  attr(starsDiv, { 'aria-label': d.rating + ' out of 5 stars' });
+  for (let s = 0; s < d.rating; s++) starsDiv.appendChild(makeStar());
+  top.appendChild(starsDiv);
+
+  const blockquote = el('blockquote', 'quote-text');
+  blockquote.textContent = '\u201c' + d.quote + '\u201d';
+  top.appendChild(blockquote);
+
+  card.appendChild(top);
+
+  /* footer */
+  const footer = el('footer', 'card-author');
+
+  const avatarWrap = el('div', 'avatar-wrap');
+  const ring = el('div', 'avatar-ring');
+  avatarWrap.appendChild(ring);
+  const avatarBg = el('div', 'avatar-bg');
+  const avatarInner = el('div', 'avatar-inner');
+  avatarInner.style.background = d.bg;
+  avatarInner.textContent = d.initials;
+  avatarBg.appendChild(avatarInner);
+  avatarWrap.appendChild(avatarBg);
+  footer.appendChild(avatarWrap);
+
+  const info = el('div', 'author-info');
+  const nameP = el('p', 'author-name');
+  nameP.textContent = d.name;
+  info.appendChild(nameP);
+
+  const metaP = el('p', 'author-meta');
+  metaP.textContent = d.role + ' \u00b7 ';
+  const companySpan = el('span', 'company');
+  companySpan.textContent = d.company;
+  metaP.appendChild(companySpan);
+  info.appendChild(metaP);
+
+  footer.appendChild(info);
+  card.appendChild(footer);
+
+  /* progress track */
+  const track = el('div', 'progress-track');
+  const fill = el('div', 'progress-fill');
+  fill.id = 'p' + i;
+  track.appendChild(fill);
+  card.appendChild(track);
+
+  return card;
+}
+
+/* ── Build cards & dots ──────────────────────── */
+const cards = DATA.map((d, i) => {
+  const card = makeCard(d, i);
+  stage.appendChild(card);
+  return card;
+});
+
+const dots = DATA.map((_, i) => {
+  const btn = el('button', 'dot' + (i === 0 ? ' active' : ''));
+  attr(btn, {
+    role: 'tab',
+    'aria-selected': String(i === 0),
+    'aria-label': 'Testimonial ' + (i + 1)
+  });
+  btn.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(btn);
+  return btn;
+});
+
+/* ── Stage height sync ───────────────────────── */
+function syncHeight() {
+  cards[current].style.position = 'relative';
+  stage.style.height = cards[current].offsetHeight + 'px';
+  cards[current].style.position = '';
+}
+
+/* ── Progress (rAF-driven) ───────────────────── */
+function startProg() {
+  const fill = document.getElementById('p' + current);
+  if (!fill) return;
+  cancelAnimationFrame(progRaf);
+  progStart  = performance.now() - progFrozenAt * DURATION;
+  progPaused = false;
+
+  (function tick(now) {
+    if (progPaused) return;
+    const pct = Math.min((now - progStart) / DURATION * 100, 100);
+    fill.style.width = pct + '%';
+    if (pct < 100) progRaf = requestAnimationFrame(tick);
+  })(performance.now());
+}
+
+function pauseProg() {
+  progPaused = true;
+  cancelAnimationFrame(progRaf);
+  const fill = document.getElementById('p' + current);
+  if (fill) progFrozenAt = parseFloat(fill.style.width) / 100;
+}
+
+function resetProg(idx) {
+  const fill = document.getElementById('p' + idx);
+  if (fill) fill.style.width = '0%';
+}
+
+/* ── Navigate ────────────────────────────────── */
+function goTo(idx) {
+  if (busy || idx === current) return;
+  busy = true;
+
+  const from = current;
+  current = idx;
+  progFrozenAt = 0;
+
+  resetProg(from);
+  cancelAnimationFrame(progRaf);
+  clearTimeout(autoTimer);
+
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+    d.setAttribute('aria-selected', String(i === current));
+  });
+
+  cards[from].className = 't-card s-exit';
+  cards[from].setAttribute('aria-hidden', 'true');
+  cards[current].className = 't-card s-enter';
+  cards[current].setAttribute('aria-hidden', 'false');
+
+  syncHeight();
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    cards[current].className = 't-card s-active';
+  }));
+
+  setTimeout(() => {
+    cards[from].className = 't-card s-idle';
+    busy = false;
+    startProg();
+    scheduleAuto();
+  }, 520);
+}
+
+function next() { goTo((current + 1) % DATA.length); }
+function prev() { goTo((current - 1 + DATA.length) % DATA.length); }
+
+function scheduleAuto() {
+  clearTimeout(autoTimer);
+  autoTimer = setTimeout(next, DURATION);
+}
+
+/* ── Controls ────────────────────────────────── */
+prevBtn.addEventListener('click', () => { clearTimeout(autoTimer); prev(); });
+nextBtn.addEventListener('click', () => { clearTimeout(autoTimer); next(); });
+
+stage.addEventListener('mouseenter', () => { clearTimeout(autoTimer); pauseProg(); });
+stage.addEventListener('mouseleave', () => {
+  startProg();
+  clearTimeout(autoTimer);
+  autoTimer = setTimeout(next, (1 - progFrozenAt) * DURATION);
+});
+
+let tx0 = 0;
+stage.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
+stage.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx0;
+  if (Math.abs(dx) > 50) { clearTimeout(autoTimer); dx < 0 ? next() : prev(); }
+}, { passive: true });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  { clearTimeout(autoTimer); prev(); }
+  if (e.key === 'ArrowRight') { clearTimeout(autoTimer); next(); }
+});
+
+/* ── Init ────────────────────────────────────── */
+syncHeight();
+window.addEventListener('resize', syncHeight);
+startProg();
+scheduleAuto();
+</script>
+
+</body>
+</html>

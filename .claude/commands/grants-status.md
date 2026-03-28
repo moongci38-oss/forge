@@ -8,7 +8,7 @@ model: haiku
 
 ## 워크플로우
 
-1. `forge-outputs/09-grants/` 하위 모든 기관/사업 폴더 스캔
+1. `~/forge-outputs/09-grants/` 하위 모든 기관/사업 폴더 스캔
 2. 각 사업의 `_grant-info.md` 읽기
 3. 상태 요약 테이블 출력:
 

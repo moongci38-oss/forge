@@ -1,6 +1,7 @@
 ---
 name: requirements-clarity
 description: Clarify ambiguous requirements through focused dialogue before implementation. Use when requirements are unclear, features are complex (>2 days), or involve cross-team coordination. Ask two core questions - Why? (YAGNI check) and Simpler? (KISS check) - to ensure clarity before coding.
+context: fork
 ---
 
 # Requirements Clarity Skill
@@ -9,6 +10,18 @@ description: Clarify ambiguous requirements through focused dialogue before impl
 
 Automatically transforms vague requirements into actionable PRDs through systematic clarification with a 100-point scoring system.
 
+
+## Two Core Questions (MANDATORY)
+
+Every response MUST include these two checks before any other analysis:
+
+1. **"Why?" (YAGNI Check)**: Ask why this feature is needed. What business problem does it solve? Is it truly necessary right now, or is it speculative?
+   - Example: "Why do you need analytics tracking? What decision will this data inform?"
+
+2. **"Simpler?" (KISS Check)**: Propose a simpler alternative or scope reduction. Always suggest at least one way to achieve the goal with less complexity.
+   - Example: "Instead of building a full analytics dashboard, could you start with just event logging to a file and review it weekly?"
+
+These two questions MUST appear explicitly in the output, labeled as **Why? (YAGNI)** and **Simpler? (KISS)**.
 
 ## Instructions
 

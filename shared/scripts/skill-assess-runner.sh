@@ -2,15 +2,18 @@
 # skill-assess-runner.sh — Run skill assessment with Yes/No criteria
 # Called by: manage-skills.sh assess <skill-name> [--runs N]
 #
-# Reads assessment.md → extracts test inputs + criteria →
-# runs skill via claude CLI → grades output with Haiku → reports pass_rate
+# Supports TWO eval formats:
+#   1. assessment.md (legacy) — input_N + 평가 기준
+#   2. evals/evals.json (official) — evals[].prompt + expectations
+#
+# Optimized: Batch grading (1 Haiku call instead of N)
 
 set -uo pipefail
 
 SKILL_NAME="${1:-}"
 ASSESSMENT_FILE="${2:-}"
 RUNS="${3:-3}"
-MAX_PARALLEL="${4:-3}"
+MAX_PARALLEL="${4:-6}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -33,15 +36,13 @@ cleanup_bg() {
 }
 trap cleanup_bg EXIT INT TERM
 
-# ─── Parse assessment.md ───────────────────────────────────────────────────
+# ─── Parse assessment.md (legacy) ─────────────────────────────────────────
 
 parse_inputs() {
-    # Extract input_N values from assessment.md
     grep -oP '^\- input_\d+: "(.+)"' "$ASSESSMENT_FILE" | sed 's/^- input_[0-9]*: "//' | sed 's/"$//'
 }
 
 parse_criteria() {
-    # Extract numbered criteria lines
     local in_criteria=0
     while IFS= read -r line; do
         if [[ "$line" == "## 평가 기준"* ]]; then
@@ -57,57 +58,212 @@ parse_criteria() {
     done < "$ASSESSMENT_FILE"
 }
 
-# ─── Single run function (runs in background) ─────────────────────────────
+# ─── Parse evals.json (official) ──────────────────────────────────────────
 
-run_single() {
+parse_evals_json() {
+    local evals_file="$1"
+    python3 -c "
+import json, sys
+with open('$evals_file') as f:
+    data = json.load(f)
+for e in data['evals']:
+    print(e['prompt'])
+"
+}
+
+parse_expectations_json() {
+    local evals_file="$1"
+    python3 -c "
+import json
+with open('$evals_file') as f:
+    data = json.load(f)
+# Use expectations from first eval (all evals share same criteria)
+for i, exp in enumerate(data['evals'][0]['expectations'], 1):
+    print(f'{i}. {exp}')
+"
+}
+
+# ─── Detect eval format ──────────────────────────────────────────────────
+
+SKILL_DIR="$(dirname "$ASSESSMENT_FILE")"
+EVALS_JSON="$SKILL_DIR/evals/evals.json"
+EVAL_FORMAT="assessment"
+
+if [ -f "$EVALS_JSON" ]; then
+    EVAL_FORMAT="evals_json"
+    echo -e "${CYAN}  Format: evals.json (official)${NC}"
+fi
+
+# ─── Single execution function (NO grading — grading is batched) ──────────
+
+run_exec_only() {
     local input_num="$1"
     local run="$2"
     local input="$3"
 
-    local log_file="$RESULTS_DIR/log-${input_num}-${run}.txt"
-    local status_file="$RESULTS_DIR/result-${input_num}-${run}.status"
     local output_file="$RESULTS_DIR/output-${input_num}-${run}.txt"
-    local grade_file="$RESULTS_DIR/grade-${input_num}-${run}.txt"
+    local timing_file="$RESULTS_DIR/timing-${input_num}-${run}.json"
 
-    {
-        echo -n "  Run $run/$RUNS: "
+    local max_retries=2
+    local attempt=0
+    local valid_output=false
+    local output_content=""
 
-        # Step 1: Run skill via claude CLI (non-interactive, isolated)
-        local max_retries=2
-        local attempt=0
-        local valid_output=false
-        local output_content=""
+    local start_ts=$(date +%s%N)
 
-        while [ $attempt -lt $max_retries ]; do
-            attempt=$((attempt + 1))
+    while [ $attempt -lt $max_retries ]; do
+        attempt=$((attempt + 1))
 
-            if ! timeout --signal=TERM --kill-after=10 600 claude -p "${PROMPT_PREFIX}${input}" --model sonnet --output-format text \
-                --no-session-persistence --permission-mode acceptEdits \
-                > "$output_file" 2>/dev/null; then
-                echo -e "${RED}EXEC_FAIL (attempt $attempt)${NC}"
+        if ! timeout --signal=TERM --kill-after=10 180 claude -p "${PROMPT_PREFIX}${input}" --model sonnet --output-format text \
+            --no-session-persistence --permission-mode acceptEdits \
+            > "$output_file" 2>/dev/null; then
+            continue
+        fi
+
+        # Filter out task notifications and session artifacts
+        if [ -f "$output_file" ]; then
+            sed -i '/^Also empty/d; /^The task output is no longer/d; /killed before producing/d; /background.*search.*stopped/d; /plan remains valid/d' "$output_file"
+        fi
+
+        output_content=$(cat "$output_file" 2>/dev/null | tr -s '[:space:]')
+        if [ ${#output_content} -ge 50 ]; then
+            valid_output=true
+            break
+        fi
+    done
+
+    local end_ts=$(date +%s%N)
+    local duration_ms=$(( (end_ts - start_ts) / 1000000 ))
+
+    # Write timing
+    echo "{\"input\":$input_num,\"run\":$run,\"duration_ms\":$duration_ms,\"valid\":$valid_output,\"attempts\":$attempt}" > "$timing_file"
+
+    if [ "$valid_output" = false ]; then
+        echo "EXEC_FAIL" > "$RESULTS_DIR/result-${input_num}-${run}.status"
+    fi
+}
+
+# ─── Batch grading function (1 Haiku call for all outputs) ────────────────
+
+batch_grade() {
+    echo -e "\n${CYAN}── Batch Grading (1 Haiku call) ──${NC}"
+
+    # Collect valid outputs
+    local batch_prompt="아래 여러 출력을 평가하라. 각 출력마다 각 기준에 대해 YES 또는 NO만 답하라. 설명 불필요.
+
+## 평가 기준
+$CRITERIA
+
+## 응답 형식 (정확히 이 형식으로)
+각 출력마다:
+Output N: 1=YES/NO, 2=YES/NO, 3=YES/NO, ...
+
+"
+    local output_count=0
+    local output_keys=()
+
+    for i in "${!INPUTS[@]}"; do
+        local input_num=$((i + 1))
+        for run in $(seq 1 "$RUNS"); do
+            local output_file="$RESULTS_DIR/output-${input_num}-${run}.txt"
+            local status_file="$RESULTS_DIR/result-${input_num}-${run}.status"
+
+            # Skip EXEC_FAIL
+            if [ -f "$status_file" ] && grep -q "EXEC_FAIL" "$status_file"; then
                 continue
             fi
 
-            # Filter out task notifications and session artifacts
-            if [ -f "$output_file" ]; then
-                sed -i '/^Also empty/d; /^The task output is no longer/d; /killed before producing/d; /background.*search.*stopped/d; /plan remains valid/d' "$output_file"
-            fi
+            if [ -f "$output_file" ] && [ -s "$output_file" ]; then
+                output_count=$((output_count + 1))
+                output_keys+=("${input_num}-${run}")
+                local content
+                content=$(head -c 3000 "$output_file" | tr -s '[:space:]')
+                batch_prompt+="
+## Output $output_count (Input ${input_num}, Run ${run})
+$content
 
-            output_content=$(cat "$output_file" 2>/dev/null | tr -s '[:space:]')
-            # Validate output has meaningful content (at least 50 chars, contains plan-like structure)
-            if [ ${#output_content} -ge 50 ]; then
-                valid_output=true
-                break
+"
             fi
         done
+    done
 
-        if [ "$valid_output" = false ]; then
-            echo -e "${RED}INVALID_OUTPUT (${#output_content} chars after $attempt attempts)${NC}"
-            echo "ERROR" > "$status_file"
-            return 0
+    if [ "$output_count" -eq 0 ]; then
+        echo -e "${RED}No valid outputs to grade${NC}"
+        return 1
+    fi
+
+    echo -e "  Grading $output_count outputs in 1 call..."
+
+    local batch_grade_file="$RESULTS_DIR/batch-grade.txt"
+
+    if ! echo "$batch_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p - --model haiku --output-format text \
+        --no-session-persistence \
+        > "$batch_grade_file" 2>/dev/null; then
+        echo -e "${YELLOW}Batch grading failed, falling back to individual grading...${NC}"
+        fallback_individual_grade
+        return $?
+    fi
+
+    # Parse batch response
+    local parse_success=true
+    local idx=0
+
+    for key in "${output_keys[@]}"; do
+        idx=$((idx + 1))
+        local grade_file="$RESULTS_DIR/grade-${key}.txt"
+        local status_file="$RESULTS_DIR/result-${key}.status"
+
+        # Extract line for this output: "Output N: 1=YES, 2=NO, ..."
+        local grade_line
+        grade_line=$(grep -iP "Output\s*$idx\s*:" "$batch_grade_file" 2>/dev/null | head -1)
+
+        if [ -z "$grade_line" ]; then
+            # Try alternate format: just numbered YES/NO after Output N header
+            parse_success=false
+            continue
         fi
 
-        # Step 2: Grade with Haiku (assessor-generator separation)
+        echo "$grade_line" > "$grade_file"
+
+        # Count YES and NO
+        local yes_count no_count
+        yes_count=$(echo "$grade_line" | grep -oiP 'YES' | wc -l)
+        no_count=$(echo "$grade_line" | grep -oiP 'NO' | wc -l)
+
+        if [ "$no_count" -eq 0 ] && [ "$yes_count" -ge "$CRITERIA_COUNT" ]; then
+            echo "PASS" > "$status_file"
+        else
+            echo "FAIL" > "$status_file"
+        fi
+    done
+
+    if [ "$parse_success" = false ]; then
+        echo -e "${YELLOW}Batch parse incomplete, falling back...${NC}"
+        fallback_individual_grade
+    fi
+}
+
+# ─── Fallback: individual grading (legacy) ────────────────────────────────
+
+fallback_individual_grade() {
+    for key in "${output_keys[@]}"; do
+        local output_file="$RESULTS_DIR/output-${key}.txt"
+        local grade_file="$RESULTS_DIR/grade-${key}.txt"
+        local status_file="$RESULTS_DIR/result-${key}.status"
+
+        # Skip already graded or EXEC_FAIL
+        if [ -f "$status_file" ]; then
+            continue
+        fi
+
+        if [ ! -f "$output_file" ] || [ ! -s "$output_file" ]; then
+            echo "EXEC_FAIL" > "$status_file"
+            continue
+        fi
+
+        local output_content
+        output_content=$(head -c 3000 "$output_file" | tr -s '[:space:]')
+
         local grade_prompt
         grade_prompt=$(cat <<GRADE_EOF
 아래 출력을 평가하라. 각 기준에 대해 YES 또는 NO만 답하라. 설명 불필요.
@@ -125,12 +281,10 @@ GRADE_EOF
         if ! echo "$grade_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p - --model haiku --output-format text \
             --no-session-persistence \
             > "$grade_file" 2>/dev/null; then
-            echo -e "${RED}GRADE_FAIL${NC}"
             echo "ERROR" > "$status_file"
-            return 0
+            continue
         fi
 
-        # Step 3: Parse YES/NO results (match "N: YES", "N. YES", "N) YES" patterns)
         local yes_count no_count
         yes_count=$(grep -cP '[.:)]\s*YES\s*$' "$grade_file" 2>/dev/null || echo "0")
         no_count=$(grep -cP '[.:)]\s*NO\s*$' "$grade_file" 2>/dev/null || echo "0")
@@ -139,41 +293,36 @@ GRADE_EOF
 
         if [ "$no_count" -eq 0 ] && [ "$yes_count" -ge "$CRITERIA_COUNT" ]; then
             echo "PASS" > "$status_file"
-            echo -e "${GREEN}PASS${NC} ($yes_count/$CRITERIA_COUNT YES)"
         else
             echo "FAIL" > "$status_file"
-            echo -e "${YELLOW}FAIL${NC} ($yes_count/$CRITERIA_COUNT YES, $no_count NO)"
-            # Show which criteria failed
-            grep -P ':\s*NO\s*$' "$grade_file" 2>/dev/null | head -5 | while read -r line; do
-                echo -e "    ${RED}$line${NC}"
-            done
         fi
-    } > "$log_file" 2>&1
-
-    return 0
+    done
 }
 
 # ─── Main ──────────────────────────────────────────────────────────────────
 
-echo -e "${CYAN}── Parsing assessment.md ──${NC}"
+echo -e "${CYAN}── Parsing eval source ──${NC}"
 
-# Read inputs into array
-mapfile -t INPUTS < <(parse_inputs)
+# Read inputs and criteria based on format
+if [ "$EVAL_FORMAT" = "evals_json" ]; then
+    mapfile -t INPUTS < <(parse_evals_json "$EVALS_JSON")
+    CRITERIA=$(parse_expectations_json "$EVALS_JSON")
+else
+    mapfile -t INPUTS < <(parse_inputs)
+    CRITERIA=$(parse_criteria)
+fi
+
 INPUT_COUNT=${#INPUTS[@]}
 
 if [ "$INPUT_COUNT" -eq 0 ]; then
-    echo -e "${RED}No test inputs found in assessment.md${NC}"
+    echo -e "${RED}No test inputs found${NC}"
     exit 1
 fi
 
-echo -e "  Test inputs: $INPUT_COUNT"
-
-# Read criteria into string
-CRITERIA=$(parse_criteria)
 CRITERIA_COUNT=$(echo "$CRITERIA" | wc -l)
+echo -e "  Test inputs: $INPUT_COUNT"
 echo -e "  Criteria: $CRITERIA_COUNT"
 echo -e "  Parallel: $MAX_PARALLEL"
-echo ""
 
 # Detect test-method from frontmatter
 TEST_METHOD=$(grep -m1 'test-method:' "$ASSESSMENT_FILE" 2>/dev/null | sed 's/.*test-method:\s*//' | tr -d '[:space:]')
@@ -183,31 +332,30 @@ if [ "$TEST_METHOD" = "indirect-via-prompt" ]; then
 else
     PROMPT_PREFIX="/$SKILL_NAME "
 fi
+echo ""
 
-# Export variables needed by run_single (subshell access)
-export RESULTS_DIR RUNS PROMPT_PREFIX CRITERIA CRITERIA_COUNT
-export RED GREEN YELLOW CYAN BOLD NC
+# Export variables needed by run_exec_only
+export RESULTS_DIR RUNS PROMPT_PREFIX
 
-# ─── Run Assessment (parallel within each input) ─────────────────────────
+# ─── Phase 1: Execute all runs in parallel ─────────────────────────────────
+
+echo -e "${BOLD}── Phase 1: Execution (parallel) ──${NC}"
+
+declare -a all_pids=()
 
 for i in "${!INPUTS[@]}"; do
     input="${INPUTS[$i]}"
     input_num=$((i + 1))
-    echo -e "${BOLD}── Input $input_num/$INPUT_COUNT ──${NC}"
-    echo -e "  \"${input:0:80}...\""
-
-    # Launch runs in parallel with concurrency cap
-    declare -a run_pids=()
 
     for run in $(seq 1 "$RUNS"); do
-        # Concurrency limiter: wait if we've hit MAX_PARALLEL
-        while [ ${#run_pids[@]} -ge "$MAX_PARALLEL" ]; do
+        # Concurrency limiter
+        while [ ${#all_pids[@]} -ge "$MAX_PARALLEL" ]; do
             local_finished=false
-            for idx in "${!run_pids[@]}"; do
-                if ! kill -0 "${run_pids[$idx]}" 2>/dev/null; then
-                    wait "${run_pids[$idx]}" 2>/dev/null || true
-                    unset 'run_pids[$idx]'
-                    run_pids=("${run_pids[@]}")
+            for idx in "${!all_pids[@]}"; do
+                if ! kill -0 "${all_pids[$idx]}" 2>/dev/null; then
+                    wait "${all_pids[$idx]}" 2>/dev/null || true
+                    unset 'all_pids[$idx]'
+                    all_pids=("${all_pids[@]}")
                     local_finished=true
                     break
                 fi
@@ -217,32 +365,85 @@ for i in "${!INPUTS[@]}"; do
             fi
         done
 
-        run_single "$input_num" "$run" "$input" &
+        run_exec_only "$input_num" "$run" "$input" &
         pid=$!
-        run_pids+=("$pid")
+        all_pids+=("$pid")
         BG_PIDS+=("$pid")
     done
+done
 
-    # Wait for all runs of this input to finish
-    for pid in "${run_pids[@]}"; do
-        wait "$pid" 2>/dev/null || true
-    done
+# Wait for all executions to finish
+for pid in "${all_pids[@]}"; do
+    wait "$pid" 2>/dev/null || true
+done
 
-    # Replay buffered output in order
+echo -e "  All $((INPUT_COUNT * RUNS)) executions complete."
+
+# ─── Phase 2: Batch grade all outputs (1 Haiku call) ──────────────────────
+
+echo -e "\n${BOLD}── Phase 2: Batch Grading ──${NC}"
+batch_grade
+
+# ─── Display results ──────────────────────────────────────────────────────
+
+echo ""
+for i in "${!INPUTS[@]}"; do
+    input="${INPUTS[$i]}"
+    input_num=$((i + 1))
+    echo -e "${BOLD}── Input $input_num/$INPUT_COUNT ──${NC}"
+    echo -e "  \"${input:0:80}...\""
+
     for run in $(seq 1 "$RUNS"); do
-        log_file="$RESULTS_DIR/log-${input_num}-${run}.txt"
-        if [ -f "$log_file" ]; then
-            cat "$log_file"
-        fi
-    done
+        status_file="$RESULTS_DIR/result-${input_num}-${run}.status"
+        grade_file="$RESULTS_DIR/grade-${input_num}-${run}.txt"
+        timing_file="$RESULTS_DIR/timing-${input_num}-${run}.json"
 
+        status="UNKNOWN"
+        [ -f "$status_file" ] && status=$(cat "$status_file")
+
+        duration=""
+        if [ -f "$timing_file" ]; then
+            duration=$(grep -oP '"duration_ms":\s*\K[0-9]+' "$timing_file" 2>/dev/null)
+            [ -n "$duration" ] && duration=" (${duration}ms)"
+        fi
+
+        case "$status" in
+            PASS)
+                echo -e "  Run $run/$RUNS: ${GREEN}PASS${NC} ($CRITERIA_COUNT/$CRITERIA_COUNT YES)$duration"
+                ;;
+            FAIL)
+                grade_info=""
+                if [ -f "$grade_file" ]; then
+                    no_items=$(grep -oiP 'NO' "$grade_file" 2>/dev/null | wc -l)
+                    yes_items=$(grep -oiP 'YES' "$grade_file" 2>/dev/null | wc -l)
+                    grade_info=" ($yes_items/$CRITERIA_COUNT YES, $no_items NO)"
+                fi
+                echo -e "  Run $run/$RUNS: ${YELLOW}FAIL${NC}$grade_info$duration"
+                ;;
+            EXEC_FAIL)
+                echo -e "  Run $run/$RUNS: ${RED}EXEC_FAIL${NC}$duration"
+                ;;
+            *)
+                echo -e "  Run $run/$RUNS: ${RED}$status${NC}$duration"
+                ;;
+        esac
+    done
     echo ""
 done
 
-# ─── Summary ───────────────────────────────────────────────────────────────
+# ─── Summary + benchmark.json ─────────────────────────────────────────────
 
 total_runs=$(find "$RESULTS_DIR" -name "result-*.status" 2>/dev/null | wc -l)
-total_pass=$(grep -rl "^PASS$" "$RESULTS_DIR"/result-*.status 2>/dev/null | wc -l || echo "0")
+total_runs=$(echo "$total_runs" | tr -d '[:space:]')
+total_pass=$(grep -rl "^PASS$" "$RESULTS_DIR"/result-*.status 2>/dev/null | wc -l)
+total_pass=$(echo "${total_pass:-0}" | tr -d '[:space:]')
+total_fail=$(grep -rl "^FAIL$" "$RESULTS_DIR"/result-*.status 2>/dev/null | wc -l)
+total_fail=$(echo "${total_fail:-0}" | tr -d '[:space:]')
+total_error=$(grep -rl "^EXEC_FAIL\|^ERROR$" "$RESULTS_DIR"/result-*.status 2>/dev/null | wc -l)
+total_error=$(echo "${total_error:-0}" | tr -d '[:space:]')
+[ -z "$total_pass" ] && total_pass=0
+[ -z "$total_fail" ] && total_fail=0
+[ -z "$total_error" ] && total_error=0
 
 if [ "$total_runs" -gt 0 ]; then
     pass_rate=$(awk "BEGIN {printf \"%.0f\", ($total_pass / $total_runs) * 100}")
@@ -250,14 +451,48 @@ else
     pass_rate=0
 fi
 
+# Calculate total timing
+total_duration_ms=0
+for tf in "$RESULTS_DIR"/timing-*.json; do
+    [ -f "$tf" ] || continue
+    d=$(grep -oP '"duration_ms":\s*\K[0-9]+' "$tf" 2>/dev/null || echo "0")
+    total_duration_ms=$((total_duration_ms + d))
+done
+total_duration_s=$((total_duration_ms / 1000))
+
 echo -e "${CYAN}══════════════════════════════════════════${NC}"
 echo -e "${BOLD}Assessment Result: $SKILL_NAME${NC}"
 echo -e "  Total runs:  $total_runs"
 echo -e "  Passed:      $total_pass"
+echo -e "  Failed:      $total_fail"
+echo -e "  Errors:      $total_error"
 echo -e "  Pass rate:   ${BOLD}${pass_rate}%${NC}"
+echo -e "  Total time:  ${total_duration_s}s"
 echo -e "  Results dir: $RESULTS_DIR"
 echo -e "${CYAN}══════════════════════════════════════════${NC}"
 
 # Write summary TSV
-echo -e "skill\tdate\truns\tpass\trate" > "$RESULTS_DIR/summary.tsv"
-echo -e "$SKILL_NAME\t$(date +%Y-%m-%d)\t$total_runs\t$total_pass\t${pass_rate}%" >> "$RESULTS_DIR/summary.tsv"
+echo -e "skill\tdate\truns\tpass\trate\ttime_s" > "$RESULTS_DIR/summary.tsv"
+echo -e "$SKILL_NAME\t$(date +%Y-%m-%d)\t$total_runs\t$total_pass\t${pass_rate}%\t${total_duration_s}" >> "$RESULTS_DIR/summary.tsv"
+
+# Write benchmark.json (official format)
+cat > "$RESULTS_DIR/benchmark.json" <<BENCH_EOF
+{
+  "metadata": {
+    "skill_name": "$SKILL_NAME",
+    "eval_format": "$EVAL_FORMAT",
+    "timestamp": "$(date -Iseconds)",
+    "runs_per_input": $RUNS,
+    "input_count": $INPUT_COUNT,
+    "criteria_count": $CRITERIA_COUNT
+  },
+  "summary": {
+    "total_runs": $total_runs,
+    "passed": $total_pass,
+    "failed": $total_fail,
+    "errors": $total_error,
+    "pass_rate": $(awk "BEGIN {printf \"%.4f\", $total_pass / ($total_runs > 0 ? $total_runs : 1)}"),
+    "total_duration_ms": $total_duration_ms
+  }
+}
+BENCH_EOF

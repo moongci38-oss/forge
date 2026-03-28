@@ -151,13 +151,12 @@ forge-outputs/          ← 산출물 (private repo)
 |------|:-----:|------|
 | **filesystem** | project | 워크스페이스 파일 접근 |
 | **Sequential Thinking** | project | 복잡한 전략 계획 수립 |
-| **Notion** | project | Notion 페이지/DB 연동 |
-| **NanoBanana** | user | Google Gemini AI 이미지 생성/편집 |
-| **Stitch** | user | AI UI 목업 생성 |
-| **Lighthouse** | user | 웹 성능/접근성/SEO 감사 |
-| **Sentry** | user | 프로덕션 에러 추적 |
-| **Brave Search** | user | 웹 검색 |
-| **Draw.io** | user | 다이어그램 생성 |
+| **Draw.io** | project | 다이어그램 생성 |
+| **Replicate** | project | AI 모델 (style-train, game-asset-generate) |
+| **NanoBanana** | project | Google Gemini AI 이미지 생성/편집 |
+| **Stitch** | project | AI UI 목업 생성 |
+| **Notion** | global | Notion 페이지/DB 연동 |
+| **Brave Search** | global | 웹 검색 |
 
 ## Plugins
 

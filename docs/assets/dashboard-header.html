@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Header — Obsidian Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-void:     #07080C;
+      --bg-surface:  #0F1117;
+      --bg-elevated: #161922;
+      --bg-overlay:  #1E2230;
+      --border:      rgba(255,255,255,0.07);
+      --border-lit:  rgba(124,58,237,0.4);
+
+      --violet:      #7C3AED;
+      --violet-dim:  #6D28D9;
+      --violet-glow: rgba(124,58,237,0.25);
+      --gold:        #F5A623;
+      --gold-dim:    rgba(245,166,35,0.15);
+
+      --text-primary:   #F0F2F8;
+      --text-secondary: #7A7F96;
+      --text-muted:     #3E4258;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+
+      --font-display: 'Syne', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg-void);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+      font-family: var(--font-mono);
+    }
+
+    /* ─── Background atmosphere ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% -10%, rgba(124,58,237,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 110%, rgba(245,166,35,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════ */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: 64px;
+      background: rgba(15,17,23,0.75);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 24px;
+    }
+
+    /* Subtle top accent line */
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--violet) 30%,
+        var(--gold) 60%,
+        transparent 100%
+      );
+      opacity: 0.6;
+    }
+
+    /* ─── Logo zone ─── */
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      margin-right: 32px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo-wordmark {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .logo-wordmark span {
+      color: var(--violet);
+    }
+
+    /* ─── Nav pills ─── */
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .nav-item {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s;
+      letter-spacing: 0.01em;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      color: var(--text-primary);
+      background: var(--bg-elevated);
+    }
+
+    .nav-item.active {
+      color: var(--text-primary);
+      background: rgba(124,58,237,0.12);
+      border-color: rgba(124,58,237,0.2);
+    }
+
+    /* ─── Right cluster ─── */
+    .header__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    /* ─── SEARCH ─── */
+    .search-container {
+      position: relative;
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: relative;
+      width: 220px;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .search-form.expanded {
+      width: 320px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+      z-index: 1;
+      transition: color 0.2s;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 36px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0 36px 0 36px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--text-primary);
+      outline: none;
+      transition:
+        border-color 0.2s,
+        background 0.2s,
+        box-shadow 0.3s;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .search-input:focus {
+      background: var(--bg-overlay);
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px var(--violet-glow), 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .search-input:focus + .search-icon,
+    .search-container:focus-within .search-icon {
+      color: var(--violet);
+    }
+
+    .search-kbd {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .search-input:focus ~ .search-kbd {
+      opacity: 0;
+    }
+
+    .kbd {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      background: var(--bg-overlay);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 5px;
+      line-height: 1.4;
+      letter-spacing: 0.05em;
+    }
+
+    /* Search dropdown */
+    .search-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-lit);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,237,0.1);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+    }
+
+    .search-container:focus-within .search-dropdown {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    .search-section-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 8px 6px;
+    }
+
+    .search-result {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .search-result:hover {
+      background: var(--bg-overlay);
+    }
+
+    .search-result__icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+
+    .search-result__text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .search-result__title {
+      font-size: 12.5px;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-result__meta {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .search-result__badge {
+      font-size: 9.5px;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── NOTIFICATION BELL ─── */
+    .notif-wrapper {
+      position: relative;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition:
+        color 0.15s,
+        background 0.15s,
+        border-color 0.15s,
+        box-shadow 0.2s,
+        transform 0.1s;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-overlay);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .icon-btn:active {
+      transform: scale(0.93);
+    }
+
+    .icon-btn.active {
+      color: var(--violet);
+      background: rgba(124,58,237,0.1);
+      border-color: rgba(124,58,237,0.3);
+    }
+
+    /* Badge */
+    .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 16px;
+      height: 16px;
+      background: var(--violet);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid var(--bg-surface);
+      animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes badge-pop {
+      from { transform: scale(0) rotate(-30deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+    }
+
+    /* Bell shake on hover */
+    .notif-btn:hover svg {
+      animation: bell-shake 0.5s ease;
+    }
+
+    @keyframes bell-shake {
+      0%   { transform: rotate(0deg); }
+      15%  { transform: rotate(12deg); }
+      30%  { transform: rotate(-10deg); }
+      45%  { transform: rotate(8deg); }
+      60%  { transform: rotate(-6deg); }
+      75%  { transform: rotate(4deg); }
+      90%  { transform: rotate(-2deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* Pulse ring behind badge */
+    .badge-pulse {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--violet);
+      opacity: 0;
+      animation: pulse-ring 2.5s ease-out infinite 1s;
+    }
+
+    @keyframes pulse-ring {
+      0%   { transform: scale(0.8); opacity: 0.5; }
+      70%  { transform: scale(2);   opacity: 0; }
+      100% { transform: scale(2);   opacity: 0; }
+    }
+
+    /* Notification dropdown */
+    .notif-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: -8px;
+      width: 340px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,58,237,0.08);
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    .notif-wrapper.open .notif-dropdown {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    .notif-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notif-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .notif-count-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--violet);
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+    }
+
+    .notif-mark-read {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.15s;
+      border: none;
+      background: none;
+    }
+
+    .notif-mark-read:hover { color: var(--violet); }
+
+    .notif-list { padding: 8px; }
+
+    .notif-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.1s;
+      position: relative;
+    }
+
+    .notif-item:hover { background: var(--bg-overlay); }
+
+    .notif-item.unread::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 4px;
+      background: var(--violet);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--violet);
+    }
+
+    .notif-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-display);
+    }
+
+    .notif-content { flex: 1; min-width: 0; }
+
+    .notif-text {
+      font-family: var(--font-display);
+      font-size: 12.5px;
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+
+    .notif-text strong { color: var(--text-primary); font-weight: 600; }
+
+    .notif-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .notif-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .notif-footer a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .notif-footer a:hover { color: var(--violet); }
+
+    /* ─── AVATAR / USER MENU ─── */
+    .avatar-wrapper {
+      position: relative;
+    }
+
+    .avatar-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      border: none;
+      background: none;
+      padding: 0;
+      transition: transform 0.15s;
+    }
+
+    .avatar-btn:hover { transform: scale(1.05); }
+
+    .avatar-btn:active { transform: scale(0.97); }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #F5A623 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Rotating gradient ring */
+    .avatar-ring {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #7C3AED 0%,
+        #A855F7 30%,
+        #F5A623 60%,
+        #7C3AED 100%
+      );
+      animation: spin-ring 4s linear infinite;
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .avatar-ring::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+    }
+
+    @keyframes spin-ring {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Online dot */
+    .avatar-status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 9px;
+      height: 9px;
+      background: #22C55E;
+      border: 2px solid var(--bg-surface);
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    /* User dropdown */
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 240px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    .avatar-wrapper.open .user-dropdown {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    .user-profile-block {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7C3AED 0%, #F5A623 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-profile-info { min-width: 0; }
+
+    .user-profile-name {
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-profile-email {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-plan-badge {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: var(--radius-pill);
+      padding: 2px 6px;
+      margin-top: 3px;
+    }
+
+    .menu-section { padding: 6px; }
+    .menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: color 0.1s, background 0.1s;
+    }
+
+    .menu-item:hover {
+      color: var(--text-primary);
+      background: var(--bg-overlay);
+    }
+
+    .menu-item.danger:hover {
+      color: #EF4444;
+      background: rgba(239,68,68,0.08);
+    }
+
+    .menu-item svg {
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .menu-item:hover svg { opacity: 1; }
+
+    .menu-item-shortcut {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 2px;
+    }
+
+    /* ──────────────────────────────────────
+       DEMO CONTENT BELOW HEADER
+    ────────────────────────────────────── */
+    .demo-body {
+      width: 100%;
+      max-width: 1200px;
+      padding: 60px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .demo-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .demo-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .demo-title em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--violet), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .demo-sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 500px;
+    }
+
+    .demo-sub kbd {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px;
+    }
+
+    .demo-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .demo-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .demo-card:hover {
+      border-color: rgba(124,58,237,0.25);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    .demo-card__label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .demo-card__value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.04em;
+      margin: 8px 0 4px;
+    }
+
+    .demo-card__delta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #22C55E;
+    }
+
+    /* Overlay for closing dropdowns */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      display: none;
+    }
+    .overlay.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ════════════════════════════════════════
+     HEADER
+════════════════════════════════════════ -->
+<header class="header">
+
+  <!-- Logo -->
+  <a class="header__logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+        <path d="M8 24 L16 8 L24 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.5 19.5 H21.5" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        <defs>
+          <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0%" stop-color="#7C3AED"/>
+            <stop offset="100%" stop-color="#A855F7"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="logo-wordmark">OB<span>SIDIA</span>N</span>
+  </a>
+
+  <!-- Nav -->
+  <nav class="header__nav">
+    <div class="nav-item active">Overview</div>
+    <div class="nav-item">Analytics</div>
+    <div class="nav-item">Projects</div>
+    <div class="nav-item">Team</div>
+    <div class="nav-item">Logs</div>
+  </nav>
+
+  <!-- Actions cluster -->
+  <div class="header__actions">
+
+    <!-- Search -->
+    <div class="search-container" id="searchContainer">
+      <form class="search-form" id="searchForm" onsubmit="return false">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M11.5 11.5 L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          placeholder="Search commands..."
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <div class="search-kbd">
+          <span class="kbd">⌘</span>
+          <span class="kbd">K</span>
+        </div>
+      </form>
+      <div class="search-dropdown">
+        <div class="search-section-label">Recent</div>
+        <div class="search-result">
+          <div class="search-result__icon" style="background:rgba(124,58,237,0.15);">📊</div>
+          <div class="search-result__text">
+            <div class="search-result__title">Q4 Analytics Report</div>
+            <div class="search-result__meta">Dashboard · 3 hrs ago</div>
+          </div>
+          <span class="search-result__badge" style="background:rgba(124,58,237,0.15);color:#A78BFA;">report</span>
+        </div>
+        <div class="search-result">
+          <div class="search-result__icon" style="background:rgba(245,166,35,0.12);">⚡</div>
+          <div class="search-result__text">
+            <div class="search-result__title">Deploy to Production</div>
+            <div class="search-result__meta">Pipeline · Yesterday</div>
+          </div>
+          <span class="search-result__badge" style="background:rgba(245,166,35,0.1);color:#F5A623;">deploy</span>
+        </div>
+        <div class="search-section-label" style="margin-top:4px;">Commands</div>
+        <div class="search-result">
+          <div class="search-result__icon" style="background:rgba(34,197,94,0.12);">🔑</div>
+          <div class="search-result__text">
+            <div class="search-result__title">Manage API Keys</div>
+            <div class="search-result__meta">Settings</div>
+          </div>
+        </div>
+        <div class="search-result">
+          <div class="search-result__icon" style="background:rgba(239,68,68,0.1);">🛡</div>
+          <div class="search-result__text">
+            <div class="search-result__title">Security Audit</div>
+            <div class="search-result__meta">Admin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notif-wrapper" id="notifWrapper">
+      <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+        <div class="badge-pulse"></div>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2.5A5.5 5.5 0 0 0 4.5 8v3.5L3 13.5h14l-1.5-2V8A5.5 5.5 0 0 0 10 2.5Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 15.5a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="badge">5</span>
+      </button>
+
+      <div class="notif-dropdown" id="notifDropdown">
+        <div class="notif-header">
+          <span class="notif-title">Notifications</span>
+          <span class="notif-count-chip">5 new</span>
+          <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+        </div>
+
+        <div class="notif-list">
+          <div class="notif-item unread">
+            <div class="notif-avatar" style="background:rgba(124,58,237,0.2);color:#A78BFA;">KL</div>
+            <div class="notif-content">
+              <div class="notif-text"><strong>Kira Lee</strong> commented on your deployment pipeline</div>
+              <div class="notif-time">2 min ago</div>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-avatar" style="background:rgba(245,166,35,0.15);color:#F5A623;">⚡</div>
+            <div class="notif-content">
+              <div class="notif-text">Build <strong>#1842</strong> completed successfully in 43s</div>
+              <div class="notif-time">18 min ago</div>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-avatar" style="background:rgba(34,197,94,0.12);color:#22C55E;">MR</div>
+            <div class="notif-content">
+              <div class="notif-text"><strong>Marcus Reed</strong> joined your workspace</div>
+              <div class="notif-time">1 hr ago</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-avatar" style="background:rgba(239,68,68,0.1);color:#EF4444;">⚠</div>
+            <div class="notif-content">
+              <div class="notif-text">API rate limit reached on <strong>endpoint /v2/data</strong></div>
+              <div class="notif-time">3 hrs ago</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-avatar" style="background:rgba(59,130,246,0.12);color:#60A5FA;">📋</div>
+            <div class="notif-content">
+              <div class="notif-text">Weekly report is ready to review</div>
+              <div class="notif-time">Yesterday</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notif-footer">
+          <a href="#">View all notifications →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div style="width:1px;height:24px;background:var(--border);flex-shrink:0;"></div>
+
+    <!-- Avatar / User menu -->
+    <div class="avatar-wrapper" id="avatarWrapper">
+      <button class="avatar-btn" id="avatarBtn" aria-label="User menu">
+        <div class="avatar-ring"></div>
+        <div class="avatar-img">JD</div>
+        <div class="avatar-status"></div>
+      </button>
+
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-profile-block">
+          <div class="user-profile-avatar">JD</div>
+          <div class="user-profile-info">
+            <div class="user-profile-name">James Dorian</div>
+            <div class="user-profile-email">james@obsidian.dev</div>
+            <div class="user-plan-badge">Pro Plan</div>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <div class="menu-item">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            Profile Settings
+            <span class="menu-item-shortcut"><span class="kbd">⌘</span><span class="kbd">P</span></span>
+          </div>
+          <div class="menu-item">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"
+                    stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            Preferences
+          </div>
+          <div class="menu-item">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            Team & Billing
+          </div>
+        </div>
+
+        <div class="menu-divider"></div>
+
+        <div class="menu-section">
+          <div class="menu-item">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M8 6v4M8 4.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Documentation
+          </div>
+          <div class="menu-item">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1.5L10 5.5H14L11 8.5L12.5 12.5L8 10L3.5 12.5L5 8.5L2 5.5H6L8 1.5Z"
+                    stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            </svg>
+            Changelog
+            <span style="margin-left:auto;font-family:var(--font-display);font-size:9px;font-weight:700;color:#A78BFA;background:rgba(124,58,237,0.15);border-radius:var(--radius-pill);padding:2px 7px;">NEW</span>
+          </div>
+        </div>
+
+        <div class="menu-divider"></div>
+
+        <div class="menu-section">
+          <div class="menu-item danger">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M10.5 5.5L14 8L10.5 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 8H6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            Sign Out
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════
+     DEMO CONTENT
+════════════════════════════════════════ -->
+<main class="demo-body">
+  <div class="demo-label">/ overview / workspace</div>
+  <div class="demo-title">Command <em>Center</em></div>
+  <div class="demo-sub">
+    Click the bell to see notifications. Click the avatar for the user menu. Focus the search bar or press <kbd>⌘K</kbd> to explore commands.
+  </div>
+
+  <div class="demo-cards">
+    <div class="demo-card">
+      <div class="demo-card__label">Active Deployments</div>
+      <div class="demo-card__value">24</div>
+      <div class="demo-card__delta">↑ 3 this week</div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-card__label">API Requests / hr</div>
+      <div class="demo-card__value" style="background:linear-gradient(90deg,#7C3AED,#F5A623);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1.4M</div>
+      <div class="demo-card__delta">↑ 12% vs last hr</div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-card__label">Error Rate</div>
+      <div class="demo-card__value" style="color:#22C55E;">0.02%</div>
+      <div class="demo-card__delta" style="color:#22C55E;">All systems nominal</div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const overlay     = document.getElementById('overlay');
+  const notifWrapper = document.getElementById('notifWrapper');
+  const notifBtn    = document.getElementById('notifBtn');
+  const avatarWrapper = document.getElementById('avatarWrapper');
+  const avatarBtn   = document.getElementById('avatarBtn');
+  const searchInput = document.getElementById('searchInput');
+  const searchForm  = document.getElementById('searchForm');
+
+  function closeAll() {
+    notifWrapper.classList.remove('open');
+    avatarWrapper.classList.remove('open');
+    overlay.classList.remove('visible');
+    notifBtn.classList.remove('active');
+    avatarBtn.style.boxShadow = '';
+  }
+
+  function openDropdown(wrapperEl, btnEl) {
+    const isOpen = wrapperEl.classList.contains('open');
+    closeAll();
+    if (!isOpen) {
+      wrapperEl.classList.add('open');
+      overlay.classList.add('visible');
+      if (btnEl) btnEl.classList.add('active');
+    }
+  }
+
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openDropdown(notifWrapper, notifBtn);
+  });
+
+  avatarBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openDropdown(avatarWrapper, null);
+  });
+
+  overlay.addEventListener('click', closeAll);
+
+  // ── Search expand ──
+  searchInput.addEventListener('focus', () => {
+    searchForm.classList.add('expanded');
+  });
+
+  searchInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      if (!searchInput.value) {
+        searchForm.classList.remove('expanded');
+      }
+    }, 200);
+  });
+
+  // ── ⌘K keyboard shortcut ──
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+    if (e.key === 'Escape') {
+      closeAll();
+      searchInput.blur();
+    }
+  });
+
+  // ── Mark all read ──
+  function markAllRead() {
+    document.querySelectorAll('.notif-item.unread').forEach(el => {
+      el.classList.remove('unread');
+    });
+    document.querySelector('.badge').textContent = '0';
+    document.querySelector('.badge').style.opacity = '0.4';
+    document.querySelector('.notif-count-chip').textContent = '0 new';
+    document.querySelector('.badge-pulse').style.animationName = 'none';
+  }
+</script>
+
+</body>
+</html>

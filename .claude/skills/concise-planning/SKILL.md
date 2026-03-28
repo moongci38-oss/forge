@@ -1,9 +1,21 @@
 ---
 name: concise-planning
 description: Generates a clear, actionable, atomic implementation checklist when a user requests a plan for a coding task. Produces structured output with Approach, Scope, Action Items (6-10 steps), and Validation. Minimizes blocking questions by making reasonable assumptions.
+context: fork
 ---
 
 # Concise Planning
+
+## Output Requirements
+
+Every plan MUST include ALL of the following — missing any one is a failure:
+
+1. **Approach section**: 1-3 sentences describing the high-level strategy
+2. **Scope In/Out**: Explicit "In" and "Out" bullet points
+3. **6-10 Action Items**: Exactly 6-10 items — no fewer, no more. If the task seems small, add Read/Verify steps to reach 6
+4. **Verb-first items**: Every action item MUST start with a verb (Add, Create, Read, Update, Write, Verify, Test, Refactor, Configure)
+5. **File paths in items**: At least 2 action items MUST include a concrete file path with extension (e.g., `src/hooks/useDarkMode.ts`)
+6. **Validation step**: At least 1 item for testing/verification
 
 ## Goal
 
@@ -35,20 +47,23 @@ Use the following structure:
 ```markdown
 # Plan
 
-<High-level approach>
+## Approach
+
+<1-3 sentences describing what we're building and the high-level strategy>
 
 ## Scope
 
-- In:
-- Out:
+- **In:** <what's included>
+- **Out:** <what's excluded>
 
 ## Action Items
 
-[ ] <Step 1: Discovery>
-[ ] <Step 2: Implementation>
-[ ] <Step 3: Implementation>
-[ ] <Step 4: Validation/Testing>
-[ ] <Step 5: Rollout/Commit>
+[ ] Read `src/components/Settings.tsx` and identify current theme logic
+[ ] Create `src/hooks/useDarkMode.ts` with toggle + persistence logic
+[ ] Add dark mode toggle component to `src/components/Settings.tsx`
+[ ] Update `src/styles/globals.css` with dark mode CSS variables
+[ ] Write test in `tests/components/Settings.test.tsx` for toggle behavior
+[ ] Verify dark mode toggles correctly in dev server and persists on reload
 
 ## Open Questions
 
@@ -58,5 +73,6 @@ Use the following structure:
 ## Checklist Guidelines
 
 - **Atomic**: Each step should be a single logical unit of work.
-- **Verb-first**: "Add...", "Refactor...", "Verify...".
-- **Concrete**: Name specific files or modules when possible.
+- **Verb-first**: "Add...", "Create...", "Refactor...", "Verify...", "Update...", "Write...".
+- **Concrete file paths required**: Every implementation step MUST name at least one specific file path (e.g., `src/components/Foo.tsx`). Never use vague references like "the component" or "the module".
+- **6-10 items**: Always produce 6-10 action items. If the task seems small, include discovery (Read) and validation (Test/Verify) steps to reach 6.

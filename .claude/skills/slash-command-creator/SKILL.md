@@ -1,11 +1,22 @@
 ---
 name: slash-command-creator
 description: Guide for creating Claude Code slash commands. Use when the user wants to create a new slash command, update an existing slash command, or asks about slash command syntax, frontmatter options, or best practices.
+context: fork
 ---
 
 # Slash Command Creator
 
 Create custom slash commands for Claude Code to automate frequently-used prompts.
+
+## Output Requirements
+
+**Every response MUST include the complete command file in a markdown code block FIRST**, with:
+1. YAML frontmatter (`description`, `allowed-tools` if needed)
+2. Full prompt/instruction body (the actual prompt Claude will receive)
+3. Save path (`.claude/commands/` or `~/.claude/commands/`)
+4. Example usage showing how to invoke the command
+
+Output the complete file content first, then offer to write it.
 
 ## Quick Start
 

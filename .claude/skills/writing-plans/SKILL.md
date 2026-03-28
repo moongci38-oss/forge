@@ -1,9 +1,20 @@
 ---
 name: writing-plans
 description: "Transforms a spec or requirements document into a comprehensive, bite-sized implementation plan before touching code. Produces TDD-oriented task sequences with exact file paths, step-by-step actions (2-5 minutes each), and explicit test verification steps. Use when starting multi-step implementations with a spec, but before any code changes begin."
+context: fork
 ---
 
 # Writing Plans
+
+## Output Requirements
+
+Every plan MUST include ALL of the following — missing any one is a failure:
+
+1. **Structured header**: Goal + Architecture + Tech Stack
+2. **3+ Tasks**: Each task as a numbered `### Task N: [Name]` section
+3. **File paths per task**: Every task MUST list at least 2 concrete file paths with extensions in a `**Files:**` block (e.g., `src/services/comment.service.ts`, `tests/comment.e2e-spec.ts`)
+4. **Test steps**: Every task MUST include "Write the failing test" and "Run test" steps
+5. **Ordered dependencies**: Tasks MUST be numbered in implementation order
 
 ## Overview
 
@@ -58,7 +69,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 ```
 
 ## Remember
-- Exact file paths always
+- **Exact file paths always** — every task MUST reference at least 2 concrete file paths with extensions (e.g., `src/services/comment.service.ts`, `tests/comment.e2e-spec.ts`)
 - Complete code in plan (not "add validation")
 - Exact commands with expected output
 - DRY, YAGNI, TDD, frequent commits

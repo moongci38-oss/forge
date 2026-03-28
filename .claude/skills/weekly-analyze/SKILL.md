@@ -5,6 +5,7 @@ description: >
   수집 단계를 스킵하고 분석만 실행하는 재분석 진입점.
 argument-hint: "<YYYY-MM-DD>"
 user-invocable: true
+context: fork
 ---
 
 # Weekly Research — 재분석 (JSON → 분석)

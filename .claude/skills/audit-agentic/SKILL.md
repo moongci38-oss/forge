@@ -5,6 +5,7 @@ description: >
   CLEAR 프레임워크 + Anthropic Composable Patterns 기준으로 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
+context: fork
 ---
 
 # 에이전틱 AI 역량 감사

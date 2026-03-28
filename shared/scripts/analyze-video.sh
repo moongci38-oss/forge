@@ -18,7 +18,13 @@ set -euo pipefail
 
 VIDEO_INPUT="${1:?Usage: analyze-video.sh <video-path-or-url> [output-file] [prompt]}"
 OUTPUT_FILE="${2:-}"
-PROMPT="${3:-다음 게임 영상을 분석해주세요. 타임스탬프별로 연출 요소(파티클, 셰이더, 애니메이션, 사운드, UI 전환)를 식별하고, 각 요소의 시작/종료 시간, 이징, 구현에 필요한 Unity 컴포넌트를 표 형식으로 정리해주세요.}"
+PROMPT_RAW="${3:-다음 게임 영상을 분석해주세요. 타임스탬프별로 연출 요소(파티클, 셰이더, 애니메이션, 사운드, UI 전환)를 식별하고, 각 요소의 시작/종료 시간, 이징, 구현에 필요한 Unity 컴포넌트를 표 형식으로 정리해주세요.}"
+
+# JSON-safe escape: 특수문자(\, ", 개행, 탭)를 이스케이프하여 JSON 인젝션 방지
+json_escape() {
+  python3 -c "import json,sys; print(json.dumps(sys.stdin.read().strip())[1:-1])"
+}
+PROMPT=$(echo "$PROMPT_RAW" | json_escape)
 
 # --- API 키 확인 ---
 if [ -z "${GEMINI_API_KEY:-}" ]; then
@@ -65,21 +71,26 @@ echo "📝 프롬프트: ${PROMPT:0:80}..."
 TEMP_RESULT=$(mktemp)
 trap 'rm -f "$TEMP_RESULT"' EXIT
 
+VIDEO_INPUT_ESCAPED=$(echo "$VIDEO_INPUT" | json_escape)
+
 if [ "$IS_URL" = true ]; then
   # YouTube URL — Gemini에 URL 직접 전달
+  # JSON 구조를 python3으로 안전하게 생성 (인젝션 방지)
+  python3 -c "
+import json, sys
+payload = {
+    'contents': [{
+        'parts': [
+            {'text': sys.argv[1]},
+            {'file_data': {'file_uri': sys.argv[2], 'mime_type': 'video/*'}}
+        ]
+    }]
+}
+print(json.dumps(payload))
+" "$PROMPT_RAW" "$VIDEO_INPUT" | \
   curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
     -H 'Content-Type: application/json' \
-    -d "$(cat <<JSONEOF
-{
-  "contents": [{
-    "parts": [
-      {"text": "$PROMPT"},
-      {"file_data": {"file_uri": "$VIDEO_INPUT", "mime_type": "video/*"}}
-    ]
-  }]
-}
-JSONEOF
-)" > "$TEMP_RESULT" 2>/dev/null
+    -d @- > "$TEMP_RESULT" 2>/dev/null
 
 else
   # 로컬 파일 — Gemini Files API로 업로드 후 분석
@@ -146,19 +157,22 @@ else
     WAIT=$((WAIT + 5))
   done
 
+  # JSON 구조를 python3으로 안전하게 생성 (인젝션 방지)
+  python3 -c "
+import json, sys
+payload = {
+    'contents': [{
+        'parts': [
+            {'text': sys.argv[1]},
+            {'file_data': {'file_uri': sys.argv[2], 'mime_type': sys.argv[3]}}
+        ]
+    }]
+}
+print(json.dumps(payload))
+" "$PROMPT_RAW" "$FILE_URI" "$MIME" | \
   curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
     -H 'Content-Type: application/json' \
-    -d "$(cat <<JSONEOF
-{
-  "contents": [{
-    "parts": [
-      {"text": "$PROMPT"},
-      {"file_data": {"file_uri": "$FILE_URI", "mime_type": "$MIME"}}
-    ]
-  }]
-}
-JSONEOF
-)" > "$TEMP_RESULT" 2>/dev/null
+    -d @- > "$TEMP_RESULT" 2>/dev/null
 
 fi
 

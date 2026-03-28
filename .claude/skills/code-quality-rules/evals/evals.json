@@ -1,0 +1,41 @@
+{
+  "skill_name": "code-quality-rules",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "code-quality-rules 스킬의 10개 룰 기준으로 이 코드를 리뷰해줘:\\n```tsx\\nimport { useEffect, useState } from 'react';\\nexport function UserProfile({ id }: { id: string }) {\\n  const [user, setUser] = useState(null);\\n  useEffect(() => {\\n    fetch(`/api/users/${id}`).then(res => res.json()).then(data => setUser(data));\\n  }, [id]);\\n  return <div onClick={() => window.location.href='/home'}>{user?.name}</div>;\\n}\\n```",
+      "expected_output": "Complete code-quality-rules output meeting all 5 criteria",
+      "expectations": [
+        "출력에 최소 1개 이상의 코드 품질 이슈가 구체적으로 지적되어 있는가?",
+        "이슈 설명에 룰 이름(예: error-swallow, race-condition, cleanup) 또는 카테고리(security, logic, ux, architecture, api, html)가 명시되어 있는가?",
+        "critical/warning 또는 이에 준하는 우선순위/심각도 구분이 있는가?",
+        "감지된 이슈에 대해 구체적인 수정 방향(예: AbortController 추가, button 태그로 변경, re-throw)이 제시되어 있는가?",
+        "결과가 JSON, 테이블, 또는 번호/불릿 리스트로 구조화되어 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "code-quality-rules 스킬의 10개 룰 기준으로 이 코드를 리뷰해줘:\\n```ts\\nasync function updateUser(req: Request) {\\n  try {\\n    const result = await db.users.update(req.body);\\n    await fetch('/api/audit-log', { method: 'POST', body: JSON.stringify(result) });\\n    return result;\\n  } catch (e) {\\n    console.log(e);\\n    return null;\\n  }\\n}\\n```",
+      "expected_output": "Complete code-quality-rules output meeting all 5 criteria",
+      "expectations": [
+        "출력에 최소 1개 이상의 코드 품질 이슈가 구체적으로 지적되어 있는가?",
+        "이슈 설명에 룰 이름(예: error-swallow, race-condition, cleanup) 또는 카테고리(security, logic, ux, architecture, api, html)가 명시되어 있는가?",
+        "critical/warning 또는 이에 준하는 우선순위/심각도 구분이 있는가?",
+        "감지된 이슈에 대해 구체적인 수정 방향(예: AbortController 추가, button 태그로 변경, re-throw)이 제시되어 있는가?",
+        "결과가 JSON, 테이블, 또는 번호/불릿 리스트로 구조화되어 정리되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "code-quality-rules 스킬의 10개 룰 기준으로 이 코드를 리뷰해줘:\\n```tsx\\nimport { useContext } from 'react';\\nimport { AuthContext } from './auth';\\nimport { ThemeContext } from './theme';\\nimport { CartContext } from './cart';\\nimport { NotificationContext } from './notifications';\\nexport function Header() {\\n  const auth = useContext(AuthContext);\\n  const theme = useContext(ThemeContext);\\n  const cart = useContext(CartContext);\\n  const notif = useContext(NotificationContext);\\n  return <a><button onClick={() => auth.logout()}>Logout</button></a>;\\n}\\n```",
+      "expected_output": "Complete code-quality-rules output meeting all 5 criteria",
+      "expectations": [
+        "출력에 최소 1개 이상의 코드 품질 이슈가 구체적으로 지적되어 있는가?",
+        "이슈 설명에 룰 이름(예: error-swallow, race-condition, cleanup) 또는 카테고리(security, logic, ux, architecture, api, html)가 명시되어 있는가?",
+        "critical/warning 또는 이에 준하는 우선순위/심각도 구분이 있는가?",
+        "감지된 이슈에 대해 구체적인 수정 방향(예: AbortController 추가, button 태그로 변경, re-throw)이 제시되어 있는가?",
+        "결과가 JSON, 테이블, 또는 번호/불릿 리스트로 구조화되어 정리되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "skill_name": "hook-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a hook that logs all bash commands to ~/.claude/bash-history.log",
+      "expected_output": "Complete hook-creator output meeting all 5 criteria",
+      "expectations": [
+        "JSON 코드블록에 hooks 설정이 포함되어 있거나, 훅이 이미 존재/생성되었다는 안내가 있는가?",
+        "PreToolUse, PostToolUse, Notification, Stop 중 하나의 이벤트 이름이 출력에 언급되어 있는가?",
+        "훅이 무엇을 하는지(로깅, 차단, 포맷팅 등) 구체적으로 설명되어 있는가?",
+        "settings.json 또는 hooks 스크립트 경로가 출력에 언급되어 있는가?",
+        "훅이 실제 동작 중이라는 확인이거나, 적용 방법이 구체적으로 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a hook that sends a desktop notification when any git commit is made",
+      "expected_output": "Complete hook-creator output meeting all 5 criteria",
+      "expectations": [
+        "JSON 코드블록에 hooks 설정이 포함되어 있거나, 훅이 이미 존재/생성되었다는 안내가 있는가?",
+        "PreToolUse, PostToolUse, Notification, Stop 중 하나의 이벤트 이름이 출력에 언급되어 있는가?",
+        "훅이 무엇을 하는지(로깅, 차단, 포맷팅 등) 구체적으로 설명되어 있는가?",
+        "settings.json 또는 hooks 스크립트 경로가 출력에 언급되어 있는가?",
+        "훅이 실제 동작 중이라는 확인이거나, 적용 방법이 구체적으로 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Auto-format Python files with black after every edit",
+      "expected_output": "Complete hook-creator output meeting all 5 criteria",
+      "expectations": [
+        "JSON 코드블록에 hooks 설정이 포함되어 있거나, 훅이 이미 존재/생성되었다는 안내가 있는가?",
+        "PreToolUse, PostToolUse, Notification, Stop 중 하나의 이벤트 이름이 출력에 언급되어 있는가?",
+        "훅이 무엇을 하는지(로깅, 차단, 포맷팅 등) 구체적으로 설명되어 있는가?",
+        "settings.json 또는 hooks 스크립트 경로가 출력에 언급되어 있는가?",
+        "훅이 실제 동작 중이라는 확인이거나, 적용 방법이 구체적으로 안내되어 있는가?"
+      ]
+    }
+  ]
+}

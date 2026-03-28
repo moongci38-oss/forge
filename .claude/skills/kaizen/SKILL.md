@@ -1,6 +1,7 @@
 ---
 name: kaizen
 description: "Encodes continuous improvement principles (Kaizen, Poka-Yoke, Standardized Work, Just-In-Time) as coding guidelines. Use when improving code quality, refactoring existing code, or discussing process standardization. Guides toward smallest viable change, error-proofing at design time, and YAGNI-based scope control."
+context: fork
 ---
 
 # Kaizen: Continuous Improvement
@@ -43,6 +44,15 @@ Small improvements, continuously. Error-proof by design. Follow what works. Buil
 - "Users should just be careful" (Poka-Yoke violation)
 - "I prefer to do it my way" (Standardization violation)
 - "We might need this someday" (JIT violation)
+
+## Output Requirements
+
+Every kaizen response MUST include ALL of the following — missing any one is a failure:
+
+1. **Name the pillar FIRST**: The very first line MUST be: "**Pillar: [Kaizen|Poka-Yoke|Standardized Work|JIT]**"
+2. **Before/After code**: ALWAYS show a `### Before` code block and an `### After` code block — never skip the comparison
+3. **Specific references**: Include concrete file names, function names, or variable names — never give abstract advice
+4. **Smallest change only**: Propose the single smallest improvement first, not a rewrite
 
 ## Mindset
 

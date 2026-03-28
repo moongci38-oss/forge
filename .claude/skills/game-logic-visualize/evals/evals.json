@@ -1,0 +1,41 @@
+{
+  "skill_name": "game-logic-visualize",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Visualize a player state machine with states: Idle, Running, Jumping, Attacking, Dead and transitions between them",
+      "expected_output": "Complete game-logic-visualize output meeting all 5 criteria",
+      "expectations": [
+        "Mermaid 코드 블록, HTML 코드, 또는 시각화 파일 생성/저장 경로가 출력에 포함되어 있는가?",
+        "입력에서 명시된 주요 요소(상태명, 등급명, 스킬 분기명)가 출력에 최소 3개 이상 언급되어 있는가?",
+        "입력에 수치(확률, 개수, 조건)가 있을 경우 해당 수치가 출력에 반영되어 있는가?",
+        "요소 간의 관계(전이, 선행조건, 확률 분기)가 표현되어 있는가?",
+        "Mermaid 다이어그램, HTML 파일, 또는 python 스크립트 등 실행/렌더링 가능한 코드가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a gacha probability table visualization with 5-star (1%), 4-star (10%), 3-star (89%) rates and pity system at 90 pulls",
+      "expected_output": "Complete game-logic-visualize output meeting all 5 criteria",
+      "expectations": [
+        "Mermaid 코드 블록, HTML 코드, 또는 시각화 파일 생성/저장 경로가 출력에 포함되어 있는가?",
+        "입력에서 명시된 주요 요소(상태명, 등급명, 스킬 분기명)가 출력에 최소 3개 이상 언급되어 있는가?",
+        "입력에 수치(확률, 개수, 조건)가 있을 경우 해당 수치가 출력에 반영되어 있는가?",
+        "요소 간의 관계(전이, 선행조건, 확률 분기)가 표현되어 있는가?",
+        "Mermaid 다이어그램, HTML 파일, 또는 python 스크립트 등 실행/렌더링 가능한 코드가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Draw a skill tree with 3 branches: Warrior (5 skills), Mage (5 skills), Rogue (5 skills) showing prerequisites",
+      "expected_output": "Complete game-logic-visualize output meeting all 5 criteria",
+      "expectations": [
+        "Mermaid 코드 블록, HTML 코드, 또는 시각화 파일 생성/저장 경로가 출력에 포함되어 있는가?",
+        "입력에서 명시된 주요 요소(상태명, 등급명, 스킬 분기명)가 출력에 최소 3개 이상 언급되어 있는가?",
+        "입력에 수치(확률, 개수, 조건)가 있을 경우 해당 수치가 출력에 반영되어 있는가?",
+        "요소 간의 관계(전이, 선행조건, 확률 분기)가 표현되어 있는가?",
+        "Mermaid 다이어그램, HTML 파일, 또는 python 스크립트 등 실행/렌더링 가능한 코드가 포함되어 있는가?"
+      ]
+    }
+  ]
+}

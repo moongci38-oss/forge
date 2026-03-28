@@ -1,0 +1,41 @@
+{
+  "skill_name": "pptx",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a 5-slide pitch deck about an AI code review SaaS product",
+      "expected_output": "Complete pptx output meeting all 5 criteria",
+      "expectations": [
+        "출력이 슬라이드 수 또는 슬라이드별 구조(예: \"Slide 1:\", \"슬라이드 1\" 등)를 명시적으로 언급하는가?",
+        ".pptx 파일이 실제 생성/저장되었다는 증거(파일 경로, \"saved\", \"generated\", \"ready\" 등)가 출력에 있거나, python-pptx 코드가 포함되어 있는가?",
+        "출력이 색상(hex 코드 또는 색상명), 폰트, 레이아웃 중 하나 이상을 구체적으로 명시하는가?",
+        "각 슬라이드에 들어갈 텍스트, 제목, 데이터, 또는 시각 요소가 슬라이드 단위로 구체적으로 서술되어 있는가?",
+        "출력 파일명(.pptx 확장자) 또는 저장 경로(예: `output.pptx`, `save()` 호출)가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a 3-slide project status report with timeline and milestones",
+      "expected_output": "Complete pptx output meeting all 5 criteria",
+      "expectations": [
+        "출력이 슬라이드 수 또는 슬라이드별 구조(예: \"Slide 1:\", \"슬라이드 1\" 등)를 명시적으로 언급하는가?",
+        ".pptx 파일이 실제 생성/저장되었다는 증거(파일 경로, \"saved\", \"generated\", \"ready\" 등)가 출력에 있거나, python-pptx 코드가 포함되어 있는가?",
+        "출력이 색상(hex 코드 또는 색상명), 폰트, 레이아웃 중 하나 이상을 구체적으로 명시하는가?",
+        "각 슬라이드에 들어갈 텍스트, 제목, 데이터, 또는 시각 요소가 슬라이드 단위로 구체적으로 서술되어 있는가?",
+        "출력 파일명(.pptx 확장자) 또는 저장 경로(예: `output.pptx`, `save()` 호출)가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a technical architecture presentation with 4 slides covering system overview, data flow, deployment, and monitoring",
+      "expected_output": "Complete pptx output meeting all 5 criteria",
+      "expectations": [
+        "출력이 슬라이드 수 또는 슬라이드별 구조(예: \"Slide 1:\", \"슬라이드 1\" 등)를 명시적으로 언급하는가?",
+        ".pptx 파일이 실제 생성/저장되었다는 증거(파일 경로, \"saved\", \"generated\", \"ready\" 등)가 출력에 있거나, python-pptx 코드가 포함되어 있는가?",
+        "출력이 색상(hex 코드 또는 색상명), 폰트, 레이아웃 중 하나 이상을 구체적으로 명시하는가?",
+        "각 슬라이드에 들어갈 텍스트, 제목, 데이터, 또는 시각 요소가 슬라이드 단위로 구체적으로 서술되어 있는가?",
+        "출력 파일명(.pptx 확장자) 또는 저장 경로(예: `output.pptx`, `save()` 호출)가 포함되어 있는가?"
+      ]
+    }
+  ]
+}

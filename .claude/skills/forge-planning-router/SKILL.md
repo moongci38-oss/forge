@@ -6,6 +6,7 @@ description: >
   현재 Forge 진행 상태를 확인하고 라우팅 실행. user-invocable: false — 시스템 자동 실행 전용.
 user-invocable: false
 disable-model-invocation: true
+context: fork
 ---
 
 # Forge Auto-Router

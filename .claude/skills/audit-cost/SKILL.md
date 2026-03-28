@@ -5,6 +5,7 @@ description: >
   RouteLLM/CEBench 기준으로 비용 최적화 현황을 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
+context: fork
 ---
 
 # AI 비용 효율 감사

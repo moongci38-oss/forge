@@ -1,11 +1,20 @@
 ---
 name: hook-creator
 description: Create and configure Claude Code hooks for customizing agent behavior. Use when the user wants to (1) create a new hook, (2) configure automatic formatting, logging, or notifications, (3) add file protection or custom permissions, (4) set up pre/post tool execution actions, or (5) asks about hook events like PreToolUse, PostToolUse, Notification, etc.
+context: fork
 ---
 
 # Hook Creator
 
 Create Claude Code hooks that execute shell commands at specific lifecycle events.
+
+## Output Requirements
+
+**Every response MUST include:**
+1. A complete JSON code block with the `"hooks"` key showing the full configuration
+2. The target settings file path (`~/.claude/settings.json` for user-level or `.claude/settings.json` for project-level)
+
+Always output the JSON config block first, then explain what it does.
 
 ## Hook Creation Workflow
 
@@ -14,7 +23,8 @@ Create Claude Code hooks that execute shell commands at specific lifecycle event
 3. **Design the hook command** - Write shell command that processes JSON input from stdin
 4. **Configure the matcher** - Set tool/event filter (use `*` for all, or specific tool names like `Bash`, `Edit|Write`)
 5. **Choose storage location** - User settings (`~/.claude/settings.json`) or project (`.claude/settings.json`)
-6. **Test the hook** - Verify behavior with a simple test case
+6. **Output the complete JSON config** - Always include the full `"hooks": { ... }` block
+7. **Test the hook** - Verify behavior with a simple test case
 
 ## Hook Configuration Structure
 

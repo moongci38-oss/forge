@@ -5,6 +5,7 @@ description: >
   컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot)을 RAGAS 기준으로 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
+context: fork
 ---
 
 # 컨텍스트 엔지니어링 역량 감사

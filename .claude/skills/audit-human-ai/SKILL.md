@@ -5,6 +5,7 @@ description: >
   Sterz 4조건, Override/Rubber-Stamp Rate를 기준으로 자율성-감독 최적 경계를 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
+context: fork
 ---
 
 # Human-AI 경계 설계 감사

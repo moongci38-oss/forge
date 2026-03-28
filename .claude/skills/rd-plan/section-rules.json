@@ -1,0 +1,154 @@
+{
+  "$schema": "rd-plan section rules",
+  "version": "1.0.0",
+  "description": "조건→섹션 매핑 규칙. 입력 조건에 따라 포함할 섹션을 결정한다.",
+
+  "sections": {
+    "I": {
+      "title": "시장현황 및 문제점",
+      "always": true,
+      "subsections": {
+        "I-1": { "title": "시장 현황", "always": true },
+        "I-2": { "title": "시장 위협/기회 분석", "always": true },
+        "I-3": { "title": "구조적 문제", "always": true },
+        "I-4": { "title": "글로벌 트렌드", "condition": "has_global" },
+        "I-5": { "title": "시장 공백", "always": true }
+      }
+    },
+
+    "II-A": {
+      "title": "연구개발 요약",
+      "always": true,
+      "subsections": {
+        "II-A-0": { "title": "연구 질문 (Research Questions)", "always": true },
+        "II-A-1": { "title": "기술 개발 목표 + KPI", "always": true },
+        "II-A-2": { "title": "핵심 해결 구조 개념도", "always": true }
+      }
+    },
+
+    "II-B": {
+      "title": "핵심 기술",
+      "always": true,
+      "subsections": {
+        "II-B-N": { "title": "핵심 기술 {N}", "note": "기술 수에 따라 동적 생성", "always": true },
+        "II-B-platform": { "title": "기술 적용 플랫폼/서비스", "condition": "has_platform" },
+        "II-B-kpi": { "title": "정량 목표 및 평가 방법", "always": true },
+        "II-B-data": { "title": "데이터 확보 및 윤리 전략", "condition": "has_ai_ml" }
+      }
+    },
+
+    "II-C": {
+      "title": "연구개발 현황",
+      "always": true,
+      "subsections": {
+        "II-C-1": { "title": "선행연구개발 이력", "condition": "has_prior_rd" },
+        "II-C-2": { "title": "선행 연구결과물", "condition": "has_prior_rd" },
+        "II-C-3": { "title": "본 과제에서의 활용 계획", "condition": "has_prior_rd" },
+        "II-C-4": { "title": "보유 특허/IP 현황", "condition": "has_patents" },
+        "II-C-5": { "title": "기존 R&D 과제 차별성 (중복성 해소)", "condition": "has_prior_rd" }
+      }
+    },
+
+    "II-D": {
+      "title": "단계별 연구개발",
+      "always": true,
+      "subsections": {
+        "II-D-N": { "title": "{N}단계", "note": "단계 수에 따라 동적 생성", "always": true },
+        "II-D-risk": { "title": "리스크 분석 및 대응 전략", "always": true }
+      }
+    },
+
+    "II-E": {
+      "title": "경쟁·특허 전략",
+      "always": true,
+      "subsections": {
+        "II-E-1": { "title": "경쟁사 비교표", "always": true },
+        "II-E-2": { "title": "선행기술 분석 (FTO)", "condition": "has_patents" },
+        "II-E-3": { "title": "특허 출원 전략", "condition": "has_patents" },
+        "II-E-4": { "title": "지식재산권 추진계획", "condition": "has_patents" },
+        "II-E-5": { "title": "기술유출 방지", "always": true },
+        "II-E-6": { "title": "표준화 전략", "condition": "has_standardization" }
+      }
+    },
+
+    "III": {
+      "title": "사업화 전략",
+      "always": true,
+      "subsections": {
+        "III-1": { "title": "사업화 목표", "always": true },
+        "III-2": { "title": "수익모델", "always": true },
+        "III-3": { "title": "시장규모 (TAM/SAM/SOM)", "always": true },
+        "III-4": { "title": "단계별 진입전략", "always": true },
+        "III-5": { "title": "글로벌 진출전략", "condition": "has_global" },
+        "III-6": { "title": "민간투자 유치 전략", "condition": "has_investment" },
+        "III-7": { "title": "시장 성장성 + 협력사", "always": true }
+      }
+    },
+
+    "IV": {
+      "title": "창업기업 소개",
+      "always": true,
+      "subsections": {
+        "IV-1": { "title": "연구팀 구성 역량", "always": true },
+        "IV-2": { "title": "연구원 현황", "always": true },
+        "IV-3": { "title": "정부사업 수행이력", "condition": "has_prior_rd" },
+        "IV-4": { "title": "보유 특허/논문/수상", "condition": "has_patents" },
+        "IV-5": { "title": "기존 시제품/서비스", "condition": "has_prototype" }
+      }
+    },
+
+    "appendix": {
+      "title": "사업비",
+      "always": true,
+      "subsections": {
+        "app-1": { "title": "연차별 세부 사업비", "always": true },
+        "app-2": { "title": "기관 부담 연구개발비", "always": true }
+      }
+    }
+  },
+
+  "conditions": {
+    "has_patents": {
+      "description": "특허 보유 또는 출원 예정",
+      "detection": "00-research/ 또는 _source/에서 '특허', 'patent', 'FTO' 키워드 탐색"
+    },
+    "has_prior_rd": {
+      "description": "선행 R&D 과제 수행 이력",
+      "detection": "_source/에서 '연구개발계획서', '디딤돌', '팁스', '선행연구' 키워드 탐색"
+    },
+    "has_global": {
+      "description": "글로벌 진출 목표",
+      "detection": "_grant-info.md 평가기준에 '글로벌', 'global', '해외' 키워드"
+    },
+    "has_poc_pov": {
+      "description": "PoC/PoV 검증 요구",
+      "detection": "_grant-info.md 평가기준에 'PoC', 'PoV', '기술검증', '시장검증' 키워드"
+    },
+    "has_investment": {
+      "description": "민간투자 유치 필수",
+      "detection": "_grant-info.md에 '민간투자', '투자유치', '2억' 키워드"
+    },
+    "has_platform": {
+      "description": "기술 적용 플랫폼/서비스 존재",
+      "detection": "_source/에서 '플랫폼', 'platform', '서비스', '앱' 키워드"
+    },
+    "has_ai_ml": {
+      "description": "AI/ML 기술 포함",
+      "detection": "기술 설명에 'AI', '인공지능', 'ML', 'NLP', '임베딩' 키워드"
+    },
+    "has_prototype": {
+      "description": "기존 시제품/서비스 존재",
+      "detection": "_source/에서 '.html', 'prototype', '시제품', 'MVP' 키워드"
+    },
+    "has_standardization": {
+      "description": "표준화 전략 필요",
+      "detection": "기술에 'W3C', 'ISO', 'CloudEvents', '표준' 관련 키워드"
+    }
+  },
+
+  "page_allocation": {
+    "description": "평가 배점 비중에 비례하여 분량 자동 배분",
+    "formula": "section_pages = total_pages × (section_eval_weight / total_eval_weight)",
+    "minimum_per_section": 0.3
+  }
+}

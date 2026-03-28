@@ -1,0 +1,41 @@
+{
+  "skill_name": "frontend-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a modern pricing page with 3 tiers: Free, Pro, Enterprise",
+      "expected_output": "Complete frontend-design output meeting all 5 criteria",
+      "expectations": [
+        "HTML 파일 저장 경로가 명시되어 있거나, 코드 블록에 HTML/React 코드가 포함되어 있는가?",
+        "색상, 폰트, 레이아웃 등 시각 디자인 요소가 출력에 2개 이상 구체적으로 설명되어 있는가?",
+        "입력에서 요청한 핵심 요소(티어명, UI 컴포넌트명 등)가 출력에 모두 언급되어 있는가?",
+        "호버, 애니메이션, 반응형 등 인터랙션 또는 컴포넌트 구조가 설명되어 있는가?",
+        "출력이 단순 계획이 아닌, 실제 구현 완료 상태(파일 생성 또는 전체 코드)를 나타내는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a dashboard header with user avatar, notifications bell, and search bar",
+      "expected_output": "Complete frontend-design output meeting all 5 criteria",
+      "expectations": [
+        "HTML 파일 저장 경로가 명시되어 있거나, 코드 블록에 HTML/React 코드가 포함되어 있는가?",
+        "색상, 폰트, 레이아웃 등 시각 디자인 요소가 출력에 2개 이상 구체적으로 설명되어 있는가?",
+        "입력에서 요청한 핵심 요소(티어명, UI 컴포넌트명 등)가 출력에 모두 언급되어 있는가?",
+        "호버, 애니메이션, 반응형 등 인터랙션 또는 컴포넌트 구조가 설명되어 있는가?",
+        "출력이 단순 계획이 아닌, 실제 구현 완료 상태(파일 생성 또는 전체 코드)를 나타내는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build a testimonial carousel component with customer photos and quotes",
+      "expected_output": "Complete frontend-design output meeting all 5 criteria",
+      "expectations": [
+        "HTML 파일 저장 경로가 명시되어 있거나, 코드 블록에 HTML/React 코드가 포함되어 있는가?",
+        "색상, 폰트, 레이아웃 등 시각 디자인 요소가 출력에 2개 이상 구체적으로 설명되어 있는가?",
+        "입력에서 요청한 핵심 요소(티어명, UI 컴포넌트명 등)가 출력에 모두 언급되어 있는가?",
+        "호버, 애니메이션, 반응형 등 인터랙션 또는 컴포넌트 구조가 설명되어 있는가?",
+        "출력이 단순 계획이 아닌, 실제 구현 완료 상태(파일 생성 또는 전체 코드)를 나타내는가?"
+      ]
+    }
+  ]
+}

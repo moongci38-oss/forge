@@ -5,6 +5,7 @@ description: >
   가드레일 패턴, OTel GenAI 옵저버빌리티를 기준으로 측정·제어 역량을 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
+context: fork
 ---
 
 # AI 하네스 엔지니어링 감사

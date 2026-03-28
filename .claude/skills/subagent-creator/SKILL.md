@@ -1,11 +1,21 @@
 ---
 name: subagent-creator
 description: Create specialized Claude Code sub-agents with custom system prompts and tool configurations. Use when users ask to create a new sub-agent, custom agent, specialized assistant, or want to configure task-specific AI workflows for Claude Code.
+context: fork
 ---
 
 # Sub-agent Creator
 
 Create specialized AI sub-agents for Claude Code that handle specific tasks with customized prompts and tool access.
+
+## Output Requirements
+
+**Every response MUST include:**
+1. The agent's **trigger condition** — always state when it auto-runs using "Use proactively after/when..." (e.g., "Use proactively after writing or modifying code")
+2. YAML frontmatter with `name` and `description` (description MUST contain the trigger condition)
+3. System prompt body defining the role
+4. Save path (`.claude/agents/` or `~/.claude/agents/`)
+5. If the agent already exists, describe its current configuration including its trigger conditions
 
 ## Sub-agent File Format
 

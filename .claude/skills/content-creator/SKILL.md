@@ -1,11 +1,20 @@
 ---
 name: content-creator
 description: Creates SEO-optimized marketing content with consistent brand voice using automated scripts for voice analysis and SEO scoring. Covers blog posts, social media, content calendars, and brand voice development. Use when writing or optimizing marketing content, establishing brand guidelines, or planning multi-channel content strategy.
+context: fork
 ---
 
 # Content Creator
 
 Professional-grade brand voice analysis, SEO optimization, and platform-specific content frameworks.
+
+## Output Requirements
+
+Every content piece MUST include ALL of the following:
+
+1. **Target audience**: Explicitly state who the content is for (e.g., "Target: SaaS founders, Series A stage")
+2. **CTA (Call-to-Action)**: Every piece MUST end with a clear, labeled CTA (e.g., "**CTA:** Sign up for the free trial")
+3. **SEO keywords**: List 3-5 target keywords at the top of the content brief
 
 ## Keywords
 content creation, blog posts, SEO, brand voice, social media, content calendar, marketing content, content strategy, content marketing, brand consistency, content optimization, social media marketing, content planning, blog writing, content frameworks, brand guidelines, social media strategy

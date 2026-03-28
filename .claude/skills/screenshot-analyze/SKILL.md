@@ -2,6 +2,7 @@
 name: screenshot-analyze
 description: 게임/웹/앱 스크린샷(UI, HUD, 이펙트 프레임, 경쟁작, 구현 검증)을 Gemini Vision으로 분석하여 UI 구조/컬러 팔레트/구현 가이드를 생성하는 스킬. 정적 이미지 분석 전문.
 user-invocable: true
+context: fork
 ---
 
 # Screenshot Analyze
