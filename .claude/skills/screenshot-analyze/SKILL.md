@@ -41,6 +41,14 @@ context: fork
 
 ## 워크플로우
 
+### Step 0: 분석 모드 선언 (MUST — 생략 금지)
+
+출력 첫 줄에 반드시 아래 형식으로 모드를 선언한다:
+
+```
+**분석 모드**: [기본 모드 / Task Doc 모드 / 시안 분석 모드 / 구현 검증 모드]
+```
+
 ### Step 1: 입력 확인
 
 ```
@@ -242,19 +250,39 @@ Canvas (Screen Space - Overlay)
 > 겹치는 요소도 각각 분리. Z순서로 레이어 표기.
 > 같은 디자인 반복은 1행 + "반복: N" / 서로 다르면 각각 별도 행.
 
-#### 2. 컬러 팔레트 (MUST)
+#### 2. 컬러 팔레트 (MUST — 최소 3색 이상)
 
-| # | 용도 | Hex | 사용 컴포넌트 |
-|---|------|-----|------------|
-| 1 | 배경 | #1A1A2E | 전체 배경 |
-| 2 | 버튼 | #FF6B35 | 확인 버튼 |
+| # | 용도 | Hex | 사용 컴포넌트 | 토큰명 |
+|---|------|-----|------------|--------|
+| 1 | 배경 | #1A1A2E | 전체 배경 | --color-bg |
+| 2 | 주요 액션 | #FF6B35 | 확인 버튼 | --color-primary |
+| 3 | 텍스트 | #FFFFFF | 버튼 라벨 | --color-text |
+| 4 | 보조 | #2D2D44 | 상단 바 | --color-surface |
 
-#### 3. 구현 가이드 (MUST)
+> 모든 색상은 반드시 #RRGGBB Hex로 표기. "금색", "파란색" 같은 자연어만 쓰면 FAIL.
 
-- **Canvas**: [설정 추정]
-- **Prefab 구조**: 트리 형태로 계층 표기
+#### 3. Prefab 계층 트리 (MUST)
+
+```
+Canvas (Screen Space - Overlay) [추정]
+├── Background (Image) — #1A1A2E, stretch-all
+├── TopBar (Panel) — Anchor: stretch-top, Height: 8%
+│   ├── Title (Text) — "제목", 24px, #FFFFFF
+│   └── CloseBtn (Button) — 40×40, 우상단
+├── Content (ScrollView) — Anchor: stretch, Padding: 16px
+│   ├── ConfirmBtn_1 (Button) — 80%×50px, #FF6B35 [반복×3]
+│   └── ...
+└── Overlay (Image) — #000000, alpha=0.5, Z=3 [겹침]
+```
+
+> 컴포넌트 분해 테이블의 모든 요소가 트리에 포함되어야 함. 누락 금지.
+
+#### 4. 구현 가이드 (MUST)
+
+- **Canvas**: [Screen Space - Overlay / Camera 등 추정]
 - **Anchor/Layout**: 주요 컴포넌트의 Anchor Preset 추정
 - **Inspector Reference 연동**: 분해된 컴포넌트를 docs/references/inspector-reference.md에 추가 가능한 형식으로 표기
+- **주의사항**: 추정값에는 반드시 (추정) 태그, 시안 분석 모드에서는 (확정) 태그
 ```
 
 ### Step 5: 결과 전달
