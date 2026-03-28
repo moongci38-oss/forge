@@ -502,7 +502,7 @@ Run the project's verify/build/test commands to ensure everything passes.`,
     console.error(`  2. Resume with updated spec: ... --phase 3 --spec <new-spec-path>`);
     console.error(`  3. Start fresh from plan: ... --phase 2`);
     console.error(`  4. Resume SDK session: ... --phase 3 --resume ${lastSessionId || '<session-id>'}`);
-    console.error(`  5. Check session state: node /home/damools/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
+    console.error(`  5. Check session state: node ~/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
     console.error(`\nBudget consumed: ~$${(totalBudget * 0.4).toFixed(2)} (40% of $${totalBudget})`);
     throw err;
   }
@@ -792,12 +792,12 @@ async function main() {
     }
 
     console.log('\n=== Session Complete ===');
-    console.log(`Session state managed by: node /home/damools/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
+    console.log(`Session state managed by: node ~/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
     process.exit(0);
 
   } catch (err) {
     console.error(`\nFatal error: ${err.message}`);
-    console.error(`Session state: node /home/damools/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
+    console.error(`Session state: node ~/forge/dev/scripts/session-state.mjs status --session "${sessionName}"`);
     console.error(`Resume with: node ~/.claude/scripts/forge-orchestrator.mjs --project "${projectRoot}" --session "${sessionName}" --work-size ${workSize} --phase <N>${lastSessionId ? ` --resume ${lastSessionId}` : ''}`);
     process.exit(1);
   }

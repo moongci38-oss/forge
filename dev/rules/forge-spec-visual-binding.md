@@ -158,6 +158,26 @@ AI 생성이 필요한 에셋은 아래 형식으로 Spec에 포함한다.
 
 에셋 생성 시 디자인 가이드 → 시안 이미지 → soul prompt 순으로 스타일이 전달되도록 체인을 구성한다.
 
+### D-3. Inspector Reference 연동
+
+UI/연출/이펙트 구현 시 **반드시** `docs/references/inspector-reference.md`를 참조한다.
+
+```
+구현 전:
+  1. inspector-reference.md 읽기
+  2. 유사 컴포넌트/연출의 검증된 값 복사
+  3. Spec 디자인 토큰에 반영
+
+구현 후 (Human 교정 루프):
+  1. Human이 에디터에서 값 확인/조정
+  2. 교정값을 inspector-reference.md에 커밋
+  3. 다음 구현에서 교정된 값 자동 참조
+```
+
+**Library 연동**: `/library-search`로 기존 에셋 검색 시, 매칭된 에셋의 Inspector 값도 레퍼런스 시트에서 함께 조회한다. Library 에셋 재사용 시 해당 에셋의 검증된 파라미터를 그대로 적용한다.
+
+> inspector-reference.md가 프로젝트에 없으면 `forge/planning/templates/inspector-reference-template.md`에서 복사하여 생성한다.
+
 ---
 
 ## D-EXT. Element Task Doc 분리 기준 (Split Criteria)

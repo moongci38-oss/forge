@@ -7,10 +7,10 @@ set -euo pipefail
 # Forge Dev-independent runner. Works standalone or via verify.sh e2e.
 #
 # Usage:
-#   bash /home/damools/forge/dev/scripts/e2e-runner.sh                    # local env
-#   bash /home/damools/forge/dev/scripts/e2e-runner.sh --env staging      # staging env
-#   bash /home/damools/forge/dev/scripts/e2e-runner.sh --grep "login"     # filter tests
-#   bash /home/damools/forge/dev/scripts/e2e-runner.sh --project-root /x  # explicit root
+#   bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-runner.sh                    # local env
+#   bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-runner.sh --env staging      # staging env
+#   bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-runner.sh --grep "login"     # filter tests
+#   bash ${FORGE_ROOT:-$HOME/forge}/dev/scripts/e2e-runner.sh --project-root /x  # explicit root
 # =============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

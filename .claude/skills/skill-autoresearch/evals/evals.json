@@ -1,0 +1,41 @@
+{
+  "skill_name": "skill-autoresearch",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run auto-evaluation and improvement loop on the kaizen skill",
+      "expected_output": "AutoResearch cycle with baseline measurement, failure analysis, and improvement",
+      "expectations": [
+        "대상 스킬의 현재 assessment 기준선이 측정되어 있는가?",
+        "실패 분석(어떤 기준이 실패했는지)이 포함되어 있는가?",
+        "SKILL.md 개선 제안이 구체적으로 제시되어 있는가?",
+        "개선 전후 비교(pass_rate 변화)가 계획되어 있는가?",
+        "autoresearch-log.tsv 기록 또는 이력 관리가 언급되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Assess and improve the concise-planning skill using AutoResearch pattern",
+      "expected_output": "AutoResearch cycle with baseline measurement, failure analysis, and improvement",
+      "expectations": [
+        "대상 스킬의 현재 assessment 기준선이 측정되어 있는가?",
+        "실패 분석(어떤 기준이 실패했는지)이 포함되어 있는가?",
+        "SKILL.md 개선 제안이 구체적으로 제시되어 있는가?",
+        "개선 전후 비교(pass_rate 변화)가 계획되어 있는가?",
+        "autoresearch-log.tsv 기록 또는 이력 관리가 언급되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Execute skill quality improvement cycle for the content-creator skill",
+      "expected_output": "AutoResearch cycle with baseline measurement, failure analysis, and improvement",
+      "expectations": [
+        "대상 스킬의 현재 assessment 기준선이 측정되어 있는가?",
+        "실패 분석(어떤 기준이 실패했는지)이 포함되어 있는가?",
+        "SKILL.md 개선 제안이 구체적으로 제시되어 있는가?",
+        "개선 전후 비교(pass_rate 변화)가 계획되어 있는가?",
+        "autoresearch-log.tsv 기록 또는 이력 관리가 언급되어 있는가?"
+      ]
+    }
+  ]
+}

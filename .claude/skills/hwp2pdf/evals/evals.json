@@ -1,0 +1,41 @@
+{
+  "skill_name": "hwp2pdf",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Convert the HWP file at /tmp/test-document.hwp to PDF",
+      "expected_output": "HWP to PDF conversion plan with pipeline steps and output path",
+      "expectations": [
+        "HWP→PDF 변환 파이프라인(hwp5html→HTML→PDF)이 설명되어 있는가?",
+        "변환 결과 저장 경로(_converted/ 또는 구체적 경로)가 명시되어 있는가?",
+        "이미지/표/서식 보존 방법이 언급되어 있는가?",
+        "필요한 도구(hwp5html, Playwright)가 참조되어 있는가?",
+        "변환 실행 명령 또는 스크립트가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Transform a Korean government document (HWP format) to readable PDF",
+      "expected_output": "HWP to PDF conversion plan with pipeline steps and output path",
+      "expectations": [
+        "HWP→PDF 변환 파이프라인(hwp5html→HTML→PDF)이 설명되어 있는가?",
+        "변환 결과 저장 경로(_converted/ 또는 구체적 경로)가 명시되어 있는가?",
+        "이미지/표/서식 보존 방법이 언급되어 있는가?",
+        "필요한 도구(hwp5html, Playwright)가 참조되어 있는가?",
+        "변환 실행 명령 또는 스크립트가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Convert HWP file preserving all tables and images to PDF format",
+      "expected_output": "HWP to PDF conversion plan with pipeline steps and output path",
+      "expectations": [
+        "HWP→PDF 변환 파이프라인(hwp5html→HTML→PDF)이 설명되어 있는가?",
+        "변환 결과 저장 경로(_converted/ 또는 구체적 경로)가 명시되어 있는가?",
+        "이미지/표/서식 보존 방법이 언급되어 있는가?",
+        "필요한 도구(hwp5html, Playwright)가 참조되어 있는가?",
+        "변환 실행 명령 또는 스크립트가 제시되어 있는가?"
+      ]
+    }
+  ]
+}

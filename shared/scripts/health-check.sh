@@ -5,7 +5,7 @@
 QUIET=false
 [[ "$1" == "--quiet" ]] && QUIET=true
 
-FORGE_ROOT="/home/damools/forge"
+FORGE_ROOT="${FORGE_ROOT:-$HOME/forge}"
 WORKSPACE_JSON="$FORGE_ROOT/forge-workspace.json"
 
 GREEN="\033[0;32m"
@@ -67,7 +67,7 @@ else
       fi
     done < <(python3 - <<'PYEOF'
 import json, sys
-data = json.load(open("/home/damools/forge/forge-workspace.json"))
+data = json.load(open(os.environ.get("FORGE_ROOT", os.path.expanduser("~/forge")) + "/forge-workspace.json"))
 for name, conf in data.get("projects", {}).items():
     target = conf.get("devTarget", "null")
     print(f"{name}|{target}")

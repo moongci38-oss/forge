@@ -4,7 +4,7 @@
  *
  * One-command setup for team members. After cloning the forge repo:
  *
- *   node /home/damools/forge/dev/scripts/setup.mjs
+ *   node ~/forge/dev/scripts/setup.mjs
  *
  * This single command does everything:
  *   1. Verify prerequisites (Node.js 18+, ~/.claude/ exists)
@@ -135,7 +135,7 @@ function checkPrerequisites() {
   }
   console.log(`  ~/.claude/ ... OK`);
 
-  // Check if forge is cloned to the correct location (/home/damools/forge/dev/)
+  // Check if forge is cloned to the correct location (~/forge/dev/)
   const expectedForge DevRoot = join(CLAUDE_DIR, 'forge');
   const normalizedActual = normalPath(resolve(FORGE_DEV_ROOT));
   const normalizedExpected = normalPath(resolve(expectedForge DevRoot));
@@ -152,7 +152,7 @@ function checkPrerequisites() {
     if (PLATFORM === 'win32') {
       console.error(`       git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git "$HOME\\.claude\\forge"`);
     } else {
-      console.error('       git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git /home/damools/forge/dev');
+      console.error('       git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git ~/forge/dev');
     }
     process.exit(1);
   }
@@ -643,8 +643,8 @@ async function main() {
     console.log('  forge-sync init <path> --name x  프로젝트 추가');
     console.log('');
     console.log('시스템 업데이트:');
-    console.log('  cd /home/damools/forge/dev && git pull');
-    console.log('  node /home/damools/forge/dev/scripts/setup.mjs --update');
+    console.log('  cd ~/forge/dev && git pull');
+    console.log('  node ~/forge/dev/scripts/setup.mjs --update');
   }
 }
 

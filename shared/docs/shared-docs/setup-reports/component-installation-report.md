@@ -20,7 +20,7 @@
 
 ---
 
-## Final State — Business Workspace (`/home/damools/forge/`)
+## Final State — Business Workspace (`~/forge/`)
 
 ### Skills (39개 활성)
 
@@ -90,7 +90,7 @@
 
 ---
 
-## Final State — Portfolio Project (`/home/damools/mywsl_workspace/portfolio-project/`)
+## Final State — Portfolio Project (`{YOUR_PORTFOLIO_PATH}/`)
 
 ### Skills (25개)
 

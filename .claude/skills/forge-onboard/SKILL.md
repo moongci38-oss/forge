@@ -26,7 +26,7 @@ context: fork
 ### 워크스페이스 자동 추론
 
 ```
-/home/damools/mywsl_workspace/* → wsl
+{YOUR_WSL_WORKSPACE}/* → wsl
 /mnt/e/* 또는 E:/* → windows
 ```
 
@@ -187,8 +187,23 @@ cd ../server && msbuild *.sln /p:Configuration=Debug
 `docs-structure.md` 전역 규칙에 따라 생성:
 
 ```bash
-mkdir -p docs/{guides,tech,planning/{active/forge,done},reviews,infrastructure,walkthroughs,assets,_archive}
+mkdir -p docs/{guides,tech,planning/{active/forge,done},reviews,infrastructure,walkthroughs,assets,references,_archive}
 ```
+
+### 3.5 Inspector Reference Sheet
+
+`forge/planning/templates/inspector-reference-template.md`를 `docs/references/inspector-reference.md`에 복사한다.
+
+```bash
+cp ~/forge/planning/templates/inspector-reference-template.md <project-path>/docs/references/inspector-reference.md
+```
+
+프로젝트 유형에 따라 초기 값 조정:
+- **game (Unity/NGUI)**: Canvas Scaler, UIRect anchor, ParticleSystem 섹션 활성
+- **game (Unity/UGUI)**: RectTransform, Canvas Scaler, Animator 섹션 활성
+- **web (React/Next.js)**: CSS props, design tokens, responsive breakpoints 섹션으로 변환
+
+> 이 시트는 AI-Human 분업의 핵심. AI가 Spec/코드 작성 시 이 시트를 참조하고, Human이 에디터/브라우저에서 교정한 값을 누적한다.
 
 ## Phase 4: forge-workspace.json 연결
 

@@ -1,0 +1,41 @@
+{
+  "skill_name": "audit-context",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a context engineering audit on the current Forge system",
+      "expected_output": "7-Layer context audit with RAG maturity and failure pattern analysis",
+      "expectations": [
+        "7-Layer Context Architecture 기준의 레이어별 평가가 포함되어 있는가?",
+        "RAG 성숙도 평가가 포함되어 있는가?",
+        "컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot) 중 하나 이상 언급되어 있는가?",
+        "점수 또는 커버리지 비율이 정량적으로 제시되어 있는가?",
+        "개선 권고사항이 구체적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate RAG maturity and context window management for a document QA system",
+      "expected_output": "7-Layer context audit with RAG maturity and failure pattern analysis",
+      "expectations": [
+        "7-Layer Context Architecture 기준의 레이어별 평가가 포함되어 있는가?",
+        "RAG 성숙도 평가가 포함되어 있는가?",
+        "컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot) 중 하나 이상 언급되어 있는가?",
+        "점수 또는 커버리지 비율이 정량적으로 제시되어 있는가?",
+        "개선 권고사항이 구체적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess context architecture of a system using memory + vector DB + conversation history",
+      "expected_output": "7-Layer context audit with RAG maturity and failure pattern analysis",
+      "expectations": [
+        "7-Layer Context Architecture 기준의 레이어별 평가가 포함되어 있는가?",
+        "RAG 성숙도 평가가 포함되어 있는가?",
+        "컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot) 중 하나 이상 언급되어 있는가?",
+        "점수 또는 커버리지 비율이 정량적으로 제시되어 있는가?",
+        "개선 권고사항이 구체적으로 제시되어 있는가?"
+      ]
+    }
+  ]
+}

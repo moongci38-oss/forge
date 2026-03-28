@@ -1,0 +1,41 @@
+{
+  "skill_name": "system-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a full 5-axis ACHCE system audit on the Forge pipeline",
+      "expected_output": "5-axis integrated audit with parallel agents and unified roadmap",
+      "expectations": [
+        "5개 축(Agentic/Context/Harness/Cost/Human-AI) 모두가 평가 대상으로 포함되어 있는가?",
+        "병렬 서브에이전트 스폰 계획이 있는가?",
+        "축간 트레이드오프 분석이 포함되어 있는가?",
+        "통합 개선 로드맵이 제시되어 있는가?",
+        "종합 점수 또는 등급이 산출되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Execute unified audit covering Agentic, Context, Harness, Cost, and Human-AI axes",
+      "expected_output": "5-axis integrated audit with parallel agents and unified roadmap",
+      "expectations": [
+        "5개 축(Agentic/Context/Harness/Cost/Human-AI) 모두가 평가 대상으로 포함되어 있는가?",
+        "병렬 서브에이전트 스폰 계획이 있는가?",
+        "축간 트레이드오프 분석이 포함되어 있는가?",
+        "통합 개선 로드맵이 제시되어 있는가?",
+        "종합 점수 또는 등급이 산출되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Perform comprehensive AI system quality assessment",
+      "expected_output": "5-axis integrated audit with parallel agents and unified roadmap",
+      "expectations": [
+        "5개 축(Agentic/Context/Harness/Cost/Human-AI) 모두가 평가 대상으로 포함되어 있는가?",
+        "병렬 서브에이전트 스폰 계획이 있는가?",
+        "축간 트레이드오프 분석이 포함되어 있는가?",
+        "통합 개선 로드맵이 제시되어 있는가?",
+        "종합 점수 또는 등급이 산출되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "skill_name": "video-reference-guide",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Analyze this game trailer video for combat animation sequences and timing",
+      "expected_output": "Video analysis with timeline table, tween parameters, and Unity implementation guide",
+      "expectations": [
+        "영상 분석 방법(Gemini 프레임 분석)이 설명되어 있는가?",
+        "타임라인 시퀀스 테이블이 생성되어 있는가?",
+        "DOTween/Tween 파라미터 추정이 포함되어 있는가?",
+        "Unity 구현 가이드 또는 코드 스니펫이 제시되어 있는가?",
+        "프레임별 분석 결과가 구조화되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Extract UI transition effects from a mobile game walkthrough video",
+      "expected_output": "Video analysis with timeline table, tween parameters, and Unity implementation guide",
+      "expectations": [
+        "영상 분석 방법(Gemini 프레임 분석)이 설명되어 있는가?",
+        "타임라인 시퀀스 테이블이 생성되어 있는가?",
+        "DOTween/Tween 파라미터 추정이 포함되어 있는가?",
+        "Unity 구현 가이드 또는 코드 스니펫이 제시되어 있는가?",
+        "프레임별 분석 결과가 구조화되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate implementation guide from a boss fight cutscene video",
+      "expected_output": "Video analysis with timeline table, tween parameters, and Unity implementation guide",
+      "expectations": [
+        "영상 분석 방법(Gemini 프레임 분석)이 설명되어 있는가?",
+        "타임라인 시퀀스 테이블이 생성되어 있는가?",
+        "DOTween/Tween 파라미터 추정이 포함되어 있는가?",
+        "Unity 구현 가이드 또는 코드 스니펫이 제시되어 있는가?",
+        "프레임별 분석 결과가 구조화되어 있는가?"
+      ]
+    }
+  ]
+}

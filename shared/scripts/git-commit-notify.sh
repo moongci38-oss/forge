@@ -35,7 +35,7 @@ else:
 [ -z "$MSG" ] && MSG="Commit completed"
 
 # Delegate to claude-notify.sh (handles BurntToast + sound)
-NOTIFY_SCRIPT="/home/damools/.claude/hooks/claude-notify.sh"
+NOTIFY_SCRIPT="$HOME/.claude/hooks/claude-notify.sh"
 if [ -f "$NOTIFY_SCRIPT" ]; then
     bash "$NOTIFY_SCRIPT" "complete" "$MSG" 2>/dev/null
 elif command -v notify-send &>/dev/null && [ -n "${DISPLAY:-}" ]; then

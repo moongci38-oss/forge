@@ -11,15 +11,15 @@
  *   - rules, agents, skills, commands, prompts → ~/.claude/ (global, all projects)
  *   - templates → project .specify/templates/ (project-only, scope: all)
  *   - hooks → project .claude/hooks/ (project-only, --include-recommended)
- *   - docs, shared-docs → no longer deployed (reference from /home/damools/forge/dev/ directly)
+ *   - docs, shared-docs → no longer deployed (reference from ~/forge/dev/ directly)
  *
  * Override tracking:
  *   Only templates use per-project state-based override tracking.
  *   Global components always sync to match source (no override).
  *
  * Installed at: ~/.claude/scripts/forge-sync.mjs
- * Source:       /home/damools/forge/dev/
- * Manifest:     /home/damools/forge/dev/manifest.json
+ * Source:       ~/forge/dev/
+ * Manifest:     ~/forge/dev/manifest.json
  *
  * Usage:
  *   node ~/.claude/scripts/forge-sync.mjs <command> [args]
@@ -784,7 +784,7 @@ Deployment:
   Global (all projects):  rules, agents, skills, commands, prompts → ~/.claude/
   Project (scope: all):   templates → .specify/templates/
                           gitlab-spec-kit → .gitlab/ + scripts/
-  Reference only:         docs, shared-docs → /home/damools/forge/dev/ (not deployed)
+  Reference only:         docs, shared-docs → ~/forge/dev/ (not deployed)
 
 Source: ${normalPath(FORGE_DEV_ROOT)}
 Manifest: ${normalPath(MANIFEST_PATH)}`);

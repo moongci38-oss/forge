@@ -1,0 +1,41 @@
+{
+  "skill_name": "weekly-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run the weekly research pipeline for AI and business trends",
+      "expected_output": "Weekly research pipeline with 3 subagents and consolidation plan",
+      "expectations": [
+        "3개 서브에이전트(tech/biz/S1) 병렬 수집 계획이 있는가?",
+        "기술 뉴스 수집 범위가 명시되어 있는가?",
+        "비즈니스 뉴스 수집 범위가 명시되어 있는가?",
+        "통합/검증(Wave 2) 단계가 계획되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Execute weekly 3-subagent research collection and analysis",
+      "expected_output": "Weekly research pipeline with 3 subagents and consolidation plan",
+      "expectations": [
+        "3개 서브에이전트(tech/biz/S1) 병렬 수집 계획이 있는가?",
+        "기술 뉴스 수집 범위가 명시되어 있는가?",
+        "비즈니스 뉴스 수집 범위가 명시되어 있는가?",
+        "통합/검증(Wave 2) 단계가 계획되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Perform weekly technology and business intelligence scan",
+      "expected_output": "Weekly research pipeline with 3 subagents and consolidation plan",
+      "expectations": [
+        "3개 서브에이전트(tech/biz/S1) 병렬 수집 계획이 있는가?",
+        "기술 뉴스 수집 범위가 명시되어 있는가?",
+        "비즈니스 뉴스 수집 범위가 명시되어 있는가?",
+        "통합/검증(Wave 2) 단계가 계획되어 있는가?",
+        "저장 경로(forge-outputs/01-research/)가 명시되어 있는가?"
+      ]
+    }
+  ]
+}

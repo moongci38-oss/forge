@@ -1,0 +1,41 @@
+{
+  "skill_name": "forge-onboard",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Onboard a new Next.js project at /path/to/test-project to the Forge pipeline",
+      "expected_output": "4-phase onboarding plan with manifest registration and scaffolding",
+      "expectations": [
+        "프로젝트 등록 단계(manifest, forge-workspace.json)가 안내되어 있는가?",
+        "규칙/템플릿 배포 계획이 포함되어 있는가?",
+        "CLAUDE.md 또는 constitution 스캐폴딩이 언급되어 있는가?",
+        "프로젝트 경로가 구체적으로 참조되어 있는가?",
+        "4단계 온보딩 프로세스가 순서대로 설명되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Register an existing Unity game project for Forge Dev workflow",
+      "expected_output": "4-phase onboarding plan with manifest registration and scaffolding",
+      "expectations": [
+        "프로젝트 등록 단계(manifest, forge-workspace.json)가 안내되어 있는가?",
+        "규칙/템플릿 배포 계획이 포함되어 있는가?",
+        "CLAUDE.md 또는 constitution 스캐폴딩이 언급되어 있는가?",
+        "프로젝트 경로가 구체적으로 참조되어 있는가?",
+        "4단계 온보딩 프로세스가 순서대로 설명되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Set up Forge integration for a Python FastAPI backend project",
+      "expected_output": "4-phase onboarding plan with manifest registration and scaffolding",
+      "expectations": [
+        "프로젝트 등록 단계(manifest, forge-workspace.json)가 안내되어 있는가?",
+        "규칙/템플릿 배포 계획이 포함되어 있는가?",
+        "CLAUDE.md 또는 constitution 스캐폴딩이 언급되어 있는가?",
+        "프로젝트 경로가 구체적으로 참조되어 있는가?",
+        "4단계 온보딩 프로세스가 순서대로 설명되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "skill_name": "library-search",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Search for warrior sprite assets in the Prefab Visual Library",
+      "expected_output": "Library search results with match classification and cost savings estimate",
+      "expectations": [
+        "검색 키워드 또는 태그가 명시되어 있는가?",
+        "검색 결과(매칭/부분매칭/없음)가 분류되어 있는가?",
+        "매칭된 에셋의 경로 또는 파일명이 제시되어 있는가?",
+        "MCP 생성 비용 절감 추정이 언급되어 있는가?",
+        "다음 단계(재활용/조합/신규 생성) 권장이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Find UI button templates matching fantasy RPG style",
+      "expected_output": "Library search results with match classification and cost savings estimate",
+      "expectations": [
+        "검색 키워드 또는 태그가 명시되어 있는가?",
+        "검색 결과(매칭/부분매칭/없음)가 분류되어 있는가?",
+        "매칭된 에셋의 경로 또는 파일명이 제시되어 있는가?",
+        "MCP 생성 비용 절감 추정이 언급되어 있는가?",
+        "다음 단계(재활용/조합/신규 생성) 권장이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Search library for fire/explosion VFX particle effects",
+      "expected_output": "Library search results with match classification and cost savings estimate",
+      "expectations": [
+        "검색 키워드 또는 태그가 명시되어 있는가?",
+        "검색 결과(매칭/부분매칭/없음)가 분류되어 있는가?",
+        "매칭된 에셋의 경로 또는 파일명이 제시되어 있는가?",
+        "MCP 생성 비용 절감 추정이 언급되어 있는가?",
+        "다음 단계(재활용/조합/신규 생성) 권장이 포함되어 있는가?"
+      ]
+    }
+  ]
+}

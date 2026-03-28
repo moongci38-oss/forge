@@ -3,22 +3,22 @@
   "workspaces": {
     "wsl": {
       "description": "WSL Linux 프로젝트",
-      "basePath": "/home/damools/mywsl_workspace"
+      "basePath": "{YOUR_WSL_WORKSPACE}"
     },
     "windows": {
       "description": "Windows 프로젝트",
-      "basePath": "E:/new_workspace"
+      "basePath": "{YOUR_WINDOWS_WORKSPACE}"
     }
   },
   "targets": {
     "portfolio": {
-      "path": "/home/damools/mywsl_workspace/portfolio-project",
+      "path": "{YOUR_PORTFOLIO_PATH}",
       "scope": "all",
       "description": "Next.js + NestJS 포트폴리오 플랫폼",
       "workspace": "wsl"
     },
     "godblade": {
-      "path": "/mnt/e/new_workspace/god_Sword/src",
+      "path": "{YOUR_GAME_PROJECT_PATH}",
       "scope": "all",
       "description": "Unity 게임 프로젝트 (C#)",
       "workspace": "windows"

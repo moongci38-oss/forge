@@ -1,0 +1,41 @@
+{
+  "skill_name": "game-asset-generate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate a 64x64 warrior sprite with cel-shading style for a 2D RPG",
+      "expected_output": "Asset generation pipeline with library search, soul prompt, and critic evaluation",
+      "expectations": [
+        "Library-First 탐색이 먼저 수행되거나 언급되어 있는가?",
+        "12요소 Soul 프롬프트 또는 프롬프트 구성이 설명되어 있는가?",
+        "MCP 도구 라우팅(FLUX/Gemini/Replicate)이 결정되어 있는가?",
+        "에셋 생성 결과물 또는 생성 계획이 구체적으로 제시되어 있는가?",
+        "크리틱(asset-critic) 평가 또는 품질 검증 단계가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a fire VFX particle effect for a side-scrolling action game",
+      "expected_output": "Asset generation pipeline with library search, soul prompt, and critic evaluation",
+      "expectations": [
+        "Library-First 탐색이 먼저 수행되거나 언급되어 있는가?",
+        "12요소 Soul 프롬프트 또는 프롬프트 구성이 설명되어 있는가?",
+        "MCP 도구 라우팅(FLUX/Gemini/Replicate)이 결정되어 있는가?",
+        "에셋 생성 결과물 또는 생성 계획이 구체적으로 제시되어 있는가?",
+        "크리틱(asset-critic) 평가 또는 품질 검증 단계가 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate UI button assets (normal/hover/pressed states) for a fantasy game menu",
+      "expected_output": "Asset generation pipeline with library search, soul prompt, and critic evaluation",
+      "expectations": [
+        "Library-First 탐색이 먼저 수행되거나 언급되어 있는가?",
+        "12요소 Soul 프롬프트 또는 프롬프트 구성이 설명되어 있는가?",
+        "MCP 도구 라우팅(FLUX/Gemini/Replicate)이 결정되어 있는가?",
+        "에셋 생성 결과물 또는 생성 계획이 구체적으로 제시되어 있는가?",
+        "크리틱(asset-critic) 평가 또는 품질 검증 단계가 포함되어 있는가?"
+      ]
+    }
+  ]
+}

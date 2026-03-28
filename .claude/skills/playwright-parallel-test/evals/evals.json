@@ -1,0 +1,41 @@
+{
+  "skill_name": "playwright-parallel-test",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run parallel UI tests on http://localhost:3000 covering form validation, navigation, and responsive layout",
+      "expected_output": "Parallel test plan with 3 agents and unified report",
+      "expectations": [
+        "3개 에이전트(form validation, navigation, responsive layout) 병렬 실행이 계획되어 있는가?",
+        "대상 URL 또는 테스트 대상이 명시되어 있는가?",
+        "각 에이전트의 테스트 범위가 구분되어 있는가?",
+        "테스트 결과 통합(PASS/FAIL 리포트)이 계획되어 있는가?",
+        "스크린샷 또는 증거 수집이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Execute 3-agent parallel test suite for the admin dashboard",
+      "expected_output": "Parallel test plan with 3 agents and unified report",
+      "expectations": [
+        "3개 에이전트(form validation, navigation, responsive layout) 병렬 실행이 계획되어 있는가?",
+        "대상 URL 또는 테스트 대상이 명시되어 있는가?",
+        "각 에이전트의 테스트 범위가 구분되어 있는가?",
+        "테스트 결과 통합(PASS/FAIL 리포트)이 계획되어 있는가?",
+        "스크린샷 또는 증거 수집이 포함되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Test the checkout flow with parallel form, routing, and responsive agents",
+      "expected_output": "Parallel test plan with 3 agents and unified report",
+      "expectations": [
+        "3개 에이전트(form validation, navigation, responsive layout) 병렬 실행이 계획되어 있는가?",
+        "대상 URL 또는 테스트 대상이 명시되어 있는가?",
+        "각 에이전트의 테스트 범위가 구분되어 있는가?",
+        "테스트 결과 통합(PASS/FAIL 리포트)이 계획되어 있는가?",
+        "스크린샷 또는 증거 수집이 포함되어 있는가?"
+      ]
+    }
+  ]
+}

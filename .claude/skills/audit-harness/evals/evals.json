@@ -1,0 +1,41 @@
+{
+  "skill_name": "audit-harness",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run an AI harness engineering audit on the current Forge system",
+      "expected_output": "Harness audit with CLEAR metrics, test coverage, and OWASP assessment",
+      "expectations": [
+        "CLEAR 프레임워크 기준의 평가가 포함되어 있는가?",
+        "3-Layer 테스트 아키텍처(Unit/Integration/E2E) 커버리지가 평가되어 있는가?",
+        "OWASP Agentic Top 10 관련 보안 항목이 언급되어 있는가?",
+        "가드레일 패턴 또는 안전장치 현황이 분석되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate testing and guardrail coverage for an AI code review agent",
+      "expected_output": "Harness audit with CLEAR metrics, test coverage, and OWASP assessment",
+      "expectations": [
+        "CLEAR 프레임워크 기준의 평가가 포함되어 있는가?",
+        "3-Layer 테스트 아키텍처(Unit/Integration/E2E) 커버리지가 평가되어 있는가?",
+        "OWASP Agentic Top 10 관련 보안 항목이 언급되어 있는가?",
+        "가드레일 패턴 또는 안전장치 현황이 분석되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess observability and control mechanisms for a customer service chatbot",
+      "expected_output": "Harness audit with CLEAR metrics, test coverage, and OWASP assessment",
+      "expectations": [
+        "CLEAR 프레임워크 기준의 평가가 포함되어 있는가?",
+        "3-Layer 테스트 아키텍처(Unit/Integration/E2E) 커버리지가 평가되어 있는가?",
+        "OWASP Agentic Top 10 관련 보안 항목이 언급되어 있는가?",
+        "가드레일 패턴 또는 안전장치 현황이 분석되어 있는가?",
+        "점수 또는 등급이 정량적으로 제시되어 있는가?"
+      ]
+    }
+  ]
+}

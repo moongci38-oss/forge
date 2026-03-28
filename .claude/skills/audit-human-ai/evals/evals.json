@@ -1,0 +1,41 @@
+{
+  "skill_name": "audit-human-ai",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a Human-AI boundary design audit on the current Forge system",
+      "expected_output": "Human-AI boundary audit with autonomy level and gate pattern analysis",
+      "expectations": [
+        "5-Level Autonomy 기준의 현재 레벨이 명시되어 있는가?",
+        "에스컬레이션 트리거 유형이 분석되어 있는가?",
+        "게이트 패턴(STOP/AUTO-PASS 등)이 평가되어 있는가?",
+        "Override Rate 또는 신뢰 칼리브레이션 지표가 포함되어 있는가?",
+        "자율성-감독 경계 최적화 권고가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate autonomy levels and escalation design for an AI writing assistant",
+      "expected_output": "Human-AI boundary audit with autonomy level and gate pattern analysis",
+      "expectations": [
+        "5-Level Autonomy 기준의 현재 레벨이 명시되어 있는가?",
+        "에스컬레이션 트리거 유형이 분석되어 있는가?",
+        "게이트 패턴(STOP/AUTO-PASS 등)이 평가되어 있는가?",
+        "Override Rate 또는 신뢰 칼리브레이션 지표가 포함되어 있는가?",
+        "자율성-감독 경계 최적화 권고가 제시되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess gate patterns and trust calibration for an autonomous trading bot",
+      "expected_output": "Human-AI boundary audit with autonomy level and gate pattern analysis",
+      "expectations": [
+        "5-Level Autonomy 기준의 현재 레벨이 명시되어 있는가?",
+        "에스컬레이션 트리거 유형이 분석되어 있는가?",
+        "게이트 패턴(STOP/AUTO-PASS 등)이 평가되어 있는가?",
+        "Override Rate 또는 신뢰 칼리브레이션 지표가 포함되어 있는가?",
+        "자율성-감독 경계 최적화 권고가 제시되어 있는가?"
+      ]
+    }
+  ]
+}

@@ -25,17 +25,17 @@ HWP → hwp5html(HTML+이미지) → Playwright(PDF)
 
 ### 단일 파일
 ```bash
-python3 /home/damools/forge/shared/scripts/hwp2pdf.py "파일.hwp"
+python3 ~/forge/shared/scripts/hwp2pdf.py "파일.hwp"
 ```
 
 ### 폴더 일괄
 ```bash
-python3 /home/damools/forge/shared/scripts/hwp2pdf.py "폴더/"
+python3 ~/forge/shared/scripts/hwp2pdf.py "폴더/"
 ```
 
 ### 출력 폴더 지정
 ```bash
-python3 /home/damools/forge/shared/scripts/hwp2pdf.py "파일.hwp" -o "/출력/경로/"
+python3 ~/forge/shared/scripts/hwp2pdf.py "파일.hwp" -o "/출력/경로/"
 ```
 
 ## 출력 구조

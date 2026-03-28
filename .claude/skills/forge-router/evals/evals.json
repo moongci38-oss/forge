@@ -1,0 +1,41 @@
+{
+  "skill_name": "forge-router",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Fix the login button not working on the dashboard page",
+      "expected_output": "Correct dev pipeline routing with hotfix/standard classification",
+      "expectations": [
+        "코드 변경 요청이 올바르게 감지되어 있는가?",
+        "Hotfix vs Standard 분류가 수행되어 있는가?",
+        "Forge Dev 파이프라인 진입점이 결정되어 있는가?",
+        "프로젝트 컨텍스트(.specify/ 존재 여부 등)가 확인되어 있는가?",
+        "다음 단계(Spec 작성, 브랜치 생성 등)가 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add a new REST API endpoint for user preferences",
+      "expected_output": "Correct dev pipeline routing with hotfix/standard classification",
+      "expectations": [
+        "코드 변경 요청이 올바르게 감지되어 있는가?",
+        "Hotfix vs Standard 분류가 수행되어 있는가?",
+        "Forge Dev 파이프라인 진입점이 결정되어 있는가?",
+        "프로젝트 컨텍스트(.specify/ 존재 여부 등)가 확인되어 있는가?",
+        "다음 단계(Spec 작성, 브랜치 생성 등)가 안내되어 있는가?"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Refactor the authentication middleware to support JWT refresh tokens",
+      "expected_output": "Correct dev pipeline routing with hotfix/standard classification",
+      "expectations": [
+        "코드 변경 요청이 올바르게 감지되어 있는가?",
+        "Hotfix vs Standard 분류가 수행되어 있는가?",
+        "Forge Dev 파이프라인 진입점이 결정되어 있는가?",
+        "프로젝트 컨텍스트(.specify/ 존재 여부 등)가 확인되어 있는가?",
+        "다음 단계(Spec 작성, 브랜치 생성 등)가 안내되어 있는가?"
+      ]
+    }
+  ]
+}
