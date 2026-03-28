@@ -347,12 +347,28 @@ def convert_md_to_docx(md_path, docx_path):
 
     doc = Document()
     set_style_defaults(doc)
-    # 디딤돌 양식 여백: 상하 2.54cm, 좌우 2.54cm
+    # 디딤돌 양식 여백: 상하 2.54cm, 좌우 2.54cm + 페이지 번호
     for section in doc.sections:
         section.top_margin = Cm(2.54)
         section.bottom_margin = Cm(2.54)
         section.left_margin = Cm(2.54)
         section.right_margin = Cm(2.54)
+        # 페이지 번호 (하단 중앙)
+        footer = section.footer
+        footer.is_linked_to_previous = False
+        fp = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+        fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = fp.add_run()
+        fldChar1 = run._element.makeelement(qn('w:fldChar'), {qn('w:fldCharType'): 'begin'})
+        run._element.append(fldChar1)
+        run2 = fp.add_run()
+        instrText = run2._element.makeelement(qn('w:instrText'), {})
+        instrText.text = ' PAGE '
+        run2._element.append(instrText)
+        run3 = fp.add_run()
+        fldChar2 = run3._element.makeelement(qn('w:fldChar'), {qn('w:fldCharType'): 'end'})
+        run3._element.append(fldChar2)
+        set_font(run, FONT_BODY, Pt(9))
 
     i = 0
     table_buffer = []
