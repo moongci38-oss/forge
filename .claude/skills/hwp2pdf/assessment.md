@@ -1,23 +1,23 @@
 ---
 skill: hwp2pdf
-version: 1
+version: 2
 ---
 
 # Assessment: hwp2pdf
 
 ## 테스트 입력
 
-- input_1: "Convert the HWP file at /tmp/test-document.hwp to PDF"
-- input_2: "Transform a Korean government document (HWP format) to readable PDF"
-- input_3: "Convert HWP file preserving all tables and images to PDF format"
+- input_1: "Convert this HWP file to PDF so I can read it with images and tables intact"
+- input_2: "Read this Korean government document in HWP format and extract the text content"
+- input_3: "Parse the HWP grant application form and identify all fillable sections"
 
 ## 평가 기준 (Yes/No)
 
-1. HWP→PDF 변환 파이프라인(hwp5html→HTML→PDF)이 설명되어 있는가?
-2. 변환 결과 저장 경로(_converted/ 또는 구체적 경로)가 명시되어 있는가?
-3. 이미지/표/서식 보존 방법이 언급되어 있는가?
-4. 필요한 도구(hwp5html, Playwright)가 참조되어 있는가?
-5. 변환 실행 명령 또는 스크립트가 제시되어 있는가?
+1. Output MUST detect HWP file and trigger the conversion pipeline using ~/forge/shared/scripts/hwp2pdf.py.
+2. Output MUST produce a readable PDF or text extraction with images, tables, and shapes preserved.
+3. Output MUST handle Korean text encoding correctly (UTF-8, no mojibake).
+4. Output MUST report conversion success/failure with file path of the output.
+5. Output MUST provide structured content summary (sections, tables count, image count) after conversion.
 
 ## 채점
 

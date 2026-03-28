@@ -1,23 +1,23 @@
 ---
 skill: game-asset-generate
-version: 1
+version: 2
 ---
 
 # Assessment: game-asset-generate
 
 ## 테스트 입력
 
-- input_1: "Generate a 64x64 warrior sprite with cel-shading style for a 2D RPG"
-- input_2: "Create a fire VFX particle effect for a side-scrolling action game"
-- input_3: "Generate UI button assets (normal/hover/pressed states) for a fantasy game menu"
+- input_1: "Generate a set of fantasy RPG UI button sprites for GodBlade game with consistent style"
+- input_2: "Create VFX particle effect sprites for a gacha card reveal animation"
+- input_3: "Produce background art for a medieval castle interior game scene"
 
 ## 평가 기준 (Yes/No)
 
-1. Library-First 탐색이 먼저 수행되거나 언급되어 있는가?
-2. 12요소 Soul 프롬프트 또는 프롬프트 구성이 설명되어 있는가?
-3. MCP 도구 라우팅(FLUX/Gemini/Replicate)이 결정되어 있는가?
-4. 에셋 생성 결과물 또는 생성 계획이 구체적으로 제시되어 있는가?
-5. 크리틱(asset-critic) 평가 또는 품질 검증 단계가 포함되어 있는가?
+1. Output MUST execute Library-First search (/library-search) before generating any new asset.
+2. Output MUST assemble a 12-element Soul prompt using /soul-prompt-craft with style-guide context.
+3. Output MUST route to the correct MCP tool based on asset type (NanoBanana/Replicate/Stitch).
+4. Output MUST run /asset-critic 6-axis quality check on generated assets with scores.
+5. Output MUST save assets to the correct project path and propose Library registration for approved assets.
 
 ## 채점
 

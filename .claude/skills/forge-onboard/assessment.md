@@ -1,23 +1,23 @@
 ---
 skill: forge-onboard
-version: 1
+version: 2
 ---
 
 # Assessment: forge-onboard
 
 ## 테스트 입력
 
-- input_1: "Onboard a new Next.js project at ~/test-project to the Forge pipeline"
-- input_2: "Register an existing Unity game project for Forge Dev workflow"
-- input_3: "Set up Forge integration for a Python FastAPI backend project"
+- input_1: "Onboard a new Next.js project at ~/test-project to the Forge pipeline including Inspector Reference setup"
+- input_2: "Register an existing Unity game project for Forge Dev workflow — run all 4 phases including Phase 3.5"
+- input_3: "Set up Forge integration for a Python FastAPI backend project and deploy rules, templates, and docs structure"
 
 ## 평가 기준 (Yes/No)
 
-1. 프로젝트 등록 단계(manifest, forge-workspace.json)가 안내되어 있는가?
-2. 규칙/템플릿 배포 계획이 포함되어 있는가?
-3. CLAUDE.md 또는 constitution 스캐폴딩이 언급되어 있는가?
-4. 프로젝트 경로가 구체적으로 참조되어 있는가?
-5. 4단계 온보딩 프로세스가 순서대로 설명되어 있는가?
+1. Output MUST execute Phase 1 (forge-sync init) and Phase 2 (forge-sync sync with rules, templates, hooks) in order.
+2. Output MUST scaffold Phase 3 artifacts: CLAUDE.md, .specify/constitution.md, .claude/rules/agent-teams.md, and verify.sh.
+3. Output MUST execute Phase 3.5 Inspector Reference auto-deployment — copying template to docs/references/inspector-reference.md.
+4. Output MUST create the full docs/ folder structure including references/ subfolder.
+5. Output MUST complete Phase 4 (forge-workspace.json registration) and display completion checklist.
 
 ## 채점
 

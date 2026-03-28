@@ -15,6 +15,15 @@ ASSESSMENT_FILE="${2:-}"
 RUNS="${3:-3}"
 MAX_PARALLEL="${4:-6}"
 
+# Auto-resolve assessment file if not provided
+if [ -z "$ASSESSMENT_FILE" ] && [ -n "$SKILL_NAME" ]; then
+    FORGE_ROOT_TMP="${FORGE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/forge")}"
+    SKILL_DIR_TMP="$FORGE_ROOT_TMP/.claude/skills/$SKILL_NAME"
+    if [ -f "$SKILL_DIR_TMP/assessment.md" ]; then
+        ASSESSMENT_FILE="$SKILL_DIR_TMP/assessment.md"
+    fi
+fi
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
