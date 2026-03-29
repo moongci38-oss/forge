@@ -3,38 +3,38 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Analyze this game screenshot for UI layout and color palette extraction",
-      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "prompt": "Analyze this game screenshot for UI layout — decompose each element with position, component type, Z-order, and Unity Anchor settings",
+      "expected_output": "Full UI decomposition with component table, color palette, prefab tree, and implementation guide",
       "expectations": [
-        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
-        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
-        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
-        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
-        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+        "출력 첫 줄에 분석 모드가 선언되어 있는가? (기본 모드 / Task Doc 모드 / 시안 분석 모드 / 구현 검증 모드)",
+        "컴포넌트 분해 테이블이 마크다운 테이블로 출력되고, 최소 5행 이상인가? (컴포넌트명, 타입, 반복, Z순서, 크기, 색상 Hex, 텍스트, 구현 노트)",
+        "컬러 팔레트가 #RRGGBB Hex로 최소 3색 이상 추출되고, 토큰명(--color-{용도})이 부여되었는가?",
+        "Prefab 계층 트리가 코드 블록으로 출력되고, 분해 테이블의 모든 요소가 트리에 포함되었는가?",
+        "구현 가이드에 Canvas 설정, Anchor/Layout 추정, (추정)/(확정) 태그가 포함되었는가?"
       ]
     },
     {
       "id": 2,
-      "prompt": "Compare this competitor app screenshot with our current design",
-      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "prompt": "Compare this competitor app screenshot with our current design — extract UI element breakdown and color palette",
+      "expected_output": "Competitive analysis with decomposition table, palette comparison, and UX pattern notes",
       "expectations": [
-        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
-        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
-        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
-        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
-        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+        "출력 첫 줄에 분석 모드가 선언되어 있는가?",
+        "컴포넌트 분해 테이블이 마크다운 테이블로 출력되고, 최소 5행 이상인가?",
+        "컬러 팔레트가 #RRGGBB Hex로 최소 3색 이상 추출되었는가? (자연어 색상명만 있으면 FAIL)",
+        "경쟁작 비교 시 차이점/공통점이 구조화되어 있는가?",
+        "Prefab 계층 트리 또는 레이아웃 구조가 코드 블록으로 출력되었는가?"
       ]
     },
     {
       "id": 3,
-      "prompt": "Verify implementation matches the design spec by analyzing this screenshot",
-      "expected_output": "Screenshot analysis with UI structure, color palette, and implementation guide",
+      "prompt": "Verify implementation matches the design spec by analyzing this screenshot in Task Doc mode",
+      "expected_output": "Task Doc mode output with Section 7 (Prefab hierarchy), Section 10 (design tokens), Section 16 (reference binding)",
       "expectations": [
-        "분석 유형(UI 구조, 컬러 팔레트, 경쟁작 비교, 구현 검증)이 식별되어 있는가?",
-        "UI 요소 또는 레이아웃 구조가 식별/설명되어 있는가?",
-        "색상 코드(Hex) 또는 디자인 토큰이 추출되어 있는가?",
-        "구현 가이드 또는 개선 제안이 포함되어 있는가?",
-        "구조화된 출력(테이블, 목록)으로 정리되어 있는가?"
+        "출력 첫 줄에 'Task Doc 모드' 또는 '구현 검증 모드'가 선언되어 있는가?",
+        "Section 7 형식(Prefab 계층 구조)으로 트리 + 컴포넌트 테이블이 출력되었는가?",
+        "Section 10 형식(디자인 토큰 바인딩)으로 토큰명/값/출처 테이블이 출력되었는가?",
+        "모든 추정값에 (추정) 태그가 붙어 있는가?",
+        "Gemini 응답에 누락된 필수 요소를 AI가 보완했거나, 5개 필수 요소가 모두 존재하는가?"
       ]
     }
   ]
