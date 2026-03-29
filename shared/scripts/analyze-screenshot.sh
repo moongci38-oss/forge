@@ -1,25 +1,30 @@
 #!/bin/bash
 # analyze-screenshot.sh — Gemini Vision API 이미지 분석 CLI wrapper
-# Usage: analyze-screenshot.sh <image-path-or-url> [output-file] [prompt]
+# Usage: analyze-screenshot.sh <image-path-or-url> [output-file] [prompt] [image2] [image3]
 #
 # - image-path-or-url: 로컬 이미지 경로 (png/jpg/jpeg/webp/gif/bmp) 또는 URL (http/https)
 # - output-file: 분석 결과 저장 경로 (캐싱 — 파일 존재 시 API 미호출)
 # - prompt: 분석 관점 지시 (기본: 게임 UI 레이아웃 분석)
+# - image2, image3: 비교 분석용 추가 이미지 (선택)
 #
 # 환경변수:
 #   GEMINI_API_KEY — Gemini API 키 (필수)
+#   GEMINI_MODEL  — 모델명 (기본: gemini-2.5-flash)
 #
 # 예시:
 #   analyze-screenshot.sh ./lobby-ui.png
 #   analyze-screenshot.sh ./lobby-ui.png ./analysis.md "HUD 레이아웃 분석"
-#   analyze-screenshot.sh ./competitor-shop.jpg ./shop-analysis.md "경쟁작 상점 UI 비교 분석"
-#   analyze-screenshot.sh "https://example.com/game-screenshot.png" ./analysis.md
+#   analyze-screenshot.sh ./ref.png ./compare.md "구현 검증" ./impl.png
+#   analyze-screenshot.sh "https://example.com/screenshot.png" ./analysis.md
 
 set -euo pipefail
 
-IMAGE_INPUT="${1:?Usage: analyze-screenshot.sh <image-path-or-url> [output-file] [prompt]}"
+IMAGE_INPUT="${1:?Usage: analyze-screenshot.sh <image-path-or-url> [output-file] [prompt] [image2] [image3]}"
 OUTPUT_FILE="${2:-}"
-PROMPT="${3:-다음 게임 스크린샷의 UI 레이아웃을 분석해주세요. 화면 영역별로 위치, 크기 비율, 포함된 컴포넌트, Unity UGUI 구현 방법(Canvas 설정, Layout Group, Anchor)을 표 형식으로 정리해주세요. 컬러 팔레트(Hex 값)도 추출해주세요.}"
+PROMPT="${3:-다음 스크린샷의 UI를 개별 컴포넌트로 분해해주세요. 모든 시각 요소를 고유 컴포넌트 단위로 분해하고, 컴포넌트 분해 테이블(컴포넌트명/타입/반복/Z순서/크기/색상Hex/텍스트/구현노트), 컬러 팔레트(Hex 최소 3색), Prefab 계층 트리, 구현 가이드를 포함해주세요.}"
+IMAGE2="${4:-}"
+IMAGE3="${5:-}"
+GEMINI_MODEL="${GEMINI_MODEL:-gemini-2.5-flash}"
 
 # --- API 키 확인 ---
 if [ -z "${GEMINI_API_KEY:-}" ]; then
@@ -43,76 +48,110 @@ if [ -n "$OUTPUT_FILE" ] && [ -f "$OUTPUT_FILE" ]; then
   exit 0
 fi
 
-# --- URL vs 로컬 파일 판별 + 임시 파일 cleanup ---
-TEMP_DOWNLOAD=""
+# --- 이미지 처리 함수 ---
+TEMP_FILES=()
 cleanup_temp() {
-  rm -f "$TEMP_RESULT" "$TEMP_DOWNLOAD"
+  rm -f "$TEMP_RESULT" "${TEMP_FILES[@]}"
 }
 
-if [[ "$IMAGE_INPUT" =~ ^https?:// ]]; then
-  # URL 입력: 임시 파일로 다운로드
-  TEMP_DOWNLOAD=$(mktemp /tmp/screenshot-XXXXXX)
-  echo "🌐 URL에서 이미지 다운로드 중: $IMAGE_INPUT"
+# resolve_image: URL이면 다운로드, 로컬이면 검증. base64 + MIME 반환
+resolve_image() {
+  local input="$1"
+  local resolved=""
 
-  HTTP_CODE=$(curl -sL -o "$TEMP_DOWNLOAD" -w "%{http_code}" \
-    -H "User-Agent: Mozilla/5.0" \
-    --max-time 30 \
-    "$IMAGE_INPUT" 2>/dev/null)
+  if [[ "$input" =~ ^https?:// ]]; then
+    local tmp
+    tmp=$(mktemp /tmp/screenshot-XXXXXX)
+    TEMP_FILES+=("$tmp")
+    echo "🌐 URL에서 이미지 다운로드 중: $input" >&2
 
-  if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 400 ]; then
-    echo "❌ 다운로드 실패 (HTTP $HTTP_CODE): $IMAGE_INPUT"
-    rm -f "$TEMP_DOWNLOAD"
-    exit 1
+    local http_code
+    http_code=$(curl -sL -o "$tmp" -w "%{http_code}" \
+      -H "User-Agent: Mozilla/5.0" \
+      --max-time 30 \
+      "$input" 2>/dev/null)
+
+    if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 400 ]; then
+      echo "❌ 다운로드 실패 (HTTP $http_code): $input" >&2
+      return 1
+    fi
+
+    local ftype
+    ftype=$(file -b --mime-type "$tmp" 2>/dev/null)
+    if [[ ! "$ftype" =~ ^image/ ]]; then
+      echo "❌ 이미지 파일이 아닙니다 (타입: $ftype): $input" >&2
+      return 1
+    fi
+    resolved="$tmp"
+  else
+    if [ ! -f "$input" ]; then
+      echo "❌ 파일을 찾을 수 없습니다: $input" >&2
+      return 1
+    fi
+    resolved="$input"
   fi
 
-  # Content-Type 검증 (file 명령으로 실제 파일 타입 확인)
-  FILE_TYPE=$(file -b --mime-type "$TEMP_DOWNLOAD" 2>/dev/null)
-  if [[ ! "$FILE_TYPE" =~ ^image/ ]]; then
-    echo "❌ 이미지 파일이 아닙니다 (타입: $FILE_TYPE): $IMAGE_INPUT"
-    rm -f "$TEMP_DOWNLOAD"
-    exit 1
+  # 파일 크기 확인 (20MB 제한)
+  local fsize
+  fsize=$(stat -c%s "$resolved" 2>/dev/null || stat -f%z "$resolved" 2>/dev/null)
+  if [ "$fsize" -gt 20971520 ]; then
+    echo "❌ 파일이 20MB를 초과합니다: $(( fsize / 1048576 ))MB" >&2
+    return 1
   fi
 
-  IMAGE_SOURCE="$IMAGE_INPUT"
-  IMAGE_INPUT="$TEMP_DOWNLOAD"
-else
-  # 로컬 파일 입력
-  if [ ! -f "$IMAGE_INPUT" ]; then
-    echo "❌ 파일을 찾을 수 없습니다: $IMAGE_INPUT"
-    exit 1
+  # MIME 타입
+  local mime
+  mime=$(file -b --mime-type "$resolved" 2>/dev/null)
+  if [[ ! "$mime" =~ ^image/ ]]; then
+    local ext="${resolved##*.}"
+    case "${ext,,}" in
+      png)  mime="image/png" ;;
+      jpg|jpeg) mime="image/jpeg" ;;
+      webp) mime="image/webp" ;;
+      gif)  mime="image/gif" ;;
+      bmp)  mime="image/bmp" ;;
+      *)    mime="image/png" ;;
+    esac
   fi
-  IMAGE_SOURCE="$IMAGE_INPUT"
+
+  # base64
+  local b64
+  b64=$(base64 -w0 "$resolved" 2>/dev/null || base64 "$resolved" 2>/dev/null)
+
+  echo "🖼️ 이미지 준비: $input ($mime, $(( fsize / 1024 ))KB)" >&2
+  # 출력: MIME|BASE64
+  echo "${mime}|${b64}"
+}
+
+# --- 이미지 처리 ---
+IMG1_DATA=$(resolve_image "$IMAGE_INPUT") || exit 1
+IMG1_MIME="${IMG1_DATA%%|*}"
+IMG1_B64="${IMG1_DATA#*|}"
+IMAGE_SOURCE="$IMAGE_INPUT"
+
+# 추가 이미지 parts 조립
+EXTRA_PARTS=""
+IMG_COUNT=1
+
+if [ -n "$IMAGE2" ]; then
+  IMG2_DATA=$(resolve_image "$IMAGE2") || exit 1
+  IMG2_MIME="${IMG2_DATA%%|*}"
+  IMG2_B64="${IMG2_DATA#*|}"
+  EXTRA_PARTS=",{\"inline_data\": {\"mime_type\": \"$IMG2_MIME\", \"data\": \"$IMG2_B64\"}}"
+  IMAGE_SOURCE="$IMAGE_INPUT + $IMAGE2"
+  IMG_COUNT=2
 fi
 
-# --- MIME 타입 추정 ---
-# file 명령으로 실제 타입 확인 (URL 다운로드 시 확장자가 없을 수 있음)
-DETECTED_MIME=$(file -b --mime-type "$IMAGE_INPUT" 2>/dev/null)
-if [[ "$DETECTED_MIME" =~ ^image/ ]]; then
-  MIME="$DETECTED_MIME"
-else
-  # fallback: 확장자 기반
-  EXT="${IMAGE_INPUT##*.}"
-  case "${EXT,,}" in
-    png)  MIME="image/png" ;;
-    jpg|jpeg) MIME="image/jpeg" ;;
-    webp) MIME="image/webp" ;;
-    gif)  MIME="image/gif" ;;
-    bmp)  MIME="image/bmp" ;;
-    *)    MIME="image/png" ;;
-  esac
+if [ -n "$IMAGE3" ]; then
+  IMG3_DATA=$(resolve_image "$IMAGE3") || exit 1
+  IMG3_MIME="${IMG3_DATA%%|*}"
+  IMG3_B64="${IMG3_DATA#*|}"
+  EXTRA_PARTS="${EXTRA_PARTS},\n      {\"inline_data\": {\"mime_type\": \"$IMG3_MIME\", \"data\": \"$IMG3_B64\"}}"
+  IMAGE_SOURCE="$IMAGE_INPUT + $IMAGE2 + $IMAGE3"
+  IMG_COUNT=3
 fi
 
-# --- 파일 크기 확인 (20MB 제한) ---
-FILE_SIZE=$(stat -c%s "$IMAGE_INPUT" 2>/dev/null || stat -f%z "$IMAGE_INPUT" 2>/dev/null)
-if [ "$FILE_SIZE" -gt 20971520 ]; then
-  echo "❌ 파일이 20MB를 초과합니다: $(( FILE_SIZE / 1048576 ))MB"
-  rm -f "$TEMP_DOWNLOAD"
-  exit 1
-fi
-
-# --- Base64 인코딩 ---
-echo "🖼️ 이미지 분석 시작: $IMAGE_SOURCE ($MIME, $(( FILE_SIZE / 1024 ))KB)"
-IMAGE_BASE64=$(base64 -w0 "$IMAGE_INPUT" 2>/dev/null || base64 "$IMAGE_INPUT" 2>/dev/null)
+echo "📊 분석 모델: $GEMINI_MODEL | 이미지: ${IMG_COUNT}장"
 
 # --- Gemini API 호출 ---
 TEMP_RESULT=$(mktemp)
@@ -123,13 +162,13 @@ SAFE_PROMPT=$(python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$PRO
 # json.dumps는 따옴표 포함 문자열을 출력하므로 앞뒤 따옴표 제거
 SAFE_PROMPT="${SAFE_PROMPT:1:-1}"
 
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+curl -s "https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}" \
   -H 'Content-Type: application/json' \
   -d "{
   \"contents\": [{
     \"parts\": [
       {\"text\": \"$SAFE_PROMPT\"},
-      {\"inline_data\": {\"mime_type\": \"$MIME\", \"data\": \"$IMAGE_BASE64\"}}
+      {\"inline_data\": {\"mime_type\": \"$IMG1_MIME\", \"data\": \"$IMG1_B64\"}}${EXTRA_PARTS}
     ]
   }]
 }" > "$TEMP_RESULT" 2>/dev/null
@@ -164,6 +203,7 @@ if [ -n "$OUTPUT_FILE" ]; then
 
 **원본**: \`$IMAGE_SOURCE\`
 **분석일**: $(date +%Y-%m-%d)
+**모델**: $GEMINI_MODEL
 **프롬프트**: $PROMPT
 
 ---
