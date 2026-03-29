@@ -41,12 +41,13 @@ context: fork
 
 ## 워크플로우
 
-### Step 1: 모드 판별 + 입력 확인
+### Step 1: 모드 판별 + 플랫폼 감지 + 입력 확인
 
-출력 첫 줄에 모드를 선언한다:
+출력 첫 줄에 모드와 플랫폼을 선언한다:
 
 ```
 **분석 모드**: [기본 모드 / Task Doc 모드 / 시안 분석 모드 / 구현 검증 모드]
+**플랫폼**: [Game (Unity) / Web (HTML/CSS) / App (Mobile Native)]
 ```
 
 모드 판별:
@@ -57,11 +58,20 @@ context: fork
 └─ 그 외 (경쟁작, 일반 참고) → 기본 모드 (추정값)
 ```
 
+플랫폼 자동 감지:
+```
+├─ GodBlade 프로젝트 컨텍스트 또는 사용자 명시 → Game (Unity)
+├─ Portfolio 프로젝트 컨텍스트 또는 웹사이트 URL → Web (HTML/CSS)
+├─ 앱스토어 스크린샷 또는 모바일 UI → App (Mobile Native)
+└─ 판단 불가 → 이미지 내용으로 추정 (브라우저 크롬 → Web, 게임 HUD → Game)
+```
+
 입력 추출:
 ```
-- IMAGE_PATH: 이미지 경로
+- IMAGE_PATH: 이미지 경로 (여러 장이면 공백 구분)
 - ANALYSIS_TYPE: 분석 유형 (기본: "UI 레이아웃")
 - REF_NAME: 레퍼런스 이름 (파일명 또는 사용자 지정)
+- PLATFORM: 플랫폼 (자동 감지 또는 사용자 지정)
 ```
 
 ### Step 2: Gemini 프롬프트 조립
@@ -111,13 +121,42 @@ Canvas (Screen Space - Overlay)
 
 **분석 유형별 프롬프트** (위 공통 블록 + 아래 유형별 지시):
 
-**UI 레이아웃 분석 (기본)**:
+**UI 레이아웃 분석 (기본)** — 플랫폼별 분기:
+
+Game (Unity):
 ```
 다음 스크린샷의 UI를 개별 컴포넌트로 분해해주세요.
 
 {공통 분해 규칙 블록}
 
 + Unity UGUI 구현 방법(Canvas 설정, Layout Group, Anchor)을 구현 가이드에 포함해주세요.
+```
+
+Web (HTML/CSS):
+```
+다음 스크린샷의 UI를 개별 컴포넌트로 분해해주세요.
+
+{공통 분해 규칙 블록}
+
++ 구현 가이드에 아래를 포함해주세요:
+  - HTML 시맨틱 태그 구조 (header, nav, main, section, aside, footer)
+  - CSS 레이아웃 방식 (Flexbox/Grid 추천)
+  - 반응형 breakpoint 추정 (mobile/tablet/desktop)
+  - Tailwind CSS 유틸리티 클래스 제안
+  - React 컴포넌트 분리 제안
+```
+
+App (Mobile Native):
+```
+다음 스크린샷의 UI를 개별 컴포넌트로 분해해주세요.
+
+{공통 분해 규칙 블록}
+
++ 구현 가이드에 아래를 포함해주세요:
+  - 네비게이션 패턴 (Tab Bar, Drawer, Stack)
+  - Safe Area / Status Bar 처리
+  - 터치 타겟 크기 (최소 44pt)
+  - 플랫폼 디자인 가이드라인 준수 여부 (HIG/Material)
 ```
 
 **HUD 분석**:
@@ -188,11 +227,32 @@ Canvas (Screen Space - Overlay)
 
 `analyze-screenshot.sh`를 호출하여 Gemini Vision API 분석을 실행한다.
 
+**단일 이미지 분석:**
 ```bash
 bash ~/.claude/scripts/analyze-screenshot.sh \
   "{IMAGE_PATH}" \
   "docs/assets/screenshot-refs/{YYYY-MM-DD}-{REF_NAME}-analysis.md" \
   "{Step 2에서 조립한 전체 프롬프트 — 공통 블록 포함}"
+```
+
+**멀티 이미지 비교 분석** (경쟁작 비교, 구현 검증):
+```bash
+bash ~/.claude/scripts/analyze-screenshot.sh \
+  "{IMAGE1_PATH}" \
+  "docs/assets/screenshot-refs/{YYYY-MM-DD}-{REF_NAME}-compare.md" \
+  "{비교 분석 프롬프트}" \
+  "{IMAGE2_PATH}" \
+  "{IMAGE3_PATH}"  # 선택
+```
+
+> 멀티 이미지: 2-3장을 한 번의 API 호출로 Gemini에 전송하여 직접 비교.
+> 기존 순차 분석 → 텍스트 비교 대비 정확도와 일관성 향상.
+
+**모델 선택** (환경변수 `GEMINI_MODEL`):
+```bash
+# 기본: gemini-2.5-flash (빠르고 저렴)
+# 고품질: gemini-2.5-pro (정밀 분해, 복잡한 UI)
+GEMINI_MODEL=gemini-2.5-pro bash ~/.claude/scripts/analyze-screenshot.sh ...
 ```
 
 ### Step 4: 결과 검증 + 출력
@@ -333,7 +393,7 @@ Canvas (Screen Space - Overlay)
 - 이미지 분석은 Gemini API 크레딧을 소비한다 — 불필요한 반복 분석 방지
 - 캐싱: output-file이 이미 존재하면 API를 호출하지 않는다
 - 이미지 크기 제한: 20MB 이하
-- 비교 분석 시 여러 이미지를 순차 분석 후 결과를 통합 비교
+- 비교 분석 시 멀티 이미지 모드(2-3장 동시 전송)를 우선 사용, 4장 이상은 순차 분석
 
 ## 보안 주의사항
 
