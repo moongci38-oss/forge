@@ -36,12 +36,22 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **검증 체인(Check Chain) 구현** 확인
-   - Check 3 → 3.5 → 3.7 → 3.5T 체인 존재 여부
-   - autoFix 한도(1회) 및 [STOP] 에스컬레이션 규칙 문서화
-   - 순환 autoFix 카운터 관리 방식
+> 분석 기준: `shared/docs/2026-03-30-four-engineering-disciplines.md` §3 Harness Engineering
+> 원칙: 정의서에 없는 기법은 감사하지 않는다.
 
-2. **OWASP Agentic Top 10 커버리지** — 실측
+1. **Check Chain** (정의서 §3-1) — 실측
+   - Grep `Check 3|Check 6|check.*chain` in pipeline.md → 체인 단계 수
+   - Grep `autoFix|auto-fix|1회.*수정` → autoFix 한도 규칙
+
+2. **Guardrails (5 Rail Types)** (정의서 §3-2) — 실측
+   - Input Rail: Grep `PreToolUse` in settings.json → 입력 검증 Hook
+   - Output Rail: Grep `PostToolUse` in settings.json → 출력 검증 Hook
+   - Execution Rail: Grep `block.*sensitive|exit 2` in hooks/ → 실행 차단
+   - Dialog Rail: Grep `injection|jailbreak` in hooks/ → 대화 보호
+   - Retrieval Rail: RAG 검증 존재 여부
+   - 커버리지 = 구현된 Rail / 5
+
+3. **OWASP Agentic Top 10** (정의서 §3-3) — 실측
    각 ASI 항목별 방어 코드 존재를 Grep으로 실제 확인:
    - ASI01 (Goal Hijack): Grep "ignore.*instructions|jailbreak|DAN" in hooks/ → exit 2 패턴
    - ASI02 (Tool Misuse): Grep "block.*sensitive|BLOCKED" in hooks/ → 차단 패턴
@@ -52,16 +62,30 @@ context: fork
    - 커버리지 = (방어 코드 존재 ASI 수 / 10) × 100
    - 기준: > 50%
 
-3. **가드레일 패턴** 평가
-   - 5 Rail Types(Input/Dialog/Retrieval/Output/Execution) 중 구현된 레일
-   - Constitutional 분류기 또는 동등 패턴 존재 여부
-
-4. **Hook 커버리지** — 실측
+4. **Hooks** (정의서 §3-4) — 실측
    - Glob .claude/hooks/*.sh → Hook 스크립트 수
    - 위험 이벤트 유형: [파일쓰기, Bash실행, 민감경로, 시크릿, 인젝션, force-push, 프롬프트유출, 민감출력] = 8종
    - 각 유형별 Hook 존재 여부 Grep으로 확인
    - 커버리지 = (보호된 이벤트 / 8) × 100
    - 기준: > 70%
+
+5. **AI Evals** (정의서 §3-5) — 실측
+   - Glob `spec-compliance-checker` 스킬 → Spec 추적성 평가
+   - Glob `code-reviewer` 에이전트 → 코드 리뷰 평가
+   - Glob `asset-critic` 스킬 → 에셋 품질 평가
+   - Glob `qa` 스킬 → QA 루프
+   - 평가 체계 수 = 위 존재 카운트
+
+6. **Observability** (정의서 §3-6) — 실측
+   - Grep `usage-logger|security.log|usage.log` in hooks/ → 로깅 Hook
+   - Grep `requestId|traceId` in rules/ → 추적 ID 규칙
+
+7. **Rollback** (정의서 §3-7) — 실측
+   - Grep `L1.*rollback|L2.*rollback|L3.*rollback|forge-rollback` in pipeline.md → 3단계 정의
+
+8. **Maintenance Agents** (정의서 §3-8) — 실측
+   - Glob `.claude/agents/` → 에이전트 수
+   - daily-system-review, weekly-research 등 주기적 검증 스킬 존재
 
 **반환 JSON 형식:**
 
@@ -70,10 +94,14 @@ context: fork
   "axis": "harness",
   "target": "{target}",
   "score": 0-100,
-  "check_chain": { "check3": true/false, "check3_5": true/false, "check3_7": true/false, "autofix_limit": true/false },
-  "owasp_coverage": { "ASI01": true/false, "ASI02": true/false, "ASI03": true/false, "ASI06": true/false, "ASI07": true/false, "ASI10": true/false },
-  "guardrails": ["Input", "Output"],
-  "observability": { "structured_logging": true/false, "request_id": true/false, "metrics": true/false },
+  "check_chain": { "chain_stages": 0, "autofix_limit_rule": true/false },
+  "guardrails": { "input_rail": true/false, "output_rail": true/false, "execution_rail": true/false, "dialog_rail": true/false, "retrieval_rail": true/false, "coverage_rate": 0 },
+  "owasp_coverage": { "ASI01": true/false, "ASI02": true/false, "ASI05": true/false, "ASI06": true/false, "ASI07": true/false, "ASI09": true/false, "coverage_rate": 0 },
+  "hooks": { "hook_count": 0, "coverage_rate": 0 },
+  "ai_evals": { "spec_compliance_checker": true/false, "code_reviewer": true/false, "asset_critic": true/false, "qa": true/false, "eval_count": 0 },
+  "observability": { "logging_hook": true/false, "trace_id_rule": true/false },
+  "rollback": { "three_level_defined": true/false },
+  "maintenance_agents": { "agent_count": 0, "periodic_review_skill": true/false },
   "issues": [
     { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "..." }
   ],
