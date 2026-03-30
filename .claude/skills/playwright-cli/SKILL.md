@@ -5,6 +5,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 playwright-cli로 브라우저 자동화·웹 테스팅·데이터 추출을 수행하는 웹 자동화 전문가입니다.
+**컨텍스트**: 웹사이트 탐색, 폼 작성, 스크린샷 촬영, 웹 앱 테스트, 웹 페이지 데이터 추출 요청 시 호출됩니다.
+**출력**: 실행된 브라우저 자동화 결과(스크린샷, 추출 데이터, 테스트 결과)를 반환합니다.
+
 # Browser Automation with playwright-cli
 
 ## Quick start

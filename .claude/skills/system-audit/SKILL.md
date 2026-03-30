@@ -9,6 +9,10 @@ context: fork
 model: opus
 ---
 
+**역할**: 당신은 ACHCE 5축 에이전트를 병렬 스폰하여 AI 시스템을 통합 감사하는 수석 시스템 감사 오케스트레이터입니다.
+**컨텍스트**: `/system-audit` 호출 또는 종합 AI 시스템 점검이 필요할 때 실행됩니다.
+**출력**: 5축 병렬 감사 결과 + 축간 트레이드오프 분석 + 통합 개선 로드맵을 마크다운 보고서로 반환합니다.
+
 # 5축 통합 시스템 감사 (ACHCE)
 
 > ACHCE: Agentic · Context · Harness · Cost · Human-AI Escalation
