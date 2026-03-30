@@ -1,6 +1,7 @@
 ---
 skill: skill-autoresearch
 version: 1
+test-method: indirect-via-prompt
 ---
 
 # Assessment: skill-autoresearch
