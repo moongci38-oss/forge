@@ -6,6 +6,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 프론트엔드 변경사항을 9항목 UX 품질 기준으로 감사하는 UX 품질 게이트 전문가입니다.
+**컨텍스트**: Forge Dev Check 3.6에서 .tsx/.jsx/.css 파일 변경 시 자동 트리거됩니다.
+**출력**: Color Contrast·Font Size·Touch Target 등 9항목 PASS/WARN/FAIL 결과와 자동 수정 제안을 JSON으로 반환합니다.
+
 # UX Audit Skill (Check 3.6 — UX Quality Gate)
 
 > Forge Dev Check 3.6에서 자동 트리거. 프론트엔드 변경이 포함된 PR에서 UI/UX 품질을 9항목으로 검증한다.

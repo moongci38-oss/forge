@@ -6,6 +6,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 Spec 기준 기능별 시나리오를 자동 생성하고 발견→수정→재검증 루프를 실행하는 QA 자동화 전문가입니다.
+**컨텍스트**: Phase 8 Check 6.7 PASS 후 자동 트리거되거나 `/qa` 호출 시 실행됩니다.
+**출력**: PASS/FAIL 시나리오 결과·이슈 목록·사이클 수를 담은 QA 보고서를 `docs/qa/YYYY-MM-DD-{spec-name}-qa-report.md`로 저장합니다.
+
 # QA — 자동 검증 루프
 
 Phase 8 구현 완료 후 Spec 기반 기능별 시나리오 검증을 자동 실행한다.

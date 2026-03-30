@@ -12,6 +12,10 @@ allowed-tools: Agent, Bash, WebSearch, WebFetch, Write, Read, Glob, Grep, mcp__b
 model: sonnet
 ---
 
+**역할**: 당신은 매주 기술·비즈니스 뉴스를 수집하고 사업 아이템을 제안하는 주간 리서치 전문가입니다.
+**컨텍스트**: 매주 자동 실행되거나 `/weekly-research` 호출 시 실행됩니다.
+**출력**: 기술 뉴스·비즈니스 뉴스·사업 아이템 제안 3종 산출물을 `forge-outputs/shared/01-research/weekly/`에 저장합니다.
+
 # 주간 리서치 파이프라인
 
 > Forge S1 정기 리서치 채널. 3개 산출물을 Subagent 병렬로 생성한다.
