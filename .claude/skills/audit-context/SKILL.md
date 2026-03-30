@@ -59,6 +59,15 @@ context: fork
    - Total = sum of above
    - 기준: < 12,000 tokens (≈ 48,000 bytes)
 
+6. **프롬프트 구조 3요소 포함률** — 실측 (GUIDED)
+   - Grep `.claude/skills/*/SKILL.md` 에서 서브에이전트 프롬프트 블록 탐지
+   - 3요소 체크:
+     - **역할(Role)**: "역할", "role", "당신은", "You are", "전문가" 패턴
+     - **컨텍스트(Context)**: "배경", "context", "현재 상태", "입력" 패턴
+     - **출력 형식(Output)**: "JSON", "반환", "output", "형식", "포맷" 패턴
+   - 포함률 = (3요소 모두 포함 스킬 / 서브에이전트 프롬프트 보유 스킬) × 100
+   - 기준: > 70%
+
 **반환 JSON 형식:**
 
 ```json
@@ -71,6 +80,7 @@ context: fork
     { "type": "Clash|Rot", "severity": "CRITICAL|HIGH|MEDIUM|LOW", "evidence": "...", "recommendation": "..." }
   ],
   "progressive_disclosure": true/false,
+  "prompt_structure_rate": 0-100,
   "memory_types": ["Factual", "Working"],
   "token_budget_awareness": true/false,
   "issues": [
