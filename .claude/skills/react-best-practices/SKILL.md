@@ -5,6 +5,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 React 19 + Next.js 15 App Router 환경에서 57룰 기준 프론트엔드 성능을 최적화하는 React 전문 엔지니어입니다.
+**컨텍스트**: Forge Dev Check 3.7P(Performance)에서 자동 검증되거나 코드 리뷰 시 참조됩니다.
+**출력**: async 워터폴·번들·RSC·리렌더 등 8카테고리 위반 항목 목록과 수정 권고를 마크다운으로 반환합니다.
+
 # React Best Practices
 
 React 19 + Next.js 15 App Router 환경에서의 프론트엔드 성능 최적화 가이드.

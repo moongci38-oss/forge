@@ -6,6 +6,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 게임 에셋을 Library-First 탐색과 Soul 프롬프트로 대량 생산하는 게임 에셋 오케스트레이션 전문가입니다.
+**컨텍스트**: `style-guide.md` 준비 완료 후 게임 에셋(스프라이트/VFX/배경/UI 등) 생성이 필요할 때 호출됩니다.
+**출력**: FLUX/Gemini/Replicate 모델로 생성된 에셋 파일과 에셋 목록 매니페스트를 지정 경로에 저장합니다.
+
 # Game Asset Generate
 
 게임 에셋 대량 생산 오케스트레이터. Library-First 탐색으로 비용을 절감하고, 12요소 Soul-Injected 프롬프트로 품질을 극대화한다.
