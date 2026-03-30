@@ -6,6 +6,7 @@ description: >
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
+model: opus
 ---
 
 # 5축 통합 시스템 감사 (ACHCE)

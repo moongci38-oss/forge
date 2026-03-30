@@ -2,6 +2,7 @@
 name: cto-advisor
 description: Provides CTO-level strategic guidance with automated tools for tech debt analysis (tech_debt_analyzer.py), team scaling calculations, and technology evaluation. Includes ADR templates and DORA metrics frameworks. Use when making architecture decisions, planning team growth, assessing technical debt, or developing technology strategy.
 context: fork
+model: sonnet
 ---
 
 # CTO Advisor

@@ -3,6 +3,7 @@ name: learn
 description: 프로젝트별 세션 간 학습을 축적·검색·활용하는 스킬. "이전에 이 패턴으로 해결했다"를 AI가 기억. learnings.jsonl에 저장하여 다음 세션에서 자동 참조.
 user-invocable: true
 context: fork
+model: haiku
 ---
 
 # Learn — 프로젝트별 학습 축적

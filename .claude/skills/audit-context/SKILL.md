@@ -6,6 +6,7 @@ description: >
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # 컨텍스트 엔지니어링 역량 감사

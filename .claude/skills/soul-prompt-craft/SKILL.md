@@ -3,6 +3,7 @@ name: soul-prompt-craft
 description: 12요소 Soul-Injected 이미지 생성 프롬프트를 조립하고 모델별 최적 포맷(FLUX/Gemini/Replicate)으로 변환한다. style-guide.md와 art-direction-brief.md에서 컨텍스트를 자동 추출하며, Tier(T1/T2/T3)에 따라 프롬프트 깊이를 차등 적용. /game-asset-generate 실행 전 고품질 프롬프트가 필요하거나, 프롬프트를 수동 미세조정할 때 사용.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Soul Prompt Craft — 12요소 프롬프트 조립기

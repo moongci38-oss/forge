@@ -3,6 +3,7 @@ name: rag-search
 description: forge-outputs 문서에서 벡터+BM25 하이브리드 의미 검색을 수행하는 스킬. 정부과제 자료, 리서치, 기획서 등에서 키워드가 아닌 의미 기반으로 관련 문서/청크를 찾는다. "투자 유치" → "VC 라운드, 시드 펀딩, 민간투자" 등 동의어까지 검색.
 user-invocable: true
 context: fork
+model: haiku
 ---
 
 # RAG Search — 의미 기반 문서 검색

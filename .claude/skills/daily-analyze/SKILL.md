@@ -6,6 +6,7 @@ description: >
 argument-hint: "<YYYY-MM-DD>"
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Daily System Review — 재분석 (JSON → 분석)

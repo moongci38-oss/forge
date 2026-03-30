@@ -2,6 +2,7 @@
 name: hook-creator
 description: Create and configure Claude Code hooks for customizing agent behavior. Use when the user wants to (1) create a new hook, (2) configure automatic formatting, logging, or notifications, (3) add file protection or custom permissions, (4) set up pre/post tool execution actions, or (5) asks about hook events like PreToolUse, PostToolUse, Notification, etc.
 context: fork
+model: sonnet
 ---
 
 # Hook Creator
