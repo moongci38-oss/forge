@@ -40,7 +40,7 @@ model: haiku
 
 | 분류 | Heuristic | 예시 |
 |------|-----------|------|
-| **Hotfix** | "긴급/장애/프로덕션 에러" 키워드, main 브랜치 수정, 단일 파일 | "로그인 500 에러 긴급 수정" |
+| **Hotfix** | "긴급/장애/프로덕션 에러/broken/not working/critical/down/hotfix" 키워드, main 브랜치 수정, 단일 파일 | "로그인 500 에러 긴급 수정", "Login broken fix ASAP" |
 | **Standard** | 새 기능, API 구현, 컴포넌트 생성, 리팩토링, 테스트 추가 | "채팅 기능 추가해줘" |
 
 ## 제외 대상 (이 스킬이 활성화되지 않아야 할 때)
@@ -48,7 +48,7 @@ model: haiku
 - 코드 설명/분석만 요청 (구현 변경 없음)
 - 문서(docs/, README)만 수정
 - 파일 탐색/검색/코드 리뷰만 요청
-- Business 워크스페이스 비개발 작업 (리서치, 마케팅, 콘텐츠) → `forge-router`가 처리
+- Business 워크스페이스 비개발 작업 (리서치, 마케팅, 콘텐츠) → `forge-planning-router`가 처리
 - `.specify/` 디렉토리가 없는 프로젝트
 
 ## 세션 재개 감지
