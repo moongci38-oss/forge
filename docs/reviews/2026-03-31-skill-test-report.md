@@ -2,7 +2,7 @@
 
 **날짜**: 2026-03-31
 **테스트 대상**: 55개 스킬 (archive 제외)
-**완료**: 47/55 (85%) — 나머지 8개 타임아웃
+**완료**: 49/55 (89%) — 나머지 6개 타임아웃
 
 ---
 
@@ -10,9 +10,9 @@
 
 | 등급 | 수 | 비율 |
 |------|:--:|:----:|
-| PASS | 21 | 46% |
-| PASS with WARN | 14 | 30% |
-| WARN | 10 | 22% |
+| PASS | 21 | 43% |
+| PASS with WARN | 15 | 31% |
+| WARN | 11 | 22% |
 | FAIL | 2 | 4% |
 
 **전체 통과율: 76% (PASS + PASS with WARN)**
@@ -52,6 +52,7 @@ concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, sl
 | forge-planning-router | gate-log 경로 미구체화 |
 | audit-harness | Notion DB ID 하드코딩 |
 | video-reference-guide | Gemini API 키 미설정 (screenshot-analyze와 동일 원인) |
+| forge-onboard | manifest 경로 불일치, 섹션 번호 중복 |
 
 ---
 
@@ -71,12 +72,13 @@ concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, sl
 | benchmark | evals/assessment 없음, 응답 언어 불일치 |
 | playwright-parallel-test | Playwright CLI 명령어 오류, Output Requirements 미정의 |
 | game-logic-visualize | 출력 경로 상대경로, 외부 스킬 통합 미정의 |
+| ux-audit | pass_rate 0.67 (eval 파일 미존재로 SKIP) |
 
 ---
 
-## 미테스트 (8건) — 타임아웃
+## 미테스트 (6건) — 타임아웃
 
-frontend-design, forge-onboard, spec-compliance-checker, ux-audit, asset-critic, game-reference-collect, inspection-checklist, soul-prompt-craft
+frontend-design, spec-compliance-checker, asset-critic, game-reference-collect, inspection-checklist, soul-prompt-craft
 
 ---
 
