@@ -36,21 +36,42 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **에이전트 패턴 분류** — 실측
-   - Glob `.claude/agents/*.md` → 에이전트 수 카운트
-   - Grep `Agent\(` or `subagent_type` in skills/ → Subagent 스폰 패턴 수
-   - Grep `isolation.*worktree` → Worktree 격리 패턴 수
-   - 판정: 0 agent=Augmented LLM, 1-5=Prompt Chaining, 5-10+parallel=Orchestrator-Workers
+> 분석 기준: `shared/docs/2026-03-30-four-engineering-disciplines.md` §4 Agentic Engineering
+> 원칙: 정의서에 없는 기법은 감사하지 않는다.
 
-2. **도구 커버리지율** — 실측
-   - (사용된 도구 종류 / 등록된 도구 종류) × 100
+1. **Composable Patterns 분류** (정의서 §4 — Anthropic 5대 패턴) — 실측
+   - Prompt Chaining: Grep `Phase.*→.*Phase|순차` in pipeline.md
+   - Routing: Grep `routing|라우팅|분기` in skills/ or pipeline.md
+   - Parallelization: Grep `병렬|parallel|Wave` in pipeline.md + skills/
+   - Orchestrator-Workers: Grep `orchestrat|오케스트레이터|Lead.*Subagent` in skills/
+   - Evaluator-Optimizer: Grep `evaluator|optimizer|자동.*수정.*재실행` in pipeline.md
+   - 현재 최고 수준 패턴 판정
+
+2. **ACI (Agent-Computer Interface) 설계** (정의서 §4) — 실측
+   - Read `.mcp.json` → 도구 수
+   - Grep `mcp__` in skills/ → 실제 사용 도구 수
+   - 도구 커버리지율 = 사용 / 등록 × 100
    - 기준: > 60%
-   - Tool Call Accuracy: 과다 호출, 잘못된 도구 선택, 파라미터 오류 패턴 식별
 
-3. **멀티에이전트 토폴로지** 확인
-   - Centralized / Decentralized / Hybrid
-   - Wave 기반 의존성 관리 여부
-   - 에러 증폭 방지 패턴 존재 여부
+3. **Agent Evals** (정의서 §4) — 실측
+   - skill-autoresearch (자동 평가) 존재 여부
+   - assessment.md 파일 존재 여부
+   - 평가 체계 유무 판정
+
+4. **Multi-Agent Coordination** (정의서 §4) — 실측
+   - Grep `Wave|의존성.*그래프|blockedBy` in rules/ + pipeline.md
+   - Grep `파일 소유권|PARALLEL-IRON` in rules/ → 충돌 방지 규칙
+
+5. **Memory Architecture** (정의서 §4) — 실측
+   - 단기: session-state.json 존재 여부
+   - 장기: learnings.jsonl + MEMORY.md 존재 여부
+   - 양쪽 모두 존재 = 완전, 한쪽 = 부분
+
+6. **AgentOps** (정의서 §4) — 실측
+   - /canary 스킬 존재 → 배포 모니터링
+   - /benchmark 스킬 존재 → 성능 추적
+   - daily-system-review → 일일 모니터링
+   - 존재 수 / 3 × 100
 
 **반환 JSON 형식:**
 
@@ -59,7 +80,19 @@ context: fork
   "axis": "agentic",
   "target": "{target}",
   "score": 0-100,
-  "composable_pattern": "현재 최고 수준 패턴",
+  "composable_patterns": {
+    "prompt_chaining": true/false,
+    "routing": true/false,
+    "parallelization": true/false,
+    "orchestrator_workers": true/false,
+    "evaluator_optimizer": true/false,
+    "highest_pattern": "현재 최고 수준 패턴"
+  },
+  "aci": { "registered_tools": 0, "used_tools": 0, "coverage_rate": 0 },
+  "agent_evals": { "skill_autoresearch": true/false, "assessment_md": true/false },
+  "multi_agent_coordination": { "wave_dependency": true/false, "conflict_prevention": true/false },
+  "memory_architecture": { "short_term": true/false, "long_term": true/false, "completeness": "완전|부분|없음" },
+  "agentops": { "canary": true/false, "benchmark": true/false, "daily_review": true/false, "coverage_rate": 0 },
   "issues": [
     { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "...", "enforcement_level": "ENFORCED|GUIDED|PAPER" }
   ],
