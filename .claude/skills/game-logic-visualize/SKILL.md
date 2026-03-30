@@ -3,6 +3,7 @@ name: game-logic-visualize
 description: 게임 로직(FSM, 확률 테이블, 전투 공식, 경제 시스템, 스킬 트리, 인벤토리 ER)을 Mermaid 다이어그램, Draw.io, 또는 인터랙티브 HTML 시뮬레이터로 시각화한다. GDD/S4 기획서 작성, Spec 검증, 밸런싱 사전 검증 시 사용. docs-visualization.md 규칙에서 게임 로직 유형 감지 시 자동 선택.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Game Logic Visualize

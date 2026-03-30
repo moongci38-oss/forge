@@ -2,6 +2,7 @@
 name: requirements-clarity
 description: Clarify ambiguous requirements through focused dialogue before implementation. Use when requirements are unclear, features are complex (>2 days), or involve cross-team coordination. Ask two core questions - Why? (YAGNI check) and Simpler? (KISS check) - to ensure clarity before coding.
 context: fork
+model: sonnet
 ---
 
 # Requirements Clarity Skill

@@ -3,6 +3,7 @@ name: qa
 description: Spec 기준 기능별 시나리오를 자동 생성하고 발견→수정→재검증 루프를 실행하는 스킬. Phase 8 Check 6.7 PASS 후 자동 트리거.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # QA — 자동 검증 루프

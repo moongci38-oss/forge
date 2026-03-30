@@ -7,6 +7,7 @@ description: >
 user-invocable: false
 disable-model-invocation: true
 context: fork
+model: haiku
 ---
 
 # Forge Auto-Router

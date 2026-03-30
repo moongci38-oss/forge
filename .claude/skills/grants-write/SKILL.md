@@ -3,6 +3,7 @@ name: grants-write
 description: 정부지원사업 문서를 에이전트 팀으로 작성하는 오케스트레이터 스킬. 과제 유형(R&D/사업화/콘텐츠 등)을 자동 판별하고, 분석관→전략관→작성관→검수관 파이프라인을 순차 실행한다. /grants-write 또는 정부과제 문서 작성 요청 시 트리거.
 user-invocable: true
 context: fork
+model: opus
 ---
 
 # Grants Write — 정부과제 문서 작성 오케스트레이터

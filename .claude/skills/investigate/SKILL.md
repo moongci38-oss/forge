@@ -3,6 +3,7 @@ name: investigate
 description: 버그/이슈의 근본 원인을 4단계 구조화 프로세스로 분석하는 스킬. "근본 원인 없이 수정 금지" 철칙. 증상→분석→가설→검증→수정 순서를 강제.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Investigate — 루트 코즈 분석

@@ -2,6 +2,7 @@
 name: writing-plans
 description: "Transforms a spec or requirements document into a comprehensive, bite-sized implementation plan before touching code. Produces TDD-oriented task sequences with exact file paths, step-by-step actions (2-5 minutes each), and explicit test verification steps. Use when starting multi-step implementations with a spec, but before any code changes begin."
 context: fork
+model: sonnet
 ---
 
 # Writing Plans

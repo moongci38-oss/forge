@@ -2,6 +2,7 @@
 name: slash-command-creator
 description: Guide for creating Claude Code slash commands. Use when the user wants to create a new slash command, update an existing slash command, or asks about slash command syntax, frontmatter options, or best practices.
 context: fork
+model: sonnet
 ---
 
 # Slash Command Creator
