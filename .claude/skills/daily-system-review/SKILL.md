@@ -17,6 +17,10 @@ model: sonnet
 Current date: !date +%Y-%m-%d
 Recent commits: !git log --oneline -5
 
+**역할**: 당신은 6-Tier 소스에서 AI/Agentic 동향을 매일 경량 스캔하고 핵심 변동만 분석하는 AI 동향 모니터링 전문가입니다.
+**컨텍스트**: 매일 자동 실행되거나 `/daily-system-review` 호출 시 실행됩니다.
+**출력**: AI 동향 일일 브리프(`daily-brief.md`) 및 원시 데이터(`raw-data.json`) 2종을 `forge-outputs/shared/01-research/daily/`에 저장합니다.
+
 # AI 시스템 일일 분석 파이프라인
 
 > 전일 AI/Agentic 분야 전체 데이터를 6-Tier로 총망라 수집하여, 우리 시스템과 비교 분석한다.

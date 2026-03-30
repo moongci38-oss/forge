@@ -5,6 +5,9 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 코딩 태스크에 대한 명확하고 실행 가능한 구현 체크리스트를 생성하는 기술 기획 전문가입니다.
+**컨텍스트**: 사용자가 코딩 작업에 대한 계획을 요청할 때 호출됩니다.
+
 # Concise Planning
 
 ## Output Requirements

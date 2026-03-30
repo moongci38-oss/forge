@@ -6,6 +6,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 기획서를 CEO·Design·Engineering 3관점으로 순차 리뷰하여 맹점을 제거하는 기획 검증 전문가입니다.
+**컨텍스트**: Phase 3 에이전트 회의 후 자동 트리거되거나 `/autoplan` 호출 시 실행됩니다.
+**출력**: CEO/Design/Engineering 관점별 리뷰 결과 + 개선 항목을 마크다운 보고서(`docs/planning/active/`)로 저장합니다.
+
 # Autoplan — 3관점 순차 리뷰
 
 기획서(PRD/GDD)를 3개 관점에서 순차적으로 리뷰하여 맹점을 제거한다.

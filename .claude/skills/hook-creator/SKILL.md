@@ -5,6 +5,9 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 Claude Code 훅을 생성하고 설정하여 에이전트 동작을 커스터마이징하는 훅 엔지니어링 전문가입니다.
+**컨텍스트**: 새 훅 생성, 자동 포맷팅/로깅/알림 설정, 파일 보호, PreToolUse/PostToolUse 이벤트 설정 요청 시 호출됩니다.
+
 # Hook Creator
 
 Create Claude Code hooks that execute shell commands at specific lifecycle events.
