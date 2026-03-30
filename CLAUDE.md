@@ -16,8 +16,10 @@
 |---------|------|------|
 | **Forge** | `./` | 통합 파이프라인 (현재) |
 | **Forge Outputs** | `~/forge-outputs/` | 산출물 저장소 (private) |
-| **Portfolio** | `{YOUR_PORTFOLIO_PATH}` | Next.js + NestJS 웹 개발 |
-| **GODBLADE** | `{YOUR_GAME_PROJECT_PATH}` | Unity 게임 프로젝트 (C#) |
+| **Portfolio** | `~/mywsl_workspace/portfolio-project/` | Next.js + NestJS 웹 개발 |
+| **GODBLADE** | `/mnt/e/new_workspace/god_Sword/src` | Unity 분산 멀티플레이어 모바일 RPG (C#) |
+| **test-project** | `/tmp/test-project` | Next.js SaaS 플랫폼 |
+| **fastapi-backend** | `~/mywsl_workspace/fastapi-backend` | Python FastAPI 백엔드 |
 
 ### 디렉토리 구조
 
@@ -37,7 +39,7 @@ forge/
 │   └── prompts/      ← 개발 파이프라인 프롬프트
 ├── shared/           ← 양쪽 공통
 │   ├── docs/         ← 공유 문서
-│   ├── scripts/      ← 관리 스크립트 (manage-rules, manage-skills 등)
+│   ├── scripts/      ← 관리 스크립트 (manage-rules, manage-skills, rag/ 등)
 │   └── cross-project/ ← 크로스 프로젝트 규칙
 ├── .claude/          ← Claude Code 설정 (팀 공유)
 │   ├── rules/        ← 컴파일 규칙 (forge-planning.md, forge-core.md)
@@ -97,14 +99,12 @@ forge-outputs/          ← 산출물 (private repo)
 
 | 서버 | Scope | 설명 |
 |------|:-----:|------|
-| **filesystem** | project | 워크스페이스 파일 접근 |
 | **Sequential Thinking** | project | 복잡한 전략 계획 수립 |
-| **Draw.io** | project | 다이어그램 생성 |
-| **Replicate** | project | AI 모델 (style-train, game-asset-generate) |
 | **NanoBanana** | project | Google Gemini AI 이미지 생성/편집 |
-| **Stitch** | project | AI UI 목업 생성 |
+| **Context7** | project | 최신 라이브러리/프레임워크 문서 검색 |
 | **Notion** | global | Notion 페이지/DB 연동 |
 | **Brave Search** | global | 웹 검색 |
+| **Telegram** | global | 텔레그램 원격 제어 |
 
 ## Plugins
 
@@ -118,7 +118,21 @@ forge-outputs/          ← 산출물 (private repo)
 | **security-guidance** | 보안 가이드 | ✅ |
 | **superpowers** | 워크플로 스킬 | ✅ |
 | **skill-creator** | 스킬 생성/평가/개선 | ✅ |
+| **design** | UX/UI 디자인 스킬 | ✅ |
+| **telegram** | 텔레그램 채널 관리 | ✅ |
+
+## gstack 파이프라인 자동화
+
+| 트리거 | 스킬 | Phase |
+|--------|------|:-----:|
+| 런타임 에러 + 반복 패턴 | `/investigate` | 8 |
+| Check 6.7 PASS 후 | `/qa` | 8 |
+| PR 직전 | `/benchmark` | 9 |
+| develop 통합 후 | `/canary` | 10 |
+| Phase checkpoint | `/learn save` | 전체 |
+| Phase 6 시작 | `/learn load` | 6 |
+| Phase 3 회의 후 | `/autoplan` | 3 |
 
 ---
 
-*Last Updated: 2026-03-19 (Forge 통합 마이그레이션)*
+*Last Updated: 2026-03-30 (gstack 파이프라인 자동화 + NanoBanana 편집 파이프라인)*

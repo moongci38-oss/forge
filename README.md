@@ -18,7 +18,9 @@ Forge is a unified pipeline for **solo developers and small teams** to systemati
 
 - **Planning** (Phase 1~4): Research, concept validation, design docs, planning packages
 - **Dev** (Phase 6~12): Spec-driven development with SDD+DDD+TDD
-- **13 specialized AI agents**, **40+ skills**, **10 slash commands**
+- **13 specialized AI agents**, **40+ skills**, **15+ slash commands**
+- **gstack automation**: 7 auto-trigger skills across the pipeline (/investigate, /qa, /benchmark, /canary, /learn, /autoplan)
+- **RAG system**: Hybrid vector+BM25 search across forge-outputs
 - **Rules-as-Code**: Compilable rule system for automated pipeline governance
 - **Notion as single source of truth** for task tracking
 
@@ -79,7 +81,7 @@ forge/
 │   └── gitlab-spec-kit/← GitLab CI pipelines + scripts
 ├── shared/             ← Shared between planning & dev
 │   ├── docs/           ← Shared documentation
-│   ├── scripts/        ← Management scripts
+│   ├── scripts/        ← Management scripts (incl. rag/ for hybrid search)
 │   └── cross-project/  ← Cross-project rules
 ├── .claude/            ← Claude Code config (team-shared)
 │   ├── agents/         ← AI agents (13)
@@ -152,6 +154,13 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/daily-system-review` | Daily AI system analysis |
 | `/weekly-research` | Weekly research pipeline |
 | `/yt` | YouTube video analysis |
+| `/qa` | Auto QA verification loop |
+| `/benchmark` | Pre-PR performance comparison |
+| `/canary` | Post-deploy health monitoring |
+| `/autoplan` | CEO→Design→Eng 3-perspective review |
+| `/investigate` | Root cause analysis (4-stage) |
+| `/learn` | Cross-session learning store |
+| `/rag-search` | Semantic document search |
 
 ## Project Sync
 
