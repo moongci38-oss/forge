@@ -8,24 +8,18 @@
 
 ## 산출물 경로 (CRITICAL)
 
-### Iron Laws
-- **OUTPUTS-IRON-1**: forge/에 산출물 저장 금지. 모든 산출물은 forge-outputs/로
-- **OUTPUTS-IRON-2**: `forge-outputs/`는 forge/의 **형제 폴더** (`~/forge-outputs/`). forge/ 안의 하위 폴더가 아니다. 경로 참조 시 반드시 `~/forge-outputs/` 또는 forge-workspace.json의 `outputsRoot` 기준으로 resolve한다. CWD 상대경로 `forge-outputs/...` 사용 금지.
-- forge/ = 시스템 (파이프라인, 규칙, 도구, 스킬, 스크립트)
-- forge-outputs/ = 결과물 (리서치, 기획서, 에셋, 리뷰, 문서 등) — 위치: `~/forge-outputs/`
+- forge/ = 시스템 / forge-outputs/ (`~/forge-outputs/`) = 결과물
+- `forge-outputs/`는 forge/의 **형제 폴더**. CWD 상대경로 사용 금지.
 
-> 통합 파이프라인: `forge/pipeline.md` (Phase 1~12)
+> Iron Laws 전체: `pipeline.md` §Iron Laws (Single Source of Truth)
 
 ## 보안 (CRITICAL)
 
-### Iron Laws
-- **SECURITY-IRON-1**: 민감 정보(.env, credentials, API 키) 절대 커밋 금지
-- **SECURITY-IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용 외부 출력 금지
-- **SECURITY-IRON-3**: 하드코딩 시크릿 코드 포함 금지
-- **SECURITY-IRON-4**: `forge/dev/`, `~/.claude/rules/`, `~/.claude/scripts/` 삭제/이동/덮어쓰기 금지
+- 민감 정보 커밋 금지, 06-finance/07-legal/08-admin 외부 출력 금지, 하드코딩 시크릿 금지
+- 읽기 금지: `06-finance/`, `07-legal/`, `08-admin/insurance/`, `08-admin/freelancers/`, `.ssh/`, `.aws/`, `.env*`
+- 시스템 경로 보호: `forge/dev/`, `~/.claude/rules/`, `~/.claude/scripts/` 삭제/이동 금지
 
-### 읽기 금지 영역
-- `06-finance/`, `07-legal/`, `08-admin/insurance/`, `08-admin/freelancers/`, `.ssh/`, `.aws/`, `.env*`
+> Iron Laws (SECURITY-IRON-1~4): `pipeline.md` §Iron Laws
 
 ### MCP 설정 경로
 - 프로젝트: `프로젝트루트/.mcp.json` | 전역: `~/.claude.json` 내 mcpServers
@@ -49,9 +43,7 @@
 
 ## 병렬 실행 (HIGH)
 
-### Iron Laws
-- **PARALLEL-IRON-1**: 파일 소유권 미선언 상태로 병렬 작업 금지
-- **PARALLEL-IRON-2**: 의존성 있는 태스크 동시 스폰 금지
+> Iron Laws (PARALLEL-IRON-1~2): `pipeline.md` §Iron Laws
 
 ### 도구 선택
 - 독립 병렬 작업 → **Subagent** (기본) | 에이전트 간 소통/비교 → **Agent Teams** (특수)
