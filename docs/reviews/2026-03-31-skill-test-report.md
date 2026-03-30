@@ -2,7 +2,7 @@
 
 **날짜**: 2026-03-31
 **테스트 대상**: 55개 스킬 (archive 제외)
-**완료**: 49/55 (89%) — 나머지 6개 타임아웃
+**완료**: 54/55 (98%) — 1개 타임아웃 (game-reference-collect)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | 등급 | 수 | 비율 |
 |------|:--:|:----:|
-| PASS | 21 | 43% |
-| PASS with WARN | 15 | 31% |
-| WARN | 11 | 22% |
+| PASS | 25 | 46% |
+| PASS with WARN | 16 | 30% |
+| WARN | 11 | 20% |
 | FAIL | 2 | 4% |
 
-**전체 통과율: 76% (PASS + PASS with WARN)**
+**전체 통과율: 76% (PASS + PASS with WARN = 41/54)**
 
 ---
 
@@ -30,7 +30,7 @@
 
 ## PASS (21건) — 정상 동작
 
-concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, slash-command-creator, react-best-practices, yt-analyze, requirements-clarity, audit-context, audit-human-ai, library-search, subagent-creator, weekly-analyze, audit-agentic, audit-cost, cto-advisor, playwright-cli, style-train
+concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, slash-command-creator, react-best-practices, yt-analyze, requirements-clarity, audit-context, audit-human-ai, library-search, subagent-creator, weekly-analyze, audit-agentic, audit-cost, cto-advisor, playwright-cli, style-train, asset-critic, spec-compliance-checker, inspection-checklist, soul-prompt-craft
 
 ---
 
@@ -53,6 +53,7 @@ concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, sl
 | audit-harness | Notion DB ID 하드코딩 |
 | video-reference-guide | Gemini API 키 미설정 (screenshot-analyze와 동일 원인) |
 | forge-onboard | manifest 경로 불일치, 섹션 번호 중복 |
+| frontend-design | 폰트 수렴 경고 (Playfair Display 반복 선택) |
 
 ---
 
@@ -76,9 +77,9 @@ concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, sl
 
 ---
 
-## 미테스트 (6건) — 타임아웃
+## 미테스트 (1건) — 타임아웃
 
-frontend-design, spec-compliance-checker, asset-critic, game-reference-collect, inspection-checklist, soul-prompt-craft
+game-reference-collect
 
 ---
 
