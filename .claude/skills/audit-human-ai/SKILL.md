@@ -41,11 +41,12 @@ context: fork
    - L1(Operator) ~ L5(Observer) 중 실제 적용 레벨
    - "자율성은 능력과 별개의 설계 결정" 원칙 반영 여부
 
-2. **[STOP]/[AUTO-PASS] 게이트 설계** 분석
-   - 각 게이트의 유형 분류 (Hard Stop / Conditional Auto-Pass / Confidence-Based 등)
-   - 비가역적 행동에 Hard Stop 존재 여부 확인
-   - Auto-Pass 6조건 적용 여부 (가역성+이전승인+외부영향없음+신뢰도+규제+분포)
-   - 게이트 과잉(Alert Fatigue) 위험 식별
+2. **게이트 커버리지** — 실측
+   - Grep "\\[STOP\\]" in pipeline.md → Hard Stop 게이트 수
+   - Grep "AUTO-PASS" in pipeline.md → Auto-Pass 게이트 수
+   - Grep "Phase.*비가역|DB 마이그레이션|프로덕션|force" in pipeline.md/rules → 비가역 작업 수
+   - 커버리지 = (STOP 게이트 / 비가역 작업) × 100
+   - 기준: 100%
 
 3. **에스컬레이션 트리거** 커버리지
    - 신뢰도 기반 / 가역성 기반 / 리스크 도메인 기반 / 이상 감지 기반 / 감정 기반
@@ -63,10 +64,11 @@ context: fork
    - 실제 행동 권한 존재 여부
    - 정렬된 의도 확인
 
-6. **지표 추적** 현황
-   - Override Rate 추적 여부 (너무 낮으면 rubber-stamp 위험)
-   - Rubber-Stamp Rate 기준 (< 20% 목표) 문서화 여부
-   - Gate Bypass Rate 모니터링 여부
+6. **지표 추적** — 실측 (Design Review로 정직 표기)
+   - Override Rate: ⚠️ 런타임 데이터 필요 — 현재 측정 불가. "미측정" 표기.
+   - Rubber-Stamp Rate: ⚠️ 승인 이력 필요 — 현재 측정 불가. "미측정" 표기.
+   - Gate Bypass Rate: Grep "no-verify|skip.*check" in git log → 우회 시도 수
+   - 측정 불가 항목은 "Design Review" 라벨, 측정 가능 항목만 "Audit" 라벨
 
 **반환 JSON 형식:**
 
