@@ -596,19 +596,41 @@ PR 생성 전 `/benchmark` 자동 실행 (develop baseline vs feature 브랜치 
 
 ---
 
-## Iron Laws
+## Iron Laws (Single Source of Truth)
 
-- Phase 3 기획서 없이 Phase 4 진입 금지 (Hard 의존성)
-- Phase 4 기획 패키지 없이 Phase 5 진입 금지 (Hard 의존성)
-- Handoff 문서 없이 Phase 6 세션 시작 금지
-- Phase 3에 관리자 기능 포함 시 Phase 4에도 관리자 산출물 필수
+> 이 섹션이 모든 Iron Laws의 유일한 정의. forge-core.md, forge-planning.md는 이 섹션을 참조.
+
+### 파이프라인
+- **PIPELINE-IRON-1**: Phase 3 기획서 없이 Phase 4 진입 금지 (Hard 의존성)
+- **PIPELINE-IRON-2**: Phase 4 기획 패키지 없이 Phase 5 진입 금지 (Hard 의존성)
+- **PHASE3-IRON-1**: 단일 에이전트 초안으로 기획서 확정 금지 (에이전트 회의 필수)
+- **PHASE3-IRON-2**: .pptx 없이 기획서 승인 금지
+- **PHASE4-IRON-1**: 필수 산출물 3종 완성 전 Gate 통과 금지
+- **PHASE4-IRON-2**: Phase 3에 관리자 기능 포함 시 Phase 4에도 관리자 산출물 필수
+- **HANDOFF-IRON-1**: Handoff 문서 없이 Phase 6 진입 금지
 - Phase 2 기획 디렉션 5축의 Axis 1/3은 Human 확인 없이 확정 금지
 - Phase 4 Wave 2B Don't 태그 위반 = CRITICAL → [STOP]
 - Phase 7 Spec 승인 없이 구현 시작 금지
 - Phase 10 Check 8 PASS 없이 Phase 11 진입 금지
 - Phase 11 Release PR 승인 없이 Phase 12 진입 금지
 - 기획/계획 문서 수정은 Forge 워크스페이스 원본에서만 (symlink 자동 반영)
-- **forge/에 산출물 저장 금지. 모든 산출물은 forge-outputs/로.**
+
+### 산출물
+- **OUTPUTS-IRON-1**: forge/에 산출물 저장 금지. 모든 산출물은 forge-outputs/로
+- **OUTPUTS-IRON-2**: `forge-outputs/`는 forge/의 형제 폴더 (`~/forge-outputs/`). CWD 상대경로 금지
+
+### 보안
+- **SECURITY-IRON-1**: 민감 정보(.env, credentials, API 키) 절대 커밋 금지
+- **SECURITY-IRON-2**: 06-finance/, 07-legal/, 08-admin/ 내용 외부 출력 금지
+- **SECURITY-IRON-3**: 하드코딩 시크릿 코드 포함 금지
+- **SECURITY-IRON-4**: `forge/dev/`, `~/.claude/rules/`, `~/.claude/scripts/` 삭제/이동/덮어쓰기 금지
+
+### 병렬 실행
+- **PARALLEL-IRON-1**: 파일 소유권 미선언 상태로 병렬 작업 금지
+- **PARALLEL-IRON-2**: 의존성 있는 태스크 동시 스폰 금지
+
+### PM
+- **PM-IRON-1**: Human 수동 변경한 Notion 상태 덮어쓰기 금지
 
 ## 산출물 저장 경로 요약
 

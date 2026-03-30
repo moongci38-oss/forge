@@ -20,15 +20,13 @@ Phase 1 Research → Phase 2 Concept → Phase 3 Design Doc → Phase 4 Planning
 
 ## Iron Laws
 
-- **PIPELINE-IRON-1**: Phase 3 기획서 없이 Phase 4 진입 금지
-- **PIPELINE-IRON-2**: Phase 4 개발 계획 없이 Phase 5 진입 금지
-- **PHASE3-IRON-1**: 단일 에이전트 초안으로 기획서 확정 금지 (에이전트 회의 필수)
-- **PHASE3-IRON-2**: .pptx 없이 기획서 승인 금지
-- **PHASE4-IRON-1**: 필수 산출물 3종 완성 전 Gate 통과 금지
-- **PHASE4-IRON-2**: Phase 3에 관리자 포함 시 Phase 4에도 관리자 산출물 필수
-- **HANDOFF-IRON-1**: Handoff 문서 없이 Phase 6 진입 금지
-- **PM-IRON-1**: Human 수동 변경한 Notion 상태 덮어쓰기 금지
-- **OUTPUTS-IRON-1**: forge/에 산출물 저장 금지. 모든 산출물은 forge-outputs/로
+> 전체 Iron Laws: `pipeline.md` §Iron Laws (Single Source of Truth)
+> 이 파일에서는 핵심 요약만 기재. 정확한 정의는 pipeline.md 참조.
+
+- Phase 3→4→5→6 Hard 의존성 순서 불변
+- 에이전트 회의 필수, .pptx 필수, 산출물 3종 필수
+- Human 수동 변경 Notion 상태 덮어쓰기 금지
+- forge/에 산출물 저장 금지
 
 ## 모델 계층화
 
