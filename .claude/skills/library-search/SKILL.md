@@ -3,6 +3,7 @@ name: library-search
 description: Prefab Visual Library에서 기존 에셋을 검색하여 MCP 생성 비용을 절감하는 스킬. 키워드/태그/트랙으로 검색하고, 완전매칭/부분매칭/없음 분기를 제안한다. 에셋 생성 전 Library-First 탐색 전용.
 user-invocable: true
 context: fork
+model: haiku
 ---
 
 # Library Search — Prefab Visual Library 검색

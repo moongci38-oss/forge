@@ -6,6 +6,7 @@ description: >
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Human-AI 경계 설계 감사

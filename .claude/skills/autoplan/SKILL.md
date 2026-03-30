@@ -3,6 +3,7 @@ name: autoplan
 description: 기획서를 CEO(비즈니스)→Design(UX)→Engineering(기술) 3관점으로 순차 리뷰하는 스킬. Phase 3 에이전트 회의 후 자동 트리거.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Autoplan — 3관점 순차 리뷰

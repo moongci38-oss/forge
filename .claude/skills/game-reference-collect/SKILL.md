@@ -3,6 +3,7 @@ name: game-reference-collect
 description: S3(GDD)~S4 단계에서 경쟁작/레퍼런스 게임의 시각 자료(영상, 스크린샷, 로직)를 체계적으로 수집·분석·정리하는 통합 스킬. 분석 도구 자동 라우팅.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Game Reference Collect
