@@ -3,6 +3,7 @@ name: forge-onboard
 description: 신규 프로젝트를 Forge 파이프라인에 온보딩하는 스킬. forge-sync 등록 → 규칙/템플릿 배포 → CLAUDE.md/constitution 스캐폴딩 → forge-workspace.json 연결까지 4단계 자동화. 새 프로젝트 추가, 프로젝트 온보딩, forge 등록, 프로젝트 초기 설정 요청 시 사용.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent
 context: fork
+model: sonnet
 ---
 
 # Forge Onboard — 신규 프로젝트 온보딩

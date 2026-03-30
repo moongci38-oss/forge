@@ -3,6 +3,7 @@ name: asset-critic
 description: AI 생성 에셋의 품질을 6항목 정량 크리틱 루브릭(5점 척도)으로 평가하는 스킬. 계층/일관성/안티패턴/브리프/서사/물성 6축 평가 + 🎮/🌐 트랙별 추가 항목. 에셋 승인/거부 의사결정을 정량 데이터로 지원.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Asset Critic — 6항목 정량 크리틱

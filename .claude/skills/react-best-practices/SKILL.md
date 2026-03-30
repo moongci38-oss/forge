@@ -2,6 +2,7 @@
 name: react-best-practices
 description: "React/Next.js 성능 최적화 57룰. async 워터폴 제거, 번들 최적화, RSC 성능, 리렌더 방지 등 8카테고리 프론트엔드 성능 도메인 지식 (React, Next.js, App Router, Server Components)"
 context: fork
+model: sonnet
 ---
 
 # React Best Practices

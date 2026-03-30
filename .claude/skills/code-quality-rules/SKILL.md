@@ -3,6 +3,7 @@ name: code-quality-rules
 description: "Detects semantic code quality issues (logic, architecture, UX) that static hooks cannot catch. Provides 10 rules across 4 categories: API patterns, HTML/accessibility, architecture, and logic. Auto-triggered in Forge Dev Check 3.7Q and referenced during code review."
 user-invocable: false
 context: fork
+model: sonnet
 ---
 
 # Code Quality Rules (Semantic)

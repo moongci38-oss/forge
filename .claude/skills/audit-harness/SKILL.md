@@ -6,6 +6,7 @@ description: >
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # AI 하네스 엔지니어링 감사
