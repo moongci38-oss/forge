@@ -147,6 +147,8 @@ Hotfix:  Phase 1(경량) → Phase 3 → Check 3 → Phase 4
 | Check 3.6 | Check 3.7 후 | AI가 `ui-quality-checker` 에이전트 스폰 (FE 변경 시) | 프론트엔드 PR |
 | Check 6 | develop push 후 | `develop-integration.yml` GitLab CI | Phase 5 자동 |
 | Check 6.5 | Check 6 실패 시 | GitLab Issue 자동 생성 → AI 분석 + 수정 (최대 2회 재시도; 초과 시 **[STOP]** Human 에스컬레이션) | Phase 10 실패 대응 |
+| Check 6.8 | Check 6.7 PASS 후 | `/qa` 자동 루프 — Spec FR/NFR 기준 시나리오 검증 (최대 2 사이클; 잔존 시 **[STOP]**) | Hotfix 스킵 |
+| Pre-PR Benchmark | PR 생성 직전 | `/benchmark` — develop 대비 번들/테스트/API 성능 비교 (WARN +10%, STOP +25%) | `benchmarkEnabled: false` 시 스킵 |
 | Check 7 | 릴리스 브랜치 생성 후 | `release-staging.yml` — staging deploy(조건부) + E2E | Phase 6 자동 |
 | Check 7.5 | Check 7 완료 후 | Release PR 생성 + Human 승인 대기 | Phase 6 **[STOP]** |
 | Check 8 | main push 후 | `production-deploy.yml` — deploy + health check + smoke test | Phase 7 자동 |
@@ -295,6 +297,81 @@ Check 3 실패 판별
 ```
 
 **주의**: autoFix 횟수 카운터(1회 제한)는 E2E/비E2E 구분 없이 공유. 한도 초과 시 [STOP].
+
+## gstack 파이프라인 자동화
+
+Phase 진행 중 아래 조건이 감지되면 해당 스킬이 자동 트리거된다.
+
+### 자동 트리거 매트릭스
+
+| 트리거 조건 | 스킬 | Phase | 동작 |
+|------------|------|:-----:|------|
+| Check 6 실패 + 런타임 에러 | `/investigate` | 8 | 루트 코즈 4단계 분석 → 수정 → 재검증 |
+| Check 6.7 PASS 후 | `/qa` | 8 | 기능별 시나리오 검증 루프 (최대 2회) |
+| PR 생성 직전 | `/benchmark` | 9 | develop 대비 성능 비교 (번들/테스트/API) |
+| develop 통합 PASS 후 | `/canary` | 10 | 15분 헬스 모니터링 (canaryEnabled 시) |
+| Phase checkpoint 도달 | `/learn save` | 전체 | 세션 학습 자동 저장 |
+| Phase 6 세션 시작 | `/learn search` | 6 | 이전 학습 자동 로드 (상위 3건) |
+| Phase 3 에이전트 회의 후 | `/autoplan` | 3 | CEO→Design→Eng 3관점 순차 리뷰 |
+
+### /investigate 자동 트리거 조건
+
+아래 **모두** 충족 시 자동 발동 (lint/type 에러는 제외):
+
+1. Check 6 (verify.sh) 실패
+2. 에러 유형이 런타임 에러 (테스트 실패, 크래시, 예외)
+3. 동일 에러 패턴 2회+ 반복 또는 스택 트레이스의 원인 불명
+
+발동 후: `/investigate` 4단계 → 수정 → Check 6 재실행. 실패 시 [STOP].
+
+### /qa 자동 루프
+
+Check 6.7 (코드 리뷰) PASS 후 자동 실행:
+
+1. Spec의 FR/NFR 기준 기능별 시나리오 생성
+2. 시나리오 실행 → 이슈 발견 시 수정 → 재검증
+3. 최대 2 사이클. 2회 후에도 이슈 잔존 → [STOP]
+4. Hotfix는 /qa 스킵
+
+### /benchmark 성능 비교
+
+PR 생성 직전 자동 실행:
+
+1. develop 브랜치 baseline 측정
+2. feature 브랜치 측정
+3. 비교: 번들 크기, 테스트 실행 시간, API 응답 시간 (해당 시)
+4. 임계값: +10% → WARN (PR에 기록), +25% → [STOP]
+5. `release-config.json`의 `benchmarkEnabled: false`이면 스킵
+
+### /canary 모니터링
+
+develop 통합 (Phase 10) Check 8 PASS 후:
+
+1. `release-config.json`의 `canaryEnabled: true` 확인
+2. 15분 모니터링 윈도우: 에러율, 응답 시간, 메모리 사용량
+3. 임계값 초과 → 자동 알림 + [STOP]
+4. 모니터링 미설정 시 스킵
+
+### /learn 자동 저장·로드
+
+**저장** (모든 Phase checkpoint):
+- 세션 중 발견한 패턴, 해결한 버그, 도구 관련 발견을 자동 저장
+- 유의미한 학습이 없으면 스킵 (빈 학습 저장 금지)
+
+**로드** (Phase 6 세션 시작):
+- `.claude/learnings.jsonl`에서 현재 세션 컨텍스트와 관련 있는 상위 3건 자동 표시
+- forge-core.md의 "learnings 참조" 규칙과 연동
+
+### /autoplan 3관점 리뷰
+
+Phase 3 에이전트 회의(Competing Hypotheses) 후 자동 실행:
+
+1. **CEO Review**: 비즈니스 모델, 수익성, 시장 적합성 관점
+2. **Design Review**: UX/UI 일관성, 사용자 경험, 접근성 관점
+3. **Engineering Review**: 기술 실현성, 아키텍처 건전성, 확장성 관점
+4. 각 리뷰어가 기획서에 어노테이션 추가
+5. 관점 간 충돌 → Human 에스컬레이션
+6. 3관점 모두 PASS → Phase 3 Check 진입
 
 ## PR 역할 분리
 
