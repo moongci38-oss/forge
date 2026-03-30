@@ -43,8 +43,13 @@ Phase 10 Check 8 PASS → canaryEnabled 시 자동 실행
 1. `release-config.json`에서 `canaryEnabled`, `healthCheckUrl`, `monitoringDuration` 확인
 2. 모니터링 시작 (기본 15분, 1분 간격 폴링)
 3. 각 체크포인트에서 메트릭 수집
-4. 임계값 초과 시 즉시 알림
-5. 모니터링 완료 → 리포트 생성
+4. 모니터링 완료 → **canary-judge 에이전트** 호출하여 자동 판정
+   - 수집된 메트릭(에러율, p95 응답 시간, 메모리 사용량, HTTP 상태)을 에이전트에 전달
+   - 에이전트가 PASS / WARN / FAIL verdict와 JSON 결과 반환
+   - **FAIL** 판정 시: "롤백 권고 — `/forge-rollback` 명령으로 즉시 롤백하세요." 자동 출력
+   - **WARN** 판정 시: 경고 내용과 함께 모니터링 지속 권장 메시지 출력
+   - **PASS** 판정 시: "배포 안정. Phase 11 진행 가능." 출력
+5. 리포트 생성 → `docs/canary/YYYY-MM-DD-canary-report.md` 저장
 
 ## 설정 (release-config.json)
 
