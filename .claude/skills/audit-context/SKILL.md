@@ -36,37 +36,53 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **컨텍스트 구성 체크리스트**
-   - System Instructions / User Prompt / Conversation History / Persistent Memory / Retrieved Data / Available Tools / Output Specifications 각 레이어 구현 여부
+> 분석 기준: `shared/docs/2026-03-30-four-engineering-disciplines.md` §2 Context Engineering
+> 원칙: 정의서에 없는 기법은 감사하지 않는다.
 
-2. **컨텍스트 실패 패턴 탐지** — 실측
-   - **Clash**: Grep for conflicting patterns — same keyword with opposite instructions across rules files. Count files with "금지" and "허용" for same subject.
-   - **Rot**: Check MEMORY.md dates — entries older than 90 days without update = Rot risk
+1. **System Prompt Design** (정의서 §2-1) — 실측
+   - Glob `CLAUDE.md` + `.claude/rules/*.md` → 파일 수 + 총 바이트
+   - 기준: CLAUDE.md 1개 이상 + rules 2개 이상
 
-3. **Progressive Disclosure 구현** 확인
-   - Passive → Active → Deep 3단계 로딩 적용 여부
-   - 불필요한 전체 로드 패턴 식별
+2. **Short-Term Memory 관리** (정의서 §2-2) — 실측
+   - Grep `/compact` or `compact` in `.claude/rules/*.md` → 규칙 존재 여부
+   - Grep `History.*제한|autoFixHistory` → 히스토리 관리 규칙
 
-4. **메모리 시스템** 평가
-   - Factual / Experiential / Working 메모리 분류
-   - Cross-Session Continuity 메커니즘 존재 여부
-   - MEMORY.md / session-state 활용 패턴
+3. **Long-Term Memory** (정의서 §2-3) — 실측
+   - Glob `learnings.jsonl` + `MEMORY.md` → 존재 여부
+   - `wc -l` MEMORY.md → 항목 수
+   - 기준: MEMORY.md < 30 항목
 
-5. **세션 시작 토큰** — 추정
-   - `wc -c` on all .claude/rules/*.md → byte count → ÷4 = estimated tokens
-   - `wc -c` on CLAUDE.md → tokens
-   - `wc -c` on MEMORY.md → tokens
-   - Total = sum of above
-   - 기준: < 12,000 tokens (≈ 48,000 bytes)
+4. **RAG (Just-in-Time Retrieval)** (정의서 §2-4) — 실측
+   - Glob `shared/scripts/rag/` → RAG 스크립트 존재
+   - Glob `.rag-index/` → 인덱스 존재
+   - /rag-search 스킬 존재 여부
 
-6. **프롬프트 구조 3요소 포함률** — 실측 (GUIDED)
-   - Grep `.claude/skills/*/SKILL.md` 에서 서브에이전트 프롬프트 블록 탐지
-   - 3요소 체크:
-     - **역할(Role)**: "역할", "role", "당신은", "You are", "전문가" 패턴
-     - **컨텍스트(Context)**: "배경", "context", "현재 상태", "입력" 패턴
-     - **출력 형식(Output)**: "JSON", "반환", "output", "형식", "포맷" 패턴
-   - 포함률 = (3요소 모두 포함 스킬 / 서브에이전트 프롬프트 보유 스킬) × 100
-   - 기준: > 70%
+5. **Tool Definition Optimization** (정의서 §2-5) — 실측
+   - Read `.mcp.json` → MCP 서버 수
+   - 각 서버에 description 필드 존재 여부
+
+6. **Context Compaction** (정의서 §2-6) — 실측
+   - Grep `compact|압축|70%` in rules/ → /compact 트리거 기준 문서화 여부
+
+7. **Sub-Agent Architecture** (정의서 §2-7) — 실측
+   - Grep `subagent_type|context.*fork|isolation.*worktree` in skills/ → 격리 패턴 수
+
+8. **Progressive Disclosure** (정의서 §2-8) — 실측
+   - Grep `Passive|Active|Deep.*로딩|Deep.*로드|점진적` in rules/ → 3단계 구현 여부
+   - 조건부 로딩률 = (Deep 참조 규칙 / 전체 규칙 섹션) × 100
+   - 기준: > 50%
+
+9. **Structured Note-Taking** (정의서 §2-9) — 실측
+   - Grep `session-state|checkpoint|state=` in rules/ or pipeline.md → 상태 관리 패턴
+
+10. **프롬프트 구조 3요소 포함률** (Prompt Eng. 연동) — 실측
+    - Grep `.claude/skills/*/SKILL.md` 에서 서브에이전트 프롬프트 블록 탐지
+    - 3요소 체크:
+      - **역할(Role)**: "역할", "role", "당신은", "You are", "전문가" 패턴
+      - **컨텍스트(Context)**: "배경", "context", "현재 상태", "입력" 패턴
+      - **출력 형식(Output)**: "JSON", "반환", "output", "형식", "포맷" 패턴
+    - 포함률 = (3요소 모두 포함 스킬 / 서브에이전트 프롬프트 보유 스킬) × 100
+    - 기준: > 70%
 
 **반환 JSON 형식:**
 
@@ -75,14 +91,19 @@ context: fork
   "axis": "context",
   "target": "{target}",
   "score": 0-100,
-  "context_checklist": { "system_instructions": true/false, "persistent_memory": true/false, "retrieved_data": true/false, "available_tools": true/false, "output_specifications": true/false },
+  "system_prompt_design": { "claude_md_exists": true/false, "rules_count": 0, "total_bytes": 0 },
+  "short_term_memory": { "compact_rule_exists": true/false, "history_limit_rule": true/false },
+  "long_term_memory": { "learnings_jsonl": true/false, "memory_md": true/false, "memory_md_lines": 0 },
+  "rag": { "rag_scripts": true/false, "rag_index": true/false, "rag_skill": true/false },
+  "tool_definition": { "mcp_server_count": 0, "description_coverage": true/false },
+  "context_compaction": { "compact_trigger_documented": true/false },
+  "sub_agent_architecture": { "isolation_pattern_count": 0 },
+  "progressive_disclosure": { "three_stage_implemented": true/false, "conditional_loading_rate": 0 },
+  "structured_note_taking": { "state_management_pattern": true/false },
+  "prompt_structure_rate": 0-100,
   "failure_patterns": [
     { "type": "Clash|Rot", "severity": "CRITICAL|HIGH|MEDIUM|LOW", "evidence": "...", "recommendation": "..." }
   ],
-  "progressive_disclosure": true/false,
-  "prompt_structure_rate": 0-100,
-  "memory_types": ["Factual", "Working"],
-  "token_budget_awareness": true/false,
   "issues": [
     { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "..." }
   ],

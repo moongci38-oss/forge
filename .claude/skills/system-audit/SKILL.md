@@ -69,19 +69,19 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 
 **에이전트 1 — axis-agentic (model: sonnet)**
 
-프롬프트: `{target} 경로의 에이전틱 역량을 분석한다. Anthropic Composable Patterns 수준, 도구 커버리지율, 멀티에이전트 토폴로지를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 에이전틱 역량을 분석한다. 반드시 `shared/docs/2026-03-30-four-engineering-disciplines.md`의 §4 Agentic Engineering 섹션을 Read한 후, 정의서 기법 목록을 기준으로 체크하라. 정의서에 없는 항목은 감사하지 않는다. Anthropic Composable Patterns 수준, ACI 설계, Agent Evals, Multi-Agent Coordination, Memory Architecture, AgentOps를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
 반환 JSON: `{ "axis": "agentic", "score": 0-100, "composable_pattern": "...", "issues": [...], "strengths": [...], "summary": "..." }`
 
 **에이전트 2 — axis-context (model: sonnet)**
 
-프롬프트: `{target} 경로의 컨텍스트 엔지니어링을 분석한다. 컨텍스트 구성 체크리스트(7개 레이어) 커버리지, 실측 가능한 컨텍스트 실패 패턴(Clash/Rot), Progressive Disclosure 적용, 메모리 시스템, 토큰 효율을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 컨텍스트 엔지니어링을 분석한다. 반드시 `shared/docs/2026-03-30-four-engineering-disciplines.md`의 §2 Context Engineering 섹션을 Read한 후, 정의서 기법 목록을 기준으로 체크하라. 정의서에 없는 항목은 감사하지 않는다. System Prompt Design(§2-1), Short-Term Memory(§2-2), Long-Term Memory(§2-3), RAG(§2-4), Tool Definition(§2-5), Context Compaction(§2-6), Sub-Agent Architecture(§2-7), Progressive Disclosure(§2-8), Structured Note-Taking(§2-9) 9개 기법과 프롬프트 구조 3요소 포함률을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
 반환 JSON: `{ "axis": "context", "score": 0-100, "context_checklist": {...}, "failure_patterns": [...], "progressive_disclosure": true/false, "issues": [...], "strengths": [...], "summary": "..." }`
 
 **에이전트 3 — axis-harness (model: sonnet)**
 
-프롬프트: `{target} 경로의 AI 하네스를 분석한다. Check Chain(3→3.5→3.7), OWASP Agentic Top 10 커버리지(ASI01-ASI10), 가드레일 5 Rail Types, Hook 커버리지를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 AI 하네스를 분석한다. 반드시 `shared/docs/2026-03-30-four-engineering-disciplines.md`의 §3 Harness Engineering 섹션을 Read한 후, 정의서 기법 목록을 기준으로 체크하라. 정의서에 없는 항목은 감사하지 않는다. Check Chain(§3-1), Guardrails 5 Rail Types(§3-2), OWASP Agentic Top 10(§3-3), Hooks(§3-4), AI Evals(§3-5), Observability(§3-6), Rollback(§3-7), Maintenance Agents(§3-8) 8개 구성요소를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
 반환 JSON: `{ "axis": "harness", "score": 0-100, "check_chain": {...}, "owasp_coverage": {...}, "issues": [...], "strengths": [...], "summary": "..." }`
 
