@@ -36,16 +36,18 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **모델 라우팅/계층화** 평가
-   - Opus/Sonnet/Haiku 3단계 계층 문서화 여부
-   - 작업 성격별 모델 할당 기준 존재 여부
-   - 탐색 전용 Haiku 사용 패턴 (불필요한 Opus/Sonnet 사용 식별)
+1. **모델 계층화율** — 실측
+   - Grep `model.*haiku|model.*sonnet|model.*opus` in .claude/skills/*/SKILL.md → 모델 지정 스킬 수
+   - Glob .claude/skills/*/SKILL.md → 전체 스킬 수
+   - 계층화율 = (model 지정 스킬 / 전체 스킬) × 100
+   - 기준: > 60%
+   - Haiku 비율 = Haiku 지정 수 / model 지정 전체
 
-2. **컨텍스트 절약 패턴** 확인
-   - /compact 트리거 기준 문서화 여부
-   - Sub-Agent 격리로 메인 컨텍스트 보호 패턴
-   - Progressive Disclosure 적용으로 초기 토큰 절감
-   - MCP 도구 정의 토큰 인식 여부
+2. **조건부 로딩률** — 실측
+   - Grep "Deep.*로드|Deep.*로딩|참조$" in .claude/rules/*.md → 조건부 참조 규칙 수
+   - Grep "^##" in .claude/rules/*.md → 전체 규칙 섹션 수
+   - 조건부 로딩률 = (조건부 참조 / 전체 섹션) × 100
+   - 기준: > 50%
 
 3. **MCP vs CLI 전환** 현황
    - MCP→CLI 전환 완료 항목 확인 (Playwright 등)
