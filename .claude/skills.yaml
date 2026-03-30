@@ -1,0 +1,227 @@
+# Forge Skills Registry
+# 자동 생성: 2026-03-31
+version: 1
+sync:
+  forge_to_global: true
+
+skills:
+  asset-critic:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  audit-agentic:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  audit-context:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  audit-cost:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  audit-harness:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  audit-human-ai:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  autoplan:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  benchmark:
+    model: haiku
+    user-invocable: true
+    context: fork
+  canary:
+    model: haiku
+    user-invocable: true
+    context: fork
+  code-quality-rules:
+    model: sonnet
+    user-invocable: false
+    context: fork
+  concise-planning:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  content-creator:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  cto-advisor:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  daily-analyze:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  daily-system-review:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  forge-onboard:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  forge-planning-router:
+    model: haiku
+    user-invocable: false
+    context: fork
+  forge-router:
+    model: haiku
+    user-invocable: false
+    context: fork
+  frontend-design:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  game-asset-generate:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  game-logic-visualize:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  game-reference-collect:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  grants-review:
+    model: opus
+    user-invocable: true
+    context: fork
+  grants-write:
+    model: opus
+    user-invocable: true
+    context: fork
+  hook-creator:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  hwp2pdf:
+    model: haiku
+    user-invocable: true
+    context: fork
+  inspection-checklist:
+    model: haiku
+    user-invocable: true
+    context: fork
+  investigate:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  kaizen:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  learn:
+    model: haiku
+    user-invocable: true
+    context: fork
+  library-search:
+    model: haiku
+    user-invocable: true
+    context: fork
+  playwright-cli:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  playwright-parallel-test:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  pptx:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  product-manager-toolkit:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  qa:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  rag-search:
+    model: haiku
+    user-invocable: true
+    context: fork
+  rd-plan:
+    model: opus
+    user-invocable: true
+    context: fork
+  react-best-practices:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  requirements-clarity:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  screenshot-analyze:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  skill-autoresearch:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  slash-command-creator:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  soul-prompt-craft:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  spec-compliance-checker:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  style-train:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  subagent-creator:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  system-audit:
+    model: opus
+    user-invocable: true
+    context: fork
+  ux-audit:
+    model: sonnet
+    user-invocable: false
+    context: fork
+  video-reference-guide:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  weekly-analyze:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  weekly-research:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  writing-plans:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  yt-analyze:
+    model: sonnet
+    user-invocable: true
+    context: fork
+  yt:
+    model: sonnet
+    user-invocable: true
+    context: fork

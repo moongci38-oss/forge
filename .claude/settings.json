@@ -50,6 +50,11 @@
             "type": "command",
             "command": "bash .claude/hooks/claude-notify.sh complete '응답 완료'",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-learn-save.sh",
+            "timeout": 10
           }
         ]
       }
