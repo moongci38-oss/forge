@@ -1,6 +1,6 @@
 #!/bin/bash
-# Telegram Remote Control — Plan mode 원격 해제
-# tmux 의존성 제거: plan 파일 직접 삭제 + tmux 키입력 병행
+# Telegram Remote Control — tmux 의존성 제거 버전
+# plan 파일 + 세션 파일 기반으로 동작
 
 ACTION="$1"
 PIN="$2"
@@ -18,54 +18,80 @@ if [ "$PIN" != "$STORED_PIN" ]; then
   exit 1
 fi
 
+SESSION_DIR="/tmp/claude-sessions"
+PLAN_DIR="$HOME/.claude/plans"
+# lock 신호 파일 — Claude Code 세션이 감지할 수 있는 마커
+LOCK_FILE="/tmp/claude-remote-lock"
+
 case "$ACTION" in
   unlock)
     RESULT=""
-    
-    # 방법 1: plan 파일 삭제 (tmux 불필요)
-    PLAN_DIR="$HOME/.claude/plans"
+
+    # 1. Plan 파일 삭제
     if [ -d "$PLAN_DIR" ]; then
       PLAN_COUNT=$(ls "$PLAN_DIR"/*.md 2>/dev/null | wc -l)
       if [ "$PLAN_COUNT" -gt 0 ]; then
         rm -f "$PLAN_DIR"/*.md
-        RESULT="Plan 파일 ${PLAN_COUNT}개 삭제 완료."
-      else
-        RESULT="활성 Plan 파일 없음."
+        RESULT="Plan 파일 ${PLAN_COUNT}개 삭제."
       fi
     fi
-    
-    # 방법 2: tmux pane에 Escape 전송 (있으면)
+
+    # 2. Lock 신호 파일 제거
+    if [ -f "$LOCK_FILE" ]; then
+      rm -f "$LOCK_FILE"
+      RESULT="${RESULT} Lock 해제."
+    fi
+
+    # 3. tmux (있으면)
     PANES=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' 2>/dev/null | grep -i claude | awk '{print $1}')
     if [ -n "$PANES" ]; then
       for pane in $PANES; do
         tmux send-keys -t "$pane" Escape 2>/dev/null
       done
-      PANE_COUNT=$(echo "$PANES" | wc -w)
-      RESULT="${RESULT} tmux ${PANE_COUNT}개 pane에 Escape 전송."
+      RESULT="${RESULT} tmux $(echo "$PANES" | wc -w)개 pane Escape."
     fi
-    
-    [ -z "$RESULT" ] && RESULT="Plan 파일 없음, tmux pane 없음."
+
+    [ -z "$RESULT" ] && RESULT="이미 unlock 상태."
     echo "Unlock 완료: $RESULT"
     ;;
-    
+
   lock)
+    # 1. Lock 신호 파일 생성
+    echo "$(date +%s)" > "$LOCK_FILE"
+    RESULT="Lock 신호 설정."
+
+    # 2. tmux (있으면)
     PANES=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' 2>/dev/null | grep -i claude | awk '{print $1}')
     if [ -n "$PANES" ]; then
       for pane in $PANES; do
         tmux send-keys -t "$pane" "/plan" Enter 2>/dev/null
       done
-      echo "Lock 완료: $(echo "$PANES" | wc -w)개 pane에 /plan 전송"
-    else
-      echo "Claude tmux pane 없음. 수동으로 /plan을 입력하세요."
+      RESULT="${RESULT} tmux $(echo "$PANES" | wc -w)개 pane /plan 전송."
     fi
+
+    echo "Lock 완료: $RESULT"
     ;;
-    
+
   status)
-    PLAN_COUNT=$(ls "$HOME/.claude/plans/"*.md 2>/dev/null | wc -l)
-    PANES=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' 2>/dev/null | grep -i claude | wc -l)
-    echo "Plan 파일: ${PLAN_COUNT}개 | Claude pane: ${PANES}개"
+    # 활성 세션 수 (2시간 내)
+    SESSIONS=$(find "$SESSION_DIR" -mmin -120 -type f 2>/dev/null | wc -l)
+
+    # Plan 파일 수
+    PLAN_COUNT=$(ls "$PLAN_DIR"/*.md 2>/dev/null | wc -l)
+
+    # Lock 상태
+    if [ -f "$LOCK_FILE" ]; then
+      LOCK_STATUS="LOCKED"
+    else
+      LOCK_STATUS="UNLOCKED"
+    fi
+
+    # tmux pane (있으면)
+    TMUX_PANES=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' 2>/dev/null | grep -i claude | wc -l)
+
+    echo "상태: ${LOCK_STATUS} | 세션: ${SESSIONS}개 | Plan: ${PLAN_COUNT}개 | tmux: ${TMUX_PANES}개"
     ;;
-    
+
   *)
     echo "Usage: $0 {unlock|lock|status} <PIN>"
     exit 1
