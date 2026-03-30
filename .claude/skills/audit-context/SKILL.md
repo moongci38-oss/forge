@@ -39,12 +39,12 @@ context: fork
 1. **7-Layer Context Architecture 커버리지**
    - System Instructions / User Prompt / Conversation History / Persistent Memory / Retrieved Data / Available Tools / Output Specifications 각 레이어 구현 여부
 
-2. **컨텍스트 실패 패턴 탐지**
-   - Poisoning (할루시네이션 전파): 오래된 정보가 새 컨텍스트에 혼입되는가?
-   - Distraction (볼륨 > 신호): 불필요한 규칙/설명이 핵심을 희석하는가?
-   - Confusion (방향 변경): 모순된 지시가 존재하는가?
-   - Clash (모순 정보): 서로 충돌하는 규칙/설정이 있는가?
-   - Rot (길이 성능 저하): 컨텍스트 증가에 따른 성능 저하 위험이 있는가?
+2. **컨텍스트 실패 패턴 탐지** — 실측
+   - **Clash**: Grep for conflicting patterns — same keyword with opposite instructions across rules files. Count files with "금지" and "허용" for same subject.
+   - **Distraction**: Count total lines in .claude/rules/*.md → if >2000 lines, flag as WARN
+   - **Rot**: Check MEMORY.md dates — entries older than 90 days without update = Rot risk
+   - **Confusion**: Grep for "Iron Law" across all files → count unique definitions. >1 definition per law = Confusion
+   - **Poisoning**: Check learnings.jsonl entries — any with status=invalidated or contradicting current code
 
 3. **Progressive Disclosure 구현** 확인
    - Passive → Active → Deep 3단계 로딩 적용 여부
@@ -55,10 +55,12 @@ context: fork
    - Cross-Session Continuity 메커니즘 존재 여부
    - MEMORY.md / session-state 활용 패턴
 
-5. **토큰 효율** 분석
-   - 규칙 파일 총 토큰 추정
-   - /compact 트리거 기준 문서화 여부
-   - Sub-Agent 격리로 컨텍스트 절약 패턴
+5. **세션 시작 토큰** — 실측
+   - `wc -c` on all .claude/rules/*.md → byte count → ÷4 = estimated tokens
+   - `wc -c` on CLAUDE.md → tokens
+   - `wc -c` on MEMORY.md → tokens
+   - Total = sum of above
+   - 기준: < 12,000 tokens (≈ 48,000 bytes)
 
 6. **RAGAS 지표 커버리지** 체크
    - Faithfulness, Context Precision/Recall 측정 여부

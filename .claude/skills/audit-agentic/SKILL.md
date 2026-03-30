@@ -36,8 +36,11 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **Anthropic Composable Patterns 수준** 파악
-   - Augmented LLM / Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer 중 어디까지 구현되어 있는가?
+1. **Composable Patterns 수준** — 실측
+   - Glob `.claude/agents/*.md` → 에이전트 수 카운트
+   - Grep `Agent\(` or `subagent_type` in skills/ → Subagent 스폰 패턴 수
+   - Grep `isolation.*worktree` → Worktree 격리 패턴 수
+   - 판정: 0 agent=Augmented LLM, 1-5=Prompt Chaining, 5-10+parallel=Orchestrator-Workers
 
 2. **Sema4.ai 성숙도 레벨** 판정
    - L0-L5 중 현재 위치 + 근거 (코드/설정 인용)
