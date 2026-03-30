@@ -2,7 +2,7 @@
 
 **날짜**: 2026-03-31
 **테스트 대상**: 55개 스킬 (archive 제외)
-**완료**: 46/55 (84%) — 나머지 9개 타임아웃
+**완료**: 47/55 (85%) — 나머지 8개 타임아웃
 
 ---
 
@@ -13,7 +13,7 @@
 | PASS | 21 | 46% |
 | PASS with WARN | 14 | 30% |
 | WARN | 10 | 22% |
-| FAIL | 1 | 2% |
+| FAIL | 2 | 4% |
 
 **전체 통과율: 76% (PASS + PASS with WARN)**
 
@@ -24,6 +24,7 @@
 | 스킬 | 원인 | 조치 |
 |------|------|------|
 | **screenshot-analyze** | Gemini API 키 만료 (`~/.claude/scripts/.env`) | API 키 갱신 필요 |
+| **skill-autoresearch** | assessment.md에 `test-method: indirect-via-prompt` 누락 → 재귀 호출 | 1줄 추가로 해결 |
 
 ---
 
@@ -73,9 +74,9 @@ concise-planning, kaizen, code-quality-rules, writing-plans, content-creator, sl
 
 ---
 
-## 미테스트 (9건) — 타임아웃
+## 미테스트 (8건) — 타임아웃
 
-frontend-design, forge-onboard, skill-autoresearch, spec-compliance-checker, ux-audit, asset-critic, game-reference-collect, inspection-checklist, soul-prompt-craft
+frontend-design, forge-onboard, spec-compliance-checker, ux-audit, asset-critic, game-reference-collect, inspection-checklist, soul-prompt-craft
 
 ---
 
