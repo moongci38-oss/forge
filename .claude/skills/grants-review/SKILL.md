@@ -3,6 +3,7 @@ name: grants-review
 description: 정부지원사업 연구개발계획서를 5축(작성요령/데이터/평가위원/톤/방향성)으로 자동 검수하여 예상 점수·수정 우선순위·미활용 데이터를 리포트로 출력하는 스킬. 정부과제 본문 검수, 계획서 리뷰, 문서 품질 점검, /grants-review 요청 시 사용. 본문 작성 완료 후 반드시 실행하여 품질을 검증.
 user-invocable: true
 context: fork
+model: opus
 ---
 
 # Grants Review — 정부지원사업 문서 검수

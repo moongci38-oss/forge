@@ -3,6 +3,7 @@ name: playwright-parallel-test
 description: Run parallel UI tests using 3 subagents with Playwright CLI. Tests form validation, navigation/routing, and responsive layout simultaneously. Use when the user wants to run comprehensive UI tests, parallel browser tests, or says "UI 테스트", "폼 테스트", "parallel test".
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Playwright Parallel UI Test

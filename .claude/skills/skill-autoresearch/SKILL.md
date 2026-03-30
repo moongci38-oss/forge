@@ -7,6 +7,7 @@ description: >
 user-invocable: true
 argument-hint: "<skill-name> [--assess-only] [--iterations N] [--budget N]"
 context: fork
+model: sonnet
 ---
 
 # Skill AutoResearch

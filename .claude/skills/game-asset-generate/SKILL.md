@@ -3,6 +3,7 @@ name: game-asset-generate
 description: 게임 에셋(스프라이트, VFX, 배경, 3D, UI, 아이콘, 오디오)을 대량 생산하는 오케스트레이터. Library-First 탐색으로 MCP 비용을 절감하고, 12요소 Soul 프롬프트와 모델 어댑터(FLUX/Gemini/Replicate)로 품질을 극대화한다. style-guide.md가 준비된 후 게임 에셋 생성 시 사용. 리소스 파이프라인 P3 단계.
 user-invocable: true
 context: fork
+model: sonnet
 ---
 
 # Game Asset Generate

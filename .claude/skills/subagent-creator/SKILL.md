@@ -2,6 +2,7 @@
 name: subagent-creator
 description: Create specialized Claude Code sub-agents with custom system prompts and tool configurations. Use when users ask to create a new sub-agent, custom agent, specialized assistant, or want to configure task-specific AI workflows for Claude Code.
 context: fork
+model: sonnet
 ---
 
 # Sub-agent Creator
