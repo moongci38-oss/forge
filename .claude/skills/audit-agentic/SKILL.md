@@ -1,8 +1,8 @@
 ---
 name: audit-agentic
 description: >
-  에이전틱 AI 역량 감사. 자율성, 도구 사용, 멀티에이전트 조정, 성숙도 레벨(Sema4.ai L0-L5)을
-  CLEAR 프레임워크 + Anthropic Composable Patterns 기준으로 평가한다.
+  에이전틱 AI 역량 감사. 자율성, 도구 사용, 멀티에이전트 조정을
+  Anthropic Composable Patterns 기준으로 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
@@ -36,29 +36,21 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **Composable Patterns 수준** — 실측
+1. **에이전트 패턴 분류** — 실측
    - Glob `.claude/agents/*.md` → 에이전트 수 카운트
    - Grep `Agent\(` or `subagent_type` in skills/ → Subagent 스폰 패턴 수
    - Grep `isolation.*worktree` → Worktree 격리 패턴 수
    - 판정: 0 agent=Augmented LLM, 1-5=Prompt Chaining, 5-10+parallel=Orchestrator-Workers
 
-2. **Sema4.ai 성숙도 레벨** 판정
-   - L0-L5 중 현재 위치 + 근거 (코드/설정 인용)
+2. **도구 커버리지율** — 실측
+   - (사용된 도구 종류 / 등록된 도구 종류) × 100
+   - 기준: > 60%
+   - Tool Call Accuracy: 과다 호출, 잘못된 도구 선택, 파라미터 오류 패턴 식별
 
-3. **도구 호출 패턴** 분석
-   - Tool Call Accuracy: 과다 호출, 잘못된 도구 선택, 파라미터 오류 패턴
-
-4. **멀티에이전트 토폴로지** 확인
+3. **멀티에이전트 토폴로지** 확인
    - Centralized / Decentralized / Hybrid
    - Wave 기반 의존성 관리 여부
    - 에러 증폭 방지 패턴 존재 여부
-
-5. **CLEAR 5차원 커버리지** 체크
-   - CNA, SCR, PAS, pass@k 측정 여부 확인
-   - 미측정 항목 식별
-
-6. **모니터링 체크리스트** (5축 프레임워크 기준)
-   - 벤치마크 측정 여부, pass@1 vs pass@k 구분, 레이턴시/비용 보고, 토폴로지 명시
 
 **반환 JSON 형식:**
 
@@ -67,13 +59,11 @@ context: fork
   "axis": "agentic",
   "target": "{target}",
   "score": 0-100,
-  "maturity_level": "L0-L5",
   "composable_pattern": "현재 최고 수준 패턴",
   "issues": [
-    { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "..." }
+    { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "...", "enforcement_level": "ENFORCED|GUIDED|PAPER" }
   ],
   "strengths": ["강점1", "강점2"],
-  "metrics_coverage": { "CNA": true/false, "SCR": true/false, "PAS": true/false, "pass_k": true/false },
   "summary": "2-3문장 요약"
 }
 ```
@@ -94,8 +84,7 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 
 ## Executive Summary
 
-## 성숙도 평가
-- **현재 레벨**: Sema4.ai {L?} — {레벨명}
+## 에이전트 패턴 분류
 - **Composable Pattern 수준**: {패턴명}
 
 ## 강점
@@ -104,8 +93,6 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ### CRITICAL
 ### HIGH
 ### MEDIUM / LOW
-
-## CLEAR 5차원 커버리지
 
 ## 권장 액션 (우선순위순)
 

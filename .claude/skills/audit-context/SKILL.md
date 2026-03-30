@@ -1,8 +1,8 @@
 ---
 name: audit-context
 description: >
-  컨텍스트 엔지니어링 역량 감사. 7-Layer Context Architecture, RAG 성숙도, 메모리 시스템,
-  컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot)을 RAGAS 기준으로 평가한다.
+  컨텍스트 엔지니어링 역량 감사. 컨텍스트 구성 체크리스트(7개 레이어), RAG 성숙도, 메모리 시스템,
+  컨텍스트 실패 패턴(Clash/Rot)을 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
@@ -36,15 +36,12 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **7-Layer Context Architecture 커버리지**
+1. **컨텍스트 구성 체크리스트**
    - System Instructions / User Prompt / Conversation History / Persistent Memory / Retrieved Data / Available Tools / Output Specifications 각 레이어 구현 여부
 
 2. **컨텍스트 실패 패턴 탐지** — 실측
    - **Clash**: Grep for conflicting patterns — same keyword with opposite instructions across rules files. Count files with "금지" and "허용" for same subject.
-   - **Distraction**: Count total lines in .claude/rules/*.md → if >2000 lines, flag as WARN
    - **Rot**: Check MEMORY.md dates — entries older than 90 days without update = Rot risk
-   - **Confusion**: Grep for "Iron Law" across all files → count unique definitions. >1 definition per law = Confusion
-   - **Poisoning**: Check learnings.jsonl entries — any with status=invalidated or contradicting current code
 
 3. **Progressive Disclosure 구현** 확인
    - Passive → Active → Deep 3단계 로딩 적용 여부
@@ -55,15 +52,12 @@ context: fork
    - Cross-Session Continuity 메커니즘 존재 여부
    - MEMORY.md / session-state 활용 패턴
 
-5. **세션 시작 토큰** — 실측
+5. **세션 시작 토큰** — 추정
    - `wc -c` on all .claude/rules/*.md → byte count → ÷4 = estimated tokens
    - `wc -c` on CLAUDE.md → tokens
    - `wc -c` on MEMORY.md → tokens
    - Total = sum of above
    - 기준: < 12,000 tokens (≈ 48,000 bytes)
-
-6. **RAGAS 지표 커버리지** 체크
-   - Faithfulness, Context Precision/Recall 측정 여부
 
 **반환 JSON 형식:**
 
@@ -72,9 +66,9 @@ context: fork
   "axis": "context",
   "target": "{target}",
   "score": 0-100,
-  "layer_coverage": { "system_instructions": true/false, "persistent_memory": true/false, "retrieved_data": true/false },
+  "context_checklist": { "system_instructions": true/false, "persistent_memory": true/false, "retrieved_data": true/false, "available_tools": true/false, "output_specifications": true/false },
   "failure_patterns": [
-    { "type": "Poisoning|Distraction|Confusion|Clash|Rot", "severity": "CRITICAL|HIGH|MEDIUM|LOW", "evidence": "...", "recommendation": "..." }
+    { "type": "Clash|Rot", "severity": "CRITICAL|HIGH|MEDIUM|LOW", "evidence": "...", "recommendation": "..." }
   ],
   "progressive_disclosure": true/false,
   "memory_types": ["Factual", "Working"],
@@ -103,7 +97,7 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 
 ## Executive Summary
 
-## 7-Layer Architecture 커버리지
+## 컨텍스트 구성 체크리스트
 
 | 레이어 | 구현 | 비고 |
 |--------|:----:|------|
@@ -111,8 +105,9 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 | Persistent Memory | ✅/❌ | |
 | Retrieved Data (RAG) | ✅/❌ | |
 | Available Tools | ✅/❌ | |
+| Output Specifications | ✅/❌ | |
 
-## 컨텍스트 실패 패턴 분석
+## 컨텍스트 실패 패턴 분석 (Clash / Rot)
 
 ## Progressive Disclosure 상태
 
