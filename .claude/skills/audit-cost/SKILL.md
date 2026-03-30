@@ -36,14 +36,14 @@ context: fork
 
 **에이전트 분석 항목:**
 
-1. **모델 계층화율** — 실측
+1. **모델 계층화율** — 실측 (GUIDED)
    - Grep `model.*haiku|model.*sonnet|model.*opus` in .claude/skills/*/SKILL.md → 모델 지정 스킬 수
    - Glob .claude/skills/*/SKILL.md → 전체 스킬 수
    - 계층화율 = (model 지정 스킬 / 전체 스킬) × 100
    - 기준: > 60%
    - Haiku 비율 = Haiku 지정 수 / model 지정 전체
 
-2. **조건부 로딩률** — 실측
+2. **조건부 로딩률** — 실측 (GUIDED)
    - Grep "Deep.*로드|Deep.*로딩|참조$" in .claude/rules/*.md → 조건부 참조 규칙 수
    - Grep "^##" in .claude/rules/*.md → 전체 규칙 섹션 수
    - 조건부 로딩률 = (조건부 참조 / 전체 섹션) × 100
@@ -53,12 +53,12 @@ context: fork
    - MCP→CLI 전환 완료 항목 확인 (Playwright 등)
    - 고빈도 단순 작업에 MCP 사용 중인 항목 식별
 
-4. **비용 추적 메커니즘** 존재 여부
+4. **비용 추적 메커니즘** 존재 여부 (GUIDED)
    - CPT(Cost per Task) 측정 여부
    - P95 토큰 세션 플래그 기준 존재 여부
    - 배치 처리 비율 추적 여부
 
-5. **비용 최적화 패턴 ROI 체크** (우선순위순)
+5. **비용 최적화 패턴 ROI 체크** (우선순위순) (GUIDED)
    - 프롬프트 캐싱 적용 여부 (80-90% 절감 가능)
    - 모델 라우팅 효율 (>50% 저비용 모델 라우팅)
    - 출력 길이 제어 전략 (output 가격 3-5x)
