@@ -24,6 +24,16 @@ context: fork
 
 > 모든 지표에 유형을 명시한다. "실측"이 아닌 항목은 과신하지 않는다.
 
+## 항목별 강제 수준
+
+| 수준 | 의미 | 점수 반영 |
+|------|------|:--------:|
+| **ENFORCED** | Hook/스크립트가 `exit 2`로 위반 차단 | 100% 반영 |
+| **GUIDED** | 규칙 존재, AI가 자발적 준수 | 70% 반영 |
+| **PAPER** | 감사에만 존재, 운영 미적용 | 점수 제외 (0%) |
+
+> PAPER 항목은 보고서에 "미적용" 표기만 하고 점수에 포함하지 않는다.
+
 ## 인자
 
 - `$ARGUMENTS` = 감사 대상. 미입력 시 `system` (Forge+Forge Dev).
@@ -59,21 +69,21 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 
 **에이전트 1 — axis-agentic (model: sonnet)**
 
-프롬프트: `{target} 경로의 에이전틱 역량을 분석한다. Sema4.ai L0-L5 성숙도, Anthropic Composable Patterns 수준, CLEAR 5차원 커버리지, 멀티에이전트 토폴로지를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 에이전틱 역량을 분석한다. Anthropic Composable Patterns 수준, 도구 커버리지율, 멀티에이전트 토폴로지를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
-반환 JSON: `{ "axis": "agentic", "score": 0-100, "maturity_level": "L?", "composable_pattern": "...", "issues": [...], "strengths": [...], "summary": "..." }`
+반환 JSON: `{ "axis": "agentic", "score": 0-100, "composable_pattern": "...", "issues": [...], "strengths": [...], "summary": "..." }`
 
 **에이전트 2 — axis-context (model: sonnet)**
 
-프롬프트: `{target} 경로의 컨텍스트 엔지니어링을 분석한다. 7-Layer Architecture 커버리지, 5가지 컨텍스트 실패 패턴(Poisoning/Distraction/Confusion/Clash/Rot), Progressive Disclosure 적용, 메모리 시스템, 토큰 효율을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 컨텍스트 엔지니어링을 분석한다. 컨텍스트 구성 체크리스트(7개 레이어) 커버리지, 실측 가능한 컨텍스트 실패 패턴(Clash/Rot), Progressive Disclosure 적용, 메모리 시스템, 토큰 효율을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
-반환 JSON: `{ "axis": "context", "score": 0-100, "layer_coverage": {...}, "failure_patterns": [...], "progressive_disclosure": true/false, "issues": [...], "strengths": [...], "summary": "..." }`
+반환 JSON: `{ "axis": "context", "score": 0-100, "context_checklist": {...}, "failure_patterns": [...], "progressive_disclosure": true/false, "issues": [...], "strengths": [...], "summary": "..." }`
 
 **에이전트 3 — axis-harness (model: sonnet)**
 
-프롬프트: `{target} 경로의 AI 하네스를 분석한다. Check Chain(3→3.5→3.7), 3-Layer 테스트 아키텍처, OWASP Agentic Top 10 커버리지(ASI01-ASI10), 가드레일 5 Rail Types, OTel GenAI 옵저버빌리티를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 AI 하네스를 분석한다. Check Chain(3→3.5→3.7), OWASP Agentic Top 10 커버리지(ASI01-ASI10), 가드레일 5 Rail Types, Hook 커버리지를 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
-반환 JSON: `{ "axis": "harness", "score": 0-100, "check_chain": {...}, "test_layers": {...}, "owasp_coverage": {...}, "issues": [...], "strengths": [...], "summary": "..." }`
+반환 JSON: `{ "axis": "harness", "score": 0-100, "check_chain": {...}, "owasp_coverage": {...}, "issues": [...], "strengths": [...], "summary": "..." }`
 
 **에이전트 4 — axis-cost (model: haiku)**
 
@@ -83,9 +93,9 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 
 **에이전트 5 — axis-human-ai (model: sonnet)**
 
-프롬프트: `{target} 경로의 Human-AI 경계 설계를 분석한다. 5-Level Autonomy 매핑, [STOP]/[AUTO-PASS] 게이트 적절성, 에스컬레이션 트리거 5유형 커버리지, 안티패턴(Quasi-Automation/Rubber Stamping/Alert Fatigue), Sterz 4조건, Override Rate 추적을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
+프롬프트: `{target} 경로의 Human-AI 경계 설계를 분석한다. 5-Level Autonomy 매핑, [STOP]/[AUTO-PASS] 게이트 적절성, 에스컬레이션 트리거 5유형 커버리지, 안티패턴(Quasi-Automation/Rubber Stamping/Alert Fatigue), Override Rate 추적을 점검한다. 반드시 Glob/Grep/Read 도구로 실제 파일을 탐색하여 정량 지표를 측정하라. 주관적 판단 금지 — 모든 점수는 실측 데이터 기반이어야 한다. 측정 불가 항목은 "N/A (런타임 데이터 필요)" 로 표기하라. 아래 JSON 형식으로만 반환한다.`
 
-반환 JSON: `{ "axis": "human-ai", "score": 0-100, "autonomy_mapping": [...], "gate_analysis": [...], "anti_patterns": [...], "sterz_conditions": {...}, "issues": [...], "strengths": [...], "summary": "..." }`
+반환 JSON: `{ "axis": "human-ai", "score": 0-100, "autonomy_mapping": [...], "gate_analysis": [...], "anti_patterns": [...], "issues": [...], "strengths": [...], "summary": "..." }`
 
 ---
 
@@ -135,7 +145,6 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 | 축 | 측정 지표 | 측정 방법 | 기준값 | 측정 유형 |
 |----|---------|---------|-------|---------|
 | Agentic | 도구 커버리지율 | (사용된 도구 / 등록된 도구) × 100 | > 60% | 실측 |
-| Agentic | 병렬 실행 비율 | (병렬 스폰 커밋 / 전체 에이전트 커밋) | > 40% | 미측정 |
 | Context | 세션 시작 토큰 | rules + CLAUDE.md + MEMORY.md 합산 (wc -c ÷ 4) | < 12,000 | 추정 |
 | Context | MEMORY.md 항목 수 | grep "^## " 카운트 | < 30 | 실측 |
 | Context | 규칙 중복률 | (중복 규칙 / 전체 규칙) × 100 | < 10% | 추정 |
@@ -144,7 +153,6 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 | Cost | 모델 계층화율 | (Haiku+Sonnet 작업 / 전체) × 100 | > 60% | 실측 |
 | Cost | 조건부 로딩률 | (on-demand 규칙 / 전체 규칙) × 100 | > 50% | 실측 |
 | Human-AI | 게이트 커버리지 | (STOP 게이트 작업 / 비가역 작업) × 100 | 100% | 실측 |
-| Human-AI | 하드코딩 경로 수 | grep "~" 카운트 | 0 | 실측 |
 
 **2-3. 트렌드 비교 (Delta Analysis)**
 
@@ -233,7 +241,6 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 | 축 | 지표 | 측정값 | 기준값 | 측정 유형 | 판정 |
 |----|------|:-----:|:-----:|:--------:|:---:|
 | Agentic | 도구 커버리지율 | | > 60% | 실측 | |
-| Agentic | 병렬 실행 비율 | | > 40% | 미측정 | |
 | Context | 세션 시작 토큰 | | < 12,000 | 추정 | |
 | Context | MEMORY 항목 수 | | < 30 | 실측 | |
 | Context | 규칙 중복률 | | < 10% | 추정 | |
@@ -242,7 +249,6 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 | Cost | 모델 계층화율 | | > 60% | 실측 | |
 | Cost | 조건부 로딩률 | | > 50% | 실측 | |
 | Human-AI | 게이트 커버리지 | | 100% | 실측 | |
-| Human-AI | 하드코딩 경로 수 | | 0 | 실측 | |
 
 ## 4. 트렌드 비교 (이전 감사 대비)
 

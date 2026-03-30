@@ -1,8 +1,8 @@
 ---
 name: audit-harness
 description: >
-  AI 하네스 엔지니어링 감사. CLEAR 프레임워크, 3-Layer 테스트 아키텍처, OWASP Agentic Top 10,
-  가드레일 패턴, OTel GenAI 옵저버빌리티를 기준으로 측정·제어 역량을 평가한다.
+  AI 하네스 엔지니어링 감사. Check Chain, OWASP Agentic Top 10,
+  가드레일 패턴, Hook 커버리지를 기준으로 측정·제어 역량을 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
@@ -41,13 +41,7 @@ context: fork
    - autoFix 한도(1회) 및 [STOP] 에스컬레이션 규칙 문서화
    - 순환 autoFix 카운터 관리 방식
 
-2. **3-Layer 테스트 아키텍처** 커버리지
-   - Black-box (최종 결과 평가) 존재 여부
-   - Glass-box (궤적 평가) 존재 여부
-   - White-box (단일 스텝 평가) 존재 여부
-   - "결과 평가, 경로가 아니라" 원칙 적용 여부
-
-3. **OWASP Agentic Top 10 커버리지** — 실측
+2. **OWASP Agentic Top 10 커버리지** — 실측
    각 ASI 항목별 방어 코드 존재를 Grep으로 실제 확인:
    - ASI01 (Goal Hijack): Grep "ignore.*instructions|jailbreak|DAN" in hooks/ → exit 2 패턴
    - ASI02 (Tool Misuse): Grep "block.*sensitive|BLOCKED" in hooks/ → 차단 패턴
@@ -58,21 +52,16 @@ context: fork
    - 커버리지 = (방어 코드 존재 ASI 수 / 10) × 100
    - 기준: > 50%
 
-4. **가드레일 패턴** 평가
+3. **가드레일 패턴** 평가
    - 5 Rail Types(Input/Dialog/Retrieval/Output/Execution) 중 구현된 레일
    - Constitutional 분류기 또는 동등 패턴 존재 여부
 
-5. **Hook 커버리지** — 실측
+4. **Hook 커버리지** — 실측
    - Glob .claude/hooks/*.sh → Hook 스크립트 수
    - 위험 이벤트 유형: [파일쓰기, Bash실행, 민감경로, 시크릿, 인젝션, force-push, 프롬프트유출, 민감출력] = 8종
    - 각 유형별 Hook 존재 여부 Grep으로 확인
    - 커버리지 = (보호된 이벤트 / 8) × 100
    - 기준: > 70%
-
-6. **SLO 정의** 확인
-   - 품질 Eval 점수 임계값 문서화 여부
-   - 침묵 에러율(Silent Failure) 감지 메커니즘
-   - 3단계 롤백 계획 존재 여부
 
 **반환 JSON 형식:**
 
@@ -82,11 +71,9 @@ context: fork
   "target": "{target}",
   "score": 0-100,
   "check_chain": { "check3": true/false, "check3_5": true/false, "check3_7": true/false, "autofix_limit": true/false },
-  "test_layers": { "black_box": true/false, "glass_box": true/false, "white_box": true/false },
   "owasp_coverage": { "ASI01": true/false, "ASI02": true/false, "ASI03": true/false, "ASI06": true/false, "ASI07": true/false, "ASI10": true/false },
   "guardrails": ["Input", "Output"],
   "observability": { "structured_logging": true/false, "request_id": true/false, "metrics": true/false },
-  "rollback_plan": true/false,
   "issues": [
     { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "..." }
   ],
@@ -113,17 +100,11 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 
 ## 검증 체인(Check Chain) 상태
 
-## 3-Layer 테스트 아키텍처
-
-| 레이어 | 구현 | 비고 |
-|--------|:----:|------|
-| Black-box | ✅/❌ | |
-| Glass-box | ✅/❌ | |
-| White-box | ✅/❌ | |
-
 ## OWASP Agentic Top 10 커버리지
 
-## 가드레일 + 옵저버빌리티 상태
+## 가드레일 상태
+
+## Hook 커버리지
 
 ## 이슈 목록
 ### CRITICAL

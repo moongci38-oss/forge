@@ -1,8 +1,8 @@
 ---
 name: audit-human-ai
 description: >
-  Human-AI 경계 설계 감사. 5-Level Autonomy, 에스컬레이션 트리거 5유형, 게이트 설계 8패턴,
-  Sterz 4조건, Override/Rubber-Stamp Rate를 기준으로 자율성-감독 최적 경계를 평가한다.
+  Human-AI 경계 설계 감사. 5-Level Autonomy, 에스컬레이션 트리거 5유형, 게이트 설계,
+  Override/Rubber-Stamp Rate를 기준으로 자율성-감독 최적 경계를 평가한다.
 argument-hint: "[target: system|{project-name}]"
 user-invocable: true
 context: fork
@@ -58,13 +58,7 @@ context: fork
    - Rubber Stamping: 무비판적 승인 위험
    - Alert Fatigue: 과다 알림으로 둔감화 위험
 
-5. **Sterz 4조건** 충족 여부
-   - 개입/재정의 가능 여부
-   - 관련 정보 접근 가능 여부
-   - 실제 행동 권한 존재 여부
-   - 정렬된 의도 확인
-
-6. **지표 추적** — 실측 (Design Review로 정직 표기)
+5. **지표 추적** — 실측 (Design Review로 정직 표기)
    - Override Rate: ⚠️ 런타임 데이터 필요 — 현재 측정 불가. "미측정" 표기.
    - Rubber-Stamp Rate: ⚠️ 승인 이력 필요 — 현재 측정 불가. "미측정" 표기.
    - Gate Bypass Rate: Grep "no-verify|skip.*check" in git log → 우회 시도 수
@@ -87,7 +81,6 @@ context: fork
   "anti_patterns": [
     { "type": "Rubber Stamping|Quasi-Automation|False Agency|Alert Fatigue", "severity": "CRITICAL|HIGH|MEDIUM|LOW", "evidence": "..." }
   ],
-  "sterz_conditions": { "intervene": true/false, "information_access": true/false, "action_authority": true/false, "aligned_intent": true/false },
   "metrics_tracking": { "override_rate": true/false, "rubber_stamp_rate": true/false, "gate_bypass_rate": true/false },
   "issues": [
     { "severity": "CRITICAL|HIGH|MEDIUM|LOW", "finding": "...", "evidence": "파일경로:라인", "recommendation": "..." }
@@ -126,8 +119,6 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ## 에스컬레이션 트리거 커버리지
 
 ## 안티패턴 감지 결과
-
-## Sterz 4조건 충족 여부
 
 ## 이슈 목록
 ### CRITICAL
