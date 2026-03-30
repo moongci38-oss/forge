@@ -144,17 +144,31 @@ Phase 2 디렉션 5축 요약 프롬프트 주입 (~5줄)
 디렉션 탈락 필터 (Don't 태그 위반 → 해당 초안 탈락)
     ↓
 생존 초안만 비교 (아키텍처, 성능, UX) → 최적안 선택/병합
+    ↓
+/autoplan — 3관점 순차 리뷰
+    ↓
+충돌 항목 Human 에스컬레이션
 ```
 
 1. Phase 2 디렉션 5축 요약을 에이전트 프롬프트에 주입
 2. 에이전트 2~3명 병렬 스폰 → 독립 기획서 초안
 3. **디렉션 탈락 필터**: Don't 태그 위반 초안 → 비교에서 제외
 4. Competing Hypotheses: 생존 초안 비교표 + 선택 근거
-5. 시각 자료 포함 필수: Mermaid, Stitch UI 목업, NanoBanana 일러스트
-6. **Glossary** 섹션 필수 (한국어↔영어↔정의↔관계 4열 테이블)
-7. 관리자 기능 포함 시 관리자 기획서도 동등 작성
-8. `/pptx` 스킬로 .pptx 변환 (단계적: 시안 5-7슬라이드 → 전체 확장)
-9. 산출물 저장 + gate-log.md 업데이트
+5. **`/autoplan` 3관점 순차 리뷰** (Competing Hypotheses 직후 자동 트리거):
+
+   | 순서 | 리뷰어 | 검토 항목 |
+   |:----:|--------|----------|
+   | 1 | CEO Review | 비즈니스 모델, 수익성, 시장 적합성 |
+   | 2 | Design Review | UX/UI 일관성, 사용자 경험 흐름 |
+   | 3 | Engineering Review | 기술 실현성, 아키텍처 건전성 |
+
+   - 각 리뷰어는 기획서에 어노테이션(AGREE / WARN / BLOCK) 추가
+   - BLOCK 항목 2개 이상 또는 리뷰어 간 충돌 → **[STOP]** Human 에스컬레이션
+6. 시각 자료 포함 필수: Mermaid, Stitch UI 목업, NanoBanana 일러스트
+7. **Glossary** 섹션 필수 (한국어↔영어↔정의↔관계 4열 테이블)
+8. 관리자 기능 포함 시 관리자 기획서도 동등 작성
+9. `/pptx` 스킬로 .pptx 변환 (단계적: 시안 5-7슬라이드 → 전체 확장)
+10. 산출물 저장 + gate-log.md 업데이트
 
 ### Diamond Architecture (시각 자료 생성 시 인라인 호출)
 
@@ -311,6 +325,9 @@ Phase 4 작성 중 "대량 아이콘 필요"
 > 구 Phase 1 + Phase 1.5 병합
 
 1. Handoff 문서 + Phase 4 개발 계획에서 해당 세션 내용 숙지 + 세션 요약 출력
+   - **learnings 자동 로드**: `.claude/learnings.jsonl` 존재 시 `/learn load` 자동 실행
+     - 세션 컨텍스트와 관련성 높은 상위 3개 항목 출력
+     - 이전 세션 에러 패턴, 해결법, 도구별 발견사항 포함
 2. 세션 상태 초기화: `node ~/.claude/forge/scripts/session-state.mjs init --name <name>`
 3. **작업 규모 자동 분류** (재분류 필요 시만 [STOP]):
 
@@ -365,6 +382,18 @@ Phase 4 작성 중 "대량 아이콘 필요"
 | 디버깅 발생 시 | `superpowers:systematic-debugging` | 4단계 디버깅 프로토콜 |
 | 완료 선언 시 | `superpowers:verification-before-completion` | 증거 기반 완료 선언 |
 
+### /investigate 자동 트리거 조건
+
+Check 6 (`verify.sh`) 결과가 아래 조건 중 하나라도 해당하면 `/investigate` 스킬을 **자동 실행**한다 (lint/type 오류는 제외):
+
+| 조건 | 설명 |
+|------|------|
+| **런타임 오류** | Check 6 실패 원인이 런타임 에러 (lint·type 오류 제외) |
+| **반복 패턴** | 동일 에러 패턴이 2회 이상 반복 발생 |
+| **미확인 Root Cause** | 스택 트레이스에 원인 불명 에러 포함 |
+
+`/investigate` 완료 후 분석 결과를 autoFix 프롬프트에 주입하여 재시도한다.
+
 ### 진행 흐름
 
 1. Spec 기준 구현 (의존성 없는 태스크만 병렬 — Wave 단위 스폰)
@@ -377,6 +406,9 @@ Phase 4 작성 중 "대량 아이콘 필요"
    - **Check 6.5** 트레이서빌리티 (`spec-compliance-checker` 스킬)
    - **Check 6.7** 코드 리뷰 (`code-reviewer` 에이전트)
    - 실패 → 1회 자동 수정 → 재실행 / 재실패 → **[STOP]**
+   - **Check 6.8 QA Loop**: Check 6.7 PASS 직후 `/qa` 자동 실행
+     - Spec 기준 기능별 시나리오 검증 (발견→수정→재검증 루프)
+     - 최대 2사이클 반복. 2사이클 이후에도 이슈 잔존 → **[STOP]** Human 에스컬레이션
 
 ### Frontend 점진적 품질 루프 (UI 파일 변경 시)
 
@@ -414,6 +446,19 @@ Phase 4 작성 중 "대량 아이콘 필요"
 3. **브랜치 유지** → 추가 작업 예정
 4. **브랜치 폐기** → 실험 브랜치 정리
 
+### Pre-PR Benchmark
+
+PR 생성 전 `/benchmark` 자동 실행 (develop baseline vs feature 브랜치 비교):
+
+| 메트릭 | WARN 기준 | [STOP] 기준 |
+|--------|:---------:|:-----------:|
+| 번들 사이즈 | +10% | +25% |
+| 테스트 실행 시간 | +10% | +25% |
+| API 응답 시간 (적용 시) | +10% | +25% |
+
+- WARN: 결과 기록 후 PR 생성 계속 진행
+- [STOP]: Human 승인 없이 PR 생성 금지
+
 ### PR 생성 절차
 
 1. AI가 커밋 생성 (Conventional Commits)
@@ -446,7 +491,12 @@ Phase 4 작성 중 "대량 아이콘 필요"
    - ✅ PASS → Phase 11 진입 가능
    - ❌ FAIL → GitLab Issue 자동 생성 → AI 분석 + 수정 → develop 재push
      - **재시도 한도: 최대 2회.** 2회 연속 FAIL 시 자동 수정 중단 → **[STOP]** Human 에스컬레이션 필수
-4. PASS 확인 후 `/forge-release` 커맨드로 Phase 11 진입
+4. PASS 확인 후 Canary 모니터링:
+   - `release-config.json`에 `canaryEnabled: true` 설정 시 `/canary` **자동 트리거**
+   - **15분** 헬스 모니터링 윈도우 실행
+   - 모니터링 항목: 에러율, 응답 시간, 메모리 사용량 (모니터링 미설정 시 해당 항목 스킵)
+   - Canary PASS → Phase 11 진입 / FAIL → **[STOP]** Human 에스컬레이션
+5. PASS 확인 후 `/forge-release` 커맨드로 Phase 11 진입
 
    ─── Check 8: develop-integration.yml 자동 ───
 
@@ -504,16 +554,47 @@ Phase 4 작성 중 "대량 아이콘 필요"
 | 1 | Phase 1 완료 — DoD 자동 검증 | AUTO-PASS | AI |
 | 2 | Phase 2 완료 — 비전+5축 승인 | **[STOP]** | Human |
 | 3 | Phase 3 완료 — 기획서 승인 | **[STOP]** | Human |
+| 3-AP | Phase 3 — /autoplan 3관점 리뷰 | 자동 / BLOCK→[STOP] | AI→Human |
 | 4 | Phase 4 완료 — Wave 검증 | AUTO-PASS | AI |
 | 5 | Phase 5 완료 — Handoff 검증 | AUTO-PASS | AI |
 | 6 | Phase 8 — verify.sh | auto-fix→[STOP] | AI→Human |
+| 6-INV | Phase 8 — /investigate 자동 트리거 | 자동 (런타임 오류 시) | AI |
 | 6.5 | Phase 8 — 트레이서빌리티 | auto-fix→[STOP] | AI→Human |
 | 6.7 | Phase 8 — 코드 리뷰 | auto-fix→[STOP] | AI→Human |
+| 6.8 | Phase 8 — /qa QA Loop | 최대 2사이클→[STOP] | AI→Human |
+| 7-BM | Phase 9 — /benchmark Pre-PR | WARN or [STOP] | AI→Human |
 | 7 | Phase 9 — CI+리뷰 | **[STOP]** or auto-merge | Human or AI |
 | 8 | Phase 10 — develop 통합 | 자동 / FAIL→[STOP] | AI |
+| 8-CNR | Phase 10 — /canary 모니터링 | 자동 (canaryEnabled 시) | AI |
 | 9 | Phase 11 — 스테이징 E2E | 자동 | AI |
 | 9.5 | Phase 11 — Release PR | **[STOP]** | Human |
 | 10 | Phase 12 — 프로덕션 배포 | 자동 / FAIL→[STOP] 롤백 | AI→Human |
+
+## gstack 자동화 규칙
+
+> Phase checkpoint마다 자동 실행되는 gstack 스킬 트리거 규칙 요약.
+
+### /learn 자동 저장 (모든 Phase checkpoint)
+
+모든 Phase checkpoint (`state=phaseN_complete`) 도달 시 `/learn save` 자동 실행:
+
+- **저장 대상**: 새로운 패턴 발견, 발생 및 해결된 에러, 도구별 발견사항
+- **저장 조건**: 해당 Phase에서 유의미한 learnings가 없으면 스킵
+- **저장 경로**: `.claude/learnings.jsonl` (프로젝트 기준)
+
+### 자동 트리거 스킬 요약
+
+| 스킬 | 트리거 시점 | 조건 |
+|------|-----------|------|
+| `/learn load` | Phase 6 세션 시작 | `.claude/learnings.jsonl` 존재 시 |
+| `/autoplan` | Phase 3 Competing Hypotheses 완료 후 | 항상 |
+| `/investigate` | Phase 8 Check 6 실패 시 | 런타임 오류 또는 반복 에러 패턴 |
+| `/qa` | Phase 8 Check 6.7 PASS 후 | 항상 |
+| `/benchmark` | Phase 9 PR 생성 전 | 항상 |
+| `/canary` | Phase 10 Check 8 PASS 후 | `canaryEnabled: true` 시 |
+| `/learn save` | 모든 Phase checkpoint | 유의미한 learnings 존재 시 |
+
+---
 
 ## Iron Laws
 
@@ -549,7 +630,7 @@ Phase 4 작성 중 "대량 아이콘 필요"
 
 ---
 
-*Last Updated: 2026-03-19 (Phase 1~12 통합)*
+*Last Updated: 2026-03-30 (gstack 자동화 7개 통합)*
 
 ---
 
