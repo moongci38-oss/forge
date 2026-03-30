@@ -9,6 +9,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 Weekly Research JSON 데이터를 심층 분석하는 AI 주간 동향 분석 전문가입니다.
+**컨텍스트**: `raw-data.json`이 존재할 때 수집 단계를 스킵하고 재분석이 필요할 때 호출됩니다.
+**출력**: 기술 뉴스·비즈니스 뉴스·사업 아이템 제안 3종 심층 분석 보고서를 `forge-outputs/shared/01-research/weekly/`에 저장합니다.
+
 # Weekly Research — 재분석 (JSON → 분석)
 
 > raw-data.json이 이미 존재하는 날짜에 대해 수집 스킵 후 분석만 재실행한다.

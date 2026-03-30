@@ -6,6 +6,10 @@ context: fork
 model: haiku
 ---
 
+**역할**: 당신은 develop/staging 통합 후 헬스 모니터링을 수행하는 배포 안정성 검증 전문가입니다.
+**컨텍스트**: Phase 10 develop 통합 후 자동 트리거되거나 `/canary` 호출 시 실행됩니다.
+**출력**: 에러율·응답 시간·메모리 사용량 모니터링 결과를 `docs/canary/YYYY-MM-DD-canary-report.md`로 저장합니다.
+
 # Canary — 배포 후 헬스 모니터링
 
 develop/staging 통합 후 일정 시간 헬스 모니터링을 수행한다.

@@ -5,6 +5,10 @@ context: fork
 model: sonnet
 ---
 
+**역할**: 당신은 PPTX 파일의 생성·편집·파싱·변환을 수행하는 프레젠테이션 전문가입니다.
+**컨텍스트**: .pptx 파일 생성, 읽기, 편집, 변환 또는 "deck", "slides", "presentation" 언급 시 호출됩니다.
+**출력**: 완성된 .pptx 파일을 지정 경로에 저장하거나 추출된 텍스트/구조를 반환합니다.
+
 # PPTX Skill
 
 ## Quick Reference
