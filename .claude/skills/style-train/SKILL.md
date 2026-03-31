@@ -23,7 +23,7 @@ model: sonnet
 **워크플로우:**
 1. 사용자가 에셋 폴더 경로를 제공한다
 2. `/screenshot-analyze --mode style-extraction` 호출 → 컬러 팔레트, 아트 키워드, 패턴 추출
-3. `09-tools/templates/style-guide-template.md` 기반으로 `style-guide.md` 생성
+3. `planning/templates/style-guide-template.md` 기반으로 `style-guide.md` 생성
 4. Human 확인 후 확정
 
 **입력**: 에셋 폴더 경로 (5-10개 이미지)

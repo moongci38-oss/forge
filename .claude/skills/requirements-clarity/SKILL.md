@@ -16,6 +16,16 @@ model: sonnet
 Automatically transforms vague requirements into actionable PRDs through systematic clarification with a 100-point scoring system.
 
 
+## Pre-Step: Dependency Resolution Interview (Grill Me)
+
+Before any clarification scoring, resolve structural dependencies through focused interview:
+
+1. **공유된 이해 달성까지 끈질기게 인터뷰**: 요구사항이 명확히 합의될 때까지 질문을 멈추지 않는다. "충분히 이해했다"고 넘어가지 않는다.
+2. **디자인 트리 각 가지의 의존성 해결**: 기능의 각 구성 요소가 무엇에 의존하는지 명확히 밝힌다. 미해결 의존성이 하나라도 있으면 인터뷰를 계속한다.
+3. **코드베이스 직접 탐색**: 요구사항과 관련된 기존 코드, 패턴, 제약을 직접 읽어 컨텍스트를 확보한다. 추측하지 않는다.
+
+이 3단계를 완료한 후에만 아래 스코어링을 시작한다.
+
 ## Two Core Questions (MANDATORY)
 
 Every response MUST include these two checks before any other analysis:
