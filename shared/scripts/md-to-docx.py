@@ -62,11 +62,11 @@ def set_font(run, font_name=FONT_BODY, size=BODY_SIZE, bold=False, color=None):
         run.font.color.rgb = color
 
 
-def set_paragraph_spacing(paragraph, space_before=Pt(0), space_after=Pt(6)):
-    """문단 간격을 설정. 디딤돌 양식 기준: 줄간격 160%, 뒤 6pt."""
+def set_paragraph_spacing(paragraph, space_before=Pt(0), space_after=Pt(2)):
+    """문단 간격을 설정. 줄간격 120%, 뒤 2pt (간격 최소화)."""
     paragraph.paragraph_format.space_before = space_before
     paragraph.paragraph_format.space_after = space_after
-    paragraph.paragraph_format.line_spacing = 1.6
+    paragraph.paragraph_format.line_spacing = 1.2
 
 
 def set_style_defaults(doc):
@@ -74,9 +74,9 @@ def set_style_defaults(doc):
     style = doc.styles["Normal"]
     style.font.name = FONT_BODY
     style.font.size = BODY_SIZE
-    style.paragraph_format.space_after = Pt(6)
+    style.paragraph_format.space_after = Pt(2)
     style.paragraph_format.space_before = Pt(0)
-    style.paragraph_format.line_spacing = 1.6
+    style.paragraph_format.line_spacing = 1.2
     rpr = style.element.get_or_add_rPr()
     rfonts = rpr.find(qn("w:rFonts"))
     if rfonts is None:
@@ -192,7 +192,7 @@ def add_image(doc, img_path, base_dir):
     full_path = Path(base_dir) / img_path
     if full_path.exists():
         MAX_W = 6.3   # inches
-        MAX_H = 7.8   # inches (제목+이미지 같은 페이지 수용)
+        MAX_H = 6.0   # inches (이미지 아래 공백 최소화)
         try:
             pil_img = PILImage.open(str(full_path))
             w_px, h_px = pil_img.size
