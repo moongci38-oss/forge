@@ -21,6 +21,7 @@ import re
 import sys
 import os
 from pathlib import Path
+from PIL import Image as PILImage
 
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor, Cm, Twips
@@ -190,7 +191,22 @@ def add_image(doc, img_path, base_dir):
     """이미지를 InlineShape로 삽입. 파일 없으면 플레이스홀더 텍스트."""
     full_path = Path(base_dir) / img_path
     if full_path.exists():
-        doc.add_picture(str(full_path), width=Inches(6.3))
+        MAX_W = 6.3   # inches
+        MAX_H = 7.8   # inches (제목+이미지 같은 페이지 수용)
+        try:
+            pil_img = PILImage.open(str(full_path))
+            w_px, h_px = pil_img.size
+            h_at_max_w = h_px / w_px * MAX_W
+            if h_at_max_w > MAX_H:
+                doc.add_picture(str(full_path), height=Inches(MAX_H))
+            else:
+                doc.add_picture(str(full_path), width=Inches(MAX_W))
+        except Exception:
+            doc.add_picture(str(full_path), width=Inches(MAX_W))
+        p = doc.paragraphs[-1]
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.line_spacing = 1.0
     else:
         p = doc.add_paragraph()
         run = p.add_run(f"[이미지 플레이스홀더: {img_path}]")
@@ -285,10 +301,12 @@ def add_table(doc, rows):
     """마크다운 파이프 테이블을 고급 스타일 docx Table로 변환."""
     if len(rows) < 2:
         return
-    headers = [c.strip() for c in rows[0].split("|") if c.strip()]
+    header_parts = rows[0].split("|")
+    headers = [c.strip() for c in header_parts[1:-1]]  # 앞뒤 빈 요소 제거, 중간 빈 셀 유지
     data_rows = []
     for r in rows[2:]:
-        cells = [c.strip() for c in r.split("|") if c.strip()]
+        parts = r.split("|")
+        cells = [c.strip() for c in parts[1:-1]]  # 앞뒤 빈 요소 제거, 중간 빈 셀 유지
         data_rows.append(cells)
 
     ncols = len(headers)
@@ -422,6 +440,7 @@ def convert_md_to_docx(md_path, docx_path):
                 add_table(doc, table_buffer)
                 table_buffer = []
                 in_table = False
+                doc.add_paragraph()  # 테이블 뒤 구분 단락
             consecutive_blank += 1
             i += 1
             continue

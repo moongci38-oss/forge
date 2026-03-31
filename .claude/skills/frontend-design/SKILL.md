@@ -41,6 +41,8 @@ Focus on:
 
 NEVER use generic AI-generated aesthetics like overused font families as standalone brand fonts (Inter, Roboto, Arial) — system-ui/-apple-system 폴백 스택에서 Roboto 사용은 허용 — cliched color schemes (particularly purple gradients on white backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character.
 
+- **한국어 프로젝트 기본값**: 한국어 텍스트가 포함된 UI는 `Pretendard` 폰트를 기본으로 사용한다 (`@font-face` 또는 CDN). 아이콘은 `Iconify` (오픈소스, 200k+ 아이콘)를 우선 적용한다. Inter/Noto Sans KR 대신 Pretendard를 선택하면 한국어 가독성과 자간 품질이 즉시 개선된다.
+
 - **Forge Default Reference**: Instagram Design Language — `#FFFFFF`/`#FAFAFA` 배경, `#0095F6` CTA, 5-color 브랜드 그라데이션 (`#FEDA75→#FA7E1E→#D62976→#962FBF→#4F5BD5`), Squircle(22%) 아이콘 코너, SF Pro Display 타이포그래피(-0.02em). 소셜/라이트 UI 구축 시 참고.
 
 Interpret creatively and make unexpected choices that feel genuinely designed for the context. No design should be the same. Vary between light and dark themes, different fonts, different aesthetics. NEVER converge on common choices (Space Grotesk, for example) across generations.
@@ -48,3 +50,14 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
 Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
+
+## Stitch Design System 연동
+
+Google Stitch MCP가 전역 등록되어 있다 (`~/.claude.json`의 `stitch` 서버). 기존 사이트/앱의 디자인 시스템을 추출할 때 활용한다.
+
+**활용 흐름**:
+1. Stitch MCP로 대상 URL의 DESIGN.md 추출 (색상·타이포그래피·컴포넌트 토큰)
+2. 추출된 토큰을 CSS 변수 또는 Tailwind config에 매핑
+3. 이후 모든 컴포넌트 생성 시 해당 토큰 기준으로 구현
+
+**적용 대상**: Portfolio처럼 디자인 일관성이 중요한 기존 프로젝트에서 반복적인 디자인 결정 재논의를 제거할 때 사용.
