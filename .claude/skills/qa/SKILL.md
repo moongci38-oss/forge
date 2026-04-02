@@ -39,7 +39,10 @@ Phase 8 Check 6.7 PASS → 자동 실행
    - Happy path (정상 흐름)
    - Edge case (경계값)
    - Error path (에러 처리)
-4. 시나리오 실행 (verify.sh + 수동 검증)
+4. 시나리오 실행:
+   - **API/로직**: `verify.sh` 실행
+   - **UI/Web**: `playwright-parallel-test` 스킬로 실제 브라우저 테스트 (사람이 클릭하듯 검증)
+   - **게임 (GodBlade)**: Unity 빌드 후 플레이테스트 시나리오 수동 실행
 5. 결과 기록: PASS/FAIL + 이슈 상세
 
 ### Cycle 2: 수정 + 재검증
@@ -77,6 +80,24 @@ Phase 8 Check 6.7 PASS → 자동 실행
 - [ ] 동일 로직 중복 없음 (copy-paste)
 - [ ] 미사용 변수/함수/import 없음
 - [ ] 주석이 코드와 일치함
+
+### 도메인별 즉시 불합격 기준
+
+> 구체적인 불합격 언어가 Generator 산출물 품질을 결정한다 (AI 사용성연구소 EP.04)
+
+**UI/Web 작업**
+- "Bootstrap 기본 느낌" UI → 불합격 (디자인 시스템 미반영)
+- 하드코딩된 색상/폰트 (design-tokens 미사용) → 불합격
+- 모바일 미대응 레이아웃 → 불합격
+
+**코드 작업**
+- "AI 슬롭" (무의미 반복, 복붙, 미사용 코드) → 불합격
+- 하드코딩된 시크릿/API키 → 즉시 불합격
+- Spec 의도와 다른 구현 방향 → 불합격
+
+**게임 (GodBlade) 작업**
+- Unity 빌드 에러 잔존 → 불합격
+- 프레임 드롭 없이 테스트 환경에서 60fps 미달 → 불합격
 
 ## 산출물
 
