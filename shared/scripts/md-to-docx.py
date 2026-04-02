@@ -542,14 +542,23 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
 
-        # 일반 텍스트 — current_color 적용
+        # 일반 텍스트 — current_color 적용 + 들여쓰기 레벨 감지
         p = doc.add_paragraph()
         set_paragraph_spacing(p)
-        # 불릿(‣→⇒①②③)이 아닌 일반 서술문만 첫줄 들여쓰기 (디딤돌 양식)
         stripped = line.strip()
-        is_bullet = stripped and stripped[0] in '‣→⇒①②③④⑤⑥⑦⑧⑨-'
-        if not is_bullet and len(stripped) > 20:
-            p.paragraph_format.first_line_indent = Cm(0.5)
+
+        # 마크다운 들여쓰기 감지 (4칸 = 1레벨)
+        leading_spaces = len(line) - len(line.lstrip())
+        indent_level = leading_spaces // 4
+
+        if indent_level > 0:
+            p.paragraph_format.left_indent = Cm(0.8 * indent_level)
+        else:
+            # 불릿·번호 항목이 아닌 일반 서술문만 첫줄 들여쓰기 (디딤돌 양식)
+            is_bullet = stripped and stripped[0] in '‣→⇒①②③④⑤⑥⑦⑧⑨-'
+            is_numbered = bool(re.match(r'^\d+[\.\)]\s', stripped))
+            if not is_bullet and not is_numbered and len(stripped) > 20:
+                p.paragraph_format.first_line_indent = Cm(0.5)
         add_rich_text(p, line, base_color=current_color)
         i += 1
 
