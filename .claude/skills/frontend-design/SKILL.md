@@ -14,6 +14,29 @@ This skill guides creation of distinctive, production-grade frontend interfaces 
 
 The user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.
 
+## Generator 원칙: Rubric 선행 + Museum Quality
+
+### 시작 전: 평가 기준 먼저 읽기
+
+코딩을 시작하기 전에 아래 루브릭을 먼저 읽고 내면화한다. QA에서 지적받을 항목을 사전에 제거하는 것이 목표다:
+
+| 항목 | 기준 |
+|------|------|
+| **Typography** | Inter/Roboto 단독 사용 금지 — 독창적 서체 페어링 필수 |
+| **Color** | 보라 그라데이션+흰 배경 금지 — 맥락에 맞는 팔레트 커밋 |
+| **Layout** | 예측 가능한 카드 그리드 지양 — 비대칭/오버랩/대각선 흐름 검토 |
+| **Motion** | 산발적 마이크로인터랙션 지양 — 고임팩트 포인트 1개 집중 |
+| **AI Slop** | 라이브러리 기본값, 틀에 박힌 그림자, 과잉 rounded-corners 금지 |
+
+### Museum Quality 목표
+
+제출 전 자체 점검: "이 UI를 박물관에 전시해도 부끄럽지 않은가?"
+- 라이브러리 기본값을 그대로 쓴 부분이 있는가? → 제거
+- AI 슬롭 패턴(뻔한 Hero 레이아웃, 예측 가능한 카드 3열)이 남아 있는가? → 교체
+- QA 핸드오프 전 위 루브릭으로 자체 채점 후 3.5점 미만 항목 개선
+
+---
+
 ## Design Thinking
 
 Before coding, understand the context and commit to a BOLD aesthetic direction:
