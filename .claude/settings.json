@@ -55,6 +55,11 @@
             "type": "command",
             "command": "bash .claude/hooks/auto-learn-save.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/cleanup-plans.sh",
+            "timeout": 5
           }
         ]
       }
