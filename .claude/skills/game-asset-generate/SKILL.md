@@ -14,6 +14,31 @@ model: sonnet
 
 게임 에셋 대량 생산 오케스트레이터. Library-First 탐색으로 비용을 절감하고, 12요소 Soul-Injected 프롬프트로 품질을 극대화한다.
 
+## Generator 핵심 원칙
+
+### 생성 전: Rubric 선행 확인
+
+12요소 Soul 프롬프트 조립(Step 6) 전에 반드시 `asset-critic` Rubric을 읽는다:
+- `asset-critic` 스킬의 6축 평가 기준(계층/일관성/안티패턴/브리프/서사/물성)이 **생성 목표**다
+- Rubric을 모르고 생성하면 Step 9 자동 평가에서 반복 실패가 발생한다
+- 에셋 Tier T1/T2는 반드시 Rubric 확인 후 프롬프트 조립을 시작한다
+
+### 생성 목표: museum quality
+
+- AI 슬롭 패턴 금지: 과도한 광원, 흐릿한 디테일, 대칭 과잉, 플라스틱 질감
+- "그냥 뽑힌 이미지"가 아니라 **art-direction-brief의 감성과 물성이 담긴** 에셋을 목표로 한다
+- 프롬프트 슬롯 [10. 스타일]에 반드시 anti-AI 미학 키워드를 포함한다
+
+### 생성 후: 자체 점검 후 핸드오프
+
+Step 9(크리틱 자동 평가) 전에 자체 점검을 수행한다:
+1. 브리프의 target_emotion이 이미지에서 느껴지는가?
+2. 팔레트 HEX가 정확히 반영되었는가?
+3. AI 슬롭 패턴(흐림, 과잉 광원, 이상 손가락 등)이 없는가?
+자체 점검 통과 후 asset-critic에 핸드오프한다.
+
+**asset-critic 연결**: 이 스킬의 Step 9는 `asset-critic` 스킬을 Evaluator로 활용한다. asset-critic의 6축 기준은 생성 품질의 최종 판정자이며, Step 1에서 style-guide.md 로드 시 asset-critic Rubric도 함께 확인한다.
+
 ## 전제조건
 
 1. `style-guide.md` 존재 필수 (없으면 `/style-train` 먼저 실행)

@@ -206,6 +206,20 @@ model: sonnet
 
 ---
 
+## Evaluator 핵심 원칙: 절대 관대하게 보지 마라
+
+아래 생각이 들면 더 엄격하게 본다:
+- "나쁘지 않은데..." → 감점
+- "이 정도면 괜찮지 않나?" → 감점
+- "전반적으로 잘했으니 이 부분은 넘어가자" → 금지
+
+규칙:
+- 한 항목이 좋아도 다른 항목 문제를 상쇄하지 않는다
+- 모든 피드백은 위치(파일경로:라인) + 이유(어떤 기준에 미달) + 방법(구체적 수정 방향) 3요소를 포함한다
+
+**예시 — UX 항목 간 관대함 금지:**
+> "`src/components/Button.tsx:34` — `<button>` 에 hover 스타일이 없다(UX-9 FAIL). Color Contrast가 PASS라도 Interaction Feedback 누락은 별도 감점 사유다. `hover:bg-primary-600 transition-colors duration-200`을 추가해야 한다."
+
 ## 심각도 요약
 
 | 심각도 | 항목 | 실패 시 행동 |
