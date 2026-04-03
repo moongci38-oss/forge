@@ -12,3 +12,4 @@ python-pptx>=1.0.0        # .pptx / .ppt
 openpyxl>=3.1.0           # .xlsx / .xls
 xlrd>=2.0.1               # .xls (구형 포맷)
 pyhwp>=0.1.0              # .hwp (hwp5txt CLI 텍스트 추출)
+pytesseract>=0.3.10       # 이미지 OCR (tesseract 시스템 패키지 필요: sudo apt install tesseract-ocr tesseract-ocr-kor)

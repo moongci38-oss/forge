@@ -53,6 +53,7 @@ def get_embed_model():
 # 인덱싱 대상 확장자
 # - 텍스트/문서: md, txt, json, yaml, toml, xml
 # - 오피스 문서: docx, pdf, pptx, ppt, xlsx, xls, hwp
+# - 이미지 (OCR): png, jpg, jpeg, bmp, tiff — tesseract 필요
 # - 소스코드(.ts/.js/.cs/.py 등)는 의도적으로 제외
 INCLUDE_EXTS = {
     ".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml",
@@ -60,6 +61,7 @@ INCLUDE_EXTS = {
     ".pptx", ".ppt",
     ".xlsx", ".xls",
     ".hwp",
+    ".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif",
 }
 
 # 항상 제외할 디렉토리 (빌드 아티팩트, 의존성)
@@ -150,12 +152,12 @@ def _get_file_extractor():
     """파일 형식별 커스텀 리더 반환"""
     extractors = {}
 
+    import subprocess
+    from llama_index.core.readers.base import BaseReader
+    from llama_index.core.schema import Document as LIDocument
+
     # HWP: pyhwp(hwp5txt) 기반 텍스트 추출
     try:
-        import subprocess
-        from llama_index.core.readers.base import BaseReader
-        from llama_index.core.schema import Document as LIDocument
-
         class HWPReader(BaseReader):
             def load_data(self, file, extra_info=None):
                 try:
@@ -172,7 +174,42 @@ def _get_file_extractor():
         subprocess.run(["hwp5txt", "--version"], capture_output=True, check=True)
         extractors[".hwp"] = HWPReader()
     except Exception:
-        print("⚠️ hwp5txt 없음 — .hwp 파일은 건너뜁니다. (pip install pyhwp)")
+        print("⚠️ hwp5txt 없음 — .hwp 건너뜁니다. (pip install pyhwp)")
+
+    # 이미지 OCR: tesseract + pytesseract
+    try:
+        import pytesseract
+        from PIL import Image
+
+        # tesseract 설치 확인
+        pytesseract.get_tesseract_version()
+
+        # 한국어 지원 여부 확인
+        langs = pytesseract.get_languages()
+        ocr_lang = "kor+eng" if "kor" in langs else "eng"
+
+        class ImageOCRReader(BaseReader):
+            def __init__(self, lang):
+                self.lang = lang
+
+            def load_data(self, file, extra_info=None):
+                try:
+                    img = Image.open(str(file))
+                    text = pytesseract.image_to_string(img, lang=self.lang).strip()
+                except Exception as e:
+                    text = f"[OCR 실패: {e}]"
+                return [LIDocument(text=text or "[텍스트 없는 이미지]",
+                                   metadata={"file_path": str(file)})]
+
+        reader = ImageOCRReader(lang=ocr_lang)
+        for ext in (".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif"):
+            extractors[ext] = reader
+        print(f"✅ 이미지 OCR 활성 (언어: {ocr_lang})")
+    except Exception:
+        print("⚠️ tesseract 없음 — 이미지 건너뜁니다. (sudo apt install tesseract-ocr tesseract-ocr-kor)")
+        # 이미지 확장자를 수집 대상에서 제거
+        for ext in (".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif"):
+            INCLUDE_EXTS.discard(ext)
 
     return extractors
 
