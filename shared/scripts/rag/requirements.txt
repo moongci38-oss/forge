@@ -4,5 +4,11 @@ llama-index-vector-stores-faiss>=0.3.0
 llama-index-readers-file>=0.4.0
 llama-index-retrievers-bm25>=0.4.0
 faiss-cpu>=1.9.0
-python-docx>=1.1.0
-pymupdf>=1.25.0
+
+# 문서 파서
+python-docx>=1.1.0       # .docx
+pymupdf>=1.25.0           # .pdf
+python-pptx>=1.0.0        # .pptx / .ppt
+openpyxl>=3.1.0           # .xlsx / .xls
+xlrd>=2.0.1               # .xls (구형 포맷)
+pyhwp>=0.1.0              # .hwp (hwp5txt CLI 텍스트 추출)

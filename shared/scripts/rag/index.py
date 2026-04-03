@@ -50,8 +50,17 @@ def get_embed_model():
         return OpenAIEmbedding(model="text-embedding-3-small", dimensions=1536), 1536, "text-embedding-3-small"
 
 
-# 인덱싱 대상 확장자 (소스코드 제외, 문서/설정만)
-INCLUDE_EXTS = {".md", ".txt", ".json", ".docx", ".pdf", ".yaml", ".yml", ".toml"}
+# 인덱싱 대상 확장자
+# - 텍스트/문서: md, txt, json, yaml, toml, xml
+# - 오피스 문서: docx, pdf, pptx, ppt, xlsx, xls, hwp
+# - 소스코드(.ts/.js/.cs/.py 등)는 의도적으로 제외
+INCLUDE_EXTS = {
+    ".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml",
+    ".docx", ".pdf",
+    ".pptx", ".ppt",
+    ".xlsx", ".xls",
+    ".hwp",
+}
 
 # 항상 제외할 디렉토리 (빌드 아티팩트, 의존성)
 BASE_EXCLUDE_DIRS = {
@@ -137,6 +146,37 @@ def file_hash(filepath):
     return h.hexdigest()
 
 
+def _get_file_extractor():
+    """파일 형식별 커스텀 리더 반환"""
+    extractors = {}
+
+    # HWP: pyhwp(hwp5txt) 기반 텍스트 추출
+    try:
+        import subprocess
+        from llama_index.core.readers.base import BaseReader
+        from llama_index.core.schema import Document as LIDocument
+
+        class HWPReader(BaseReader):
+            def load_data(self, file, extra_info=None):
+                try:
+                    result = subprocess.run(
+                        ["hwp5txt", str(file)],
+                        capture_output=True, text=True, encoding="utf-8", timeout=30,
+                    )
+                    text = result.stdout.strip()
+                except Exception as e:
+                    text = f"[HWP 추출 실패: {e}]"
+                return [LIDocument(text=text or "[빈 HWP 파일]",
+                                   metadata={"file_path": str(file)})]
+
+        subprocess.run(["hwp5txt", "--version"], capture_output=True, check=True)
+        extractors[".hwp"] = HWPReader()
+    except Exception:
+        print("⚠️ hwp5txt 없음 — .hwp 파일은 건너뜁니다. (pip install pyhwp)")
+
+    return extractors
+
+
 def _do_build(files, index_dir, meta_extra=None):
     """공통 빌드 로직 (build_full / workspace_full_build 공유)"""
     from llama_index.core import VectorStoreIndex, StorageContext, Settings, SimpleDirectoryReader
@@ -144,7 +184,12 @@ def _do_build(files, index_dir, meta_extra=None):
     from llama_index.vector_stores.faiss import FaissVectorStore
     import faiss
 
-    reader = SimpleDirectoryReader(input_files=files, filename_as_id=True)
+    file_extractor = _get_file_extractor()
+    reader = SimpleDirectoryReader(
+        input_files=files,
+        filename_as_id=True,
+        file_extractor=file_extractor if file_extractor else None,
+    )
     documents = reader.load_data()
     print(f"📖 로드 완료: {len(documents)}개 문서")
 
@@ -287,7 +332,12 @@ def add_files(file_paths, index_dir=None):
     storage_context = StorageContext.from_defaults(vector_store=vector_store, persist_dir=str(index_dir))
     index = load_index_from_storage(storage_context)
 
-    reader = SimpleDirectoryReader(input_files=valid_files, filename_as_id=True)
+    file_extractor = _get_file_extractor()
+    reader = SimpleDirectoryReader(
+        input_files=valid_files,
+        filename_as_id=True,
+        file_extractor=file_extractor if file_extractor else None,
+    )
     documents = reader.load_data()
     splitter = SentenceSplitter(chunk_size=512, chunk_overlap=50)
     nodes = splitter.get_nodes_from_documents(documents)
