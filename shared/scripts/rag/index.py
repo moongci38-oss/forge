@@ -34,8 +34,14 @@ def load_env():
 
 
 def expand_path(path_str):
-    """환경변수 + ~ 확장"""
-    return str(Path(os.path.expandvars(os.path.expanduser(path_str))).resolve())
+    """환경변수 + ~ 확장 (bash ${VAR:-default} 문법 지원)"""
+    import re
+    def _replace_with_default(m):
+        var, default = m.group(1), m.group(2)
+        return os.environ.get(var, default)
+    # ${VAR:-default} → 환경변수 있으면 사용, 없으면 default
+    expanded = re.sub(r'\$\{(\w+):-([^}]*)\}', _replace_with_default, path_str)
+    return str(Path(os.path.expandvars(os.path.expanduser(expanded))).resolve())
 
 
 def get_embed_model():
@@ -73,20 +79,21 @@ BASE_EXCLUDE_DIRS = {
 }
 
 
-def collect_files(target_path, extra_exclude_dirs=None):
+def collect_files(target_path, extra_exclude_dirs=None, include_exts_override=None):
     """인덱싱 대상 파일 수집
 
     Args:
         target_path: 스캔할 루트 Path
         extra_exclude_dirs: 추가 제외 디렉토리 (단순 이름 또는 상대 경로 prefix)
+        include_exts_override: 이 소스에서만 사용할 확장자 집합 (지정 시 글로벌 INCLUDE_EXTS 대신 사용)
     """
+    allowed_exts = include_exts_override if include_exts_override else INCLUDE_EXTS
     exclude_dirs = BASE_EXCLUDE_DIRS.copy()
     exclude_prefixes = set()
 
     if extra_exclude_dirs:
         for ex in extra_exclude_dirs:
             if "/" in ex:
-                # 슬래시 포함 → 경로 prefix로 처리 (e.g. "06-finance", "08-admin/insurance")
                 exclude_prefixes.add(ex.rstrip("/"))
             else:
                 exclude_dirs.add(ex)
@@ -95,10 +102,8 @@ def collect_files(target_path, extra_exclude_dirs=None):
     for f in target_path.rglob("*"):
         if f.is_dir():
             continue
-        # 디렉토리 이름 제외
         if any(ex in f.parts for ex in exclude_dirs):
             continue
-        # 경로 prefix 제외
         try:
             rel = str(f.relative_to(target_path))
             if any(rel.startswith(prefix) for prefix in exclude_prefixes):
@@ -107,7 +112,7 @@ def collect_files(target_path, extra_exclude_dirs=None):
             pass
         if f.name.startswith("."):
             continue
-        if f.suffix.lower() in INCLUDE_EXTS:
+        if f.suffix.lower() in allowed_exts:
             files.append(str(f))
     return files
 
@@ -121,7 +126,13 @@ def collect_files_workspace(sources):
             print(f"  ⚠️ 스킵 (경로 없음): {source['path']}")
             continue
         extra_excludes = source.get("exclude_dirs", [])
-        files = collect_files(source_path, extra_exclude_dirs=extra_excludes)
+        # 소스별 확장자 오버라이드 (지정 시 글로벌 INCLUDE_EXTS 대신 사용)
+        source_exts = source.get("include_exts")
+        if source_exts:
+            override_exts = set(source_exts)
+            files = collect_files(source_path, extra_exclude_dirs=extra_excludes, include_exts_override=override_exts)
+        else:
+            files = collect_files(source_path, extra_exclude_dirs=extra_excludes)
         label = source.get("note", source["path"])
         print(f"  📂 {label}: {len(files)}개 파일")
         all_files.extend(files)

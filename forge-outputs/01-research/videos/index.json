@@ -1,0 +1,81 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-03",
+  "videos": [
+    {
+      "video_id": "hjIxPpJyYHs",
+      "title": "하네스 엔지니어링 — 이거 모르면 클로드코드 아무리 써도 소용없습니다 | EP.04",
+      "channel": "AI 사용성연구소",
+      "url": "https://youtu.be/hjIxPpJyYHs",
+      "category": "tech/ai",
+      "analyzed_at": "2026-04-03",
+      "analysis_file": "01-research/videos/analyses/2026-04-03-hjIxPpJyYHs-하네스-엔지니어링-이거-모르면-클로드코드-아무리-써도-소용없습니다-ep-04-analysis.md",
+      "tags": ["하네스엔지니어링", "ClaudeCode", "멀티에이전트", "Planner-Generator-Evaluator", "컨텍스트리셋"],
+      "relevance": {
+        "portfolio": 4,
+        "godblade": 3,
+        "business": 3
+      }
+    },
+    {
+      "video_id": "g6YesZMG40s",
+      "title": "AI 모델 성능 경쟁이 더이상 무의미… 하네스 엔지니어링 본격 개화 | NVIDIA는 이미 준비 중, 반도체도 함께 변한다",
+      "channel": "안될공학 - IT 테크 신기술",
+      "url": "https://youtu.be/g6YesZMG40s",
+      "category": "tech/ai",
+      "analyzed_at": "2026-04-03",
+      "analysis_file": "01-research/videos/analyses/2026-04-03-g6YesZMG40s-ai-모델-성능-경쟁이-더이상-무의미-하네스-엔지니어링-본격-개화-nvidia는-이미-analysis.md",
+      "tags": ["하네스엔지니어링", "NVIDIA다이나모", "AI에이전트", "반도체", "SaaS경쟁력"],
+      "relevance": {
+        "portfolio": 3,
+        "godblade": 2,
+        "business": 5
+      }
+    },
+    {
+      "video_id": "0322tGsiauo",
+      "title": "투자사 YC 대표의 클로드코드 Claude Code 설정 공개 | gstack 완전 분석",
+      "channel": "퀀텀점프대학 (QJU)",
+      "url": "https://youtu.be/0322tGsiauo",
+      "category": "tech/ai",
+      "analyzed_at": "2026-03-30",
+      "analysis_file": "01-research/videos/analyses/2026-03-30-0322tGsiauo-투자사-yc-대표의-클로드코드-claude-code-설정-공개-gstack-완전-분석-analysis.md",
+      "tags": ["ClaudeCode", "gstack", "YCombinator", "브라우저자동화", "AI개발도구"],
+      "relevance": {
+        "portfolio": 3,
+        "godblade": 2,
+        "business": 2
+      }
+    },
+    {
+      "video_id": "d-iNXwtwdFU",
+      "title": "클로드코드 잘 쓰는 10단계 — 순서 틀리면 90%가 포기합니다",
+      "channel": "메이커 에반 | Maker Evan",
+      "url": "https://youtu.be/d-iNXwtwdFU",
+      "category": "tech/ai",
+      "analyzed_at": "2026-03-30",
+      "analysis_file": "01-research/videos/analyses/2026-03-30-d-iNXwtwdFU-클로드코드-잘-쓰는-10단계-순서-틀리면-90-가-포기합니다-analysis.md",
+      "tags": ["ClaudeCode", "컨텍스트엔지니어링", "토큰최적화", "MCP", "클로드코드사용법"],
+      "relevance": {
+        "portfolio": 4,
+        "godblade": 3,
+        "business": 2
+      }
+    },
+    {
+      "video_id": "W2nHHiIWuqk",
+      "title": "1년만에 150억, 400% 성장을 만드는 환경을 셋팅하는 방법 | 엔코위더스 오정훈",
+      "channel": "EO Korea",
+      "url": "https://youtu.be/W2nHHiIWuqk",
+      "category": "business/startup",
+      "analyzed_at": "2026-03-30",
+      "analysis_file": "01-research/videos/analyses/2026-03-30-W2nHHiIWuqk-1년만에-150억-400-성장을-만드는-환경을-셋팅하는-방법-엔코위더스-오정훈-analysis.md",
+      "tags": ["스타트업", "단기임대", "외국인플랫폼", "가설검증", "피봇"],
+      "relevance": {
+        "portfolio": 2,
+        "godblade": 2,
+        "business": 5
+      }
+    }
+  ]
+}
