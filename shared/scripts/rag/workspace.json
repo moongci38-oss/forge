@@ -1,0 +1,36 @@
+{
+  "_comment": "워크스페이스 RAG 인덱스 설정. 경로는 환경변수($FORGE_ROOT 등) + ~ 확장 지원.",
+  "index_dir": "~/.rag-workspace-index",
+  "sources": [
+    {
+      "path": "${FORGE_ROOT:-~/forge}",
+      "exclude_dirs": [".git", "__pycache__", ".rag-index", "forge-knowledge-index"],
+      "note": "Forge 시스템 (rules/skills/agents/templates)"
+    },
+    {
+      "path": "${FORGE_OUTPUTS:-~/forge-outputs}",
+      "exclude_dirs": [
+        ".git", "__pycache__", ".rag-index",
+        "06-finance", "07-legal",
+        "08-admin/insurance", "08-admin/freelancers"
+      ],
+      "note": "Forge 산출물 (민감 폴더 제외)"
+    },
+    {
+      "path": "~/mywsl_workspace/portfolio-project",
+      "exclude_dirs": [
+        ".git", "node_modules", ".next", "dist", "out", "build",
+        ".turbo", "coverage", ".jest-cache"
+      ],
+      "note": "Portfolio 프로젝트 문서/설정 (소스는 INCLUDE_EXTS 화이트리스트로 자동 제외)"
+    },
+    {
+      "path": "/mnt/e/new_workspace/god_Sword",
+      "exclude_dirs": [
+        ".git", "Library", "Temp", "obj", "Logs",
+        "UserSettings", "Packages", "ProjectSettings/GraphicsSettings.asset"
+      ],
+      "note": "GodBlade Unity 프로젝트 (빌드 아티팩트 제외, .cs는 화이트리스트로 자동 제외)"
+    }
+  ]
+}

@@ -19,8 +19,12 @@ def main():
     parser = argparse.ArgumentParser(description="RAG 하이브리드 검색")
     parser.add_argument("query", help="검색어")
     parser.add_argument("--top-k", type=int, default=5, help="결과 수 (기본: 5)")
-    parser.add_argument("--index-dir", default=os.environ.get("FORGE_OUTPUTS", os.path.expanduser("~/forge-outputs")) + "/09-grants/.rag-index",
-                        help="인덱스 디렉토리")
+    # 기본 인덱스: 워크스페이스 인덱스 우선, 없으면 forge-outputs fallback
+    _ws_index = str(Path.home() / ".rag-workspace-index")
+    _fo_index = os.environ.get("FORGE_OUTPUTS", os.path.expanduser("~/forge-outputs")) + "/.rag-index"
+    _default_index = _ws_index if Path(_ws_index).exists() else _fo_index
+    parser.add_argument("--index-dir", default=_default_index,
+                        help="인덱스 디렉토리 (기본: ~/.rag-workspace-index, 없으면 ~/forge-outputs/.rag-index)")
     parser.add_argument("--mode", choices=["vector", "bm25", "hybrid"], default="hybrid",
                         help="검색 모드 (기본: hybrid)")
     parser.add_argument("--json", action="store_true", help="JSON 출력")
