@@ -33,6 +33,9 @@ enforcement: rigid
 1. `.claude/state/sessions/` 디렉토리에서 **신규/재개** 판단
 2. 존재 → 마지막 체크포인트에서 재개
 3. 미존재 → `node ~/.claude/forge/scripts/session-state.mjs init --name <name>` 실행
+4. **learnings 자동 로드** → `.claude/learnings.jsonl` 존재 시 현재 작업 컨텍스트 관련 상위 3건 확인 (서버 실행법, 알려진 이슈, 디버깅 교훈 등)
+
+> **MUST**: 4번은 Forge Phase 진입 여부와 무관하게 **모든 세션 시작(신규/재개/Implicit Entry/비파이프라인 재개)에서 실행**한다. Phase 6 트리거에만 의존하지 않는다.
 
 ## 스크립트 호출
 
