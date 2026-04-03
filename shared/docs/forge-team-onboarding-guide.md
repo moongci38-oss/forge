@@ -237,6 +237,39 @@ bash ~/.claude/forge/shared/scripts/setup-mcp.sh
 > Sentry, Notion, Lighthouse, Draw.io, Magic UI는 API 키 없이 동작한다.
 > API 키는 `forge/.env`에서 관리한다. `.env.example`을 참고한다.
 
+#### Step 3.5: learnings 자동 로드 훅 등록 (1회)
+
+세션 시작 시 프로젝트의 `.claude/learnings.jsonl`을 자동으로 읽어 최근 5건을 표시하는 훅을 등록한다.
+
+`~/.claude/settings.json`의 `SessionStart` 훅 배열에 아래 항목을 추가:
+
+```json
+{
+  "type": "command",
+  "command": "bash <프로젝트경로>/.claude/hooks/load-learnings.sh"
+}
+```
+
+예시 (`~/.claude/settings.json`):
+
+```json
+"hooks": {
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        { "type": "command", "command": "bash ~/.claude/hooks/cleanup-zombie-sessions.sh" },
+        { "type": "command", "command": "bash ~/.claude/hooks/session-count-check.sh" },
+        { "type": "command", "command": "bash /path/to/project/.claude/hooks/load-learnings.sh" }
+      ]
+    }
+  ]
+}
+```
+
+> **훅 파일 위치**: `forge-sync --include-recommended` 실행 시 프로젝트 `.claude/hooks/load-learnings.sh`로 자동 배포된다.
+> 여러 프로젝트를 사용하는 경우 각 프로젝트별로 훅을 추가한다.
+
 #### Step 4: CLI 도구 설치 (MCP 병행)
 
 Sentry, Lighthouse는 MCP와 CLI를 용도별로 병행 사용한다.
