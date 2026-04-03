@@ -200,7 +200,7 @@ mkdir -p docs/{guides,tech,planning/{active/forge,done},reviews,infrastructure,w
 `forge/planning/templates/inspector-reference-template.md`를 `docs/references/inspector-reference.md`에 복사한다.
 
 ```bash
-cp ~/forge/planning/templates/inspector-reference-template.md <project-path>/docs/references/inspector-reference.md
+cp ${FORGE_ROOT:-~/forge}/planning/templates/inspector-reference-template.md <project-path>/docs/references/inspector-reference.md
 ```
 
 프로젝트 유형에 따라 초기 값 조정:

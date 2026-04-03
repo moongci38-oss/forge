@@ -7,7 +7,7 @@ Usage:
   python3 index.py --add file1.md file2.docx # 특정 파일만 기존 인덱스에 추가
   python3 index.py [target_dir] --incremental # 변경/추가된 파일만 재인덱싱
 
-기본 대상: ~/forge-outputs/09-grants/
+기본 대상: $FORGE_OUTPUTS/09-grants/
 인덱스 저장: {target_dir}/.rag-index/
 """
 import os
@@ -20,8 +20,9 @@ from datetime import datetime
 
 
 def load_env():
-    """~/forge/.env에서 환경변수 로드"""
-    env_file = Path.home() / "forge" / ".env"
+    """$FORGE_ROOT/.env에서 환경변수 로드"""
+    forge_root = os.environ.get("FORGE_ROOT", str(Path.home() / "forge"))
+    env_file = Path(forge_root) / ".env"
     if env_file.exists():
         for line in env_file.read_text().splitlines():
             if "=" in line and not line.startswith("#"):
@@ -161,7 +162,8 @@ def add_files(file_paths, index_dir=None):
 
     # 인덱스 위치 결정
     if index_dir is None:
-        index_dir = Path.home() / "forge-outputs" / ".rag-index"
+        forge_outputs = os.environ.get("FORGE_OUTPUTS", str(Path.home() / "forge-outputs"))
+        index_dir = Path(forge_outputs) / ".rag-index"
     else:
         index_dir = Path(index_dir)
 
@@ -299,7 +301,8 @@ def main():
         return
 
     # target_dir 결정
-    target_dir = os.path.expanduser("~/forge-outputs/09-grants")
+    forge_outputs = os.environ.get("FORGE_OUTPUTS", os.path.expanduser("~/forge-outputs"))
+    target_dir = forge_outputs + "/09-grants"
     for arg in args:
         if not arg.startswith("--"):
             target_dir = arg

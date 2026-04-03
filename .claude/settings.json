@@ -38,6 +38,11 @@
             "type": "command",
             "command": "bash .claude/hooks/usage-logger.sh",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/validate-output.sh",
+            "timeout": 5
           }
         ]
       }

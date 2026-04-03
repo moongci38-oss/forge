@@ -2,6 +2,8 @@
 description: "Forge Dev Phase 7 — 프로덕션 배포 상태 확인 및 수동 트리거"
 model: haiku
 ---
+> **⚠️ 실행 모드 확인**: 이 커맨드는 쓰기 모드에서만 정상 동작합니다. Plan mode 감지 시 즉시 [STOP] — "Escape로 plan mode 해제 후 재실행하세요. 내부 [STOP] 게이트가 승인 지점입니다."
+
 
 Forge Dev Phase 7 프로덕션 배포를 확인하거나 수동으로 트리거합니다.
 

@@ -129,6 +129,48 @@
 
 ---
 
+## 설치 경로 (CRITICAL - 외부 사용자)
+
+Forge를 외부에서 클론할 때:
+
+```bash
+# 홈 디렉토리에 forge 클론
+git clone https://git.lumir-ai.com/lumir/forge ~/forge
+
+# 또는 다른 경로에 클론 후 환경변수 설정
+git clone https://git.lumir-ai.com/lumir/forge /custom/path/forge
+export FORGE_ROOT=/custom/path/forge
+export FORGE_OUTPUTS=/custom/path/forge-outputs
+```
+
+**중요**: 모든 Forge 커맨드/스킬은 `FORGE_ROOT` 환경변수를 기본값 `~/forge`로 사용합니다. 다른 경로를 사용하면 `FORGE_ROOT`를 명시적으로 설정해야 합니다.
+
+## 커맨드 실행 모드 (HIGH)
+
+Forge 커맨드/스킬은 **쓰기 모드에서 실행**해야 한다. 내부 [STOP] 게이트가 인간 승인 지점 역할을 하므로 plan mode가 별도로 필요 없다.
+
+### Plan Mode 감지 규칙
+
+멀티 Phase 커맨드(`/forge`, `/sdd`, `/pge`, `/grants`, `/prd`, `/gdd`, `/forge-fix`, `/forge-deploy`, `/forge-release`, `/rd-plan` 등) 실행 시:
+
+1. Claude가 현재 plan mode(도구 사용이 제한된 상태)임을 인식하면:
+   ```
+   [STOP] 이 커맨드는 쓰기 모드에서 실행해야 합니다.
+   Escape로 plan mode를 해제하거나 "쓰기 모드로 전환"을 요청한 후 재실행하세요.
+   이 커맨드의 내부 [STOP] 게이트가 승인 지점 역할을 합니다.
+   ```
+2. 경고를 출력한 후 **즉시 중단**한다. Plan mode에서 부분 실행하지 않는다.
+
+### 모드 구분
+
+| 상황 | 모드 |
+|------|------|
+| `/forge`, `/sdd`, `/pge`, `/grants-write` 등 커맨드 | 쓰기 모드 필수 |
+| `"이 부분 수정해줘"` 등 직접 파일 수정 요청 | plan mode 권장 |
+| 파일 탐색·조회·읽기만 | 어느 모드든 무관 |
+
+---
+
 ## 세션 관리 (MEDIUM)
 
 - **/clear 사용 기준**: 새 작업 시작 시, AI 이상 동작(반복/무한루프/엉뚱한 응답) 시

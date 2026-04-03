@@ -25,7 +25,7 @@ model: opus
 # 5축 통합 시스템 감사 (ACHCE)
 
 > ACHCE: Agentic · Context · Harness · Cost · Human-AI Escalation
-> 참조: `~/forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
+> 참조: `$FORGE_OUTPUTS/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
 
 ## 감사 유형 정의
 
@@ -56,7 +56,7 @@ model: opus
 
 | target | 감사 경로 |
 |--------|----------|
-| `system` | `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
+| `system` | `$FORGE_ROOT/.claude/` 또는 `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
 | `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `apps/`, `.claude/` 등) |
 
 ## 실행 흐름
@@ -295,7 +295,7 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 - 정기 감사: 분기 1회 권장
 
 ## 참조
-- ~/forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
+- $FORGE_OUTPUTS/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
 ```
 
 ---

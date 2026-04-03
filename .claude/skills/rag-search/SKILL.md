@@ -40,23 +40,23 @@ forge-outputs/ 문서에서 벡터(의미) + BM25(키워드) 하이브리드 검
 ls {target_dir}/.rag-index/meta.json
 
 # 없으면 빌드
-python3 ~/forge/shared/scripts/rag/index.py {target_dir}
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py {target_dir}
 ```
 
 인덱스 위치:
-- **전체**: `~/forge-outputs/.rag-index/` (통합 인덱스 — 기본)
-- **정부과제**: `~/forge-outputs/09-grants/.rag-index/` (과제 전용)
+- **전체**: `$FORGE_OUTPUTS/.rag-index/` (통합 인덱스 — 기본)
+- **정부과제**: `$FORGE_OUTPUTS/09-grants/.rag-index/` (과제 전용)
 
-다른 폴더: `python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/01-research/`
+다른 폴더: `python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py $FORGE_OUTPUTS/01-research/`
 
 ### Step 2: 검색 실행
 
 ```bash
 # 전체 forge-outputs 검색 (기본)
-python3 ~/forge/shared/scripts/rag/search.py "{검색어}" --top-k {N} --mode {hybrid|vector|bm25} --index-dir ~/forge-outputs/.rag-index
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/search.py "{검색어}" --top-k {N} --mode {hybrid|vector|bm25} --index-dir ${FORGE_OUTPUTS:-~/forge-outputs}/.rag-index
 
 # 정부과제만 검색
-python3 ~/forge/shared/scripts/rag/search.py "{검색어}" --index-dir ~/forge-outputs/09-grants/.rag-index
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/search.py "{검색어}" --index-dir ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants/.rag-index
 ```
 
 파라미터:
@@ -81,26 +81,26 @@ python3 ~/forge/shared/scripts/rag/search.py "{검색어}" --index-dir ~/forge-o
 
 ```bash
 # 최초 빌드
-python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/09-grants
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants
 
 # 문서 추가/변경 후 재빌드
-python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/09-grants --rebuild
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants --rebuild
 ```
 
 ### 인덱스 정보
 
 ```bash
-cat ~/forge-outputs/09-grants/.rag-index/meta.json
+cat ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants/.rag-index/meta.json
 ```
 
 ### 다른 폴더 인덱싱
 
 ```bash
 # 리서치 폴더
-python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/01-research
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}/01-research
 
 # 전체 forge-outputs
-python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}
 ```
 
 ## 기술 구성
@@ -118,7 +118,7 @@ python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs
 ## 환경 요구사항
 
 - Python 3.10+
-- 패키지: `pip install -r ~/forge/shared/scripts/rag/requirements.txt`
+- 패키지: `pip install -r ${FORGE_ROOT:-~/forge}/shared/scripts/rag/requirements.txt`
 - 추가: `pip install llama-index-embeddings-huggingface sentence-transformers docx2txt`
 - (선택) OPENAI_API_KEY — 있으면 text-embedding-3-small 사용, 없으면 로컬 모델
 

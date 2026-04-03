@@ -4,6 +4,8 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent
 argument-hint: <이슈 설명 또는 Notion task URL>
 model: sonnet
 ---
+> **⚠️ 실행 모드 확인**: 이 커맨드는 쓰기 모드에서만 정상 동작합니다. Plan mode 감지 시 즉시 [STOP] — "Escape로 plan mode 해제 후 재실행하세요. 내부 [STOP] 게이트가 승인 지점입니다."
+
 
 # /forge-fix
 

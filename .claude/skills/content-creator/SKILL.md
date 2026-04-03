@@ -31,7 +31,14 @@ Professional-grade brand voice analysis, SEO optimization, and platform-specific
 제출 전 자체 점검: "이 콘텐츠를 브랜드 쇼케이스에 올려도 부끄럽지 않은가?"
 - AI 슬롭 패턴(빈 리스트 패딩, 공허한 결론 문단)이 남아 있는가? → 제거
 - SEO 점수 75+ 미달인가? → `seo_optimizer.py` 재실행 후 반영
-- QA 핸드오프 전 위 루브릭 자체 점검 완료 후 제출
+- 위 루브릭 자체 점검 완료 후 핸드오프
+
+### 자기평가 분리: 외부 Evaluator 핸드오프
+
+자체 점검은 Generator의 최소 품질 게이트일 뿐이다. 최종 판정은 외부 Evaluator가 수행한다:
+- Forge 파이프라인 내: 완료 후 `/qa` 스킬 자동 호출 대기
+- 단독 실행 시: 결과물 제출과 함께 "루브릭 자체 점검 결과" 명시 → Lead가 외부 검토 여부 결정
+- **Generator가 자신의 결과를 최종 합격으로 선언하지 않는다**
 
 ---
 

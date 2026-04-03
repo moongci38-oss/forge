@@ -4,6 +4,8 @@ argument-hint: <agency> <사업명>
 allowed-tools: Read, Write, Bash, Glob, Grep, WebSearch, WebFetch
 model: sonnet
 ---
+> **⚠️ 실행 모드 확인**: 이 커맨드는 쓰기 모드에서만 정상 동작합니다. Plan mode 감지 시 즉시 [STOP] — "Escape로 plan mode 해제 후 재실행하세요. 내부 [STOP] 게이트가 승인 지점입니다."
+
 
 # /grants — 정부지원사업 파이프라인
 
@@ -16,7 +18,7 @@ model: sonnet
 ## 워크플로우
 
 1. `forge-workspace.json`의 `folderMap.grants` 경로 확인
-2. `~/forge-outputs/09-grants/{agency}/` 하위에 사업 폴더 존재 여부 확인
+2. `$FORGE_OUTPUTS/09-grants/{agency}/` 하위에 사업 폴더 존재 여부 확인
 3. 사업 폴더가 없으면 새로 생성 (디렉토리 구조 스캐폴딩)
 4. `_grant-info.md` 존재 여부로 현재 단계 판단:
    - 없음 → GR-1 (공고 분석) 시작
@@ -38,4 +40,4 @@ GR-1 공고 분석 [AUTO-PASS] → GR-2 전략 [STOP] → GR-3 서류 작성 [ST
 
 ## 산출물 경로
 
-`~/forge-outputs/09-grants/{agency}/{YYYY}-{사업명}/` 하위 각 Phase 폴더
+`$FORGE_OUTPUTS/09-grants/{agency}/{YYYY}-{사업명}/` 하위 각 Phase 폴더

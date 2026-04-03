@@ -25,7 +25,7 @@ maxTurns: 15
 
 ## 레퍼런스
 
-`~/forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md` 축5 섹션을 반드시 읽고 체크리스트를 적용한다.
+`$FORGE_OUTPUTS/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md` 축5 섹션을 반드시 읽고 체크리스트를 적용한다.
 
 ## 평가 프레임워크
 
