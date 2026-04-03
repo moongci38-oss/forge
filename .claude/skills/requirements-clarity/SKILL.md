@@ -9,6 +9,10 @@ model: sonnet
 **컨텍스트**: 요구사항 불명확, 복잡한 기능(2일 이상), 크로스팀 조율이 필요할 때 호출됩니다.
 **출력**: Why(YAGNI 체크)·Simpler(KISS 체크) 기반 명확화 후 PRD를 `./docs/prds/{feature_name}-v{version}-prd.md`로 저장합니다.
 
+## Planner 핵심 원칙
+- 야심차게 설계한다 (ambitious scope): 작게 생각하지 말고, 목표를 최대한 달성하는 계획을 수립한다
+- AI 기능을 체계에 자연스럽게 녹여 넣는다: 기능 추가가 아닌 워크플로우에 통합된 형태로 설계한다
+
 # Requirements Clarity Skill
 
 ## Description

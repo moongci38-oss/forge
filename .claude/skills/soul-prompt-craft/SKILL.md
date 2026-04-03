@@ -10,6 +10,11 @@ model: sonnet
 **컨텍스트**: `/game-asset-generate` 실행 전 고품질 프롬프트 필요 시 또는 프롬프트 수동 미세조정 요청 시 호출됩니다.
 **출력**: FLUX/Gemini/Replicate 모델별 최적화된 3가지 형태의 이미지 생성 프롬프트를 반환합니다.
 
+## Generator 핵심 원칙 (하네스 엔지니어링)
+- 생성 전 Evaluator 기준(Rubric)을 먼저 확인한다: `asset-critic` 6축 루브릭 내면화 후 프롬프트 조립 시작
+- "museum quality" 목표: 라이브러리 기본값·AI 슬롭 패턴(빈 수식어, 복붙 스타일) 금지
+- 생성 후 자체 점검 후 핸드오프: asset-critic 기준에서 감점 요소 직접 확인 후 제출
+
 # Soul Prompt Craft — 12요소 프롬프트 조립기
 
 style-guide.md와 art-direction-brief.md에서 프로젝트 컨텍스트를 자동 추출하고, 12요소 Soul-Injected 프롬프트를 조립하여 모델별 최적 포맷으로 변환한다.
