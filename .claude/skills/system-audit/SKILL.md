@@ -13,10 +13,19 @@ model: opus
 **컨텍스트**: `/system-audit` 호출 또는 종합 AI 시스템 점검이 필요할 때 실행됩니다.
 **출력**: 5축 병렬 감사 결과 + 축간 트레이드오프 분석 + 통합 개선 로드맵을 마크다운 보고서로 반환합니다.
 
+## Evaluator 핵심 원칙: 절대 관대하게 보지 마라
+아래 생각이 들면 더 엄격하게 본다:
+- "나쁘지 않은데..." → 감점
+- "이 정도면 괜찮지 않나?" → 감점
+- "전반적으로 잘했으니 이 부분은 넘어가자" → 금지
+규칙:
+- 한 항목이 좋아도 다른 항목 문제를 상쇄하지 않는다
+- 모든 피드백은 위치 + 이유 + 방법 3요소를 포함한다
+
 # 5축 통합 시스템 감사 (ACHCE)
 
 > ACHCE: Agentic · Context · Harness · Cost · Human-AI Escalation
-> 참조: `~/forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
+> 참조: `$FORGE_OUTPUTS/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md`
 
 ## 감사 유형 정의
 
@@ -47,7 +56,7 @@ model: opus
 
 | target | 감사 경로 |
 |--------|----------|
-| `system` | `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
+| `system` | `$FORGE_ROOT/.claude/` 또는 `~/.claude/forge/` + `.claude/rules/` + `.claude/skills/` + `.claude/agents/` |
 | `{project-name}` | `forge-workspace.json`에 등록된 프로젝트 경로 (`.specify/`, `apps/`, `.claude/` 등) |
 
 ## 실행 흐름
@@ -286,7 +295,7 @@ Wave 1 — 5개 축 에이전트 병렬 스폰 중...
 - 정기 감사: 분기 1회 권장
 
 ## 참조
-- ~/forge-outputs/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
+- $FORGE_OUTPUTS/docs/tech/2026-03-16-5-axis-ai-analysis-framework.md
 ```
 
 ---

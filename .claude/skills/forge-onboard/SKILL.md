@@ -200,7 +200,7 @@ mkdir -p docs/{guides,tech,planning/{active/forge,done},reviews,infrastructure,w
 `forge/planning/templates/inspector-reference-template.md`를 `docs/references/inspector-reference.md`에 복사한다.
 
 ```bash
-cp ~/forge/planning/templates/inspector-reference-template.md <project-path>/docs/references/inspector-reference.md
+cp ${FORGE_ROOT:-~/forge}/planning/templates/inspector-reference-template.md <project-path>/docs/references/inspector-reference.md
 ```
 
 프로젝트 유형에 따라 초기 값 조정:
@@ -233,6 +233,53 @@ cp ~/forge/planning/templates/inspector-reference-template.md <project-path>/doc
 }
 ```
 
+## Phase 5: RAG 워크스페이스 등록
+
+`${FORGE_ROOT:-~/forge}/shared/scripts/rag/workspace.json`의 `sources`에 새 프로젝트를 추가한다.
+
+### 5.1 이미 등록됐는지 확인
+
+```python
+import json
+from pathlib import Path
+config = json.loads(Path("shared/scripts/rag/workspace.json").read_text())
+paths = [s["path"] for s in config["sources"]]
+# <project-path>가 이미 있으면 스킵
+```
+
+### 5.2 프로젝트 유형별 exclude_dirs
+
+프로젝트 유형에 맞게 exclude_dirs를 결정한다:
+
+| 유형 | exclude_dirs |
+|------|-------------|
+| **web (Node.js)** | `.git`, `node_modules`, `.next`, `dist`, `out`, `build`, `.turbo`, `coverage` |
+| **game (Unity)** | `.git`, `Library`, `Temp`, `obj`, `Logs`, `UserSettings`, `Packages` |
+| **python** | `.git`, `__pycache__`, `.venv`, `venv`, `dist`, `build`, `.pytest_cache` |
+| **generic** | `.git`, `node_modules`, `__pycache__`, `dist`, `build` |
+
+### 5.3 workspace.json sources에 추가
+
+Read → Edit으로 직접 수정한다:
+
+```json
+{
+  "path": "<project-path>",
+  "exclude_dirs": ["<유형별 목록>"],
+  "note": "<project-name> — <description>"
+}
+```
+
+### 5.4 등록 확인
+
+```bash
+python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py --workspace --incremental
+```
+
+변경 없으면 "✅ 변경 없음" 출력. 새 프로젝트 파일이 있으면 자동 추가됨.
+
+---
+
 ## 완료 체크리스트
 
 모든 단계 완료 후 아래를 검증한다:
@@ -248,6 +295,7 @@ cp ~/forge/planning/templates/inspector-reference-template.md <project-path>/doc
 [ ] verify.sh 존재 + 실행 권한
 [ ] docs/ 폴더 구조 생성
 [ ] forge-workspace.json에 프로젝트 등록
+[ ] workspace.json sources에 프로젝트 등록 (Phase 5)
 [ ] forge-sync status 확인
 ```
 

@@ -60,7 +60,16 @@ bash shared/scripts/setup-mcp.sh
 bash shared/scripts/setup-cli.sh
 # → Installs Lighthouse, Sentry CLI (for CI/batch)
 
-# 6. Run Claude Code
+# 6. Register learnings auto-load hook (one-time per machine)
+# → Sync hook file to project first:
+node ~/.claude/scripts/forge-sync.mjs sync --target <project> --include-recommended
+# → Then add to ~/.claude/settings.json SessionStart hooks:
+# {
+#   "type": "command",
+#   "command": "bash /path/to/project/.claude/hooks/load-learnings.sh"
+# }
+
+# 7. Run Claude Code
 claude
 ```
 

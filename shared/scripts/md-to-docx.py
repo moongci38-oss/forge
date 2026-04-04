@@ -62,11 +62,11 @@ def set_font(run, font_name=FONT_BODY, size=BODY_SIZE, bold=False, color=None):
         run.font.color.rgb = color
 
 
-def set_paragraph_spacing(paragraph, space_before=Pt(0), space_after=Pt(6)):
-    """문단 간격을 설정. 디딤돌 양식 기준: 줄간격 160%, 뒤 6pt."""
+def set_paragraph_spacing(paragraph, space_before=Pt(0), space_after=Pt(2)):
+    """문단 간격을 설정. 줄간격 120%, 뒤 2pt (간격 최소화)."""
     paragraph.paragraph_format.space_before = space_before
     paragraph.paragraph_format.space_after = space_after
-    paragraph.paragraph_format.line_spacing = 1.6
+    paragraph.paragraph_format.line_spacing = 1.2
 
 
 def set_style_defaults(doc):
@@ -74,9 +74,9 @@ def set_style_defaults(doc):
     style = doc.styles["Normal"]
     style.font.name = FONT_BODY
     style.font.size = BODY_SIZE
-    style.paragraph_format.space_after = Pt(6)
+    style.paragraph_format.space_after = Pt(2)
     style.paragraph_format.space_before = Pt(0)
-    style.paragraph_format.line_spacing = 1.6
+    style.paragraph_format.line_spacing = 1.2
     rpr = style.element.get_or_add_rPr()
     rfonts = rpr.find(qn("w:rFonts"))
     if rfonts is None:
@@ -192,7 +192,7 @@ def add_image(doc, img_path, base_dir):
     full_path = Path(base_dir) / img_path
     if full_path.exists():
         MAX_W = 6.3   # inches
-        MAX_H = 7.8   # inches (제목+이미지 같은 페이지 수용)
+        MAX_H = 6.0   # inches (이미지 아래 공백 최소화)
         try:
             pil_img = PILImage.open(str(full_path))
             w_px, h_px = pil_img.size
@@ -542,14 +542,23 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
 
-        # 일반 텍스트 — current_color 적용
+        # 일반 텍스트 — current_color 적용 + 들여쓰기 레벨 감지
         p = doc.add_paragraph()
         set_paragraph_spacing(p)
-        # 불릿(‣→⇒①②③)이 아닌 일반 서술문만 첫줄 들여쓰기 (디딤돌 양식)
         stripped = line.strip()
-        is_bullet = stripped and stripped[0] in '‣→⇒①②③④⑤⑥⑦⑧⑨-'
-        if not is_bullet and len(stripped) > 20:
-            p.paragraph_format.first_line_indent = Cm(0.5)
+
+        # 마크다운 들여쓰기 감지 (4칸 = 1레벨)
+        leading_spaces = len(line) - len(line.lstrip())
+        indent_level = leading_spaces // 4
+
+        if indent_level > 0:
+            p.paragraph_format.left_indent = Cm(0.8 * indent_level)
+        else:
+            # 불릿·번호 항목이 아닌 일반 서술문만 첫줄 들여쓰기 (디딤돌 양식)
+            is_bullet = stripped and stripped[0] in '‣→⇒①②③④⑤⑥⑦⑧⑨-'
+            is_numbered = bool(re.match(r'^\d+[\.\)]\s', stripped))
+            if not is_bullet and not is_numbered and len(stripped) > 20:
+                p.paragraph_format.first_line_indent = Cm(0.5)
         add_rich_text(p, line, base_color=current_color)
         i += 1
 

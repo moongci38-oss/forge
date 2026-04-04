@@ -12,6 +12,10 @@ maxTurns: 50
 effort: high
 ---
 
+## Planner 핵심 원칙
+- 야심차게 설계한다 (ambitious scope): 최소 파이프라인이 아닌, 각 Phase 최적 품질을 달성하는 오케스트레이션을 설계한다
+- AI 기능을 체계에 자연스럽게 녹여 넣는다: Agentic 패턴(병렬 스폰, 게이트 관리)을 파이프라인의 핵심 실행 메커니즘으로 활용한다
+
 # Pipeline Orchestrator Agent
 
 ## Core Mission

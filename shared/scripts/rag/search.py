@@ -6,7 +6,7 @@ Usage: python3 search.py "검색어" [--top-k N] [--index-dir DIR]
 예시:
   python3 search.py "투자 유치 전략"
   python3 search.py "TagHub 특허 기술 차별점" --top-k 10
-  python3 search.py "시장 규모" --index-dir ~/forge-outputs/09-grants/.rag-index
+  python3 search.py "시장 규모" --index-dir ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants/.rag-index
 """
 import os
 import sys
@@ -19,8 +19,12 @@ def main():
     parser = argparse.ArgumentParser(description="RAG 하이브리드 검색")
     parser.add_argument("query", help="검색어")
     parser.add_argument("--top-k", type=int, default=5, help="결과 수 (기본: 5)")
-    parser.add_argument("--index-dir", default=os.path.expanduser("~/forge-outputs/09-grants/.rag-index"),
-                        help="인덱스 디렉토리")
+    # 기본 인덱스: 워크스페이스 인덱스 우선, 없으면 forge-outputs fallback
+    _ws_index = str(Path.home() / ".rag-workspace-index")
+    _fo_index = os.environ.get("FORGE_OUTPUTS", os.path.expanduser("~/forge-outputs")) + "/.rag-index"
+    _default_index = _ws_index if Path(_ws_index).exists() else _fo_index
+    parser.add_argument("--index-dir", default=_default_index,
+                        help="인덱스 디렉토리 (기본: ~/.rag-workspace-index, 없으면 ~/forge-outputs/.rag-index)")
     parser.add_argument("--mode", choices=["vector", "bm25", "hybrid"], default="hybrid",
                         help="검색 모드 (기본: hybrid)")
     parser.add_argument("--json", action="store_true", help="JSON 출력")
@@ -33,7 +37,8 @@ def main():
         sys.exit(1)
 
     # --- 환경변수 로드 ---
-    env_file = Path.home() / "forge" / ".env"
+    forge_root = os.environ.get("FORGE_ROOT", str(Path.home() / "forge"))
+    env_file = Path(forge_root) / ".env"
     if env_file.exists():
         for line in env_file.read_text().splitlines():
             if "=" in line and not line.startswith("#"):
@@ -148,7 +153,7 @@ def main():
         for i, (node, score) in enumerate(results, 1):
             file_path = node.node.metadata.get("file_path", "unknown")
             # 경로 축약
-            short_path = file_path.replace(os.path.expanduser("~/forge-outputs/09-grants/"), "")
+            short_path = file_path.replace(os.environ.get("FORGE_OUTPUTS", os.path.expanduser("~/forge-outputs")) + "/09-grants/", "")
             text_preview = node.node.text[:300].replace("\n", " ")
             score_str = f"{score:.4f}" if score else "N/A"
 

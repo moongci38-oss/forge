@@ -10,6 +10,10 @@ tools: Read, Write, Edit, Task
 model: opus
 ---
 
+## Planner 핵심 원칙
+- 야심차게 설계한다 (ambitious scope): 단일 소스에 의존하지 않고, 경쟁 가설 2개 이상·다중 소스 교차 검증으로 리서치를 설계한다
+- AI 기능을 체계에 자연스럽게 녹여 넣는다: 리서치 결과가 S2→S4 의사결정에 직접 연결되도록 구조화한다
+
 # Research Coordinator Agent
 
 ## Core Mission

@@ -1,0 +1,11 @@
+name,reach,impact,confidence,effort,description
+User Dashboard Redesign,5000,high,high,l,Complete redesign of user dashboard
+Mobile Push Notifications,10000,massive,medium,m,Add push notification support
+Dark Mode,8000,medium,high,s,Implement dark mode theme
+API Rate Limiting,2000,low,high,xs,Add rate limiting to API
+Social Login,12000,high,medium,m,Add Google/Facebook login
+Export to PDF,3000,medium,low,s,Export reports as PDF
+Team Collaboration,4000,massive,low,xl,Real-time collaboration features
+Search Improvements,15000,high,high,m,Enhance search functionality
+Onboarding Flow,20000,massive,high,s,Improve new user onboarding
+Analytics Dashboard,6000,high,medium,l,Advanced analytics for users

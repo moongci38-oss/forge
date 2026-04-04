@@ -13,7 +13,7 @@ version: 2
 
 ## 평가 기준 (Yes/No)
 
-1. Output MUST detect HWP file and trigger the conversion pipeline using ~/forge/shared/scripts/hwp2pdf.py.
+1. Output MUST detect HWP file and trigger the conversion pipeline using ${FORGE_ROOT:-~/forge}/shared/scripts/hwp2pdf.py.
 2. Output MUST produce a readable PDF or text extraction with images, tables, and shapes preserved.
 3. Output MUST handle Korean text encoding correctly (UTF-8, no mojibake).
 4. Output MUST report conversion success/failure with file path of the output.

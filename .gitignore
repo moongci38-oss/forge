@@ -11,11 +11,17 @@
 credentials.json
 secrets/
 
+# === MCP & API config (contains secrets/endpoints) ===
+.mcp.json
+.nano-banana-config.json
+
 # === Personal overrides (per-user) ===
 .claude/settings.local.json
 .claude/state/
 .claude/memory/
 .claude/forge-sync-state.json
+.claude/usage.log
+.claude/scheduled_tasks.lock
 
 # === OS files ===
 .DS_Store

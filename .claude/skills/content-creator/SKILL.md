@@ -12,6 +12,36 @@ model: sonnet
 
 Professional-grade brand voice analysis, SEO optimization, and platform-specific content frameworks.
 
+## Generator 원칙: Rubric 선행 + Museum Quality
+
+### 시작 전: 평가 기준 먼저 읽기
+
+콘텐츠를 작성하기 전에 아래 루브릭을 먼저 읽고 내면화한다. QA에서 지적받을 항목을 사전에 제거하는 것이 목표다:
+
+| 항목 | 기준 |
+|------|------|
+| **SEO** | 키워드 밀도 1-3%, H2 3개+, 메타 디스크립션 — 작성 전 키워드 확정 필수 |
+| **Brand Voice** | 일관성 체크 — `brand_voice_analyzer.py` 결과 기준 편차 감지 시 수정 |
+| **CTA** | 모든 콘텐츠에 명확한 CTA 필수 — 없으면 미완성으로 취급 |
+| **AI Slop** | 과도한 리스트 나열, 빈 수식어("혁신적", "최고의"), 근거 없는 주장 금지 |
+| **Fact-check** | 수치·통계·사례는 출처 URL+날짜 없으면 사용 금지 |
+
+### Museum Quality 목표
+
+제출 전 자체 점검: "이 콘텐츠를 브랜드 쇼케이스에 올려도 부끄럽지 않은가?"
+- AI 슬롭 패턴(빈 리스트 패딩, 공허한 결론 문단)이 남아 있는가? → 제거
+- SEO 점수 75+ 미달인가? → `seo_optimizer.py` 재실행 후 반영
+- 위 루브릭 자체 점검 완료 후 핸드오프
+
+### 자기평가 분리: 외부 Evaluator 핸드오프
+
+자체 점검은 Generator의 최소 품질 게이트일 뿐이다. 최종 판정은 외부 Evaluator가 수행한다:
+- Forge 파이프라인 내: 완료 후 `/qa` 스킬 자동 호출 대기
+- 단독 실행 시: 결과물 제출과 함께 "루브릭 자체 점검 결과" 명시 → Lead가 외부 검토 여부 결정
+- **Generator가 자신의 결과를 최종 합격으로 선언하지 않는다**
+
+---
+
 ## Output Requirements
 
 Every content piece MUST include ALL of the following:

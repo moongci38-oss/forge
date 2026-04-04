@@ -11,6 +11,11 @@ model: sonnet
 effort: high
 ---
 
+## Generator 핵심 원칙 (하네스 엔지니어링)
+- 생성 전 Evaluator 기준(Rubric)을 먼저 확인한다: GDD 검수 기준(완성도/일관성/구현가능성)을 내면화 후 작성 시작
+- "museum quality" 목표: 개발자가 읽고 즉시 구현 가능한 수준, AI 슬롭 패턴(모호한 설명, 빈 섹션) 금지
+- 생성 후 자체 점검 후 핸드오프: 핵심 시스템 섹션 완성도·수치 일관성 직접 확인 후 제출
+
 # GDD Writer Agent
 
 ## Core Mission

@@ -1,0 +1,41 @@
+{
+  "_comment": "워크스페이스 RAG 인덱스 설정. 경로는 환경변수($FORGE_ROOT 등) + ~ 확장 지원. include_exts 지정 시 해당 소스만 해당 확장자로 제한.",
+  "_no_image_exts": "이미지 제외 확장자 목록 (프로젝트용)",
+  "index_dir": "~/.rag-workspace-index",
+  "sources": [
+    {
+      "path": "${FORGE_ROOT:-~/forge}",
+      "exclude_dirs": [".git", "__pycache__", ".rag-index", "forge-knowledge-index"],
+      "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".xlsx", ".hwp"],
+      "note": "Forge 시스템 (이미지 제외)"
+    },
+    {
+      "path": "${FORGE_OUTPUTS:-~/forge-outputs}",
+      "exclude_dirs": [
+        ".git", "__pycache__", ".rag-index",
+        "06-finance", "07-legal",
+        "08-admin/insurance", "08-admin/freelancers"
+      ],
+      "note": "Forge 산출물 (이미지 OCR 포함, 민감 폴더 제외)"
+    },
+    {
+      "path": "~/mywsl_workspace/portfolio-project",
+      "exclude_dirs": [
+        ".git", "node_modules", ".next", "dist", "out", "build",
+        ".turbo", "coverage", ".jest-cache"
+      ],
+      "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".xlsx", ".hwp"],
+      "note": "Portfolio 문서만 (이미지 제외)"
+    },
+    {
+      "path": "/mnt/e/new_workspace/god_Sword/docs",
+      "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".hwp"],
+      "note": "GodBlade docs (이미지 제외)"
+    },
+    {
+      "path": "/mnt/e/new_workspace/god_Sword/src/docs",
+      "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".hwp"],
+      "note": "GodBlade src/docs (이미지 제외)"
+    }
+  ]
+}

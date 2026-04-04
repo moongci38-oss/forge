@@ -9,6 +9,10 @@ model: sonnet
 **컨텍스트**: 기능 우선순위화, 사용자 리서치 종합, PRD 작성, 제품 전략 수립 요청 시 호출됩니다.
 **출력**: RICE 점수표·인터뷰 분석 보고서·PRD 문서·DORA 지표 대시보드를 마크다운 또는 스크립트 반환값으로 제공합니다.
 
+## Planner 핵심 원칙
+- 야심차게 설계한다 (ambitious scope): PRD는 최소 기능이 아닌 사용자 목표를 완전히 달성하는 기준으로 작성한다
+- AI 기능을 체계에 자연스럽게 녹여 넣는다: AI 기반 기능을 별도 항목이 아닌 핵심 UX 플로우에 통합한다
+
 # Product Manager Toolkit
 
 Essential tools and frameworks for modern product management, from discovery to delivery.
