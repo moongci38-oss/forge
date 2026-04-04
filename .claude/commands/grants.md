@@ -68,6 +68,7 @@ INDEX.md에서 본문 상태가 "작업중"이면:
 3. 인수인계 문서가 있으면 Read
 4. 상태 요약 후 [STOP] — 사용자 지시 대기
 
+
 ## 산출물 경로
 
 `~/forge-outputs/09-grants/{agency}/{YYYY}-{사업명}/` 하위 각 Phase 폴더
