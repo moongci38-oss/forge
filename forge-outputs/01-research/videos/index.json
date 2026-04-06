@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-04-04",
+  "last_updated": "2026-04-06",
   "videos": [
     {
       "video_id": "hjIxPpJyYHs",
@@ -158,6 +158,97 @@
       "view_count": "1.7K",
       "published": null,
       "has_followup": false
+    },
+    {
+      "video_id": "DrekqeDlO1w",
+      "title": "하네스 공식문서 100번 읽은 것처럼 만들어드림",
+      "channel": "캐슬 AI",
+      "url": "https://youtu.be/DrekqeDlO1w",
+      "category": "tech/ai",
+      "analyzed_at": "2026-04-06",
+      "duration": "17:20",
+      "view_count": "30.2K",
+      "files": {
+        "analysis": "01-research/videos/analyses/2026-04-06-DrekqeDlO1w-하네스-공식문서-100번-읽은-것처럼-만들어드림-analysis.md",
+        "comparison": "docs/reviews/2026-04-06-harness-vibe-pptx-comparison.md",
+        "apply_plan": "docs/planning/active/plans/2026-04-06-yt-harness-vibe-coding-pptx-consolidated-apply-plan.md"
+      },
+      "tags": [
+        "하네스엔지니어링",
+        "CLAUDE.md",
+        "Hooks",
+        "MitchellHashimoto",
+        "OpenAI",
+        "AgentFirst"
+      ],
+      "tldr": "Harness Engineering = CLAUDE.md(컨텍스트 부패 방어) + Hooks(규칙 강제). 프롬프트는 부탁, 하네스는 강제. OpenAI 3명이 5개월간 코드 0줄로 100만 줄 코드베이스 구축.",
+      "relevance": {
+        "portfolio": 3,
+        "godblade": 2,
+        "business": 4
+      },
+      "has_comparison": true,
+      "has_factcheck": true
+    },
+    {
+      "video_id": "dZG3-9lKpIA",
+      "title": "바이브코딩시대, 개발 프로세스에도 변혁이 일고 있다.",
+      "channel": "김플립 - LLM 코딩",
+      "url": "https://youtu.be/dZG3-9lKpIA",
+      "category": "tech/ai",
+      "analyzed_at": "2026-04-06",
+      "duration": "10:57",
+      "view_count": "6.3K",
+      "files": {
+        "analysis": "01-research/videos/analyses/2026-04-06-dZG3-9lKpIA-바이브코딩시대-개발-프로세스에도-변혁이-일고-있다-analysis.md",
+        "comparison": "docs/reviews/2026-04-06-harness-vibe-pptx-comparison.md",
+        "apply_plan": "docs/planning/active/plans/2026-04-06-yt-harness-vibe-coding-pptx-consolidated-apply-plan.md"
+      },
+      "tags": [
+        "바이브코딩",
+        "프로토타입우선",
+        "Linear",
+        "이슈트래킹",
+        "PLAN.md",
+        "에이전틱코딩"
+      ],
+      "tldr": "Linear CEO 이슈 트래킹은 죽었다. 기획서 3일 대신 프로토타입 3일. 기획서의 미래는 에이전트에게 줄 PLAN.md 파일.",
+      "relevance": {
+        "portfolio": 2,
+        "godblade": 2,
+        "business": 4
+      },
+      "has_comparison": true,
+      "has_factcheck": true
+    },
+    {
+      "video_id": "68hp8IiUXB4",
+      "title": "(직장인 필수) 클로드 skill로 pptx 템플릿 양식을 자동으로 완성",
+      "channel": "오피스마스터",
+      "url": "https://youtu.be/68hp8IiUXB4",
+      "category": "productivity",
+      "analyzed_at": "2026-04-06",
+      "duration": "21:56",
+      "view_count": "10.7K",
+      "files": {
+        "analysis": "01-research/videos/analyses/2026-04-06-68hp8IiUXB4-클로드-skill-pptx-템플릿-자동-채우기-analysis.md",
+        "comparison": "docs/reviews/2026-04-06-harness-vibe-pptx-comparison.md",
+        "apply_plan": "docs/planning/active/plans/2026-04-06-yt-harness-vibe-coding-pptx-consolidated-apply-plan.md"
+      },
+      "tags": [
+        "pptx",
+        "ClaudeSkill",
+        "템플릿자동화",
+        "오피스자동화"
+      ],
+      "tldr": "Claude.ai 커스텀 스킬 업로드로 기존 PPTX 레이아웃 유지 + 내용만 새 주제로 자동 교체. 완성도 약 80%. 우리 시스템의 pptx skill이 이보다 강력.",
+      "relevance": {
+        "portfolio": 1,
+        "godblade": 1,
+        "business": 4
+      },
+      "has_comparison": true,
+      "has_factcheck": true
     }
   ]
 }

@@ -25,4 +25,19 @@ find "$PLANS_DIR" -maxdepth 1 -name "*.md" | while read -r f; do
   fi
 done
 
+# 글로벌 plans 정리 (~/.claude/plans/)
+GLOBAL_PLANS="${HOME}/.claude/plans"
+if [ -d "$GLOBAL_PLANS" ]; then
+  GLOBAL_DONE="${GLOBAL_PLANS}/done"
+  mkdir -p "$GLOBAL_DONE"
+  find "$GLOBAL_PLANS" -maxdepth 1 -name "*.md" | while read -r f; do
+    AGE_DAYS=$(( ( $(date +%s) - $(stat -c %Y "$f" 2>/dev/null || stat -f %m "$f") ) / 86400 ))
+    if [ "$AGE_DAYS" -ge 7 ]; then
+      rm -f "$f"
+    else
+      mv "$f" "$GLOBAL_DONE/"
+    fi
+  done
+fi
+
 exit 0

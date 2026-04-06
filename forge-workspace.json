@@ -47,6 +47,15 @@
       "symlinkBase": "docs/planning/active/forge/api",
       "type": "web",
       "description": "Python FastAPI 백엔드 프로젝트"
+    },
+    "notion-mcp-workflow": {
+      "devTarget": null,
+      "symlinkBase": "docs/planning/active/forge/notion-mcp-workflow",
+      "type": "web",
+      "description": "MCP 기반 Notion 워크플로우 자동화 레시피 마켓플레이스 — 코딩 없이 MCP 연동 자동화",
+      "stage": "S1",
+      "createdAt": "2026-04-06",
+      "researchPath": "outputs/01-research/projects/notion-mcp-workflow/2026-04-06-s1-research.md"
     }
   },
   "notionDBs": {
