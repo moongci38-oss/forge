@@ -37,13 +37,13 @@ FONT_BODY = "맑은 고딕"
 FONT_TABLE = "맑은 고딕"
 FONT_FALLBACK = "Malgun Gothic"
 
-TITLE_SIZE = Pt(18)
-H1_SIZE = Pt(16)
-H2_SIZE = Pt(13)
-H3_SIZE = Pt(11)
-BODY_SIZE = Pt(11)
-TABLE_SIZE = Pt(10)
-CAPTION_SIZE = Pt(9)
+TITLE_SIZE = Pt(18)   # HWP: HY헤드라인M 18pt
+H1_SIZE = Pt(16)      # HWP: 한양신명조 16pt (소제목)
+H2_SIZE = Pt(14)      # HWP: 한양신명조 14pt (항)
+H3_SIZE = Pt(12)      # HWP: 12pt (세부항)
+BODY_SIZE = Pt(10)    # HWP: 함초롬바탕 10pt
+TABLE_SIZE = Pt(10)   # HWP: 돋움 10pt
+CAPTION_SIZE = Pt(11) # HWP: 한양중고딕 11pt Bold
 
 
 def set_font(run, font_name=FONT_BODY, size=BODY_SIZE, bold=False, color=None):
@@ -203,15 +203,8 @@ def add_image(doc, img_path, base_dir):
     full_path = Path(base_dir) / img_path
     if full_path.exists():
         MAX_W = get_content_width_inches(doc)
-        MAX_H = MAX_W * 0.75  # 4:3 비율 상한
         try:
-            pil_img = PILImage.open(str(full_path))
-            w_px, h_px = pil_img.size
-            h_at_max_w = h_px / w_px * MAX_W
-            if h_at_max_w > MAX_H:
-                doc.add_picture(str(full_path), height=Inches(MAX_H))
-            else:
-                doc.add_picture(str(full_path), width=Inches(MAX_W))
+            doc.add_picture(str(full_path), width=Inches(MAX_W))
         except Exception:
             doc.add_picture(str(full_path), width=Inches(MAX_W))
         p = doc.paragraphs[-1]
@@ -644,6 +637,38 @@ def convert_md_to_docx(md_path, docx_path):
             pf.space_after = Pt(2)
         if pf.line_spacing is None:
             pf.line_spacing = 1.2
+
+    # 테이블 전후 간격 추가 (문단과 테이블 사이 갭)
+    for table in doc.tables:
+        tbl = table._tbl
+        tblPr = tbl.find(qn("w:tblPr"))
+        if tblPr is None:
+            tblPr = tbl.makeelement(qn("w:tblPr"), {})
+            tbl.insert(0, tblPr)
+        # 테이블 전후 여백: 상 6pt, 하 6pt
+        for margin_tag, margin_val in [("w:tblpPr", None)]:
+            pass  # tblpPr은 floating table용이므로 skip
+        # OxmlElement로 직접 spacing 설정
+        tblCellSpacing = tblPr.find(qn("w:tblCellSpacing"))
+        # 테이블 앞뒤 빈 줄 대신 tblInd 활용 — 실제로는 전후 paragraph spacing으로 처리
+        prev = tbl.getprevious()
+        if prev is not None and prev.tag == qn("w:p"):
+            pPr = prev.find(qn("w:pPr"))
+            if pPr is not None:
+                spacing = pPr.find(qn("w:spacing"))
+                if spacing is None:
+                    spacing = prev.makeelement(qn("w:spacing"), {})
+                    pPr.append(spacing)
+                spacing.set(qn("w:after"), "120")  # 6pt = 120 twips
+        nxt = tbl.getnext()
+        if nxt is not None and nxt.tag == qn("w:p"):
+            pPr = nxt.find(qn("w:pPr"))
+            if pPr is not None:
+                spacing = pPr.find(qn("w:spacing"))
+                if spacing is None:
+                    spacing = nxt.makeelement(qn("w:spacing"), {})
+                    pPr.append(spacing)
+                spacing.set(qn("w:before"), "120")  # 6pt = 120 twips
 
     # 테이블 내부 셀 정렬 통일
     for table in doc.tables:
