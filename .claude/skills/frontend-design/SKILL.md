@@ -14,6 +14,20 @@ This skill guides creation of distinctive, production-grade frontend interfaces 
 
 The user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.
 
+## 렌더링 레벨 연동
+
+프로젝트 style-guide에 `Rendering Level` 필드가 있으면 UI 목업 수준을 해당 레벨에 맞춘다.
+**레벨 정의**: `shared/design-tokens/rendering-levels.md`
+
+| Level | UI/UX 목업 수준 |
+|:-----:|--------------|
+| L1 | 와이어프레임 (회색 박스 + 라벨) |
+| L2 | 로우파이 목업 (실제 컬러 + 기본 컴포넌트) |
+| L3 | 하이파이 목업 (디자인 토큰 적용, 그림자/radius/spacing 정밀) |
+| L4 | 프로토타입 수준 (마이크로인터랙션, 트랜지션 포함) |
+
+미지정 시 기본값: **L3** (하이파이 목업)
+
 ## Generator 원칙: Rubric 선행 + Museum Quality
 
 ### 시작 전: 평가 기준 먼저 읽기

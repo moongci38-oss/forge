@@ -173,6 +173,23 @@ Choose colors that match your topic — don't default to generic blue. Use these
 
 ---
 
+## 렌더링 레벨 (Rendering Quality Level)
+
+슬라이드 비주얼 품질은 `shared/design-tokens/rendering-levels.md`의 레벨 체계를 따른다.
+프로젝트 style-guide에 `Rendering Level` 필드가 있으면 해당 레벨을, 없으면 용도별 기본값을 적용한다.
+
+| 용도 | 기본 레벨 |
+|------|:-------:|
+| 정부과제/공식 제안서 | L3 |
+| 투자 IR | L3 ~ L4 |
+| 내부 보고서 | L2 |
+| 기술 데모 | L3.5c |
+
+**적용 방식:**
+- NanoBanana 이미지 생성 시 해당 레벨의 프롬프트 키워드 사전을 삽입
+- 슬라이드 도형/배경/아이콘 스타일을 레벨에 맞게 차등 적용
+- L3 이상에서 다이어그램은 NanoBanana로 생성하여 삽입 (도형 직접 구성 대신)
+
 ## Generating Visuals with NanoBanana
 
 When stock images are unavailable, use the NanoBanana MCP (`generate-image` skill) to create custom visuals for slides.

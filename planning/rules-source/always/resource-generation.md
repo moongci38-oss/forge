@@ -25,6 +25,20 @@ P3 (확산): 대량 생산 — 승인된 스타일로 전체 에셋 생성
 P4 (수렴): 품질 검증 — 일관성 검증 + 크리틱 루프 → 최종 확정
 ```
 
+## 렌더링 레벨 (Rendering Quality Level)
+
+이미지/다이어그램/슬라이드의 비주얼 품질 단계. 프로젝트 style-guide에서 레벨을 선택한다.
+**상세 정의**: `shared/design-tokens/rendering-levels.md`
+
+| Level | 이름 | 적합 용도 |
+|:-----:|------|----------|
+| L1 | Flat 2D | 내부 메모, 초안 |
+| L2 | Soft 3D | 일반 기획서, 내부 보고서 |
+| **L3** | **Premium Glassmorphism** | **정부과제, IR, 공식 제안서** |
+| L3.5x | 변형 (Isometric/Infographic/Neon/Clay/Paper) | 특화 용도별 선택 |
+| L4 | Cinematic 3D | 제품 런칭, 프리미엄 키노트 |
+| L5 | Rendered 3D | 영상/게임 에셋 |
+
 ## 3-Tier 에셋 분류
 
 | Tier | 분류 | 기준 | 생성 방식 |

@@ -16,6 +16,16 @@
 | Error | `#______` | 에러 상태 | `#ED4956` |
 | Success | `#______` | 성공 상태 | `#00C853` |
 
+## 1.5. 렌더링 레벨 (Rendering Level)
+
+> `shared/design-tokens/rendering-levels.md` 참조
+
+| 항목 | 값 |
+|------|-----|
+| 기본 레벨 | {예: L3 Premium Glassmorphism} |
+| 데이터/차트 슬라이드 | {예: L3.5b Infographic Editorial} |
+| 비고 | {용도 설명} |
+
 ## 2. 아트 스타일 키워드
 
 | 카테고리 | 키워드 | 설명 |

@@ -43,10 +43,23 @@
 - Human override 우선: `last_edited_by=person`이면 AI가 덮어쓰기 금지
 - 버그/기능 등록: **명시적 요청** 시에만. DB URL: `forge-workspace.json`의 `notionDBs`
 
+## 렌더링 레벨 (HIGH)
+
+- 이미지/다이어그램/PPTX/HTML 시각화 생성 전 프로젝트 style-guide의 **Rendering Level** 필드를 확인한다
+- 미지정 시 용도별 기본값 적용: 정부과제=L3, 내부 문서=L2, IR/키노트=L3~L4
+- 레벨 정의: `shared/design-tokens/rendering-levels.md`
+
 ## 커맨드 실행 모드 (HIGH)
 
 - Forge 멀티 Phase 커맨드는 **쓰기 모드에서 실행** (내부 [STOP] 게이트가 승인 지점)
 - Plan mode 감지 시 경고 출력 후 즉시 중단
+
+## 하네스 업데이트 프로토콜 (HIGH)
+
+- **동일 실수 2회 발생 시**: 즉시 forge-core.md 또는 해당 Deep 규칙 파일에 방지 규칙 추가
+- **learnings.jsonl 동일 태그 3회 이상**: forge-core.md 규칙 승격 후보로 표시 → `promote-learnings.sh` 실행
+- **Gate 결정 시**: gate-log에 "근거 (1~2줄)" 필드 필수 기록 (통과/실패 사유)
+- 하네스 변경 후 관련 스킬 프롬프트도 함께 동기화 (pipeline-prompt-sync 원칙)
 
 ---
 
