@@ -1,11 +1,30 @@
 #!/usr/bin/env bash
-# Forge MCP Setup — 전역 MCP 서버를 ~/.claude.json에 등록
+# Forge MCP Setup — 전역 MCP 서버를 ~/.claude.json에 등록 + ~/.claude/forge 심볼릭 생성
 # 팀원 온보딩 시 실행: bash shared/scripts/setup-mcp.sh
 # 이미 등록된 서버는 건너뜀 (멱등성 보장)
 
 set -euo pipefail
 
 CLAUDE_JSON="$HOME/.claude.json"
+
+# ─── ~/.claude/forge 심볼릭 생성 ───────────────────────────────────────────
+FORGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+FORGE_DEV="$FORGE_ROOT/dev"
+CLAUDE_FORGE="$HOME/.claude/forge"
+
+echo "=== ~/.claude/forge 심볼릭 설정 ==="
+
+if [ -L "$CLAUDE_FORGE" ]; then
+  echo "  ⏭ 이미 존재: $CLAUDE_FORGE -> $(readlink "$CLAUDE_FORGE")"
+elif [ -e "$CLAUDE_FORGE" ]; then
+  echo "  ⚠ 실제 디렉토리가 존재합니다: $CLAUDE_FORGE (심볼릭으로 교체 필요 시 수동 삭제 후 재실행)"
+else
+  mkdir -p "$HOME/.claude"
+  ln -s "$FORGE_DEV" "$CLAUDE_FORGE"
+  echo "  ✓ 생성됨: $CLAUDE_FORGE -> $FORGE_DEV"
+fi
+
+echo ""
 
 # jq 없이 동작하도록 node 기반 처리
 if ! command -v node &>/dev/null; then
