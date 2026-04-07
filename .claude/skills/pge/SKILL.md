@@ -67,14 +67,15 @@ model: opus
      - `{project_root}/.claude/reference/key-file-map.md` — 기능별 파일 위치 + 쌍 수정 패턴
      - `{project_root}/.claude/reference/code-snippets.md` — DOTween/UI/이벤트 표준 패턴
 2. 작업 요구사항 분석 — `system-analysis-cycle.md`에 따라 기존 시스템 분석 문서 먼저 확인
-3. **Unity 클라이언트 .cs 수정이 포함된 경우** (필수 순서 — 모두 직접 Read):
-   1. `{project_root}/.claude/reference/key-file-map.md` **Read** — 기능별 파일 위치 + 쌍 수정 패턴
-   2. `{project_root}/.claude/reference/code-snippets.md` **Read** — DOTween/UI/이벤트 표준 패턴
-   3. `{project_root}/.claude/reference/pre-modification-analysis-detail.md` **Read** — 4단계 의존성 분석 지침
-   4. `{project_root}/.claude/reference/pge-game-evaluator-rubric-detail.md` **Read** — 평가 기준 숙지
-   5. `pre-modification-analysis-detail.md`의 4단계 지침(Step 0~4)을 순서대로 수행
-   6. 분석 결과를 `{project_root}/.claude/state/current-analysis.md`에 저장
-   → Generator가 .cs 수정 시작 전 반드시 완료해야 함
+3. **Unity 클라이언트 .cs 수정이 포함된 경우** (필수 순서):
+   1. `{project_root}/.claude/state/current-analysis.md` 존재 확인 — **있으면 먼저 Read**하여 이전 분석 재사용 판단
+   2. `{project_root}/.claude/reference/key-file-map.md` **Read** — 기능별 파일 위치 + 쌍 수정 패턴
+   3. `{project_root}/.claude/reference/code-snippets.md` **Read** — DOTween/UI/이벤트 표준 패턴
+   4. `{project_root}/.claude/reference/pre-modification-analysis-detail.md` **Read** — Step 0~5 의존성 분석 지침 (핵심: Step 3 실행 흐름 추적)
+   5. `{project_root}/.claude/reference/pge-game-evaluator-rubric-detail.md` **Read** — 평가 기준 숙지
+   6. `pre-modification-analysis-detail.md`의 Step 0~4 지침을 순서대로 수행 (Step 3 실행 흐름 추적이 가장 중요)
+   7. 분석 결과를 `{project_root}/.claude/state/current-analysis.md`에 **저장 (Write)** — Step 0~4 섹션 + 대상 파일명 필수 포함
+   → Hook이 내용 검증함: Step 0~4 섹션 없거나 대상 파일명 없으면 Generator의 .cs 수정이 차단됨
 4. 산출물 구조 설계 (목차, 컴포넌트, 인터페이스 등)
 5. **범위를 야심 있게(ambitious) 설정** — 보수적으로 축소하지 않는다
 5. 가능하면 **AI 기능을 자연스럽게 체계에 녹여 넣는다** (단순 자동화보다 지능형 통합)
@@ -108,7 +109,9 @@ model: sonnet
    - [ ] key-file-map의 쌍 수정 패턴 준수 여부
    - [ ] code-snippets의 파일별 애니메이션 방식 준수 여부
 
-**출력**: `{project_root}/.claude/state/PGE_SELF_CHECK.md` + 산출물(코드/파일)
+8. **Unity .cs 수정 완료 후**: `{project_root}/.claude/state/current-analysis.md`의 Step 4에 수정 결과 추가 (수정된 파일:라인, 수정 전/후 동작 차이, 잔존 이슈)
+
+**출력**: `{project_root}/.claude/state/PGE_SELF_CHECK.md` + 산출물(코드/파일) + (Unity .cs 수정 시) 갱신된 `current-analysis.md`
 
 ### Phase 3: QA — 독립 에이전트 검증 (필수)
 
