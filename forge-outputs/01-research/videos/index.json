@@ -1,7 +1,50 @@
 {
   "version": "1.0",
-  "last_updated": "2026-04-06",
+  "last_updated": "2026-04-07",
   "videos": [
+    {
+      "video_id": "tt50miJGquE",
+      "title": "클로드(claude)로 hwpx(한글) 한방에 채우기 | 이제 복잡한 보고서도 5분 컷!(클로드 스킬 무료 제공)",
+      "channel": "김용성 교수의 AI 클래스",
+      "url": "https://youtu.be/tt50miJGquE",
+      "category": "productivity",
+      "analyzed_at": "2026-04-07",
+      "analysis_file": "01-research/videos/analyses/2026-04-07-tt50miJGquE-클로드-hwpx-한글-보고서-자동화-analysis.md",
+      "apply_plan_file": "docs/planning/active/plans/2026-04-07-hwpx-claude-skill-automation-apply-plan.md",
+      "tags": [
+        "HWPX",
+        "한글파일",
+        "Claude스킬",
+        "보고서자동화",
+        "정부문서"
+      ],
+      "relevance": {
+        "portfolio": 1,
+        "godblade": 1,
+        "business": 4
+      }
+    },
+    {
+      "video_id": "IELGBirIgtk",
+      "title": "사운드 시스템 설계 — 5대 플랫폼 전격 비교",
+      "channel": "Time and Space Design",
+      "url": "https://youtu.be/IELGBirIgtk",
+      "category": "tech/audio",
+      "analyzed_at": "2026-04-07",
+      "analysis_file": "01-research/videos/analyses/2026-04-07-IELGBirIgtk-사운드-시스템-설계-5대-플랫폼-비교-analysis.md",
+      "tags": [
+        "라이브음향",
+        "L-Acoustics",
+        "MeyerSound",
+        "d&b",
+        "이머시브오디오"
+      ],
+      "relevance": {
+        "portfolio": 1,
+        "godblade": 2,
+        "business": 1
+      }
+    },
     {
       "video_id": "hjIxPpJyYHs",
       "title": "하네스 엔지니어링 — 이거 모르면 클로드코드 아무리 써도 소용없습니다 | EP.04",
