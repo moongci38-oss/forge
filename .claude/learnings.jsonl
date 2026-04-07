@@ -136,3 +136,6 @@
 {"timestamp":"2026-04-07T01:51:20Z","pattern":"session_activity","solution":"session=unknown duration=8min events=22 top_tools=[unknown]","project":"forge","type":"session_summary"}
 {"timestamp":"2026-04-07T02:15:33Z","pattern":"session_activity","solution":"session=unknown duration=32min events=47 top_tools=[unknown]","project":"forge","type":"session_summary"}
 {"timestamp":"2026-04-07T03:07:55Z","pattern":"session_activity","solution":"session=unknown duration=85min events=53 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"date":"2026-04-07","content":"Windows PowerShell 스크립트에 한글 주석/특수문자(따옴표 등) 포함 시 인코딩 오류 발생. PowerShell 스크립트는 반드시 영문으로만 작성해야 한다.","tags":["powershell","windows","encoding"]}
+{"date":"2026-04-07","content":"WSL UNC 경로(\\\\wsl.localhost\\...)는 junction point(mklink /J) 미지원. symlink(mklink /D)만 동작한다. PowerShell에서 mklink 직접 실행 불가 → cmd /c \"mklink /D ...\" 패턴 사용.","tags":["windows","wsl","symlink","mklink"]}
+{"date":"2026-04-07","content":"forge-sync.mjs가 FORGE_DEV_ROOT = ~/.claude/forge 경로를 기준으로 동작하므로, ~/.claude/forge → ~/forge/dev 심볼릭이 setup-mcp.sh 실행 시 자동 생성되어야 한다. 없으면 forge-sync 전체가 동작 안 함.","tags":["forge","symlink","setup-mcp","forge-sync"]}
