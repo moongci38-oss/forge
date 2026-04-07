@@ -64,12 +64,13 @@ model: opus
    - UI/연출/에셋 태스크인 경우: `{project_root}/.claude/rules/forge-spec-visual-binding.md` — 기획서·시안을 Spec 수치로 바인딩
    - **각 rules 파일 내 링크된 reference 파일도 반드시 Read**
 2. 작업 요구사항 분석 — `system-analysis-cycle.md`에 따라 기존 시스템 분석 문서 먼저 확인
-3. 산출물 구조 설계 (목차, 컴포넌트, 인터페이스 등)
-4. **범위를 야심 있게(ambitious) 설정** — 보수적으로 축소하지 않는다
+3. **Unity 클라이언트 .cs 수정이 포함된 경우**: `pre-modification-analysis-detail.md`의 4단계 의존성 분석 수행 후 결과를 `{project_root}/.claude/state/current-analysis.md`에 저장 (필수 — Generator가 .cs 수정 전 완료해야 함)
+4. 산출물 구조 설계 (목차, 컴포넌트, 인터페이스 등)
+5. **범위를 야심 있게(ambitious) 설정** — 보수적으로 축소하지 않는다
 5. 가능하면 **AI 기능을 자연스럽게 체계에 녹여 넣는다** (단순 자동화보다 지능형 통합)
 6. Phase 0에서 확정한 Rubric을 실행 계획에 포함
 
-**출력**: `{project_root}/.claude/state/PGE_SPEC.md`
+**출력**: `{project_root}/.claude/state/PGE_SPEC.md` + (Unity .cs 수정 시) `{project_root}/.claude/state/current-analysis.md`
 - 상단에 "## 참조 컨텍스트" 섹션 — 로드한 reference 파일 목록 + 핵심 내용 요약
 - 이후 실행 계획 본문
 
