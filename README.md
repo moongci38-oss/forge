@@ -52,15 +52,26 @@ cp forge-workspace.example.json forge-workspace.json
 cp .env.example .env
 # → Set API keys in .env
 
-# 4. Register global MCP servers
+# 4. Register global MCP servers + create ~/.claude/forge symlink
 bash shared/scripts/setup-mcp.sh
 # → Registers 10 global MCP servers to ~/.claude.json (idempotent)
+# → Creates ~/.claude/forge → ~/forge/dev symlink (idempotent)
 
 # 5. Install CLI tools (used alongside MCP)
 bash shared/scripts/setup-cli.sh
 # → Installs Lighthouse, Sentry CLI (for CI/batch)
 
-# 6. Register learnings auto-load hook (one-time per machine)
+# 6. [WSL+Windows only] Sync Windows .claude symlinks (Admin PowerShell)
+#    Skip this step if using WSL-only or native Linux.
+#    Open PowerShell as Administrator, then run:
+#
+#    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+#    & "\\wsl.localhost\Ubuntu-22.04\home\<your-wsl-username>\forge\.claude\scripts\setup-windows-symlinks.ps1"
+#
+#    → Creates symlinks in C:\Users\<you>\.claude\ pointing to WSL ~/.claude/
+#    → agents, commands, rules, skills, prompts, forge all synced automatically
+
+# 7. Register learnings auto-load hook (one-time per machine)
 # → Sync hook file to project first:
 node ~/.claude/scripts/forge-sync.mjs sync --target <project> --include-recommended
 # → Then add to ~/.claude/settings.json SessionStart hooks:
@@ -69,7 +80,7 @@ node ~/.claude/scripts/forge-sync.mjs sync --target <project> --include-recommen
 #   "command": "bash /path/to/project/.claude/hooks/load-learnings.sh"
 # }
 
-# 7. Run Claude Code
+# 8. Run Claude Code
 claude
 ```
 
