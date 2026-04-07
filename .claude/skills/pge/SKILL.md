@@ -97,10 +97,11 @@ model: sonnet
    - `{project_root}/.claude/rules/forge-walkthrough.md` — 구현 완료 후 Walkthrough 작성 기준
    - 영상 레퍼런스 태스크인 경우: `{project_root}/.claude/rules/video-reference-workflow.md` (**링크된 reference 파일도 Read**)
 2. `{project_root}/.claude/state/PGE_SPEC.md` 읽기
-3. PGE_SPEC.md의 "## 참조 컨텍스트" 섹션에 명시된 reference 파일들을 직접 Read
-4. 계획에 따라 산출물 생성/구현 — **반드시 reference의 패턴/규칙을 준수**
-5. Rubric 기준을 의식하며 생성. 목표: **"museum quality"** (라이브러리 기본값·AI 슬롭 패턴 금지)
-6. **QA 핸드오프 전 자기검토** — 아래 체크 후 Evaluator에게 전달:
+3. **Unity .cs 수정이 포함된 경우 필수**: `{project_root}/.claude/state/current-analysis.md` **Read** → Planner가 수행한 Step 0~4 분석 결과 숙지 후 구현
+4. PGE_SPEC.md의 "## 참조 컨텍스트" 섹션에 명시된 reference 파일들을 직접 Read
+5. 계획에 따라 산출물 생성/구현 — **반드시 reference의 패턴/규칙을 준수**
+6. Rubric 기준을 의식하며 생성. 목표: **"museum quality"** (라이브러리 기본값·AI 슬롭 패턴 금지)
+7. **QA 핸드오프 전 자기검토** — 아래 체크 후 Evaluator에게 전달:
    - [ ] Rubric 불합격 조건 직접 확인
    - [ ] "이 정도면 됐다" 자기합리화 없음
    - [ ] 실제로 실행/렌더링되는지 확인
