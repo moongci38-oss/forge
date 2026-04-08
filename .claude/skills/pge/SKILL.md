@@ -66,6 +66,9 @@ model: opus
    - **Unity 클라이언트 작업 시 추가 Read**:
      - `{project_root}/.claude/reference/key-file-map.md` — 기능별 파일 위치 + 쌍 수정 패턴
      - `{project_root}/.claude/reference/code-snippets.md` — DOTween/UI/이벤트 표준 패턴
+   - **웹/앱 UI 작업 시 추가 Read**:
+     - `~/forge/shared/design-tokens/design-rules.md` — 레이아웃 4타입, 금지사항 7개, 카드/간격 원칙
+     - `~/forge/shared/design-tokens/instagram-default.json` — 색상/타이포/스페이싱 토큰
 2. 작업 요구사항 분석 — `system-analysis-cycle.md`에 따라 기존 시스템 분석 문서 먼저 확인
 3. **Unity 클라이언트 .cs 수정이 포함된 경우** (필수 순서):
    1. `{project_root}/.claude/state/current-analysis.md` 존재 확인 — **있으면 먼저 Read**하여 이전 분석 재사용 판단
@@ -159,7 +162,11 @@ QA Agent (별도 subagent, 독립 컨텍스트)
 
 1. `/ux-audit` → 9항목 UX 품질 검증 (색상 대비, 터치 타겟, 반응형 등)
 2. `/playwright-parallel-test` → 3-Agent 병렬 브라우저 테스트 (폼, 네비, 반응형)
-3. **결과**: 각 스킬의 PASS/FAIL JSON을 `PGE_QA_RESULT.md`에 병합
+3. **design-rules 준수 검증** → `~/forge/shared/design-tokens/design-rules.md` Read 후 체크:
+   - 섹션 타입(A/B/C/D) 연속 배치 위반
+   - 금지사항 7개 위반 (순수 검정, 카드 밖 콘텐츠 등)
+   - 간격 시스템 비준수 (홀수 px 등)
+4. **결과**: 각 스킬의 PASS/FAIL JSON을 `PGE_QA_RESULT.md`에 병합
 
 #### 트랙 C: 게임 연출/UI 테스트
 
