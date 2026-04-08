@@ -28,6 +28,21 @@
             "type": "command",
             "command": "bash .claude/hooks/auto-forge-sync.sh",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/100-line-rule.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/reset-code-lines.sh",
+            "timeout": 3
           }
         ]
       },
@@ -37,6 +52,11 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/usage-logger.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/agent-token-budget.sh",
             "timeout": 3
           },
           {
@@ -64,6 +84,11 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/cleanup-plans.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/cleanup-agent-budget.sh",
             "timeout": 5
           }
         ]
