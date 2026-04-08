@@ -115,6 +115,10 @@ Input: Spec 경로 + 구현 파일 목록
 
 `code-reviewer` 에이전트 스폰 (보안/로직/UX 병렬 검토)
 
+**웹/앱 UI 파일(.tsx/.jsx/.css/.html) 변경 포함 시 추가 체크:**
+- `shared/design-tokens/design-rules.md` Read → 섹션 타입 준수, 금지사항 7개, 카드 구조, 간격 시스템 검증
+- 위반 항목 발견 시 WARN으로 기록 (블로킹 아님, 수정 권고)
+
 FAIL → 수정 → Check A 재실행
 
 ---
