@@ -6,7 +6,7 @@ description: |
   CRITICAL/HIGH/MEDIUM/LOW 등급의 UX 이슈 리포트를 생성한다.
 
   Use for: S4 UX 검증, 와이어프레임 리뷰, 인터랙션 패턴 검토
-tools: Read, Grep, Glob, WebSearch, Write
+tools: Read, Grep, Glob, WebSearch
 model: sonnet
 ---
 
