@@ -44,6 +44,11 @@
             "type": "command",
             "command": "bash .claude/hooks/reset-code-lines.sh",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/filter-log-output.sh",
+            "timeout": 5
           }
         ]
       },
@@ -164,10 +169,10 @@
   },
   "enabledPlugins": {
     "productivity@knowledge-work-plugins": false,
-    "product-management@knowledge-work-plugins": true,
-    "marketing@knowledge-work-plugins": true,
+    "product-management@knowledge-work-plugins": false,
+    "marketing@knowledge-work-plugins": false,
     "enterprise-search@knowledge-work-plugins": false,
-    "data@knowledge-work-plugins": true,
+    "data@knowledge-work-plugins": false,
     "sales@knowledge-work-plugins": false,
     "customer-support@knowledge-work-plugins": false,
     "playground@claude-plugins-official": true
