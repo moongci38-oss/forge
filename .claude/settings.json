@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
   },
   "hooks": {
     "SessionStart": [
@@ -169,9 +170,6 @@
     "data@knowledge-work-plugins": true,
     "sales@knowledge-work-plugins": false,
     "customer-support@knowledge-work-plugins": false,
-    "playground@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "playground@claude-plugins-official": true
   }
 }
