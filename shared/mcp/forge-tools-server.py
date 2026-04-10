@@ -38,11 +38,7 @@ ALLOWED_SCRIPTS = {
 # 접근 금지 경로
 BLOCKED_PATHS = ["06-finance", "07-legal", "08-admin/insurance", "08-admin/freelancers"]
 
-mcp = FastMCP(
-    "forge-tools",
-    host="0.0.0.0",
-    port=8765,
-)
+mcp = FastMCP("forge-tools")
 
 
 # ── 보안 헬퍼 ──────────────────────────────────────────────────────────────
@@ -301,15 +297,15 @@ def telegram_notify(message: str, chat_id: str = "") -> str:
 # ── 서버 실행 ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    transport = "stdio" if len(sys.argv) > 1 and sys.argv[1] == "stdio" else "sse"
+    transport = "stdio" if len(sys.argv) > 1 and sys.argv[1] == "stdio" else "http"
 
-    if transport == "sse":
-        print(f"Forge Tools MCP Server 시작")
-        print(f"  주소: http://0.0.0.0:8765/sse")
+    if transport == "http":
+        print(f"Forge Tools MCP Server 시작 (streamable-http)")
+        print(f"  주소: http://0.0.0.0:8765/mcp")
         print(f"  forge-outputs: {FORGE_OUTPUTS}")
         print(f"  forge-root: {FORGE_ROOT}")
         print(f"  인증: {'활성화' if FORGE_MCP_TOKEN else '비활성화 (개발 모드)'}")
         print(f"  허용 스크립트: {', '.join(ALLOWED_SCRIPTS.keys())}")
         print()
 
-    mcp.run(transport=transport)
+    mcp.run(transport=transport, host="0.0.0.0", port=8765)
