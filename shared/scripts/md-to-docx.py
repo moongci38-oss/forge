@@ -108,8 +108,10 @@ def set_style_defaults(doc):
 COLOR_MAP = {
     "red": RGBColor(0xFF, 0x00, 0x00),
     "blue": RGBColor(0x00, 0x62, 0xB8),
+    "green": RGBColor(0x00, 0x80, 0x00),
     "#ff0000": RGBColor(0xFF, 0x00, 0x00),
     "#0062b8": RGBColor(0x00, 0x62, 0xB8),
+    "#008000": RGBColor(0x00, 0x80, 0x00),
 }
 
 # 인라인 span (한 줄 안에서 열고 닫는 경우)
@@ -483,8 +485,9 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
 
-        # 문서 끝 메타 (*v1.3...) 스킵
-        if line.strip().startswith("*") and line.strip().endswith("*") and len(line.strip()) > 5:
+        # 문서 끝 메타 (*v1.3...) 스킵 — 이탤릭(*...*) 전용, 볼드(**...**) 제외
+        _s = line.strip()
+        if _s.startswith("*") and not _s.startswith("**") and _s.endswith("*") and not _s.endswith("**") and len(_s) > 5:
             i += 1
             continue
 

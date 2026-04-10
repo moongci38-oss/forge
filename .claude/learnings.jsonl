@@ -142,3 +142,193 @@
 {"timestamp":"2026-04-07","content":"PGE subagent는 main session의 .claude/rules/ 파일을 자동 상속하지 않는다. 각 Phase(Planner/Generator/Evaluator) 프롬프트에 rules 파일 직접 Read 지시를 명시해야 한다. rules 파일이 reference 파일 링크를 포함하므로, rules 읽기 + '링크된 reference도 Read' 지시로 체이닝 가능.","tags":"pge,subagent,rules,context"}
 {"timestamp":"2026-04-07","content":"GodBlade 애니메이션 시스템은 파일별로 다르다: DOTween(EodUIGachaDrawScene/Effect/Card.cs), 코루틴+Animator(EodUIGoodsShopGachaResultPopup/Icon.cs), UITweener(레거시 UI). 파일 수정 전 key-file-map.md에서 해당 파일의 방식 확인 필수. 방식 혼용 시 PGE Evaluator B섹션 0점.","tags":"godblade,unity,animation,dotween,coroutine,uitweener"}
 {"timestamp":"2026-04-07","content":"forge 및 모든 GodBlade repo 브랜치 전략: feat 브랜치 있으면 해당 브랜치 push → 완료 후 develop 머지. 브랜치 없으면 develop 직접 작업. 배포 흐름: develop→staging→main. main 직접 커밋/작업 절대 금지.","tags":"git,branch,develop,forge,godblade"}
+{"timestamp":"2026-04-07T06:50:47Z","pattern":"session_activity","solution":"session=unknown duration=10min events=17 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:44:21Z","pattern":"session_activity","solution":"session=unknown duration=6min events=40 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:46:18Z","pattern":"session_activity","solution":"session=unknown duration=8min events=46 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:49:49Z","pattern":"session_activity","solution":"session=unknown duration=12min events=68 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:54:57Z","pattern":"session_activity","solution":"session=unknown duration=17min events=89 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:56:26Z","pattern":"session_activity","solution":"session=unknown duration=18min events=92 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:57:19Z","pattern":"session_activity","solution":"session=unknown duration=19min events=94 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T01:58:15Z","pattern":"session_activity","solution":"session=unknown duration=20min events=99 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T02:03:46Z","pattern":"session_activity","solution":"session=unknown duration=26min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T02:11:23Z","pattern":"session_activity","solution":"session=unknown duration=33min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T02:12:18Z","pattern":"session_activity","solution":"session=unknown duration=34min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T02:54:32Z","pattern":"session_activity","solution":"session=unknown duration=77min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T02:55:14Z","pattern":"session_activity","solution":"session=unknown duration=77min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:10:32Z","pattern":"session_activity","solution":"session=unknown duration=93min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:10:53Z","pattern":"session_activity","solution":"session=unknown duration=93min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:13:01Z","pattern":"session_activity","solution":"session=unknown duration=95min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:13:55Z","pattern":"session_activity","solution":"session=unknown duration=96min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:14:28Z","pattern":"session_activity","solution":"session=unknown duration=96min events=106 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:18:40Z","pattern":"session_activity","solution":"session=unknown duration=101min events=109 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:19:05Z","pattern":"session_activity","solution":"session=unknown duration=101min events=109 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T03:20:41Z","pattern":"session_activity","solution":"session=unknown duration=103min events=112 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"ts":"2026-04-08T00:00:00Z","content":"KOCCA 본문에서 \"DHS\" 약어 단독 사용 금지. 반드시 \"Data Hub Station\" 풀네임 사용. 검수자 방향성과 충돌하여 전수 교체함.","tags":["kocca","grants","terminology","dwc-part2"],"session":"2026-04-08-kocca-terminology"}
+{"ts":"2026-04-08T00:00:00Z","content":"KOCCA 본문 수정/추가 시 반드시 녹색 span 표시 필수. `<span style=\"color:green\">` 적용하여 검수자가 변경분을 바로 확인할 수 있게. 수정 후 Drive 업로드 전에 녹색 처리 확인.","tags":["kocca","grants","workflow","documentation","span-markup"],"session":"learn-add"}
+{"ts":"2026-04-08T00:00:00Z","content":"킬러콘텐츠 IP Data 확장기술은 검수자 명시 요구 아님. 주요자료.txt의 일반 방향성 언급일 뿐이므로 별도 기술 모듈로 추가하면 안 됨. 근거 없는 항목 생성 금지.","tags":["kocca","grants","content","writing-principle"],"session":"learn-add"}
+{"timestamp":"2026-04-08T03:27:29Z","pattern":"session_activity","solution":"session=unknown duration=109min events=242 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T04:20:06Z","pattern":"session_activity","solution":"session=unknown duration=162min events=243 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T04:51:12Z","pattern":"session_activity","solution":"session=unknown duration=193min events=266 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T04:56:08Z","pattern":"session_activity","solution":"session=unknown duration=198min events=266 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:04:05Z","pattern":"session_activity","solution":"session=unknown duration=206min events=267 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:05:03Z","pattern":"session_activity","solution":"session=unknown duration=207min events=267 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:11:37Z","pattern":"session_activity","solution":"session=unknown duration=214min events=267 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:12:55Z","pattern":"session_activity","solution":"session=unknown duration=215min events=268 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:13:27Z","pattern":"session_activity","solution":"session=unknown duration=215min events=271 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:14:47Z","pattern":"session_activity","solution":"session=unknown duration=217min events=272 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:17:15Z","pattern":"session_activity","solution":"session=unknown duration=219min events=272 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:18:05Z","pattern":"session_activity","solution":"session=unknown duration=220min events=276 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:18:44Z","pattern":"session_activity","solution":"session=unknown duration=221min events=279 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:19:41Z","pattern":"session_activity","solution":"session=unknown duration=222min events=284 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:20:20Z","pattern":"session_activity","solution":"session=unknown duration=222min events=288 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:21:10Z","pattern":"session_activity","solution":"session=unknown duration=223min events=289 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:21:53Z","pattern":"session_activity","solution":"session=unknown duration=224min events=293 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T05:22:15Z","pattern":"session_activity","solution":"session=unknown duration=224min events=293 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T06:54:00Z","pattern":"session_activity","solution":"session=unknown duration=316min events=320 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T08:21:35Z","pattern":"session_activity","solution":"session=unknown duration=404min events=324 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"ts":"2026-04-08T00:00:00Z","content":"정부과제 이미지 스타일은 플랫 인포그래픽 — 3D 글래스모피즘(다크 배경, 그림자, 그라데이션) 금지. 흰 배경 + 플랫 솔리드 컬러 + 굵은 산세리프 폰트(Noto Sans KR). 가독성 최우선. NanoBanana로 생성 시 'NO 3D, NO dark background, NO glassmorphism, WHITE background' 명시.","tags":["kocca","grants","images","nanoBanana","style"],"project":"forge"}
+{"ts":"2026-04-08T00:00:00Z","content":"DX vs AX 구분 — DX(Digital Transformation)=포맷 변환(소설→대본, 콘텐츠 구조화), AX(AI Transformation)=AI 기반 창작(AI영상, K-Pop 아이돌생성기, 삽화소설, 캐릭터채팅, 챗봇게임). AI가 개입하는 콘텐츠 생성/변환은 모두 AX. 채팅형 인터랙티브 시드도 AX.","tags":["kocca","grants","terminology","DX","AX"],"project":"forge"}
+{"ts":"2026-04-08T00:00:00Z","content":"본문 소제목에 ○ 기호 사용 금지 — ▸ 또는 번호(1), 2)) 사용. 테이블 셀 내 불릿은 ○ 허용(정부과제 양식). ○ 문제N: 형식도 금지 → N) 형식으로 통일.","tags":["kocca","grants","formatting","typography"],"project":"forge"}
+{"ts":"2026-04-08T00:00:00Z","content":"최종본-본문.docx는 검수자가 확정한 문서 — unpack→XML편집→repack 방식으로만 수정. 본문 내용 임의 변경 금지, 검수자 코멘트/인라인 피드백만 반영. python-docx가 아닌 ZIP unpack→직접 XML 편집→pack 워크플로우 사용.","tags":["kocca","grants","workflow","docx","xml"],"project":"forge"}
+{"timestamp":"2026-04-08T08:32:59Z","pattern":"session_activity","solution":"session=unknown duration=415min events=325 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T08:33:38Z","pattern":"session_activity","solution":"session=unknown duration=416min events=327 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T08:41:00Z","pattern":"session_activity","solution":"session=unknown duration=423min events=340 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T08:54:22Z","pattern":"session_activity","solution":"session=unknown duration=436min events=341 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T09:00:29Z","pattern":"session_activity","solution":"session=unknown duration=442min events=389 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T10:41:25Z","pattern":"session_activity","solution":"session=unknown duration=543min events=399 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T12:38:47Z","pattern":"session_activity","solution":"session=unknown duration=661min events=416 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T19:12:31Z","pattern":"session_activity","solution":"session=unknown duration=1054min events=419 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T19:16:59Z","pattern":"session_activity","solution":"session=unknown duration=1059min events=426 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T19:59:04Z","pattern":"session_activity","solution":"session=unknown duration=1101min events=462 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:00:02Z","pattern":"session_activity","solution":"session=unknown duration=1162min events=471 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:01:10Z","pattern":"session_activity","solution":"session=unknown duration=1163min events=473 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:03:07Z","pattern":"session_activity","solution":"session=unknown duration=1165min events=475 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:41:30Z","pattern":"session_activity","solution":"session=unknown duration=1203min events=477 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:42:25Z","pattern":"session_activity","solution":"session=unknown duration=1204min events=479 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:43:37Z","pattern":"session_activity","solution":"session=unknown duration=1206min events=481 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T21:45:02Z","pattern":"session_activity","solution":"session=unknown duration=1207min events=483 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T22:15:57Z","pattern":"session_activity","solution":"session=unknown duration=1238min events=489 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-08T22:28:21Z","pattern":"session_activity","solution":"session=unknown duration=1250min events=546 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"ts":"2026-04-09T00:00:00Z","content":"docx XML 직접 편집 패턴: zipfile로 unpack → xml.etree.ElementTree로 document.xml 파싱·수정 → tree.write() → zipfile로 repack. python-docx 불필요. 이미지 교체는 word/_rels/document.xml.rels에서 rId→Target 매핑만 변경하면 됨. 새 이미지는 word/media/에 복사 후 rels에 새 Relationship 추가.","tags":["docx","xml","unpack","repack","이미지교체","rels"],"project":"forge","session":"2026-04-08"}
+{"ts":"2026-04-09T00:00:00Z","content":"NanoBanana 이미지 생성 시 원본 정밀 분석 필수. /clip으로 스크린샷 캡처 후 PIL 3배 확대하여 모든 텍스트·레이아웃 정확히 파악한 뒤 프롬프트 작성. 추측으로 레이아웃 만들면 3~4회 반복 수정 발생. 특히 정부과제 개념도처럼 복잡한 다층 구조는 원본 없이 재현 불가.","tags":["nanobana","이미지생성","정밀분석","프롬프트","clip확대"],"project":"forge","session":"2026-04-08"}
+{"ts":"2026-04-09T00:00:00Z","content":"검수자 인라인 코멘트는 comments.xml(commentRangeStart/End)과 body text 직접 삽입 두 가지 형태가 있다. Google Docs에서 본문에 직접 타이핑한 피드백은 document.xml body에 일반 paragraph로 존재하므로 comments.xml만 보면 누락됨. 전체 텍스트 검색으로 '이런느낌으로', '변경요망' 등 검수자 특유 문체를 찾아야 함.","tags":["docx","comments","inline","검수자","구글독스"],"project":"forge","session":"2026-04-08"}
+{"ts":"2026-04-09T00:00:00Z","content":"docx에 새 이미지 삽입 시 필요한 3가지: (1) word/media/에 이미지 파일 복사 (2) word/_rels/document.xml.rels에 새 Relationship(rId, Target) 추가 (3) document.xml body에 w:drawing > wp:inline > a:graphic > pic:pic > a:blip[@r:embed=rId] 구조의 paragraph 생성. EMU 단위(1인치=914400) 사용, 최대폭 5486400(6인치).","tags":["docx","이미지삽입","drawing","EMU","rels"],"project":"forge","session":"2026-04-08"}
+{"timestamp":"2026-04-08T22:56:33Z","pattern":"session_activity","solution":"session=unknown duration=1279min events=562 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T00:56:38Z","pattern":"session_activity","solution":"session=unknown duration=23min events=10 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T00:56:59Z","pattern":"session_activity","solution":"session=unknown duration=24min events=12 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"task":"kocca-part2-drive-upload","result":"success","lesson":"sync-to-drive.py는 md→docx 변환 후 업로드하므로 XML 직접 편집한 이미지/텍스트가 반영 안 됨. XML 편집된 docx는 Drive API로 직접 업로드해야 함. 토큰: ~/.config/google-docs-mcp/token.json, 인증: ~/forge/.env의 GOOGLE_CLIENT_ID/SECRET. 폴더ID 없이 루트 업로드 가능.","tags":["drive","upload","docx","xml","sync-to-drive"]}
+{"task":"kocca-part2-user-edit-reunpack","result":"success","lesson":"사용자가 Drive/Word에서 직접 수정한 docx를 다시 작업할 때, 이전 docx-unpack이 아닌 새 폴더(docx-unpack-v3 등)로 re-unpack해야 함. 이전 XML 수정이 사용자 버전에 없을 수 있으므로 필요한 수정을 다시 적용해야 함.","tags":["docx","unpack","user-edit","version"]}
+{"timestamp":"2026-04-09T01:45:11Z","pattern":"session_activity","solution":"session=unknown duration=72min events=17 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:48:42Z","pattern":"session_activity","solution":"session=unknown duration=75min events=19 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:50:42Z","pattern":"session_activity","solution":"session=unknown duration=77min events=26 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:52:44Z","pattern":"session_activity","solution":"session=unknown duration=79min events=30 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:52:44Z","pattern":"session_activity","solution":"session=unknown duration=79min events=30 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:58:47Z","pattern":"session_activity","solution":"session=unknown duration=86min events=118 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:59:41Z","pattern":"session_activity","solution":"session=unknown duration=86min events=118 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:01:19Z","pattern":"session_activity","solution":"session=unknown duration=88min events=120 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:03:01Z","pattern":"session_activity","solution":"session=unknown duration=90min events=120 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:05:07Z","pattern":"session_activity","solution":"session=unknown duration=92min events=123 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:06:41Z","pattern":"session_activity","solution":"session=unknown duration=93min events=127 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:07:55Z","pattern":"session_activity","solution":"session=unknown duration=95min events=127 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:09:06Z","pattern":"session_activity","solution":"session=unknown duration=96min events=129 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:12:02Z","pattern":"session_activity","solution":"session=unknown duration=99min events=143 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:14:42Z","pattern":"session_activity","solution":"session=unknown duration=101min events=143 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T01:00:00Z","pattern":"agent_teams_default","solution":"Agent Teams를 기본 병렬 도구로 전환. Subagent는 단순 탐색/검색/단일 파일 전용. 이유: 공유 태스크 리스트 + 피어 메시징이 에이전트 간 의존성 추적에 우위","tags":["agent-teams","parallel","harness"],"project":"forge","type":"decision"}
+{"timestamp":"2026-04-09T01:00:00Z","pattern":"read_once_impossible","solution":"read-once 훅은 현재 Claude Code Hook 아키텍처에서 구현 불가. (1) PreToolUse에서 BLOCK + 캐시 반환 메커니즘 없음 (2) 파일 기반 상태 통신(PGE, Grants-Write)과 양립 불가. 시도하지 않는다","tags":["hook","token","read-once"],"project":"forge","type":"technical_limitation"}
+{"timestamp":"2026-04-09T01:00:00Z","pattern":"usage_logger_stdin_json","solution":"Claude Code Hook에서 CLAUDE_TOOL_NAME 환경변수 미지원. stdin으로 JSON이 전달되므로 jq로 파싱해야 함. log-bash-commands.sh가 올바른 패턴","tags":["hook","usage-logger","debugging"],"project":"forge","type":"bug_fix"}
+{"timestamp":"2026-04-09T01:00:00Z","pattern":"agent_tools_already_restricted","solution":"에이전트 md의 tools 필드가 이미 allowlist 역할. 별도 disallowedTools 추가 불필요한 경우가 대부분 (49개 중 9/11이 이미 차단됨). 새 에이전트 작성 시 tools 필드에 필요한 도구만 명시하면 충분","tags":["agent","tools","optimization"],"project":"forge","type":"discovery"}
+{"timestamp":"2026-04-09T01:00:00Z","pattern":"token_optimization_roi","solution":"토큰 최적화 ROI 순서: P0(중복 제거 — 플러그인/MCP) > P1(미사용 비활성화 + 로그 필터) > P2(대부분 불필요하거나 기술적 불가). 중복 제거가 가장 비용 대비 효과 높음","tags":["token","optimization","cost"],"project":"forge","type":"principle"}
+{"timestamp":"2026-04-09T02:20:05Z","pattern":"session_activity","solution":"session=unknown duration=107min events=150 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:21:22Z","pattern":"session_activity","solution":"session=unknown duration=108min events=152 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T02:48:34Z","pattern":"session_activity","solution":"session=unknown duration=135min events=179 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:13:33Z","pattern":"session_activity","solution":"session=unknown duration=160min events=258 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:15:51Z","pattern":"session_activity","solution":"session=unknown duration=163min events=298 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:15:57Z","pattern":"session_activity","solution":"session=unknown duration=163min events=298 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:16:32Z","pattern":"session_activity","solution":"session=unknown duration=163min events=300 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:16:38Z","pattern":"session_activity","solution":"session=unknown duration=163min events=300 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:16:42Z","pattern":"session_activity","solution":"session=unknown duration=163min events=300 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:16:46Z","pattern":"session_activity","solution":"session=unknown duration=164min events=300 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:17:23Z","pattern":"session_activity","solution":"session=unknown duration=164min events=300 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:21:16Z","pattern":"session_activity","solution":"session=unknown duration=168min events=308 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:33:16Z","pattern":"session_activity","solution":"session=unknown duration=180min events=308 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:35:00Z","pattern":"session_activity","solution":"session=unknown duration=182min events=328 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:35:10Z","pattern":"session_activity","solution":"session=unknown duration=182min events=334 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:35:12Z","pattern":"session_activity","solution":"session=unknown duration=182min events=338 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:37:47Z","pattern":"session_activity","solution":"session=unknown duration=185min events=353 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-09T03:39:54Z","pattern":"session_activity","solution":"session=unknown duration=187min events=358 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:15:51Z","pattern":"session_activity","solution":"session=unknown duration=9min events=73 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:21:34Z","pattern":"session_activity","solution":"session=unknown duration=15min events=91 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"ts":"2026-04-09T18:00:00Z","content":"forge-outputs에 대용량 파일(PDF/HWP/이미지/영상) 탐색 시 토큰 낭비 발생. .claudeignore에 forge-outputs/**/*.pdf, *.hwp, *.hwpx, *.mp4, *.png, *.jpg 등 패턴 추가로 차단 가능. forge/.claudeignore 생성 후 즉시 적용됨.","tags":["#token","#optimization","#claudeignore"],"project":"forge","type":"improvement"}
+{"ts":"2026-04-09T18:00:00Z","content":"WebFetch는 페이지 원문이 아닌 요약을 반환 — 80페이지 전수 수집해도 코드 블록 누락 가능. 정밀 추출 시 특정 페이지만 재추출 + '코드블록 그대로 포함' 명시 요청으로 보완. 깊이 있는 기술 분석이 필요할 때는 단순 WebFetch 배치가 아닌 타겟 재추출 전략 사용.","tags":["#webfetch","#research","#depth"],"project":"forge","type":"lesson"}
+{"timestamp":"2026-04-10T00:22:00Z","pattern":"session_activity","solution":"session=unknown duration=15min events=94 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:22:01Z","pattern":"session_activity","solution":"session=unknown duration=15min events=94 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:23:18Z","pattern":"session_activity","solution":"session=unknown duration=16min events=98 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:29:48Z","pattern":"session_activity","solution":"session=unknown duration=23min events=104 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:33:53Z","pattern":"session_activity","solution":"session=unknown duration=27min events=126 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:37:40Z","pattern":"session_activity","solution":"session=unknown duration=31min events=133 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:40:26Z","pattern":"session_activity","solution":"session=unknown duration=33min events=141 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:50:24Z","pattern":"session_activity","solution":"session=unknown duration=43min events=152 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:51:50Z","pattern":"session_activity","solution":"session=unknown duration=45min events=155 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:52:30Z","pattern":"session_activity","solution":"session=unknown duration=46min events=158 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T00:56:44Z","pattern":"session_activity","solution":"session=unknown duration=50min events=161 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:00:16Z","pattern":"session_activity","solution":"session=unknown duration=53min events=163 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:06:14Z","pattern":"session_activity","solution":"session=unknown duration=59min events=167 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:12:58Z","pattern":"session_activity","solution":"session=unknown duration=66min events=179 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:30:24Z","pattern":"session_activity","solution":"session=unknown duration=83min events=183 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:34:46Z","pattern":"session_activity","solution":"session=unknown duration=88min events=190 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:38:01Z","pattern":"session_activity","solution":"session=unknown duration=91min events=203 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:38:38Z","pattern":"session_activity","solution":"session=unknown duration=92min events=203 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:41:23Z","pattern":"session_activity","solution":"session=unknown duration=94min events=210 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T01:48:59Z","pattern":"session_activity","solution":"session=unknown duration=102min events=214 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:01:01Z","pattern":"session_activity","solution":"session=unknown duration=114min events=221 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:01:54Z","pattern":"session_activity","solution":"session=unknown duration=115min events=226 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:02:22Z","pattern":"session_activity","solution":"session=unknown duration=115min events=226 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:04:02Z","pattern":"session_activity","solution":"session=unknown duration=117min events=228 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:12:20Z","pattern":"session_activity","solution":"session=unknown duration=125min events=278 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:17:10Z","pattern":"session_activity","solution":"session=unknown duration=130min events=284 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:19:14Z","pattern":"session_activity","solution":"session=unknown duration=132min events=284 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T02:45:49Z","pattern":"session_activity","solution":"session=unknown duration=159min events=287 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T03:44:51Z","pattern":"session_activity","solution":"session=unknown duration=218min events=324 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T03:44:54Z","pattern":"session_activity","solution":"session=unknown duration=218min events=324 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T03:46:33Z","pattern":"session_activity","solution":"session=unknown duration=220min events=328 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T03:47:19Z","pattern":"session_activity","solution":"session=unknown duration=220min events=330 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T03:56:43Z","pattern":"session_activity","solution":"session=unknown duration=230min events=336 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T04:01:14Z","pattern":"session_activity","solution":"session=unknown duration=234min events=338 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T04:02:38Z","pattern":"session_activity","solution":"session=unknown duration=236min events=340 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T04:28:20Z","pattern":"session_activity","solution":"session=unknown duration=261min events=362 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T05:15:00Z","pattern":"session_activity","solution":"session=unknown duration=308min events=362 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:13:06Z","pattern":"session_activity","solution":"session=unknown duration=366min events=366 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:13:59Z","pattern":"session_activity","solution":"session=unknown duration=367min events=369 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:14:49Z","pattern":"session_activity","solution":"session=unknown duration=368min events=372 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:15:15Z","pattern":"session_activity","solution":"session=unknown duration=368min events=375 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:16:11Z","pattern":"session_activity","solution":"session=unknown duration=369min events=378 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T06:29:25Z","pattern":"session_activity","solution":"session=unknown duration=382min events=389 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T07:22:49Z","pattern":"session_activity","solution":"session=unknown duration=436min events=395 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T07:50:07Z","pattern":"session_activity","solution":"session=unknown duration=463min events=411 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:05:09Z","pattern":"session_activity","solution":"session=unknown duration=478min events=419 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:17:22Z","pattern":"session_activity","solution":"session=unknown duration=490min events=429 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:19:35Z","pattern":"session_activity","solution":"session=unknown duration=493min events=438 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:23:40Z","pattern":"session_activity","solution":"session=unknown duration=497min events=442 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:25:00Z","pattern":"session_activity","solution":"session=unknown duration=498min events=442 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:26:32Z","pattern":"session_activity","solution":"session=unknown duration=500min events=442 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:30:01Z","pattern":"session_activity","solution":"session=unknown duration=503min events=455 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:42:18Z","pattern":"session_activity","solution":"session=unknown duration=515min events=458 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:44:04Z","pattern":"session_activity","solution":"session=unknown duration=517min events=460 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:46:42Z","pattern":"session_activity","solution":"session=unknown duration=520min events=463 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:47:40Z","pattern":"session_activity","solution":"session=unknown duration=521min events=465 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T08:50:38Z","pattern":"session_activity","solution":"session=unknown duration=524min events=469 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:09:59Z","pattern":"session_activity","solution":"session=unknown duration=543min events=490 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:15:04Z","pattern":"session_activity","solution":"session=unknown duration=548min events=530 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:27:17Z","pattern":"session_activity","solution":"session=unknown duration=560min events=532 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:28:12Z","pattern":"session_activity","solution":"session=unknown duration=561min events=536 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:28:20Z","pattern":"session_activity","solution":"session=unknown duration=561min events=538 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:33:20Z","pattern":"session_activity","solution":"session=unknown duration=566min events=555 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T09:58:49Z","pattern":"session_activity","solution":"session=unknown duration=592min events=559 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:00:45Z","pattern":"session_activity","solution":"session=unknown duration=594min events=559 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:02:36Z","pattern":"session_activity","solution":"session=unknown duration=596min events=561 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:07:36Z","pattern":"session_activity","solution":"session=unknown duration=601min events=604 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:07:55Z","pattern":"session_activity","solution":"session=unknown duration=601min events=606 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:08:55Z","pattern":"session_activity","solution":"session=unknown duration=602min events=613 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:11:25Z","pattern":"session_activity","solution":"session=unknown duration=604min events=616 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T10:19:20Z","pattern":"session_activity","solution":"session=unknown duration=612min events=644 top_tools=[unknown]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-04-10T11:03:41Z","pattern":"session_activity","solution":"session=unknown duration=657min events=728 top_tools=[unknown]","project":"forge","type":"session_summary"}
