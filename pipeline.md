@@ -154,7 +154,7 @@ Phase 2 디렉션 5축 요약 프롬프트 주입 (~5줄)
 2. 에이전트 2~3명 병렬 스폰 → 독립 기획서 초안
 3. **디렉션 탈락 필터**: Don't 태그 위반 초안 → 비교에서 제외
 4. Competing Hypotheses: 생존 초안 비교표 + 선택 근거
-5. **`/autoplan` 3관점 순차 리뷰** (Competing Hypotheses 직후 자동 트리거):
+5. **`/autoplan` 3관점 순차 리뷰** [MANDATORY — Competing Hypotheses 직후 반드시 실행. 건너뛰기 금지]:
 
    | 순서 | 리뷰어 | 검토 항목 |
    |:----:|--------|----------|

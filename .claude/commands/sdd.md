@@ -2,7 +2,7 @@
 description: "Spec-Driven Development — 기획서+세부계획서 기반 Spec 작성 → 구현 → 검증"
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, Task
 argument-hint: <기능 설명> [--spec <spec-path>] [--plan <plan-path>]
-model: opus
+model: sonnet
 ---
 > **⚠️ 실행 모드 확인**: 이 커맨드는 쓰기 모드에서만 정상 동작합니다. Plan mode 감지 시 즉시 [STOP] — "Escape로 plan mode 해제 후 재실행하세요. 내부 [STOP] 게이트가 승인 지점입니다."
 
@@ -60,7 +60,9 @@ Input: <기능 설명>
 Output: .specify/specs/YYYY-MM-DD-{feature}.md
 ```
 
-Spec 작성 완료 후 **[STOP]**: Human이 Spec을 검토·수정 후 승인.
+Spec 작성 완료 후 **Opus Advisor 검토 (1회)**: Spec 초안 + 기능 설명만 전달.
+> "이 Spec의 설계 결정에서 가장 위험한 갭 또는 scope creep 가능성 1~2개만 지적하라." (응답 400토큰 이내)
+Opus 피드백을 Spec에 반영 후 **[STOP]**: Human이 Spec을 검토·수정 후 승인.
 승인 없이 Phase 3 진입 금지.
 
 **Spec 크기 가드레일** (승인 전 확인):

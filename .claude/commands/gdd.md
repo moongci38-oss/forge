@@ -24,6 +24,10 @@ $ARGUMENTS
    - 모든 화면 전환, 유저 액션을 플로우차트 수준으로 기술
    - 밸런싱 수치의 의도와 근거 함께 기술
 6. **에이전트 회의 결과**: `{folderMap.templates}/agent-meeting-template.md` 섹션 포함
+6.5. **[MANDATORY — 건너뛰기 금지] /autoplan 3관점 리뷰**: 에이전트 회의 완료 직후 반드시 실행.
+   - CEO(비즈니스) → Design(UX) → Engineering(기술) 순서로 GDD 검토
+   - BLOCK 항목 2개 이상 → **[STOP]** Human 에스컬레이션. 해소 전 저장/승인 금지.
+   - BLOCK 없음 → 어노테이션 기록 후 단계 7로 진행
 7. **저장**: `{folderMap.product}/projects/{project}/YYYY-MM-DD-s3-gdd.md`에 저장
 
 ## Iron Laws
