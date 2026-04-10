@@ -294,6 +294,80 @@ def telegram_notify(message: str, chat_id: str = "") -> str:
         return f"Telegram 발송 실패: {e}"
 
 
+# ── 웹 검색/조회 도구 ─────────────────────────────────────────────────────
+
+@mcp.tool()
+def web_search(query: str, count: int = 5) -> str:
+    """Brave Search API로 웹 검색.
+
+    Args:
+        query: 검색 쿼리
+        count: 결과 수 (기본 5, 최대 20)
+    """
+    api_key = os.environ.get("BRAVE_API_KEY", "")
+    if not api_key:
+        return "BRAVE_API_KEY 미설정 — 웹 검색 불가"
+
+    import urllib.request
+    import urllib.parse
+    import json
+
+    params = urllib.parse.urlencode({"q": query, "count": min(count, 20)})
+    url = f"https://api.search.brave.com/res/v1/web/search?{params}"
+    req = urllib.request.Request(url, headers={
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip",
+        "X-Subscription-Token": api_key,
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            import gzip
+            raw = resp.read()
+            if resp.headers.get("Content-Encoding") == "gzip":
+                raw = gzip.decompress(raw)
+            data = json.loads(raw)
+        results = data.get("web", {}).get("results", [])
+        lines = []
+        for r in results[:count]:
+            lines.append(f"**{r.get('title', '')}**\n{r.get('url', '')}\n{r.get('description', '')}\n")
+        return "\n".join(lines) or "(결과 없음)"
+    except Exception as e:
+        return f"검색 오류: {e}"
+
+
+@mcp.tool()
+def web_fetch(url: str, max_chars: int = 8000) -> str:
+    """URL 페이지 내용 조회.
+
+    Args:
+        url: 조회할 URL
+        max_chars: 최대 문자 수 (기본 8000)
+    """
+    import urllib.request
+
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; ForgeBot/1.0)",
+        "Accept": "text/html,application/xhtml+xml,text/plain",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            content_type = resp.headers.get("Content-Type", "")
+            raw = resp.read(max_chars * 3)
+
+        # HTML → 텍스트 간략 변환
+        text = raw.decode("utf-8", errors="replace")
+        if "html" in content_type.lower():
+            import re
+            text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL | re.IGNORECASE)
+            text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL | re.IGNORECASE)
+            text = re.sub(r'<[^>]+>', ' ', text)
+            text = re.sub(r'\s+', ' ', text).strip()
+
+        return text[:max_chars]
+    except Exception as e:
+        return f"조회 오류: {e}"
+
+
 # ── 서버 실행 ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

@@ -18,6 +18,12 @@
 
 set -e
 
+# forge/.env에서 환경변수 로드
+FORGE_ENV="${FORGE_ROOT:-$HOME/forge}/.env"
+if [[ -f "$FORGE_ENV" ]]; then
+    export $(grep -v '^#' "$FORGE_ENV" | grep -E '^(BRAVE_API_KEY|ANTHROPIC_API_KEY|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID)=' | xargs)
+fi
+
 PORT=${1:-8765}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SERVER_SCRIPT="$SCRIPT_DIR/../mcp/forge-tools-server.py"
