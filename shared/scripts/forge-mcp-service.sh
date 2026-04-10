@@ -22,7 +22,7 @@ QUIET="${2:-}"
 
 # forge/.env 로드
 if [[ -f "$FORGE_ROOT/.env" ]]; then
-    export $(grep -v '^#' "$FORGE_ROOT/.env" | grep -E '^(ANTHROPIC_API_KEY|BRAVE_API_KEY|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID)=' | xargs) 2>/dev/null || true
+    export $(grep -v '^#' "$FORGE_ROOT/.env" | grep -E '^(ANTHROPIC_API_KEY|BRAVE_API_KEY|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID|NOTION_API_TOKEN)=' | xargs) 2>/dev/null || true
 fi
 
 log() { [[ "$QUIET" != "--quiet" ]] && echo "$@"; }
@@ -115,7 +115,7 @@ start() {
     # Window 0: MCP 서버
     tmux rename-window -t "$TMUX_SESSION:0" "mcp-server"
     tmux send-keys -t "$TMUX_SESSION:0" \
-        "BRAVE_API_KEY=$BRAVE_API_KEY TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID python3 $MCP_SCRIPT" Enter
+        "BRAVE_API_KEY=$BRAVE_API_KEY TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID NOTION_API_TOKEN=$NOTION_API_TOKEN python3 $MCP_SCRIPT" Enter
 
     # Window 1: cloudflared 터널
     tmux new-window -t "$TMUX_SESSION" -n "tunnel"

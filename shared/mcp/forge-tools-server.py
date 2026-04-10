@@ -268,6 +268,79 @@ def run_health_check(project: str = "forge", months: int = 12) -> str:
 # ── Telegram 알림 도구 ─────────────────────────────────────────────────────
 
 @mcp.tool()
+def notion_create_page(database_id: str, properties: dict, content: str = "") -> str:
+    """Notion 데이터베이스에 새 페이지 생성.
+
+    Args:
+        database_id: Notion DB ID (예: "43829f7b-8d3f-47f1-90a1-84f40d39239e")
+        properties: 페이지 속성 딕셔너리 (title, date, status 등)
+        content: 페이지 본문 (Markdown — Notion 블록으로 변환)
+    """
+    import urllib.request
+    import json
+
+    token = os.environ.get("NOTION_API_TOKEN", "")
+    if not token:
+        return "NOTION_API_TOKEN 미설정 — Notion 등록 불가"
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28",
+    }
+
+    # properties → Notion API 포맷 변환
+    def _notion_props(props: dict) -> dict:
+        result = {}
+        for key, val in props.items():
+            if isinstance(val, str) and key.lower() in ("제목", "title", "name", "이름"):
+                result[key] = {"title": [{"text": {"content": val[:2000]}}]}
+            elif isinstance(val, str) and "날짜" in key.lower() or "date" in key.lower():
+                result[key] = {"date": {"start": val}} if val else {"date": None}
+            elif isinstance(val, (int, float)):
+                result[key] = {"number": val}
+            elif isinstance(val, str):
+                result[key] = {"rich_text": [{"text": {"content": val[:2000]}}]}
+        return result
+
+    # content → Notion 블록 (단락으로 분할, 최대 100블록)
+    def _content_blocks(text: str) -> list:
+        blocks = []
+        for chunk in text.split("\n\n")[:100]:
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            blocks.append({
+                "object": "block",
+                "type": "paragraph",
+                "paragraph": {
+                    "rich_text": [{"type": "text", "text": {"content": chunk[:2000]}}]
+                }
+            })
+        return blocks
+
+    payload = {
+        "parent": {"database_id": database_id},
+        "properties": _notion_props(properties),
+        "children": _content_blocks(content) if content else [],
+    }
+
+    data = json.dumps(payload).encode()
+    req = urllib.request.Request(
+        "https://api.notion.com/v1/pages",
+        data=data, headers=headers
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = json.loads(resp.read())
+            page_id = result.get("id", "unknown")
+            url = result.get("url", "")
+            return f"Notion 페이지 생성 완료: {page_id}\nURL: {url}"
+    except Exception as e:
+        return f"Notion 생성 실패: {e}"
+
+
+@mcp.tool()
 def telegram_notify(message: str, chat_id: str = "") -> str:
     """Telegram으로 완료 알림 발송.
 
