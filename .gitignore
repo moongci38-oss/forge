@@ -21,6 +21,7 @@ secrets/
 .claude/memory/
 .claude/forge-sync-state.json
 .claude/usage.log
+.claude/agent-budget/
 .claude/scheduled_tasks.lock
 
 # === OS files ===
