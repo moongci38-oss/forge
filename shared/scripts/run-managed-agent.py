@@ -30,8 +30,19 @@ HOME = Path.home()
 FORGE_ROOT = Path(os.environ.get("FORGE_ROOT", HOME / "forge"))
 FORGE_OUTPUTS = Path(os.environ.get("FORGE_OUTPUTS", HOME / "forge-outputs"))
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-AGENT_ID = os.environ.get("FORGE_AGENT_ID", "agent_011CZuxZ5KG6bFxctV9R2BpC")
 ENV_ID = os.environ.get("FORGE_ENV_ID", "env_01NmVREmA4Vek1kzNqRUKQxw")
+
+# 에이전트 ID 맵 (forge-agent-ids.json 또는 하드코딩 폴백)
+_AGENT_ID_FILE = FORGE_ROOT / "shared/mcp/forge-agent-ids.json"
+_DEFAULT_AGENT_IDS = {
+    "daily-system-review": "agent_011CZuxZ5KG6bFxctV9R2BpC",
+    "weekly-research": "agent_011CZv2SDDmnTGdhTZS1k7dn",
+}
+def _load_agent_ids() -> dict:
+    if _AGENT_ID_FILE.exists():
+        import json
+        return json.loads(_AGENT_ID_FILE.read_text())
+    return _DEFAULT_AGENT_IDS
 
 # API Key 로드 (forge/.env 폴백)
 if not ANTHROPIC_API_KEY:
@@ -126,9 +137,9 @@ def ensure_mcp_server() -> str:
 
 # ── 에이전트 업데이트 (MCP URL 갱신) ─────────────────────────────────────────
 
-def update_agent_mcp_url(client: anthropic.Anthropic, tunnel_url: str, current_version: int) -> int:
+def update_agent_mcp_url(client: anthropic.Anthropic, agent_id: str, tunnel_url: str) -> int:
     """에이전트의 MCP URL을 현재 터널 URL로 업데이트"""
-    agent = client.beta.agents.retrieve(AGENT_ID, betas=["managed-agents-2026-04-01"])
+    agent = client.beta.agents.retrieve(agent_id, betas=["managed-agents-2026-04-01"])
     current_url = agent.mcp_servers[0].url if agent.mcp_servers else ""
 
     if current_url == f"{tunnel_url}/mcp":
@@ -137,10 +148,11 @@ def update_agent_mcp_url(client: anthropic.Anthropic, tunnel_url: str, current_v
 
     print(f"에이전트 MCP URL 업데이트 중...")
     updated = client.beta.agents.update(
-        agent_id=AGENT_ID,
+        agent_id=agent_id,
         version=str(agent.version),
         name=agent.name,
         model={"id": agent.model.id},
+        system=agent.system,
         mcp_servers=[{"type": "url", "url": f"{tunnel_url}/mcp", "name": "forge-tools"}],
         tools=[{
             "type": "mcp_toolset",
@@ -155,7 +167,7 @@ def update_agent_mcp_url(client: anthropic.Anthropic, tunnel_url: str, current_v
 
 # ── 스킬 실행 ────────────────────────────────────────────────────────────────
 
-def run_skill(skill_name: str, date_str: str, agent_version: int):
+def run_skill(skill_name: str, date_str: str, agent_id: str, agent_version: int):
     skill_dir = SKILL_DIRS.get(skill_name)
     if not skill_dir or not skill_dir.exists():
         print(f"❌ 스킬 없음: {skill_name}", file=sys.stderr)
@@ -167,7 +179,7 @@ def run_skill(skill_name: str, date_str: str, agent_version: int):
 
     # 세션 생성
     session = client.beta.sessions.create(
-        agent={"type": "agent", "id": AGENT_ID, "version": agent_version},
+        agent={"type": "agent", "id": agent_id, "version": agent_version},
         environment_id=ENV_ID,
         title=f"{skill_name} {date_str}",
         betas=["managed-agents-2026-04-01"]
@@ -201,15 +213,12 @@ def run_skill(skill_name: str, date_str: str, agent_version: int):
     t.start()
     time.sleep(0.5)
 
-    # 메시지 전송
-    prompt = f"""\
-아래 SKILL.md 지침에 따라 {date_str} 분석을 실행하라.
-forge-tools MCP 도구를 사용하여 forge-outputs에 결과를 저장하라.
-분석 날짜: {date_str}
-
----
-{skill_md}
-"""
+    # 메시지 전송 (시스템 프롬프트에 SKILL.md가 있으면 간단하게, 없으면 전체 포함)
+    agent_obj = client.beta.agents.retrieve(agent_id, betas=["managed-agents-2026-04-01"])
+    if agent_obj.system and len(agent_obj.system) > 100:
+        prompt = f"분석 날짜: {date_str}\n\nforge-tools MCP 도구를 사용하여 지침에 따라 작업을 실행하라."
+    else:
+        prompt = f"아래 SKILL.md 지침에 따라 {date_str} 분석을 실행하라.\nforge-tools MCP 도구를 사용하여 forge-outputs에 결과를 저장하라.\n분석 날짜: {date_str}\n\n---\n{skill_md}"
     client.beta.sessions.events.send(
         session_id=SESSION_ID,
         events=[{"type": "user.message", "content": [{"type": "text", "text": prompt}]}],
@@ -245,12 +254,18 @@ def main():
     # 1. MCP 서버 + 터널 확인
     tunnel_url = ensure_mcp_server()
 
-    # 2. 에이전트 URL 최신화
+    # 2. 에이전트 ID 로드 및 URL 최신화
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    agent_version = update_agent_mcp_url(client, tunnel_url, 1)
+    agent_ids = _load_agent_ids()
+    agent_id = os.environ.get("FORGE_AGENT_ID", agent_ids.get(skill_name, ""))
+    if not agent_id:
+        print(f"❌ 에이전트 ID 없음: {skill_name}", file=sys.stderr)
+        sys.exit(1)
+    print(f"에이전트 ID: {agent_id}")
+    agent_version = update_agent_mcp_url(client, agent_id, tunnel_url)
 
     # 3. 스킬 실행
-    run_skill(skill_name, date_str, agent_version)
+    run_skill(skill_name, date_str, agent_id, agent_version)
 
 
 if __name__ == "__main__":
