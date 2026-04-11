@@ -22,7 +22,7 @@ QUIET="${2:-}"
 
 # forge/.env 로드
 if [[ -f "$FORGE_ROOT/.env" ]]; then
-    export $(grep -v '^#' "$FORGE_ROOT/.env" | grep -E '^(ANTHROPIC_API_KEY|BRAVE_API_KEY|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID|NOTION_API_TOKEN)=' | xargs) 2>/dev/null || true
+    export $(grep -v '^#' "$FORGE_ROOT/.env" | grep -E '^(ANTHROPIC_API_KEY|BRAVE_API_KEY|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID|NOTION_API_TOKEN|PERMANENT_MCP_URL)=' | xargs) 2>/dev/null || true
 fi
 
 log() { [[ "$QUIET" != "--quiet" ]] && echo "$@"; }
@@ -125,14 +125,22 @@ start() {
     log "MCP 서버 + 터널 시작 중 (8초 대기)..."
     sleep 8
 
-    # 터널 URL 추출 및 저장
-    TUNNEL_URL=$(grep -o 'https://[a-zA-Z0-9.-]*\.trycloudflare\.com' /tmp/forge-mcp-cloudflared.log 2>/dev/null | head -1)
-    if [[ -z "$TUNNEL_URL" ]]; then
-        log "⚠️  터널 URL 추출 실패. 로그: /tmp/forge-mcp-cloudflared.log"
+    # 영구 URL이 설정된 경우 — 터널 URL 대신 사용
+    if [[ -n "$PERMANENT_MCP_URL" ]]; then
+        AGENT_URL="${PERMANENT_MCP_URL%/mcp}"  # trailing /mcp 제거
+        echo "$AGENT_URL" > "$TUNNEL_URL_FILE"
+        log "✅ 영구 URL 사용: $PERMANENT_MCP_URL"
+        update_agents "$AGENT_URL"
     else
-        echo "$TUNNEL_URL" > "$TUNNEL_URL_FILE"
-        log "✅ 터널 URL: $TUNNEL_URL/mcp"
-        update_agents "$TUNNEL_URL"
+        # 터널 URL 추출 및 저장
+        TUNNEL_URL=$(grep -o 'https://[a-zA-Z0-9.-]*\.trycloudflare\.com' /tmp/forge-mcp-cloudflared.log 2>/dev/null | head -1)
+        if [[ -z "$TUNNEL_URL" ]]; then
+            log "⚠️  터널 URL 추출 실패. 로그: /tmp/forge-mcp-cloudflared.log"
+        else
+            echo "$TUNNEL_URL" > "$TUNNEL_URL_FILE"
+            log "✅ 터널 URL: $TUNNEL_URL/mcp"
+            update_agents "$TUNNEL_URL"
+        fi
     fi
 
     log "✅ forge-mcp 서비스 시작 완료"
