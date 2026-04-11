@@ -1,8 +1,45 @@
 # Forge CI/CD Pipeline
 
 stages:
+  - evals
   - auto-merge
   - weekly-report
+
+# Evals 구조 검증 (항상 실행 — 빠름, API 없음)
+evals:structure:
+  stage: evals
+  image: python:3.11-slim
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - pip install --quiet anthropic 2>/dev/null || true
+    - python3 shared/scripts/validate-evals.py structure
+  artifacts:
+    when: on_failure
+    paths:
+      - .claude/security.log
+    expire_in: 7 days
+
+# Evals LLM Judge (수동/스케줄만 실행 — Haiku API 사용)
+evals:llm-judge:
+  stage: evals
+  image: python:3.11-slim
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+  script:
+    - pip install --quiet anthropic
+    - python3 shared/scripts/validate-evals.py llm-judge --max 20
+  variables:
+    ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY
+  artifacts:
+    when: always
+    paths:
+      - .claude/security.log
+    expire_in: 30 days
 
 # Auto Merge (develop → staging → main)
 auto-merge:staging:
