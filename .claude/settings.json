@@ -96,6 +96,11 @@
             "type": "command",
             "command": "bash .claude/hooks/cleanup-agent-budget.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/track-override-rate.sh",
+            "timeout": 5
           }
         ]
       }
@@ -107,6 +112,11 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/claude-notify.sh complete '에이전트 완료'",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/track-override-rate.sh",
             "timeout": 5
           }
         ]
@@ -161,6 +171,11 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/detect-injection.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-supply-chain.sh",
             "timeout": 3
           }
         ]
