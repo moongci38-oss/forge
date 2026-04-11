@@ -44,7 +44,8 @@ def load_env():
 
 load_env()
 
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+# 서버 전용 봇 토큰 우선, 없으면 기본 봇 토큰 사용
+TELEGRAM_BOT_TOKEN = os.environ.get("FORGE_AGENT_SERVER_BOT_TOKEN", "") or os.environ.get("TELEGRAM_BOT_TOKEN", "")
 ALLOWED_CHAT_IDS = set(os.environ.get("TELEGRAM_CHAT_ID", "").split(","))
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 FORGE_OUTPUTS = Path(os.environ.get("FORGE_OUTPUTS", HOME / "forge-outputs"))
