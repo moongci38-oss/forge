@@ -135,6 +135,44 @@ forge/
 
 > 프로젝트별 MCP(sequential-thinking, hwpx 등)는 각 프로젝트의 `.mcp.json`에서 관리합니다.
 
+## Managed Agents (클라우드 자동화)
+
+Claude Code 세션 없이 자율 실행되는 Anthropic 호스팅 에이전트.
+
+**MCP 서버:** `https://manager-agent.lumir-ai.com/mcp` (영구 URL, Cloudflare 프록시)
+
+| 에이전트 | 용도 |
+|---------|------|
+| `daily-system-review` | 일일 AI/에이전틱 분야 변경사항 감지 → forge-outputs 저장 + git 커밋 |
+| `weekly-research` | 주간 리서치 파이프라인 (Wave 0→1 병렬 수집 + 분석) |
+| `system-audit` | ACHCE 5축 통합 감사 오케스트레이터 |
+| `audit-agentic` | 에이전틱 AI 역량 감사 (자율성, 도구 사용, 멀티에이전트) |
+| `audit-context` | 컨텍스트 엔지니어링 감사 (RAG, 메모리, 7-레이어) |
+| `audit-harness` | AI 하네스 엔지니어링 감사 (가드레일, 옵저버빌리티) |
+| `audit-cost` | AI 비용 효율 감사 (토큰 경제, 라우팅) |
+| `audit-human-ai` | Human-AI 경계 설계 감사 (자율성 레벨, 에스컬레이션) |
+
+```bash
+# 로컬에서 에이전트 실행
+python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
+python3 shared/scripts/run-managed-agent.py system-audit
+
+# MCP 서비스 관리 (WSL 로컬)
+forge-mcp-service.sh start|stop|restart|status
+```
+
+**Telegram 명령 서버** (`shared/scripts/telegram-command-server.py`)가 원격 서버(183.111.8.37)에서 실행되어 Claude Code 없이도 텔레그램으로 에이전트 실행 가능:
+- `run <에이전트>` — 에이전트 원격 실행
+- `status` — 서버 상태 확인
+- `agents` — 에이전트 목록
+
+**인프라:**
+- 원격 서버: `183.111.8.37` (Ubuntu 22.04, 16GB RAM)
+- Nginx 리버스 프록시 → 포트 8765 (FastMCP)
+- Telegram 명령 서버: `tmux forge-telegram` 세션
+- MCP 서버: `tmux forge-mcp` 세션
+- `.env`의 `PERMANENT_MCP_URL` → 재시작 시에도 에이전트 URL 고정
+
 ## CLI 스크립트
 
 ```bash

@@ -135,6 +135,44 @@ forge/
 
 > Project-specific MCPs (sequential-thinking, hwpx, etc.) are managed in each project's `.mcp.json`.
 
+## Managed Agents (Cloud Automation)
+
+Anthropic-hosted agents that run autonomously — no Claude Code session required.
+
+**MCP Server:** `https://manager-agent.lumir-ai.com/mcp` (permanent, Cloudflare-proxied)
+
+| Agent | Purpose |
+|-------|---------|
+| `daily-system-review` | Daily AI/Agentic field change detection → forge-outputs + git commit |
+| `weekly-research` | Weekly research pipeline (Wave 0→1 parallel collection + analysis) |
+| `system-audit` | Full ACHCE 5-axis system audit orchestrator |
+| `audit-agentic` | Agentic AI capability audit (autonomy, tool use, multi-agent) |
+| `audit-context` | Context engineering audit (RAG, memory, 7-layer) |
+| `audit-harness` | AI harness engineering audit (guardrails, observability) |
+| `audit-cost` | AI cost efficiency audit (token economics, routing) |
+| `audit-human-ai` | Human-AI boundary audit (autonomy levels, escalation) |
+
+```bash
+# Run agent locally
+python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
+python3 shared/scripts/run-managed-agent.py system-audit
+
+# MCP service management (WSL local)
+forge-mcp-service.sh start|stop|restart|status
+```
+
+**Telegram Command Server** (`shared/scripts/telegram-command-server.py`) runs on the remote server (183.111.8.37), enabling agent execution from Telegram without Claude Code:
+- `run <agent>` — trigger any agent remotely
+- `status` — check server status
+- `agents` — list available agents
+
+**Infrastructure:**
+- Remote server: `183.111.8.37` (Ubuntu 22.04, 16GB RAM)
+- Nginx reverse proxy → port 8765 (FastMCP)
+- Telegram command server: `tmux forge-telegram` session
+- MCP server: `tmux forge-mcp` session
+- `PERMANENT_MCP_URL` in `.env` → agents keep the same URL across restarts
+
 ## CLI Scripts
 
 ```bash
