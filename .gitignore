@@ -41,6 +41,17 @@ desktop.ini
 *.psd
 *.ai
 
+# === Document files (outputs → forge-outputs only, forge is public) ===
+*.docx
+*.doc
+*.hwp
+*.hwpx
+*.pptx
+*.ppt
+*.xlsx
+*.xls
+*.pdf
+
 # === Temp files ===
 *.tmp
 *.swp
