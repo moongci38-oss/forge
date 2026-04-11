@@ -167,7 +167,7 @@ forge-mcp-service.sh start|stop|restart|status
 - `agents` — 에이전트 목록
 
 **인프라:**
-- 원격 서버: `183.111.8.37` (Ubuntu 22.04, 16GB RAM)
+- 원격 서버: `.env`의 `REMOTE_SERVER_HOST` 참조
 - Nginx 리버스 프록시 → 포트 8765 (FastMCP)
 - Telegram 명령 서버: `tmux forge-telegram` 세션
 - MCP 서버: `tmux forge-mcp` 세션

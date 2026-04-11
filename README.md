@@ -167,7 +167,7 @@ forge-mcp-service.sh start|stop|restart|status
 - `agents` — list available agents
 
 **Infrastructure:**
-- Remote server: `183.111.8.37` (Ubuntu 22.04, 16GB RAM)
+- Remote server: configured via `REMOTE_SERVER_HOST` in `.env`
 - Nginx reverse proxy → port 8765 (FastMCP)
 - Telegram command server: `tmux forge-telegram` session
 - MCP server: `tmux forge-mcp` session
