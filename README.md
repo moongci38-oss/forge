@@ -167,7 +167,7 @@ forge-mcp-service.sh start|stop|restart|status
 - `agents` — list available agents
 
 **Infrastructure:**
-- Remote server: configured via `REMOTE_SERVER_HOST` in `.env`
+- Remote server: `manager-agent.lumir-ai.com` (Ubuntu 22.04)
 - Nginx reverse proxy → port 8765 (FastMCP)
 - Telegram command server: `tmux forge-telegram` session
 - MCP server: `tmux forge-mcp` session
