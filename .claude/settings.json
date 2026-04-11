@@ -69,6 +69,11 @@
             "type": "command",
             "command": "bash .claude/hooks/validate-output.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "OWASP_MODE=post bash .claude/hooks/owasp-asi-04-06-08-10.sh",
+            "timeout": 3
           }
         ]
       }
@@ -176,6 +181,21 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/check-supply-chain.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "OWASP_MODE=pre bash .claude/hooks/owasp-asi-04-06-08-10.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OWASP_MODE=pre bash .claude/hooks/owasp-asi-04-06-08-10.sh",
             "timeout": 3
           }
         ]
