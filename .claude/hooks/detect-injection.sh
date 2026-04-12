@@ -2,18 +2,42 @@
 # detect-injection.sh — 프롬프트 인젝션 패턴 감지 + 차단
 # PreToolUse 훅: BLOCK 패턴은 차단, WARN 패턴은 로깅만
 
-TOOL_NAME="${CLAUDE_TOOL_NAME:-unknown}"
 LOG_FILE="${PWD}/.claude/security.log"
 TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
+# Read Hook JSON from stdin (Claude Code Hook API)
+HOOK_JSON=""
+if [ ! -t 0 ]; then
+  HOOK_JSON=$(cat 2>/dev/null || true)
+fi
+[ -z "$HOOK_JSON" ] && exit 0
+
+TOOL_NAME=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_name',''))" 2>/dev/null)
+
 # Only check text-input tools
 case "$TOOL_NAME" in
-  Bash|Write|Edit|Agent|WebFetch) ;; # check these
+  Bash|Write|Edit|WebFetch) ;; # check these
   *) exit 0 ;; # skip others
 esac
 
-# Read tool input from environment
-INPUT="${CLAUDE_TOOL_INPUT:-}"
+# Self-exclusion: skip when editing hooks/security files (regex patterns themselves)
+FILE_PATH=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('file_path',''))" 2>/dev/null)
+case "$FILE_PATH" in
+  *.claude/hooks/*|*security.log*|*/audit/*|*/reviews/*) exit 0 ;;
+esac
+
+# Extract relevant input fields based on tool type
+INPUT=$(echo "$HOOK_JSON" | python3 -c "
+import json,sys
+d = json.load(sys.stdin)
+ti = d.get('tool_input', {}) or {}
+parts = []
+for k in ('command','content','new_string','prompt','url'):
+    v = ti.get(k)
+    if isinstance(v,str):
+        parts.append(v)
+print('\n'.join(parts))
+" 2>/dev/null)
 [ -z "$INPUT" ] && exit 0
 
 # BLOCK patterns — high-confidence injection, exit 2 to block

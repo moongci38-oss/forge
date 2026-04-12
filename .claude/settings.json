@@ -139,6 +139,18 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/gate-approval-tracker.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
@@ -147,6 +159,21 @@
             "type": "command",
             "command": "bash .claude/hooks/block-sensitive-files.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/detect-injection.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/detect-injection.sh",
+            "timeout": 3
           }
         ]
       },

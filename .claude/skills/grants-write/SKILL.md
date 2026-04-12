@@ -120,6 +120,16 @@ Writer 산출물:
 4. 인수인계 문서 작성/업데이트
 5. 검수자 최종본 대비 미반영 항목 체크 (있으면)
 
+## MCP 도구 활용 (forge-tools)
+
+Lead가 직접 호출할 수 있는 도구:
+
+- `mcp__forge-tools__rag_search(query, top_k)` — 분석 보고서/근거 데이터 의미 검색 (Analyst 완료 후 작성 단계에서 특정 수치/구절 재탐색 시)
+- `mcp__forge-tools__notion_create_page(database_id, properties, content)` — 인수인계 문서를 Notion에 업로드할 때 사용. database_id는 `forge-workspace.json`의 `notionDBs.handover`
+- `mcp__forge-tools__telegram_notify(message)` — 파이프라인 완료/중단 시 사용자에게 푸시 알림
+
+Bash 스크립트 진입 대비 stdio 직결이라 토큰·지연이 낮다. 단일 호출이면 MCP 우선, 배치/복합 플래그는 기존 Bash 유지.
+
 ## 모든 자료 읽기 규칙
 
 "자료"로 제공된 것은 형식 불문 **전부** 읽는다:

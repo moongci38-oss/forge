@@ -186,3 +186,11 @@ Notion "Weekly Research" DB에 페이지를 자동 생성한다.
 - `forge-workspace.json`에 프로젝트 등록 확인
 - gate-log.md에 S1 게이트 기록
 - Human 승인 시 S2(린 캔버스)로 진행 가능
+
+## MCP 도구 활용 (forge-tools)
+
+완료 후 사용자에게 결과를 전달하거나 Notion에 업로드할 때:
+
+- `mcp__forge-tools__notion_create_page(database_id, properties, content)` — 주간 리포트 3종을 Notion weekly 데이터베이스에 자동 업로드
+- `mcp__forge-tools__telegram_notify(message)` — 파이프라인 완료 시 사용자 텔레그램으로 요약 푸시 (Subagent 병렬 종료 감지 시)
+- `mcp__forge-tools__rag_search(query, top_k)` — 과거 주간 리포트 대비 중복/트렌드 체크

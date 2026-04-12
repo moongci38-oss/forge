@@ -48,6 +48,13 @@
 - Forge 멀티 Phase 커맨드는 **쓰기 모드에서 실행** (내부 [STOP] 게이트가 승인 지점)
 - Plan mode 감지 시 경고 출력 후 즉시 중단
 
+## Context Compaction 트리거 (HIGH)
+
+- **70% 토큰 소비 시** `/compact` 실행 권장 — 캐시 TTL(5분) 안에서 의도적 요약
+- **90% 토큰 소비 시** `/compact` 강제 권장 — 품질 저하 임계
+- 다음 Phase 진입 또는 Wave 전환 시점이 있으면 그 시점을 우선 (자연 분할점)
+- Wave 2~3 병렬 리뷰 직전에 `/compact` 수행 시 sub-agent 컨텍스트 오염 최소화
+
 ---
 
 ## Deep 로딩 라우팅 (MEDIUM — 필요 시 참조)

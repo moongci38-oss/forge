@@ -30,6 +30,17 @@ model: haiku
 /rag-search dev staging production 서버 셋팅
 ```
 
+## MCP 도구 (권장 — forge-tools)
+
+단일 검색이면 MCP 도구를 우선 사용. Bash 진입·Python 기동 비용을 제거한다.
+
+```
+mcp__forge-tools__rag_search(query="투자 유치 전략", top_k=5)
+```
+
+- 장점: stdio 직결, 토큰/지연 최소
+- CLI 사용처: 복합 플래그(`--index-dir`, `--mode vector`), 여러 인덱스 전환
+
 ## 워크플로우
 
 ### Step 1: 인덱스 확인

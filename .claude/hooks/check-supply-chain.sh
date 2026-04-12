@@ -23,17 +23,15 @@ TOOL_NAME=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.std
 COMMAND=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))" 2>/dev/null)
 [ -z "$COMMAND" ] && exit 0
 
-# 1. curl|bash / wget|sh 직접 실행 패턴 (원격 스크립트 직접 실행)
-if echo "$COMMAND" | grep -qE "(curl|wget).*(pipe|bash|sh)|\|.*bash|\|.*sh "; then
-  if echo "$COMMAND" | grep -qE "curl.*\|.*bash|curl.*\|.*sh|wget.*\|.*bash|wget.*\|.*sh"; then
-    MSG="[ASI-03] WARN: 원격 스크립트 직접 실행 감지: ${COMMAND:0:100}"
-    echo "$TS WARN $MSG" >> "$LOG_FILE"
-    echo "$MSG" >&2
-    # WARN만 (exit 0) — 합법적인 설치 스크립트도 많음
-  fi
+# 1. curl|bash / wget|sh 직접 실행 패턴 (원격 스크립트 직접 실행) — HIGH RISK, BLOCK
+if echo "$COMMAND" | grep -qE "curl.*\|.*bash|curl.*\|.*sh|wget.*\|.*bash|wget.*\|.*sh"; then
+  MSG="[ASI-03] BLOCKED: 원격 스크립트 직접 실행 차단: ${COMMAND:0:100}"
+  echo "$TS BLOCK $MSG" >> "$LOG_FILE"
+  echo "$MSG" >&2
+  exit 2
 fi
 
-# 2. 비공식 레지스트리 또는 Git URL에서 직접 패키지 설치
+# 2. 비공식 레지스트리 또는 Git URL에서 직접 패키지 설치 — WARN (합법 케이스 다수)
 if echo "$COMMAND" | grep -qE "pip install.*(git\+http|git\+ssh|https?://(?!pypi))" || \
    echo "$COMMAND" | grep -qE "npm install.*(git\+|github:|gitlab:|bitbucket:|https?://(?!registry\.npmjs))" ; then
   MSG="[ASI-03] WARN: 비공식 소스 패키지 설치 감지: ${COMMAND:0:100}"
@@ -41,8 +39,7 @@ if echo "$COMMAND" | grep -qE "pip install.*(git\+http|git\+ssh|https?://(?!pypi
   echo "$MSG" >&2
 fi
 
-# 3. 알려진 typosquatting 패턴 (고위험 패키지 유사명)
-# npm 유명 패키지 typosquatting 탐지
+# 3. 알려진 typosquatting 패턴 — HIGH RISK, BLOCK
 TYPO_PATTERNS=(
   "lodahs"
   "reacts"
@@ -55,10 +52,10 @@ TYPO_PATTERNS=(
 )
 for pattern in "${TYPO_PATTERNS[@]}"; do
   if echo "$COMMAND" | grep -qi "$pattern"; then
-    MSG="[ASI-03] WARN: 잠재적 typosquatting 패키지 감지: ${COMMAND:0:100}"
-    echo "$TS WARN $MSG" >> "$LOG_FILE"
-    echo "⚠️  $MSG" >&2
-    break
+    MSG="[ASI-03] BLOCKED: 잠재적 typosquatting 패키지 차단: ${COMMAND:0:100}"
+    echo "$TS BLOCK $MSG" >> "$LOG_FILE"
+    echo "$MSG" >&2
+    exit 2
   fi
 done
 
