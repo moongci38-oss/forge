@@ -32,8 +32,8 @@ def validate_structure():
     """모든 evals.json 파일 구조 검증"""
     evals_files = list(SKILLS_DIR.glob("*/evals/evals.json"))
     if not evals_files:
-        print("❌ evals.json 파일 없음")
-        sys.exit(1)
+        print("⚠️  evals.json 파일 없음 — skip (no evals configured yet)")
+        sys.exit(0)
 
     errors = []
     warnings = []
