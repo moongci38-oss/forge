@@ -23,6 +23,16 @@ TOOL_NAME=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.std
 COMMAND=$(echo "$HOOK_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))" 2>/dev/null)
 [ -z "$COMMAND" ] && exit 0
 
+# Exception: git commit/log/diff/show messages can mention patterns as documentation
+# Check if command starts with git (commit/log/show/diff/tag/notes) — text content, not execution
+FIRST_TOKEN=$(echo "$COMMAND" | sed 's/^[[:space:]]*//' | awk '{print $1}')
+GIT_SUBCMD=$(echo "$COMMAND" | sed 's/^[[:space:]]*//' | awk '{print $2}')
+if [ "$FIRST_TOKEN" = "git" ]; then
+  case "$GIT_SUBCMD" in
+    commit|log|show|diff|tag|notes|blame|reflog) exit 0 ;;
+  esac
+fi
+
 # 1. curl|bash / wget|sh 직접 실행 패턴 (원격 스크립트 직접 실행) — HIGH RISK, BLOCK
 if echo "$COMMAND" | grep -qE "curl.*\|.*bash|curl.*\|.*sh|wget.*\|.*bash|wget.*\|.*sh"; then
   MSG="[ASI-03] BLOCKED: 원격 스크립트 직접 실행 차단: ${COMMAND:0:100}"
