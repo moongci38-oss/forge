@@ -1,0 +1,11 @@
+{
+  "image": "/home/damools/forge-outputs/02-product/projects/baduki/screenshots/signal-2026-03-28-183415.jpeg",
+  "bbox": [815, 448, 1039, 587],
+  "margin": 3,
+  "bot_margin": 8,
+  "expected": {
+    "alpha_coverage_min": 0.1,
+    "tags": ["icon-text", "rounded", "edge-right"]
+  },
+  "_note": "manifest btn_06. 우측 끝 영역"
+}

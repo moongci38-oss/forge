@@ -1,0 +1,11 @@
+{
+  "image": "/home/damools/forge-outputs/02-product/projects/baduki/screenshots/signal-2026-03-28-183415.jpeg",
+  "bbox": [155, 110, 420, 191],
+  "margin": 3,
+  "bot_margin": 8,
+  "expected": {
+    "size_range": [[225, 250], [50, 70]],
+    "alpha_coverage_min": 0.45,
+    "tags": ["trapezoid", "dark-base-same-bg", "gradient"]
+  }
+}
