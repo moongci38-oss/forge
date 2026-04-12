@@ -1,0 +1,187 @@
+# Develop Integration Check
+#
+# 배포 위치: 프로젝트의 .github/workflows/develop-integration.yml 에 복사하여 사용
+
+name: Develop Integration Check
+
+on:
+  push:
+    branches:
+      - develop
+
+# [한글] 동시 실행 방지 — develop 브랜치 기준 그룹
+# [English] Prevent concurrent runs — group by develop branch
+concurrency:
+  group: develop-integration-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Integration Verify
+  # ─────────────────────────────────────────────
+  integration-verify:
+    name: Integration Verify
+    runs-on: ubuntu-latest
+    outputs:
+      verify_result: ${{ steps.verify.outputs.verify_result }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run verify
+        id: verify
+        run: |
+          if [ -f "scripts/verify.sh" ]; then
+            bash scripts/verify.sh code
+            echo "verify_result=pass" >> "$GITHUB_OUTPUT"
+            echo "VERIFY_RESULT=pass" >> "$GITHUB_ENV"
+          else
+            echo "verify.sh not found — running fallback checks"
+            pnpm run build 2>&1 || exit 1
+            pnpm run lint 2>&1 || true
+            pnpm run test 2>&1 || exit 1
+            echo "verify_result=pass" >> "$GITHUB_OUTPUT"
+            echo "VERIFY_RESULT=pass" >> "$GITHUB_ENV"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 2: E2E Check (conditional)
+  # ─────────────────────────────────────────────
+  e2e-check:
+    name: E2E Check
+    runs-on: ubuntu-latest
+    needs: [integration-verify]
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for e2e config
+        id: e2e-config
+        run: |
+          if [ ! -f ".specify/e2e-pipeline.json" ]; then
+            echo "No e2e-pipeline.json found — skipping E2E"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.e2e-config.outputs.skip == 'false'
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: |
+          if [ -f "scripts/e2e-runner.sh" ]; then
+            bash scripts/e2e-runner.sh --env local
+          else
+            echo "e2e-runner.sh not found — skipping E2E runner"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 3: Integration Report
+  # ─────────────────────────────────────────────
+  integration-report:
+    name: Integration Report
+    runs-on: ubuntu-latest
+    needs: [integration-verify, e2e-check]
+    if: always()
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_SHA: ${{ github.sha }}
+      GITHUB_RUN_ID: ${{ github.run_id }}
+      GITHUB_SERVER_URL: ${{ github.server_url }}
+      VERIFY_RESULT: ${{ needs.integration-verify.outputs.verify_result }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Report summary
+        run: |
+          SHORT_SHA="${GITHUB_SHA:0:7}"
+          echo "## Forge Phase 5 — Develop Integration"
+          echo ""
+          echo "| Check | Result |"
+          echo "|-------|--------|"
+          echo "| verify.sh code | ${VERIFY_RESULT:-unknown} |"
+          echo "| E2E (local) | (see e2e-check job) |"
+          echo ""
+          echo "Overall (commit: ${SHORT_SHA})"
+
+      - name: Create issue on failure
+        if: needs.integration-verify.outputs.verify_result != 'pass'
+        run: |
+          COMMIT="${GITHUB_SHA}"
+          SHORT="${COMMIT:0:7}"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          # [한글] 동일 커밋 이슈 중복 생성 방지 — 기존 이슈 목록 조회
+          # [English] Avoid duplicate issues for the same commit — check existing issues
+          EXISTING=$(curl --silent \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues?labels=integration-failure&state=open&per_page=50" \
+            | python3 -c "
+import json, sys
+issues = json.load(sys.stdin)
+short = '${SHORT}'
+for i in issues:
+    if short in i.get('title',''):
+        print(i['number'])
+        break
+" 2>/dev/null || true)
+
+          if [ -z "$EXISTING" ]; then
+            BODY=$(cat <<ISSUEBODY
+## Develop Integration Check Failed
+
+**Branch:** develop
+**Commit:** ${COMMIT}
+**Run:** ${RUN_URL}
+
+### Failed Jobs
+- verify.sh code: ${VERIFY_RESULT:-unknown}
+
+**Forge Phase 5** — Please investigate and fix before cutting a release branch.
+ISSUEBODY
+)
+            curl --silent --request POST \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "$(python3 -c "
+import json, sys
+title = '[Integration Failure] develop @ ${SHORT}'
+body = sys.stdin.read()
+print(json.dumps({'title': title, 'body': body, 'labels': ['integration-failure', 'forge-phase-5']}))
+" <<< "$BODY")" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues"
+            echo "Issue created for commit ${SHORT}"
+          else
+            echo "Issue already exists for commit ${SHORT} — skipping"
+          fi

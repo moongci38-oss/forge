@@ -1,0 +1,71 @@
+name: Evals
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+  schedule:
+    # 매주 월요일 09:00 KST (00:00 UTC)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  # 구조 검증 (항상 실행 — 빠름, API 없음)
+  structure:
+    name: Evals / Structure
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --quiet anthropic 2>/dev/null || true
+
+      - name: Run structure evals
+        run: python3 shared/scripts/validate-evals.py structure
+
+      - name: Upload security log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-log
+          path: .claude/security.log
+          retention-days: 7
+
+  # LLM Judge (스케줄/수동만 실행 — Haiku API 사용)
+  llm-judge:
+    name: Evals / LLM Judge
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --quiet anthropic
+
+      - name: Run LLM judge evals
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python3 shared/scripts/validate-evals.py llm-judge --max 20
+
+      - name: Upload security log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-log-llm-judge
+          path: .claude/security.log
+          retention-days: 30

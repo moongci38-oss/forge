@@ -21,8 +21,8 @@ Usage:
   python3 sync-notion-tasks.py doing <branch-name>
   python3 sync-notion-tasks.py done <branch-name> <pr-number> <pr-url>
 
-Source of truth: forge/dev/gitlab-spec-kit/scripts/sync-notion-tasks.py
-Deployment: Copy to .gitlab/scripts/sync-notion-tasks.py via forge-sync
+Source of truth: forge/dev/github-spec-kit/scripts/sync-notion-tasks.py
+Deployment: Copy to .github/scripts/sync-notion-tasks.py via forge-sync
 """
 import json
 import os

@@ -37,7 +37,7 @@
 //   - spec-check.yml 워크플로우에서도 동일 검증 로직 사용 (패턴 일치)
 //
 // 배포 위치: 프로젝트의 .specify/scripts/validate-spec.js 또는
-//           .gitlab/scripts/validate-spec.js 에 복사하여 사용
+//           .github/scripts/validate-spec.js 에 복사하여 사용
 //
 // [English]
 // Purpose: Reads .specify/specs/{name}.md and validates required sections,
@@ -71,7 +71,7 @@
 //   - spec-check.yml workflow uses the same validation patterns
 //
 // Deployment: Copy to .specify/scripts/validate-spec.js or
-//             .gitlab/scripts/validate-spec.js in your project
+//             .github/scripts/validate-spec.js in your project
 // =============================================================================
 
 const fs = require('fs');

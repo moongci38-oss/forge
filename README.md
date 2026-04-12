@@ -42,7 +42,7 @@ Every task — including hotfixes — requires a Spec document before branch cre
 
 ```bash
 # 1. Clone
-git clone ssh://git@ssh.lumir-ai.com:32361/lumir/forge.git ~/forge
+git clone git@github.com:moongci38-oss/forge.git ~/forge
 cd ~/forge
 
 # 2. Workspace config
@@ -87,7 +87,7 @@ forge/
 │   ├── templates/           ← Dev templates
 │   ├── scripts/             ← Dev scripts (forge-sync, etc.)
 │   ├── schemas/             ← JSON schemas
-│   └── gitlab-spec-kit/     ← GitLab CI pipelines + scripts
+│   └── github-spec-kit/     ← GitHub Actions workflows + scripts
 ├── shared/                  ← Shared between planning & dev
 │   ├── docs/                ← Shared documentation
 │   ├── scripts/             ← Management scripts (incl. rag/ for hybrid search)
@@ -110,8 +110,8 @@ forge/
 | Action | Trigger | Mechanism |
 |--------|---------|-----------|
 | Initial registration | S4 Gate PASS | `sync-notion-tasks.py register <todo-file>` |
-| Mark in-progress | Branch creation | GitLab CI → Notion API |
-| Mark done | PR merge | GitLab CI → Notion API |
+| Mark in-progress | Branch creation | GitHub Actions → Notion API |
+| Mark done | PR merge | GitHub Actions → Notion API |
 | Manual registration | On request | AI via Notion MCP or direct Notion entry |
 
 **Human Override:** If `last_edited_by` is a person and the status differs from expected, AI skips the update (PM-IRON-1).

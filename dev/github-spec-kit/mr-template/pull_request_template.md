@@ -1,38 +1,38 @@
 <!-- =============================================================================
-  MR 템플릿 — SDD 기반 Merge Request 체크리스트
-  MR Template — SDD-based Merge Request Checklist
+  PR 템플릿 — SDD 기반 Pull Request 체크리스트
+  PR Template — SDD-based Pull Request Checklist
 
   [한글]
-  기능: MR 생성 시 자동으로 채워지는 본문 템플릿.
+  기능: PR 생성 시 자동으로 채워지는 본문 템플릿.
         Spec/Plan 연결, 구현 내용, Spec 준수 체크리스트, 테스트,
         문서 업데이트, 리뷰어 체크리스트를 포함.
-  사용 시점: GitLab에서 MR을 생성할 때 자동으로 이 템플릿이 본문에 삽입됨.
-             (수동 선택 불필요 — .gitlab/merge_request_templates/ 경로에 있으면 자동 적용)
+  사용 시점: GitHub에서 PR을 생성할 때 자동으로 이 템플릿이 본문에 삽입됨.
+             (수동 선택 불필요 — .github/ 경로에 있으면 자동 적용)
 
   Forge Dev 파이프라인 연계:
-    - Phase 4 (MR 생성) 에서 AI가 이 템플릿을 기반으로 MR 본문 작성
+    - Phase 4 (PR 생성) 에서 AI가 이 템플릿을 기반으로 PR 본문 작성
     - "Spec Compliance Checklist" = Check 3.5 트레이서빌리티 검증 결과 반영
     - "Testing" = Check 3 (test/lint/build) 결과 반영
     - "For Reviewers" = Human 리뷰어가 최종 확인하는 체크리스트
-    - spec-check CI job이 이 MR에 추가 검증 코멘트를 자동 작성
+    - spec-check CI job이 이 PR에 추가 검증 코멘트를 자동 작성
 
-  배포 위치: 프로젝트의 .gitlab/merge_request_templates/merge_request_template.md 에 복사하여 사용
+  배포 위치: 프로젝트의 .github/pull_request_template.md 에 복사하여 사용
 
   [English]
-  Purpose: Auto-populated MR body template when creating merge requests.
+  Purpose: Auto-populated PR body template when creating pull requests.
            Includes Spec/Plan links, changes, Spec compliance checklist,
            testing, documentation updates, and reviewer checklist.
-  When used: Automatically inserted as MR body when creating an MR on GitLab.
-             (No manual selection needed — auto-applied when placed in .gitlab/merge_request_templates/)
+  When used: Automatically inserted as PR body when creating a PR on GitHub.
+             (No manual selection needed — auto-applied when placed in .github/)
 
   Forge Dev pipeline integration:
-    - In Phase 4 (MR creation), AI fills this template as MR body
+    - In Phase 4 (PR creation), AI fills this template as PR body
     - "Spec Compliance Checklist" reflects Check 3.5 traceability results
     - "Testing" reflects Check 3 (test/lint/build) results
     - "For Reviewers" is the final checklist for Human reviewers
-    - spec-check CI job auto-posts additional validation comments on this MR
+    - spec-check CI job auto-posts additional validation comments on this PR
 
-  Deployment: Copy to .gitlab/merge_request_templates/merge_request_template.md in your project
+  Deployment: Copy to .github/pull_request_template.md in your project
 ============================================================================= -->
 
 ## Related Spec & Plan
@@ -44,8 +44,8 @@
 
 ## Description
 
-<!-- Briefly describe the purpose and changes of this MR -->
-<!-- 이 MR의 목적과 변경 내용을 간략히 설명하세요 -->
+<!-- Briefly describe the purpose and changes of this PR -->
+<!-- 이 PR의 목적과 변경 내용을 간략히 설명하세요 -->
 
 ## Changes
 

@@ -1,0 +1,223 @@
+# Rollback
+#
+# 배포 위치: 프로젝트의 .github/workflows/rollback.yml 에 복사하여 사용
+
+name: Rollback
+
+on:
+  # [한글] 수동 트리거 전용 워크플로우
+  # [English] Manual trigger only
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Rollback reason (brief description)"
+        required: true
+        default: ""
+      level:
+        description: "Rollback level: L1-quick-revert | L2-release-revert | L3-hotfix-forward"
+        required: true
+        default: "L1-quick-revert"
+      target_version:
+        description: "Target version for L2 (e.g. 1.1.0) — leave blank for L1/L3"
+        required: false
+        default: ""
+
+# [한글] 동시 롤백 방지
+# [English] Prevent concurrent rollbacks
+concurrency:
+  group: rollback
+  cancel-in-progress: false
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: L1 Quick Revert
+  # ─────────────────────────────────────────────
+  rollback-l1:
+    name: L1 Quick Revert
+    runs-on: ubuntu-latest
+    if: github.event.inputs.level == 'L1-quick-revert'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      REASON: ${{ github.event.inputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: main
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Revert latest commit on main
+        run: |
+          git fetch origin main
+          git checkout main
+
+          COMMIT=$(git rev-parse HEAD)
+          git revert --no-edit "$COMMIT"
+          git push origin main
+
+          echo "## L1 Quick Revert Complete"
+          echo "Reverted commit: $COMMIT"
+          echo "Reason: ${REASON}"
+
+  # ─────────────────────────────────────────────
+  # Job 2: L2 Release Revert
+  # ─────────────────────────────────────────────
+  rollback-l2:
+    name: L2 Release Revert
+    runs-on: ubuntu-latest
+    if: github.event.inputs.level == 'L2-release-revert'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      REASON: ${{ github.event.inputs.reason }}
+      TARGET_VERSION: ${{ github.event.inputs.target_version }}
+      DEPLOY_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Revert to target tag
+        run: |
+          if [ -z "$TARGET_VERSION" ]; then
+            echo "TARGET_VERSION is required for L2 rollback"
+            exit 1
+          fi
+
+          TAG="v${TARGET_VERSION}"
+          git fetch --tags origin
+
+          if ! git tag | grep -q "^${TAG}$"; then
+            echo "Tag $TAG not found. Available tags:"
+            git tag | sort -V | tail -20
+            exit 1
+          fi
+          echo "Target tag $TAG found"
+
+          git fetch origin main
+          git checkout main
+
+          TARGET_SHA=$(git rev-parse "$TAG")
+          CURRENT_SHA=$(git rev-parse HEAD)
+
+          # [한글] 대상 태그까지 revert
+          # [English] Revert commits back to target tag
+          git revert --no-commit "$TARGET_SHA...$CURRENT_SHA"
+          git commit -m "revert: rollback to $TAG (L2 rollback — ${REASON})"
+          git push origin main
+
+          echo "## L2 Release Revert Complete"
+          echo "Reverted to: $TAG ($TARGET_SHA)"
+          echo "Reason: ${REASON}"
+
+      - name: Re-deploy previous version
+        run: |
+          # [한글] 이전 버전 재배포 (deployCommand 설정된 경우)
+          # [English] Re-deploy previous version (if deployCommand configured)
+          if [ ! -f "release-config.json" ]; then
+            echo "No release-config.json — skipping re-deploy"
+            exit 0
+          fi
+          DEPLOY_CMD=$(node -e "
+            try {
+              const c = require('./release-config.json');
+              process.stdout.write(c.environments?.production?.deployCommand || '');
+            } catch(e) {
+              process.stdout.write('');
+            }
+          " 2>/dev/null || echo "")
+          if [ -n "$DEPLOY_CMD" ]; then
+            echo "Re-deploying previous version..."
+            eval "$DEPLOY_CMD"
+          else
+            echo "deployCommand empty — code reverted but no re-deploy triggered"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 3: L3 Hotfix Forward
+  # ─────────────────────────────────────────────
+  rollback-l3:
+    name: L3 Hotfix Forward
+    runs-on: ubuntu-latest
+    if: github.event.inputs.level == 'L3-hotfix-forward'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      REASON: ${{ github.event.inputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Create hotfix branch
+        run: |
+          git fetch origin main
+          git checkout main
+
+          TIMESTAMP=$(date +%Y%m%d-%H%M)
+          BRANCH="hotfix/rollback-${TIMESTAMP}"
+          git checkout -b "$BRANCH"
+          git push origin "$BRANCH"
+
+          echo "## L3 Hotfix Forward — Branch Created"
+          echo ""
+          echo "**Hotfix branch**: \`$BRANCH\`"
+          echo "**Reason**: ${REASON}"
+          echo ""
+          echo "### Next Steps"
+          echo "1. Checkout \`$BRANCH\`"
+          echo "2. Apply fix"
+          echo "3. Run Forge Hotfix 플로우 (Phase 3 → Check 3 → Phase 4 PR → Phase 7)"
+
+  # ─────────────────────────────────────────────
+  # Job 4: Rollback Summary
+  # ─────────────────────────────────────────────
+  rollback-summary:
+    name: Rollback Summary
+    runs-on: ubuntu-latest
+    needs: [rollback-l1, rollback-l2, rollback-l3]
+    if: always()
+    env:
+      LEVEL: ${{ github.event.inputs.level }}
+      REASON: ${{ github.event.inputs.reason }}
+      TARGET_VERSION: ${{ github.event.inputs.target_version }}
+    steps:
+      - name: Print summary
+        run: |
+          echo "## Forge Rollback Summary"
+          echo ""
+          echo "| Item | Value |"
+          echo "|------|-------|"
+          echo "| Level | ${LEVEL} |"
+          echo "| Reason | ${REASON} |"
+          echo "| Target Version | ${TARGET_VERSION:-N/A} |"
+          echo ""
+          echo "See individual job logs for detailed results."
