@@ -1,0 +1,10 @@
+{
+  "image": "/home/damools/forge-outputs/02-product/projects/baduki/screenshots/casino-gambling-concept_1/Nut_June_04.jpg",
+  "bbox": [1878, 1925, 2070, 2098],
+  "margin": 3,
+  "bot_margin": 8,
+  "expected": {
+    "alpha_coverage_min": 0.3,
+    "tags": ["circle", "non-trapezoid", "WRONG_OBJECT", "casino-chip"]
+  }
+}

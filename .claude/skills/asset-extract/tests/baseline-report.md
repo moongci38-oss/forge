@@ -72,3 +72,16 @@ SAM이 의도한 UI(아이콘+텍스트)가 아니라 배경의 짙은 그라데
 1. **메트릭 강화부터 진행**(권장) — golden + perceptual hash 도입
 2. 사용자가 더 다양한 UI 스크린샷 제공 → fixture 확장 후 재평가
 3. v5의 적용 범위를 "사다리꼴 전용"으로 축소 명시 + 별도 직사각형 모드 추가 설계
+
+## 2026-04-12 추가 케이스
+
+### casino_chip_100 — non-trapezoid (원형 칩)
+
+- **이미지**: `forge-outputs/02-product/projects/baduki/screenshots/casino-gambling-concept_1/Nut_June_04.jpg`
+- **bbox**: `[1878, 1925, 2070, 2098]` (4167x4167 원본, 100 칩 위치)
+- **결과**: REVIEW — 출력은 보라색 평행사변형 조각 (원형 칩이 4점 사다리꼴 강제 fitting으로 왜곡됨)
+- **분류**: `WRONG_OBJECT` + `non-trapezoid` 복합. SAM이 칩 본체 대신 배경 그라데이션을 캡처한 것으로 추정됨
+- **해결 방향**: roadmap 후보 C(`--shape rect/contour` 모드) + 후보 D(SAM positive prompt) 둘 다 필요. 현 v5로는 추출 불가
+- **golden**: 미생성 (잘못된 결과를 기준으로 굳히면 안 됨)
+
+비-사다리꼴 케이스 첫 fixture로 등록 → 후보 C 구현 트리거 데이터.
