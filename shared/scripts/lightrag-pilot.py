@@ -6,14 +6,17 @@ Claude Haiku (LLM) + Gemini embedding-001 (임베딩)
 사용법:
   python3 lightrag-pilot.py index                        # 문서 인덱싱 (weekly)
   python3 lightrag-pilot.py index --context grants       # 정부과제 문서 인덱싱
+  python3 lightrag-pilot.py index --context wiki         # 20-wiki 노트 인덱싱
   python3 lightrag-pilot.py query "질문"                 # 단일 쿼리 (hybrid, weekly)
   python3 lightrag-pilot.py query "질문" hybrid --context grants  # 정부과제 쿼리
+  python3 lightrag-pilot.py query "질문" hybrid --context wiki    # 위키 노트 쿼리
   python3 lightrag-pilot.py check                        # 한국어 품질 검증 (5개 쿼리)
   python3 lightrag-pilot.py report                       # 전체 리포트 생성
 
 컨텍스트 (--context):
   weekly  — weekly-research 도메인 (기본)
   grants  — 정부과제 문서 도메인 (forge-outputs/09-grants/)
+  wiki    — 개인 지식 위키 (forge-outputs/20-wiki/, Karpathy 3-layer)
 
 환경변수:
   ANTHROPIC_API_KEY — Claude Haiku 호출용
@@ -43,16 +46,25 @@ GRANTS_PILOT_DIR = FORGE_ROOT / "shared/lightrag-grants-data"
 GRANTS_WORKING_DIR = GRANTS_PILOT_DIR / "index"
 GRANTS_DIR = FORGE_OUTPUTS / "09-grants"
 
+# wiki 컨텍스트 (Karpathy 3-layer 개인 지식 체계)
+WIKI_PILOT_DIR = FORGE_ROOT / "shared/lightrag-wiki-data"
+WIKI_WORKING_DIR = WIKI_PILOT_DIR / "index"
+WIKI_DIR = FORGE_OUTPUTS / "20-wiki"
+
 PILOT_DIR.mkdir(parents=True, exist_ok=True)
 WORKING_DIR.mkdir(parents=True, exist_ok=True)
 GRANTS_PILOT_DIR.mkdir(parents=True, exist_ok=True)
 GRANTS_WORKING_DIR.mkdir(parents=True, exist_ok=True)
+WIKI_PILOT_DIR.mkdir(parents=True, exist_ok=True)
+WIKI_WORKING_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def get_context_paths(context: str) -> tuple[Path, Path]:
     """컨텍스트별 (pilot_dir, working_dir) 반환"""
     if context == "grants":
         return GRANTS_PILOT_DIR, GRANTS_WORKING_DIR
+    if context == "wiki":
+        return WIKI_PILOT_DIR, WIKI_WORKING_DIR
     return PILOT_DIR, WORKING_DIR
 
 # ── API 키 로드 ────────────────────────────────────────────────────────────
@@ -181,6 +193,28 @@ def collect_grants_docs(grants_dir: Path, max_docs=20) -> list[dict]:
     return docs
 
 
+def collect_wiki_docs(wiki_dir: Path, max_docs=200) -> list[dict]:
+    """20-wiki 디렉토리에서 모든 노트 수집 (Karpathy 3-layer 개인 지식 체계)
+    짧은 노트도 의미 있을 수 있어 min length를 100자로 완화."""
+    docs = []
+    exclude_patterns = {"indexed"}
+
+    for md in sorted(wiki_dir.rglob("*.md"), reverse=True):
+        if any(p in md.name for p in exclude_patterns):
+            continue
+        # _meta/reviews/는 회고 문서 — 인덱싱 대상에서 제외 (개인적 감상)
+        if "_meta/reviews/" in str(md):
+            continue
+        text = md.read_text(errors="ignore").strip()
+        if len(text) < 100:
+            continue
+        docs.append({"path": str(md), "text": text})
+        if len(docs) >= max_docs:
+            break
+
+    return docs
+
+
 # ── 커맨드: index ──────────────────────────────────────────────────────────
 async def cmd_index(context: str = "weekly"):
     pilot_dir, working_dir = get_context_paths(context)
@@ -188,6 +222,9 @@ async def cmd_index(context: str = "weekly"):
     if context == "grants":
         print(f"[{datetime.now().strftime('%H:%M:%S')}] [GRANTS] 정부과제 문서 수집 중...")
         docs = collect_grants_docs(GRANTS_DIR, max_docs=20)
+    elif context == "wiki":
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] [WIKI] 20-wiki 노트 수집 중...")
+        docs = collect_wiki_docs(WIKI_DIR, max_docs=200)
     else:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] 문서 수집 중...")
         docs = collect_docs(max_docs=10)  # 파일럿: 10개로 충분 (rate limit 대응)
@@ -392,8 +429,8 @@ def main():
         if idx + 1 < len(args):
             context = args[idx + 1]
             args = args[:idx] + args[idx + 2:]
-    if context not in ("weekly", "grants"):
-        print(f"알 수 없는 context: {context} (weekly|grants)")
+    if context not in ("weekly", "grants", "wiki"):
+        print(f"알 수 없는 context: {context} (weekly|grants|wiki)")
         sys.exit(1)
 
     if cmd == "index":

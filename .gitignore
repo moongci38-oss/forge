@@ -77,3 +77,8 @@ shared/scripts/yt-analyzer/
 # === Script logs (per-user) ===
 shared/scripts/daily-review/logs/
 shared/scripts/weekly-research/logs/
+
+# === LightRAG indexes (per-user, large binary state) ===
+shared/lightrag-pilot-data/
+shared/lightrag-grants-data/
+shared/lightrag-wiki-data/
