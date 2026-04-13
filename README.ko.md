@@ -133,6 +133,10 @@ forge/
 | Draw.io | 다이어그램 생성 | - |
 | Magic UI | UI 컴포넌트 | - |
 
+### 자체 구축: `forge-tools` MCP 서버
+
+Forge는 자체 MCP 서버(`shared/mcp/forge-tools-server.py`, FastMCP 3.2.3)도 함께 제공한다. 파일 I/O, Git, RAG 검색, 웹 검색/fetch, Notion, Telegram, 헬스 모니터링을 아우르는 14종 도구를 노출하며, 로컬에서는 `http://localhost:8765/mcp`로 실행되고 영구 Cloudflare 터널을 통해 `https://manager-agent.lumir-ai.com/mcp`에서 클라우드 **Managed Agents**에 연결된다. 도구 전체 목록, 인프라, 운영 제약은 아래 [Managed Agents](#managed-agents-클라우드-자동화) 섹션 참조.
+
 > 프로젝트별 MCP(sequential-thinking, hwpx 등)는 각 프로젝트의 `.mcp.json`에서 관리합니다.
 
 ## Managed Agents (클라우드 자동화)

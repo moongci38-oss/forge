@@ -133,6 +133,10 @@ forge/
 | Draw.io | Diagram generation | - |
 | Magic UI | UI components | - |
 
+### Self-Hosted: `forge-tools` MCP Server
+
+Forge also ships its own MCP server (`shared/mcp/forge-tools-server.py`, FastMCP 3.2.3) that exposes 14 tools covering file I/O, Git, RAG search, web search/fetch, Notion, Telegram, and health monitoring. It runs locally on `http://localhost:8765/mcp` and is exposed to cloud-hosted **Managed Agents** through a permanent Cloudflare tunnel at `https://manager-agent.lumir-ai.com/mcp`. See the [Managed Agents](#managed-agents-cloud-automation) section below for the full tool list, infrastructure, and operational constraints.
+
 > Project-specific MCPs (sequential-thinking, hwpx, etc.) are managed in each project's `.mcp.json`.
 
 ## Managed Agents (Cloud Automation)
