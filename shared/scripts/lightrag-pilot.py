@@ -195,7 +195,8 @@ def collect_grants_docs(grants_dir: Path, max_docs=20) -> list[dict]:
 
 def collect_wiki_docs(wiki_dir: Path, max_docs=200) -> list[dict]:
     """20-wiki 디렉토리에서 모든 노트 수집 (Karpathy 3-layer 개인 지식 체계)
-    짧은 노트도 의미 있을 수 있어 min length를 100자로 완화."""
+    짧은 노트도 의미 있을 수 있어 min length를 100자로 완화.
+    mtime 포함 — 수정된 파일도 재인덱싱 가능."""
     docs = []
     exclude_patterns = {"indexed"}
 
@@ -208,7 +209,7 @@ def collect_wiki_docs(wiki_dir: Path, max_docs=200) -> list[dict]:
         text = md.read_text(errors="ignore").strip()
         if len(text) < 100:
             continue
-        docs.append({"path": str(md), "text": text})
+        docs.append({"path": str(md), "text": text, "mtime": md.stat().st_mtime})
         if len(docs) >= max_docs:
             break
 
@@ -230,36 +231,60 @@ async def cmd_index(context: str = "weekly"):
         docs = collect_docs(max_docs=10)  # 파일럿: 10개로 충분 (rate limit 대응)
     print(f"  → {len(docs)}개 문서 수집완료")
 
+    # indexed.json 스키마: {"path": mtime} (신규) 또는 ["path", ...] (구버전, 자동 마이그레이션)
     indexed_file = pilot_dir / "indexed.json"
-    already_indexed = set()
+    already_indexed: dict[str, float] = {}
     if indexed_file.exists():
-        already_indexed = set(json.loads(indexed_file.read_text()))
+        try:
+            data = json.loads(indexed_file.read_text())
+            if isinstance(data, list):
+                # 구버전 → 마이그레이션 (mtime=0으로 처리하여 다음 인덱싱에 모두 재처리)
+                already_indexed = {p: 0.0 for p in data}
+                print("  → 구버전 indexed.json 감지 — mtime 추적으로 마이그레이션")
+            elif isinstance(data, dict):
+                already_indexed = {k: float(v) for k, v in data.items()}
+        except (json.JSONDecodeError, ValueError) as e:
+            print(f"  → indexed.json 파싱 실패 ({e}) — 빈 셋에서 시작")
 
-    new_docs = [d for d in docs if d["path"] not in already_indexed]
-    if not new_docs:
-        print("  → 모든 문서가 이미 인덱스됨")
+    # 신규 또는 수정된 파일만 처리 (mtime 비교)
+    new_docs = []
+    modified_docs = []
+    for d in docs:
+        doc_mtime = d.get("mtime", 0.0)
+        if d["path"] not in already_indexed:
+            new_docs.append(d)
+        elif doc_mtime > already_indexed[d["path"]] + 1.0:  # 1초 마진
+            modified_docs.append(d)
+
+    todo = new_docs + modified_docs
+    if not todo:
+        print("  → 모든 문서가 최신 상태")
         return
 
-    print(f"  → {len(new_docs)}개 신규 문서 인덱싱 시작")
+    if new_docs:
+        print(f"  → {len(new_docs)}개 신규 문서 인덱싱")
+    if modified_docs:
+        print(f"  → {len(modified_docs)}개 수정 문서 재인덱싱")
     rag = await get_rag(working_dir)
 
     t0 = time.time()
     mem_before = _get_mem_mb()
 
-    for i, doc in enumerate(new_docs, 1):
+    for i, doc in enumerate(todo, 1):
         path_short = Path(doc["path"]).name
-        print(f"  [{i:02d}/{len(new_docs)}] {path_short}")
+        kind = "(modified)" if doc in modified_docs else "(new)"
+        print(f"  [{i:02d}/{len(todo)}] {path_short} {kind}")
         try:
             await rag.ainsert(doc["text"])
-            already_indexed.add(doc["path"])
+            already_indexed[doc["path"]] = doc.get("mtime", time.time())
         except Exception as e:
             print(f"    WARNING: 인덱싱 실패: {e}")
 
     elapsed = time.time() - t0
     mem_after = _get_mem_mb()
 
-    indexed_file.write_text(json.dumps(sorted(already_indexed), indent=2))
-    print(f"\nOK 인덱싱 완료: {len(new_docs)}개 / {elapsed:.1f}s / RAM {mem_before}→{mem_after}MB")
+    indexed_file.write_text(json.dumps(already_indexed, indent=2))
+    print(f"\nOK 인덱싱 완료: {len(todo)}개 / {elapsed:.1f}s / RAM {mem_before}→{mem_after}MB")
 
 
 # ── 커맨드: query ──────────────────────────────────────────────────────────
