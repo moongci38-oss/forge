@@ -33,6 +33,8 @@ ALLOWED_SCRIPTS = {
     "md-to-docx.py": FORGE_ROOT / "shared/scripts/md-to-docx.py",
     "rag-search.py": FORGE_ROOT / "shared/scripts/rag/search.py",
     "workspace-build.sh": FORGE_ROOT / "shared/scripts/rag/workspace-build.sh",
+    "lightrag-pilot.py": FORGE_ROOT / "shared/scripts/lightrag-pilot.py",
+    "wiki-sync.sh": FORGE_ROOT / "shared/scripts/wiki-sync.sh",
 }
 
 # 접근 금지 경로
@@ -239,13 +241,38 @@ def run_script(script_name: str, args: list[str] = []) -> str:
 
 @mcp.tool()
 def rag_search(query: str, top_k: int = 5) -> str:
-    """forge-outputs RAG 하이브리드 검색.
+    """forge-outputs RAG 하이브리드 검색 (워크스페이스 RAG, 벡터+BM25).
+
+    일반 검색·"어디 있었지?" 류 질문에 빠르게 답한다. 6K+ 문서 광범위 인덱스.
 
     Args:
         query: 검색 쿼리
         top_k: 반환할 결과 수 (기본 5)
     """
     return run_script("rag-search.py", [query, "--top-k", str(top_k)])
+
+
+@mcp.tool()
+def wiki_search(query: str, mode: str = "hybrid") -> str:
+    """Karpathy 3-layer 개인 지식 위키 검색 (LightRAG, 그래프 기반).
+
+    개념 간 관계, "왜/어떻게" 류 심층 질문에 강함. forge-outputs/20-wiki의
+    Wiki Layer만 검색하며, 엔티티+관계 그래프를 활용해 추론한다.
+
+    rag_search와 차이:
+    - rag_search: 광범위(6K 문서), 빠른 단순 검색
+    - wiki_search: 좁은 셋(수백 노트), 그래프 기반 깊은 추론
+
+    Args:
+        query: 검색 쿼리 (한국어 권장)
+        mode: 'local' | 'global' | 'hybrid' (기본 hybrid)
+    """
+    if mode not in ("local", "global", "hybrid"):
+        return f"ERROR: mode must be local/global/hybrid, got '{mode}'"
+    return run_script(
+        "lightrag-pilot.py",
+        ["query", query, mode, "--context", "wiki"],
+    )
 
 
 @mcp.tool()
