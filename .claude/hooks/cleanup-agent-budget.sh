@@ -3,9 +3,16 @@
 # 세션 종료 시 agent-budget 카운트/에러 파일을 정리하고 요약을 usage.log에 기록
 
 BUDGET_DIR="${PWD}/.claude/agent-budget"
-SESSION="${CLAUDE_SESSION_ID:-unknown}"
 TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 LOG_FILE="${PWD}/.claude/usage.log"
+
+# stdin Hook JSON에서 session_id 추출
+HOOK_JSON=""
+if [ ! -t 0 ]; then
+  HOOK_JSON=$(cat 2>/dev/null || true)
+fi
+SESSION=$(echo "$HOOK_JSON" | jq -r '.session_id // empty' 2>/dev/null)
+[ -z "$SESSION" ] && SESSION="${CLAUDE_SESSION_ID:-unknown}"
 
 if [ ! -d "$BUDGET_DIR" ]; then
   exit 0

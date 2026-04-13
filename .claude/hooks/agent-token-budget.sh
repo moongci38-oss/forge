@@ -13,9 +13,21 @@
 #   TOOL_USE_RESULT — 도구 실행 결과 (stdin)
 
 BUDGET_DIR="${PWD}/.claude/agent-budget"
-SESSION="${CLAUDE_SESSION_ID:-unknown}"
-TOOL_NAME="${CLAUDE_TOOL_NAME:-unknown}"
 TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# stdin에서 Hook JSON 읽기 (session_id, tool_name, tool_response)
+HOOK_JSON=""
+if [ ! -t 0 ]; then
+  HOOK_JSON=$(cat 2>/dev/null || true)
+fi
+
+# session_id 추출 (Hook JSON 우선, env fallback)
+SESSION=$(echo "$HOOK_JSON" | jq -r '.session_id // empty' 2>/dev/null)
+[ -z "$SESSION" ] && SESSION="${CLAUDE_SESSION_ID:-unknown}"
+
+# 도구명 추출 (Hook JSON 우선, env fallback)
+TOOL_NAME=$(echo "$HOOK_JSON" | jq -r '.tool_name // empty' 2>/dev/null)
+[ -z "$TOOL_NAME" ] && TOOL_NAME="${CLAUDE_TOOL_NAME:-unknown}"
 
 # 예산 설정 (도구 호출 횟수 기준)
 BUDGET_SEARCH=100      # 탐색/검색 에이전트
@@ -43,11 +55,8 @@ else
 fi
 echo "$COUNT" > "$COUNT_FILE"
 
-# stdin에서 도구 결과 읽기 (에러 감지용, 최대 500자)
-RESULT=""
-if [ ! -t 0 ]; then
-  RESULT=$(head -c 500 2>/dev/null || true)
-fi
+# Hook JSON에서 tool_response 추출 (에러 감지용, 최대 500자)
+RESULT=$(echo "$HOOK_JSON" | jq -r '.tool_response // .tool_input // empty' 2>/dev/null | head -c 500)
 
 # 에러 패턴 감지
 if echo "$RESULT" | grep -qiE "(error|failed|exception|traceback|FAIL)" 2>/dev/null; then
