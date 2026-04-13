@@ -82,3 +82,6 @@ shared/scripts/weekly-research/logs/
 shared/lightrag-pilot-data/
 shared/lightrag-grants-data/
 shared/lightrag-wiki-data/
+
+# CRITICAL: forge-outputs/ is sibling, never commit content under forge/forge-outputs/
+/forge-outputs/
