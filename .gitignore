@@ -82,6 +82,12 @@ shared/scripts/weekly-research/logs/
 shared/lightrag-pilot-data/
 shared/lightrag-grants-data/
 shared/lightrag-wiki-data/
+shared/lightrag-archive-data/
+
+# Session-specific hook logs
+.claude/gate-approval.log
+.claude/override-rate.log
+.claude/security.log
 
 # CRITICAL: forge-outputs/ is sibling, never commit content under forge/forge-outputs/
 /forge-outputs/

@@ -51,12 +51,19 @@ WIKI_PILOT_DIR = FORGE_ROOT / "shared/lightrag-wiki-data"
 WIKI_WORKING_DIR = WIKI_PILOT_DIR / "index"
 WIKI_DIR = FORGE_OUTPUTS / "20-wiki"
 
+# archive 컨텍스트 (D/E 드라이브 10년 카탈로그)
+ARCHIVE_PILOT_DIR = FORGE_ROOT / "shared/lightrag-archive-data"
+ARCHIVE_WORKING_DIR = ARCHIVE_PILOT_DIR / "index"
+ARCHIVE_DIR = FORGE_OUTPUTS / "20-wiki" / "30-archive"
+
 PILOT_DIR.mkdir(parents=True, exist_ok=True)
 WORKING_DIR.mkdir(parents=True, exist_ok=True)
 GRANTS_PILOT_DIR.mkdir(parents=True, exist_ok=True)
 GRANTS_WORKING_DIR.mkdir(parents=True, exist_ok=True)
 WIKI_PILOT_DIR.mkdir(parents=True, exist_ok=True)
 WIKI_WORKING_DIR.mkdir(parents=True, exist_ok=True)
+ARCHIVE_PILOT_DIR.mkdir(parents=True, exist_ok=True)
+ARCHIVE_WORKING_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def get_context_paths(context: str) -> tuple[Path, Path]:
@@ -65,6 +72,8 @@ def get_context_paths(context: str) -> tuple[Path, Path]:
         return GRANTS_PILOT_DIR, GRANTS_WORKING_DIR
     if context == "wiki":
         return WIKI_PILOT_DIR, WIKI_WORKING_DIR
+    if context == "archive":
+        return ARCHIVE_PILOT_DIR, ARCHIVE_WORKING_DIR
     return PILOT_DIR, WORKING_DIR
 
 # ── API 키 로드 ────────────────────────────────────────────────────────────
@@ -196,15 +205,20 @@ def collect_grants_docs(grants_dir: Path, max_docs=20) -> list[dict]:
 def collect_wiki_docs(wiki_dir: Path, max_docs=200) -> list[dict]:
     """20-wiki 디렉토리에서 모든 노트 수집 (Karpathy 3-layer 개인 지식 체계)
     짧은 노트도 의미 있을 수 있어 min length를 100자로 완화.
-    mtime 포함 — 수정된 파일도 재인덱싱 가능."""
+    mtime 포함 — 수정된 파일도 재인덱싱 가능.
+    30-archive/ 는 별도 archive context에서 처리 — wiki에서 제외."""
     docs = []
     exclude_patterns = {"indexed"}
 
     for md in sorted(wiki_dir.rglob("*.md"), reverse=True):
         if any(p in md.name for p in exclude_patterns):
             continue
+        s = str(md)
         # _meta/reviews/는 회고 문서 — 인덱싱 대상에서 제외 (개인적 감상)
-        if "_meta/reviews/" in str(md):
+        if "_meta/reviews/" in s:
+            continue
+        # 30-archive/ 는 archive context 전담
+        if "/30-archive/" in s:
             continue
         text = md.read_text(errors="ignore").strip()
         if len(text) < 100:
@@ -213,6 +227,21 @@ def collect_wiki_docs(wiki_dir: Path, max_docs=200) -> list[dict]:
         if len(docs) >= max_docs:
             break
 
+    return docs
+
+
+def collect_archive_docs(archive_dir: Path, max_docs=500) -> list[dict]:
+    """30-archive 카탈로그 카드 수집. 카드는 짧아도(~50자) 의미 있음(경로/카테고리)."""
+    docs = []
+    for md in sorted(archive_dir.rglob("*.md"), reverse=True):
+        if md.name == "exclusions.md":
+            continue
+        text = md.read_text(errors="ignore").strip()
+        if len(text) < 30:
+            continue
+        docs.append({"path": str(md), "text": text, "mtime": md.stat().st_mtime})
+        if len(docs) >= max_docs:
+            break
     return docs
 
 
@@ -226,6 +255,9 @@ async def cmd_index(context: str = "weekly"):
     elif context == "wiki":
         print(f"[{datetime.now().strftime('%H:%M:%S')}] [WIKI] 20-wiki 노트 수집 중...")
         docs = collect_wiki_docs(WIKI_DIR, max_docs=200)
+    elif context == "archive":
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] [ARCHIVE] 30-archive 카탈로그 카드 수집 중...")
+        docs = collect_archive_docs(ARCHIVE_DIR, max_docs=500)
     else:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] 문서 수집 중...")
         docs = collect_docs(max_docs=10)  # 파일럿: 10개로 충분 (rate limit 대응)
@@ -454,8 +486,8 @@ def main():
         if idx + 1 < len(args):
             context = args[idx + 1]
             args = args[:idx] + args[idx + 2:]
-    if context not in ("weekly", "grants", "wiki"):
-        print(f"알 수 없는 context: {context} (weekly|grants|wiki)")
+    if context not in ("weekly", "grants", "wiki", "archive"):
+        print(f"알 수 없는 context: {context} (weekly|grants|wiki|archive)")
         sys.exit(1)
 
     if cmd == "index":

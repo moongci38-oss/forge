@@ -1,0 +1,54 @@
+# Archive indexer exclusion patterns (matched against path basename OR full path substring)
+# One pattern per line. Lines starting with # are comments.
+# Prefix "path:" = substring match against full path. Otherwise matches basename (glob-style).
+
+# Windows system files (permission-denied / garbage)
+DUMP*.tmp
+DumpStack.log
+DumpStack.log.tmp
+pagefile.sys
+swapfile.sys
+hiberfil.sys
+$RECYCLE.BIN
+$AV_ASW
+System Volume Information
+Recovery
+Config.Msi
+
+# VCS internals
+path:/.git/
+path:/.hg/
+path:/.svn/
+
+# Dev deps (treat as regenerable)
+node_modules
+bower_components
+vendor
+__pycache__
+.venv
+venv
+.next
+.nuxt
+dist
+build
+target
+
+# IDE/editor garbage
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Already-managed items (don't re-archive what vault is)
+forge-vault
+
+# Entertainment media (user excluded 2026-04-13)
+*영화*
+*드라마*
+*예능*
+동영상_자동화_자료
+Movies
+movies
+Drama
+drama
