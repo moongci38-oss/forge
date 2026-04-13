@@ -137,9 +137,11 @@ forge/
 
 ## Managed Agents (Cloud Automation)
 
-Anthropic-hosted agents that run autonomously — no Claude Code session required.
+Anthropic-hosted agents that run autonomously — no Claude Code session required. Built on a FastMCP 3.2.3 server exposing 14 tools to cloud agents, proxied through a permanent Cloudflare endpoint.
 
 **MCP Server:** `https://manager-agent.lumir-ai.com/mcp` (permanent, Cloudflare-proxied)
+
+### Registered Agents
 
 | Agent | Purpose |
 |-------|---------|
@@ -152,26 +154,57 @@ Anthropic-hosted agents that run autonomously — no Claude Code session require
 | `audit-cost` | AI cost efficiency audit (token economics, routing) |
 | `audit-human-ai` | Human-AI boundary audit (autonomy levels, escalation) |
 
+Agent IDs and environment IDs are tracked in `shared/mcp/forge-agent-ids.json`.
+
+### MCP Server Tools (14)
+
+`shared/mcp/forge-tools-server.py` exposes these tools to managed agents over `streamable-http`:
+
+| Category | Tools |
+|----------|-------|
+| File I/O | `read_file`, `write_file`, `list_files`, `append_file` |
+| Git | `git_status`, `git_commit`, `git_log` |
+| Execution | `run_script` (whitelist-gated) |
+| Search | `rag_search`, `web_search` (Brave API), `web_fetch` |
+| Monitoring | `run_health_check` |
+| Notifications | `telegram_notify` |
+| Notion | `notion_create_page` |
+
+### Running Agents
+
 ```bash
-# Run agent locally
+# Run agent locally (streams output, waits for completion)
 python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
+python3 shared/scripts/run-managed-agent.py weekly-research
 python3 shared/scripts/run-managed-agent.py system-audit
 
-# MCP service management (WSL local)
-forge-mcp-service.sh start|stop|restart|status
+# MCP service management (WSL local, tmux-backed)
+shared/scripts/forge-mcp-service.sh start|stop|restart|status
+shared/scripts/forge-mcp-service.sh update-agents   # refresh agent MCP URL only
 ```
 
-**Telegram Command Server** (`shared/scripts/telegram-command-server.py`) runs on the remote server (183.111.8.37), enabling agent execution from Telegram without Claude Code:
-- `run <agent>` — trigger any agent remotely
+### Telegram Command Server
+
+`shared/scripts/telegram-command-server.py` runs on the remote server and lets you trigger agents from Telegram without opening Claude Code:
+
+- `run <agent>` — trigger any registered agent remotely
 - `status` — check server status
 - `agents` — list available agents
 
-**Infrastructure:**
-- Remote server: `manager-agent.lumir-ai.com` (Ubuntu 22.04)
-- Nginx reverse proxy → port 8765 (FastMCP)
+### Infrastructure
+
+- Remote server: `manager-agent.lumir-ai.com` (Ubuntu 22.04, 183.111.8.37)
+- Nginx reverse proxy → port 8765 (FastMCP, `/mcp` endpoint)
 - Telegram command server: `tmux forge-telegram` session
 - MCP server: `tmux forge-mcp` session
 - `PERMANENT_MCP_URL` in `.env` → agents keep the same URL across restarts
+
+### Operational Constraints
+
+1. **`permission_policy: always_allow` is mandatory** — the default `always_ask` blocks MCP tool use indefinitely (no approver in cloud runs).
+2. **FastMCP ≥ 3.2.3 transport** — SSE unsupported; use `streamable-http` only. Client URL: `http://localhost:8765/mcp` or `https://manager-agent.lumir-ai.com/mcp`.
+3. **Tool name sync** — agent system prompts (SKILL.md) must match actual MCP tool names exactly, or `tool not found` errors will occur. Verify with `mcp list-tools` before re-registering.
+4. **`BRAVE_API_KEY` must be unquoted** in `.env` — quoted values are parsed literally and cause Brave API 401.
 
 ## CLI Scripts
 

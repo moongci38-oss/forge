@@ -137,9 +137,11 @@ forge/
 
 ## Managed Agents (클라우드 자동화)
 
-Claude Code 세션 없이 자율 실행되는 Anthropic 호스팅 에이전트.
+Claude Code 세션 없이 자율 실행되는 Anthropic 호스팅 에이전트. FastMCP 3.2.3 서버가 14종 도구를 클라우드 에이전트에게 노출하고, Cloudflare 영구 엔드포인트로 프록시된다.
 
 **MCP 서버:** `https://manager-agent.lumir-ai.com/mcp` (영구 URL, Cloudflare 프록시)
+
+### 등록된 에이전트
 
 | 에이전트 | 용도 |
 |---------|------|
@@ -152,26 +154,57 @@ Claude Code 세션 없이 자율 실행되는 Anthropic 호스팅 에이전트.
 | `audit-cost` | AI 비용 효율 감사 (토큰 경제, 라우팅) |
 | `audit-human-ai` | Human-AI 경계 설계 감사 (자율성 레벨, 에스컬레이션) |
 
+Agent ID 및 환경 ID는 `shared/mcp/forge-agent-ids.json`에서 관리.
+
+### MCP 서버 도구 (14종)
+
+`shared/mcp/forge-tools-server.py`가 `streamable-http`로 다음 도구를 노출한다:
+
+| 카테고리 | 도구 |
+|---------|------|
+| 파일 I/O | `read_file`, `write_file`, `list_files`, `append_file` |
+| Git | `git_status`, `git_commit`, `git_log` |
+| 실행 | `run_script` (화이트리스트 기반) |
+| 검색 | `rag_search`, `web_search` (Brave API), `web_fetch` |
+| 모니터링 | `run_health_check` |
+| 알림 | `telegram_notify` |
+| Notion | `notion_create_page` |
+
+### 에이전트 실행
+
 ```bash
-# 로컬에서 에이전트 실행
+# 로컬에서 에이전트 실행 (스트리밍 + 완료 대기)
 python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
+python3 shared/scripts/run-managed-agent.py weekly-research
 python3 shared/scripts/run-managed-agent.py system-audit
 
-# MCP 서비스 관리 (WSL 로컬)
-forge-mcp-service.sh start|stop|restart|status
+# MCP 서비스 관리 (WSL 로컬, tmux 기반)
+shared/scripts/forge-mcp-service.sh start|stop|restart|status
+shared/scripts/forge-mcp-service.sh update-agents   # 에이전트 MCP URL만 갱신
 ```
 
-**Telegram 명령 서버** (`shared/scripts/telegram-command-server.py`)가 원격 서버(183.111.8.37)에서 실행되어 Claude Code 없이도 텔레그램으로 에이전트 실행 가능:
+### Telegram 명령 서버
+
+`shared/scripts/telegram-command-server.py`가 원격 서버에서 실행되어 Claude Code 없이도 텔레그램으로 에이전트 실행 가능:
+
 - `run <에이전트>` — 에이전트 원격 실행
 - `status` — 서버 상태 확인
 - `agents` — 에이전트 목록
 
-**인프라:**
-- 원격 서버: `manager-agent.lumir-ai.com` (Ubuntu 22.04)
-- Nginx 리버스 프록시 → 포트 8765 (FastMCP)
+### 인프라
+
+- 원격 서버: `manager-agent.lumir-ai.com` (Ubuntu 22.04, 183.111.8.37)
+- Nginx 리버스 프록시 → 포트 8765 (FastMCP, `/mcp` 엔드포인트)
 - Telegram 명령 서버: `tmux forge-telegram` 세션
 - MCP 서버: `tmux forge-mcp` 세션
 - `.env`의 `PERMANENT_MCP_URL` → 재시작 시에도 에이전트 URL 고정
+
+### 운영 제약
+
+1. **`permission_policy: always_allow` 필수** — 기본값 `always_ask`는 클라우드 실행 시 승인자가 없어 MCP 도구 사용을 영구 블로킹한다.
+2. **FastMCP ≥ 3.2.3 transport** — SSE 미지원. `streamable-http`만 사용. 클라이언트 URL: `http://localhost:8765/mcp` 또는 `https://manager-agent.lumir-ai.com/mcp`.
+3. **도구명 동기화** — 에이전트 system prompt(SKILL.md)의 도구명이 MCP 서버와 불일치하면 `tool not found` 오류. 재등록 전 `mcp list-tools`로 확인.
+4. **`BRAVE_API_KEY` 따옴표 금지** — `.env`에 따옴표 포함 시 값에 포함되어 Brave API 401 발생.
 
 ## CLI 스크립트
 
