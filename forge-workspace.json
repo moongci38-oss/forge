@@ -67,6 +67,26 @@
       "projectType": "game",
       "projectScale": "Standard",
       "description": "맞고 Unity 6 클라 (이주 슬롯, 추후 통합 클라로 머지)"
+    },
+    "pingame-server-legacy": {
+      "devTarget": "/home/damools/mywsl_workspace/pingame-server-legacy",
+      "symlinkBase": "docs/planning/active/forge/pingame-server-legacy",
+      "type": "web",
+      "description": "레거시 보드게임 서버 4개(baduggi/matgo/web_site/relay) + admin(PHP). 읽기 전용 참조용, node_modules 제외 복사본"
+    },
+    "baduki-client-legacy": {
+      "devTarget": "/mnt/e/new_workspace/baduki-client-legacy",
+      "symlinkBase": "docs/planning/active/forge/baduki-client-legacy",
+      "projectType": "game",
+      "projectScale": "Standard",
+      "description": "레거시 바둑이 Unity 2019.2 클라 (Library/Temp 제외 복사본, 자산 import 소스)"
+    },
+    "matgo-client-legacy": {
+      "devTarget": "/mnt/e/new_workspace/matgo-client-legacy",
+      "symlinkBase": "docs/planning/active/forge/matgo-client-legacy",
+      "projectType": "game",
+      "projectScale": "Standard",
+      "description": "레거시 맞고 Unity 2019.4 클라 (Library/Temp 제외 복사본, 자산 import 소스)"
     }
   },
   "notionDBs": {
