@@ -47,6 +47,26 @@
       "symlinkBase": "docs/planning/active/forge/api",
       "type": "web",
       "description": "Python FastAPI 백엔드 프로젝트"
+    },
+    "pingame-server": {
+      "devTarget": "/home/damools/mywsl_workspace/pingame-server",
+      "symlinkBase": "docs/planning/active/forge/pingame-server",
+      "type": "web",
+      "description": "pingame 다게임 서버 (Colyseus + NestJS, baduki/matgo/poker/sutda/holdem 통합)"
+    },
+    "baduki-client": {
+      "devTarget": "/mnt/e/new_workspace/baduki-client",
+      "symlinkBase": "docs/planning/active/forge/baduki-client",
+      "projectType": "game",
+      "projectScale": "Standard",
+      "description": "바둑이 Unity 6 클라 (이주 슬롯, 추후 통합 클라로 머지)"
+    },
+    "matgo-client": {
+      "devTarget": "/mnt/e/new_workspace/matgo-client",
+      "symlinkBase": "docs/planning/active/forge/matgo-client",
+      "projectType": "game",
+      "projectScale": "Standard",
+      "description": "맞고 Unity 6 클라 (이주 슬롯, 추후 통합 클라로 머지)"
     }
   },
   "notionDBs": {
