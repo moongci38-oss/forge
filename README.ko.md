@@ -285,6 +285,7 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/yt` | YouTube 영상 분석: 트랜스크립트 추출, 구조화 요약, Notion 업로드 |
 | `/yt-analyze` | 동일 클러스터 내 다중 영상 교차 비교 분석 (합의점/분기점/인사이트) |
 | `/rag-search` | forge-outputs 문서 하이브리드 벡터+BM25 의미 기반 검색 |
+| `/wiki-sync` | Karpathy 3-layer(Raw→Wiki→Meta) 추출 워크플로우. Raw 문서에서 Obsidian vault로 업데이트를 제안하고 Human 승인 후 반영 |
 | `/learn` | 세션 간 학습을 learnings.jsonl에 축적하고 다음 세션에서 자동 참조 |
 | `/clip` | 링크 저장 및 분석 |
 | `/content-creator` | SEO 최적화 마케팅 콘텐츠 생성 (블로그, SNS, 콘텐츠 캘린더, 브랜드 보이스) |
@@ -505,6 +506,72 @@ cp -r ~/OpenSpace/openspace/host_skills/skill-discovery/ ~/forge/.claude/skills/
 | RAG `OPENAI_API_KEY 미설정` | `~/forge/.env` 키 확인 |
 | OpenSpace MCP 연결 안 됨 | `/clear` 후 재시작. `.mcp.json` 경로 확인 |
 | `openspace-mcp: command not found` | `source ~/OpenSpace/.venv/bin/activate` 확인 |
+
+---
+
+### Obsidian 지식 위키 (`/wiki-sync`)
+
+Andrej Karpathy의 [LLM Wiki 패턴](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)을 Claude Code + Obsidian으로 구현한 **compounding 지식 베이스**. Raw 소스(리서치, 영상 분석, 일간/주간 리포트)를 AI가 추출하여 Obsidian vault의 영구 노트로 Human 승인 후 병합합니다. WSL ↔ Obsidian 양방향 동기화, LightRAG 자동 재인덱싱, Git을 통한 모바일 접근을 지원합니다.
+
+**아키텍처 (3-layer):**
+
+```
+Raw (forge-outputs/01-research/) → Wiki (forge-vault/concepts,tools,topics,people/) → Meta (_meta/MOC.md, questions.md)
+```
+
+```bash
+# 1. Obsidian 데스크톱 설치
+#    https://obsidian.md  →  "Open folder as Vault"  →  /mnt/e/forge-vault 선택
+#    (WSL 사용자는 E:\forge-vault 권장, Linux는 임의 경로 가능)
+
+# 2. Vault 레포 클론 (GitHub 공개 미러)
+git clone git@github.com:moongci38-oss/forge-vault.git /mnt/e/forge-vault
+
+# 3. forge-outputs 미러 확인
+ls ~/forge-outputs/20-wiki/
+# → CLAUDE.md, README.md, concepts/, tools/, topics/, people/, _meta/
+
+# 4. 동기화 watcher 시작 (양방향 rsync + 30초 디바운스 LightRAG 재인덱싱 + 5분 자동 git push)
+bash ~/forge/shared/scripts/wiki-sync.sh --watch
+# 로그: /tmp/wiki-sync.log, /tmp/wiki-index.log, /tmp/wiki-push.log
+# 일회성 동기화 (watcher 없음): bash ~/forge/shared/scripts/wiki-sync.sh
+
+# 5. (선택) systemd/tmux로 상시 동작 서비스 등록
+#    watch-mode 옵션은 shared/scripts/wiki-sync.sh 헤더 참조
+
+# 6. LightRAG wiki 인덱스 최초 빌드
+python3 ~/forge/shared/scripts/lightrag-pilot.py index --context wiki
+
+# 7. 자연어 쿼리
+python3 ~/forge/shared/scripts/lightrag-pilot.py query "하네스 엔지니어링이 뭐야" hybrid --context wiki
+```
+
+**Claude Code에서 사용:**
+
+```
+/wiki-sync                           # 신규 Raw 문서 스캔 → 위키 업데이트 제안 → Human 승인 → 반영 + 재인덱싱
+/rag-search --context wiki {질의}     # 위키만 의미 검색
+```
+
+**건강 검진 (매월 1일 09:00 KST 자동):**
+
+```bash
+python3 ~/forge/shared/scripts/wiki-sync-lint.py      # 미승격 Raw 카운트
+python3 ~/forge/shared/scripts/wiki-health-lint.py    # broken/orphan/stub 리포트
+```
+
+| 파일 | 역할 |
+|------|------|
+| `forge-outputs/20-wiki/README.md` | Vault 개요 + Karpathy 3-layer 원칙 |
+| `forge-outputs/20-wiki/CLAUDE.md` | Schema (AI 유지보수 규칙, 자동 로드) |
+| `forge-outputs/20-wiki/_meta/context.md` | 사업 맥락 (Track A/B/C) — 모든 노트 callout 기준 |
+| `forge-outputs/20-wiki/_meta/index.md` | 콘텐츠 카탈로그 (카테고리별 전체 노트) |
+| `~/forge/.claude/skills/wiki-sync/SKILL.md` | 5단계 워크플로우 (Scan → Read → Match → Propose → Apply) |
+| `~/forge/shared/scripts/wiki-sync.sh` | 양방향 rsync watcher (vault ↔ 20-wiki) |
+| `~/forge/shared/scripts/wiki-build-index.py` | 콘텐츠 카탈로그 빌더 |
+| `~/forge/shared/scripts/wiki-fix-dangling-refs.py` | 깨진 `[[위키링크]]` 수리 |
+
+> 모바일: Obsidian 앱 설치 → https://github.com/moongci38-oss/forge-vault 에서 pull. Git 플러그인이 주기적 자동 pull 처리.
 
 ---
 

@@ -285,6 +285,7 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/yt` | Analyze YouTube video(s): transcript extraction, structured summary, Notion upload |
 | `/yt-analyze` | Cross-compare multiple videos in a cluster for consensus/divergence insights |
 | `/rag-search` | Hybrid vector+BM25 semantic search across forge-outputs documents |
+| `/wiki-sync` | Karpathy 3-layer (Raw→Wiki→Meta) extraction workflow. Propose updates from Raw docs to Obsidian vault with Human-in-the-loop approval |
 | `/learn` | Store and retrieve cross-session learnings in learnings.jsonl |
 | `/clip` | Save and analyze links |
 | `/content-creator` | Create SEO-optimized marketing content (blog, social, content calendar, brand voice) |
@@ -505,6 +506,72 @@ cp -r ~/OpenSpace/openspace/host_skills/skill-discovery/ ~/forge/.claude/skills/
 | RAG `OPENAI_API_KEY not set` | Check `~/forge/.env` |
 | OpenSpace MCP not connecting | Run `/clear` to restart. Verify `.mcp.json` path |
 | `openspace-mcp: command not found` | Run `source ~/OpenSpace/.venv/bin/activate` |
+
+---
+
+### Obsidian Knowledge Wiki (`/wiki-sync`)
+
+Compounding personal knowledge base built on Andrej Karpathy's [LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — Raw sources (research, video analyses, daily/weekly reports) are distilled by AI into a permanent Obsidian vault with Human-in-the-loop approval. Supports bidirectional sync (WSL ↔ Obsidian vault), automatic LightRAG re-indexing, and mobile access via Git.
+
+**Architecture (3-layer):**
+
+```
+Raw (forge-outputs/01-research/) → Wiki (forge-vault/concepts,tools,topics,people/) → Meta (_meta/MOC.md, questions.md)
+```
+
+```bash
+# 1. Install Obsidian (desktop)
+#    https://obsidian.md  →  "Open folder as Vault"  →  select /mnt/e/forge-vault
+#    (Linux/WSL users: any path works; vault lives at E:\forge-vault by default)
+
+# 2. Clone the vault repo (public mirror on GitHub)
+git clone git@github.com:moongci38-oss/forge-vault.git /mnt/e/forge-vault
+
+# 3. Verify the mirror inside forge-outputs
+ls ~/forge-outputs/20-wiki/
+# → CLAUDE.md, README.md, concepts/, tools/, topics/, people/, _meta/
+
+# 4. Start the sync watcher (bidirectional rsync + 30s debounced LightRAG re-index + 5min auto git push)
+bash ~/forge/shared/scripts/wiki-sync.sh --watch
+# Logs: /tmp/wiki-sync.log, /tmp/wiki-index.log, /tmp/wiki-push.log
+# One-shot sync (no watcher): bash ~/forge/shared/scripts/wiki-sync.sh
+
+# 5. (Optional) Register as systemd/tmux service for always-on sync
+#    See shared/scripts/wiki-sync.sh header for watch-mode flags
+
+# 6. Build LightRAG wiki index (first time)
+python3 ~/forge/shared/scripts/lightrag-pilot.py index --context wiki
+
+# 7. Query the wiki in natural language
+python3 ~/forge/shared/scripts/lightrag-pilot.py query "하네스 엔지니어링이 뭐야" hybrid --context wiki
+```
+
+**Usage in Claude Code:**
+
+```
+/wiki-sync              # Scan new Raw docs → propose wiki updates → Human approves → apply + re-index
+/rag-search --context wiki {query}   # Semantic search over wiki only
+```
+
+**Lint & health checks (monthly cron at 09:00 KST):**
+
+```bash
+python3 ~/forge/shared/scripts/wiki-sync-lint.py      # Count un-promoted Raw docs
+python3 ~/forge/shared/scripts/wiki-health-lint.py    # Broken refs / orphan / stub report
+```
+
+| File | Role |
+|------|------|
+| `forge-outputs/20-wiki/README.md` | Vault overview + Karpathy 3-layer principles |
+| `forge-outputs/20-wiki/CLAUDE.md` | Schema (AI maintenance rules, auto-loaded) |
+| `forge-outputs/20-wiki/_meta/context.md` | Business context (Track A/B/C) — required for all note callouts |
+| `forge-outputs/20-wiki/_meta/index.md` | Content catalog (all notes by category) |
+| `~/forge/.claude/skills/wiki-sync/SKILL.md` | 5-step workflow (Scan → Read → Match → Propose → Apply) |
+| `~/forge/shared/scripts/wiki-sync.sh` | Bidirectional rsync watcher (vault ↔ 20-wiki) |
+| `~/forge/shared/scripts/wiki-build-index.py` | Content catalog builder |
+| `~/forge/shared/scripts/wiki-fix-dangling-refs.py` | Repair broken `[[wikilinks]]` |
+
+> Mobile: install Obsidian app → pull from https://github.com/moongci38-oss/forge-vault. Git plugin handles periodic auto-pull.
 
 ---
 
