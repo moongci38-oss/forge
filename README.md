@@ -325,6 +325,11 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/react-best-practices` | React/Next.js performance optimization (57 rules across 8 categories) |
 | `/theme-factory` | Apply or generate visual themes for slides, docs, HTML pages (10 presets) |
 | `/screenshot-analyze` | Analyze game/web/app screenshots via Gemini Vision: UI structure, color palette, implementation guide |
+| `/user-research` | Plan, conduct, and synthesize user research: interview guides, usability tests, survey design, research questions |
+| `/research-synthesis` | Synthesize user research data (transcripts, surveys, NPS, support tickets) into themes, insights, and recommendations |
+| `/design-system-management` | Manage design tokens, component libraries, and pattern documentation |
+| `/design-handoff` | Create comprehensive developer handoff documentation from designs (implementation specs, measurements, behavior notes) |
+| `/design-critique` | Evaluate designs for usability, visual hierarchy, consistency, and adherence to design principles |
 
 ### Game Development
 

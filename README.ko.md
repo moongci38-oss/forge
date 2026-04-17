@@ -325,6 +325,11 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/react-best-practices` | React/Next.js 성능 최적화 57룰 (8개 카테고리) |
 | `/theme-factory` | 슬라이드/문서/HTML 페이지에 시각 테마 적용 또는 신규 생성 (10개 프리셋) |
 | `/screenshot-analyze` | Gemini Vision으로 게임/웹/앱 스크린샷 분석 — UI 구조, 컬러 팔레트, 구현 가이드 생성 |
+| `/user-research` | 사용자 리서치 계획·수행·종합: 인터뷰 가이드, 사용성 테스트, 설문 설계, 리서치 질문 |
+| `/research-synthesis` | 리서치 데이터(인터뷰, 설문, NPS, 지원 티켓)를 테마·인사이트·추천사항으로 종합 |
+| `/design-system-management` | 디자인 토큰, 컴포넌트 라이브러리, 패턴 문서 관리 |
+| `/design-handoff` | 디자인 → 개발자 핸드오프 문서 생성 (구현 스펙, 측정값, 동작 노트) |
+| `/design-critique` | 사용성·시각 계층·일관성·디자인 원칙 기준 디자인 평가 |
 
 ### 게임 개발
 
