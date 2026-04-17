@@ -115,7 +115,7 @@ DB MCP, 캐시 MCP, 테스트 도구, 언어 전문 Skill, 빌드 도구, 공식
 | walkthrough-requirement.md | - | O | O | 🔵 |
 | session-state.md | O | O | - | 🔵 (병합) |
 | forge-workflow.md (신규) | - | - | - | 🔵 (신규) |
-| opus-4-6-best-practices.md | O | - | - | ⚪ (전역 유지) |
+| opus-4-7-best-practices.md | O | - | - | ⚪ (전역 유지) |
 | plan-mode.md | O | - | - | ⚪ (전역 유지) |
 | specs.md | - | O | - | 🟢 |
 | agent-teams.md | - | O | O | 🟡 (완전 다름) |

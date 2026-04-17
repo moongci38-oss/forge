@@ -5,7 +5,7 @@
 ## 모델 계층화
 
 ```
-Trine Lead                → Opus 4.6   (아키텍처 판단, 오케스트레이션)
+Trine Lead                → Opus 4.7   (아키텍처 판단, 오케스트레이션)
 구현 Teammate              → Sonnet 4.6 (코딩, 테스트, 문서)
 탐색 Teammate              → Haiku 4.5  (파일 탐색, 패턴 확인)
 ```

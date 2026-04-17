@@ -30,7 +30,7 @@ Phase 1 Research → Phase 2 Concept → Phase 3 Design Doc → Phase 4 Planning
 
 ## 모델 계층화
 
-- Lead/오케스트레이션 → Opus 4.6 | 기획서/문서 작성 → Sonnet 4.6 | 리서치/검색 → Haiku 4.5
+- Lead/오케스트레이션 → Opus 4.7 | 기획서/문서 작성 → Sonnet 4.6 | 리서치/검색 → Haiku 4.5
 
 ## Phase 2 핵심
 

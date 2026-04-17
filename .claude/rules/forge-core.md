@@ -34,7 +34,7 @@
 ## 병렬 실행 (HIGH)
 
 - 병렬 작업 → **Agent Teams** (기본) | 단순 탐색/검색/단일 파일 → **Subagent** (경량)
-- 모델: Lead→Opus 4.6 | 구현/작성→Sonnet 4.6 | 탐색/검색→Haiku 4.5
+- 모델: Lead→Opus 4.7 | 구현/작성→Sonnet 4.6 | 탐색/검색→Haiku 4.5
 - Worktree: 같은 파일 병렬 수정 시 `isolation: "worktree"` 사용
 
 ## PM 도구 / Notion (HIGH)

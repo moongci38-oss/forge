@@ -70,7 +70,7 @@ v1.4.0부터 **전역 배포 모델**을 사용한다. 대부분의 파일을 `~
 │   └── setup.mjs                   ← 부트스트랩 스크립트
 │
 ├── global-rules/                   ← 전역 Claude Code 규칙 (setup이 ~/.claude/rules/에 복사)
-│   ├── opus-4-6-best-practices.md  ← 행동/지식/안전성 3축 원칙
+│   ├── opus-4-7-best-practices.md  ← 행동/지식/안전성 3축 원칙
 │   ├── plan-mode.md                ← Plan mode What vs How 분리
 │   └── docs-structure.md           ← docs/ 통일 폴더 구조
 │
@@ -632,7 +632,7 @@ v1.4.0부터 `setup.mjs`와 `forge-sync`가 `~/.claude/`에 전역 배포하는 
 
 | 파일 | 출처 | 내용 |
 |------|------|------|
-| `opus-4-6-best-practices.md` | global-rules | 행동/지식/안전/효율 4축 원칙 |
+| `opus-4-7-best-practices.md` | global-rules | 행동/지식/안전/효율 4축 원칙 |
 | `plan-mode.md` | global-rules | Plan mode What vs How 분리 |
 | `docs-structure.md` | global-rules | docs/ 통일 폴더 구조 |
 | `forge-workflow.md` | rules | SDD 파이프라인 워크플로우 |

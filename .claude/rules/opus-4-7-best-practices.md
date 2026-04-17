@@ -1,4 +1,4 @@
-# Opus 4.6 Best Practices (전역)
+# Opus 4.7 Best Practices (전역)
 
 > 행동/지식/안전성 3축 원칙. 서로 상충하지 않도록 영역을 분리한다.
 

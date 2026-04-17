@@ -51,7 +51,7 @@ Evaluator가 사용할 평가 기준을 Generator 실행 **전**에 명시한다
 
 **PASS 기준**: 합산 70점 이상 + 요구사항 즉시 FAIL 없음
 
-### Phase 1: Planner (Opus 4.6)
+### Phase 1: Planner (Opus 4.7)
 
 ```
 subagent_type: general-purpose
