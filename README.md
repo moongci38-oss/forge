@@ -177,6 +177,9 @@ Agent IDs and environment IDs are tracked in `shared/mcp/forge-agent-ids.json`.
 ### Running Agents
 
 ```bash
+# 0. One-time: install MCP server Python dependencies (fastmcp, anthropic)
+pip install -r shared/mcp/requirements.txt
+
 # Run agent locally (streams output, waits for completion)
 python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
 python3 shared/scripts/run-managed-agent.py weekly-research

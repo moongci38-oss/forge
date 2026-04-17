@@ -177,6 +177,9 @@ Agent ID 및 환경 ID는 `shared/mcp/forge-agent-ids.json`에서 관리.
 ### 에이전트 실행
 
 ```bash
+# 0. 최초 1회: MCP 서버 Python 의존성 설치 (fastmcp, anthropic)
+pip install -r shared/mcp/requirements.txt
+
 # 로컬에서 에이전트 실행 (스트리밍 + 완료 대기)
 python3 shared/scripts/run-managed-agent.py daily-system-review [YYYY-MM-DD]
 python3 shared/scripts/run-managed-agent.py weekly-research
