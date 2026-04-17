@@ -294,12 +294,15 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 
 ### Government Grants
 
-| Skill | Description |
-|-------|-------------|
-| `/grants-write` | Orchestrate government grant document writing via analyst→strategist→writer pipeline |
-| `/grants-review` | 5-axis automated review: guidelines/data/evaluator/tone/direction. Outputs score + priority fixes |
-| `/grants-status` | Check grant task progress |
-| `/rd-plan` | R&D government grant business plan generation pipeline with diagram/chart auto-generation |
+Grant-writing skills run at **project scope** (not global) so each grant project can keep its own guidelines, templates, and tone. Scaffold them under `forge-outputs/09-grants/{project}/.claude/skills/` when starting a new grant.
+
+| Command / Skill | Scope | Description |
+|-----------------|-------|-------------|
+| `/grants` | global (router) | Router command that dispatches to the project's local grants skill |
+| `/grants-status` | global | Check grant task progress across projects |
+| `/rd-plan` | global | R&D government grant business plan generation pipeline with diagram/chart auto-generation |
+| `grants-write` (skill) | **project** | Orchestrate grant document writing via analyst→strategist→writer pipeline. Lives in `{project}/.claude/skills/grants-write/` |
+| `grants-review` (skill) | **project** | 5-axis automated review: guidelines/data/evaluator/tone/direction. Lives in `{project}/.claude/skills/grants-review/` |
 
 ### Documents & Assets
 
