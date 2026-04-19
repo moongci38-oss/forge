@@ -123,7 +123,7 @@ run_exec_only() {
     while [ $attempt -lt $max_retries ]; do
         attempt=$((attempt + 1))
 
-        if ! timeout --signal=TERM --kill-after=10 180 claude -p "${PROMPT_PREFIX}${input}" --model sonnet --output-format text \
+        if ! timeout --signal=TERM --kill-after=10 180 claude -p --bare "${PROMPT_PREFIX}${input}" --model sonnet --output-format text \
             --no-session-persistence --permission-mode acceptEdits \
             > "$output_file" 2>/dev/null; then
             continue
@@ -205,7 +205,7 @@ $content
 
     local batch_grade_file="$RESULTS_DIR/batch-grade.txt"
 
-    if ! echo "$batch_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p - --model haiku --output-format text \
+    if ! echo "$batch_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p --bare - --model haiku --output-format text \
         --no-session-persistence \
         > "$batch_grade_file" 2>/dev/null; then
         echo -e "${YELLOW}Batch grading failed, falling back to individual grading...${NC}"
@@ -287,7 +287,7 @@ $CRITERIA
 GRADE_EOF
 )
 
-        if ! echo "$grade_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p - --model haiku --output-format text \
+        if ! echo "$grade_prompt" | timeout --signal=TERM --kill-after=10 180 claude -p --bare - --model haiku --output-format text \
             --no-session-persistence \
             > "$grade_file" 2>/dev/null; then
             echo "ERROR" > "$status_file"

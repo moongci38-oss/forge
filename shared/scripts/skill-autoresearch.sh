@@ -188,7 +188,7 @@ IMPROVE_EOF
 )
 
     improvement_file="$SKILL_DIR/.autoresearch-suggestion.tmp"
-    if ! echo "$improvement_prompt" | claude -p - --model sonnet --output-format text \
+    if ! echo "$improvement_prompt" | claude -p --bare - --model sonnet --output-format text \
         > "$improvement_file" 2>/dev/null; then
         echo -e "  ${RED}Improvement request failed. Skipping iteration.${NC}"
         echo -e "$iteration\t$(date +%Y-%m-%d)\t${current_rate}%\t0\terror\timprovement request failed" >> "$LOG_FILE"
