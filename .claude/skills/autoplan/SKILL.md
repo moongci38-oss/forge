@@ -83,8 +83,41 @@ Subagent 역할: CTO/리드 엔지니어
 3. **Design Review** (Sonnet Subagent) → 어노테이션 추가
 4. **Engineering Review** (Sonnet Subagent) → 어노테이션 추가
 5. 충돌 감지: 관점 간 상충 사항 정리
-6. 충돌 없음 → Phase 3 Check 진입
-7. 충돌 있음 → Human 에스컬레이션 + 충돌 리포트
+6. **(선택) Advisor 통합 조언** — 3관점 리뷰에서 충돌이 2건 이상 발생하거나, 고위험 기획(1억 이상 예산·신규 시장 진입·아키텍처 대전환)일 때만:
+
+   ```
+   Agent(
+     subagent_type="advisor-strategist",
+     prompt=f"""
+   3관점 리뷰 충돌 통합 조언 요청.
+
+   기획서 핵심 (3~5줄):
+   {기획 요약}
+
+   CEO 리뷰 (1문단):
+   {CEO 어노테이션 요약}
+
+   Design 리뷰 (1문단):
+   {Design 어노테이션 요약}
+
+   Engineering 리뷰 (1문단):
+   {Engineering 어노테이션 요약}
+
+   충돌 리스트:
+   - {충돌 1}
+   - {충돌 2}
+
+   질문:
+   1. 이 기획의 전체 전략 방향에서 놓치기 쉬운 맹점 2개.
+   2. 3관점 충돌 중 어느 쪽 의견에 더 가중치를 둬야 하는지 근거 제시.
+   """
+   )
+   ```
+
+   Advisor 응답을 별도 "## Advisor 통합 조언" 섹션으로 리뷰 리포트에 첨부.
+
+7. 충돌 없음 → Phase 3 Check 진입
+8. 충돌 있음 → Human 에스컬레이션 + 충돌 리포트
 
 ## 산출물
 

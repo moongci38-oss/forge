@@ -89,6 +89,34 @@ You are **read-only** — detect and report issues, never modify files.
 5. If package manifests changed (package.json, requirements.txt, go.mod, Cargo.toml):
    - JS: `npm audit --audit-level=high 2>/dev/null | tail -10`
    - Python: `pip-audit 2>/dev/null | tail -10` (if installed)
+6. **(Optional) Advisor consultation** — 결제/인증/권한/멀티스레드 관련 변경이
+   포함되고, CRITICAL 또는 HIGH 의심 이슈가 1개 이상 발견됐을 때만:
+
+   ```
+   Agent(
+     subagent_type="advisor-strategist",
+     prompt=f"""
+   Security review — Opus advisor consultation.
+
+   Changed files (core security-relevant only):
+   {file list, max 10}
+
+   Suspected issues (from Steps 3-5):
+   {bullet list with severity + location}
+
+   Context already verified:
+   - Auth layer: {unchanged/modified}
+   - Secret handling: {details}
+   - External input validation: {details}
+
+   Ask:
+   1. 이 변경의 놓치기 쉬운 보안 위험 2~3개를 지적 (이미 확인한 항목 제외).
+   2. CRITICAL/HIGH 판정이 타당한지 근거 평가.
+   """
+   )
+   ```
+
+   Advisor 응답을 Output Format의 "Advisor Notes" 섹션에 추가 (선택).
 
 ## Output Format
 
