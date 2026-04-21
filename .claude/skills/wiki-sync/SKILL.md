@@ -34,10 +34,11 @@ RAW_DIRS=(
   ~/forge-outputs/01-research/daily
   ~/forge-outputs/01-research/weekly
   ~/forge-outputs/01-research/projects
+  ~/forge-outputs/01-research/articles
 )
 ```
 
-Glob으로 `*.md` 파일 목록을 얻고, `sync-tracking.json`의 `ingested` 배열에 없는 항목만 후보로 남긴다. 한 회 처리량은 **3~5개**로 제한 (컨텍스트 폭주 방지).
+Glob으로 `*.md` 파일 목록을 얻고, `sync-tracking.json`의 `ingested` 배열에 없는 항목만 후보로 남긴다. 한 회 처리량은 **10개**로 제한.
 
 ### Step 2 — Read: Raw 문서 핵심 추출
 
@@ -156,15 +157,26 @@ tracking.write_text(json.dumps(data, indent=2, ensure_ascii=False))
 | Raw 문서가 회고/감상 | _meta/reviews/ 후보로 분류 (자동 wiki화 안 함) |
 | 동일 주제로 여러 Raw 누적 | UPDATE 후보를 1회로 묶어서 제안 |
 
+## 실행 모드
+
+### 수동 모드 (기본)
+`/wiki-sync` — Step 4 [STOP] 게이트 활성. Human 승인 후에만 적용.
+
+### 자동 모드 (`--auto`)
+`/wiki-sync --auto` — cron/CCR 원격 실행용. Step 4 [STOP] 건너뛰고 자동 적용.
+- 변경 사항은 git commit & push로 기록 (커밋 메시지에 처리된 Raw 목록 포함)
+- 신뢰도 낮은 매칭은 skip + `_meta/pending-review.md`에 기록
+- 처리량: 10개 Raw/회
+
 ## AI 행동 규칙
 
-1. **5단계 순서를 건너뛰지 않는다**. 특히 Step 4 [STOP]은 반드시 명시적 승인을 받는다 — rubber-stamp 금지
-2. **AI 임의 판단 금지**: 신규 노트 작성, 기존 노트 수정 모두 Human 승인 후에만
+1. **5단계 순서를 건너뛰지 않는다**. 수동 모드에서 Step 4 [STOP]은 반드시 명시적 승인을 받는다
+2. **--auto 모드**: Step 4 건너뛰고 자동 적용. 신뢰도 낮은 항목은 pending-review.md로
 3. **출처 추적**: 모든 변경에 Raw 출처 wikilink 필수
-4. **트래킹 갱신은 마지막**: Apply 완료 후에만 sync-tracking.json 갱신 (실패 시 재시도 가능)
-5. **컨텍스트 절약**: 한 회 처리량 3~5개 Raw로 제한
-6. **유사도 의심 시 RAG**: `/rag-search --context wiki`로 보강
-7. **/wiki-sync는 수동 트리거 전용**: 자동 cron 금지 (Human 주도 워크플로우)
+4. **트래킹 갱신은 마지막**: Apply 완료 후에만 sync-tracking.json 갱신
+5. **컨텍스트 절약**: 한 회 처리량 10개 Raw로 제한
+6. **유사도 의심 시**: --auto 모드에서는 skip + pending-review.md 기록
+7. **--auto 완료 후**: `git add -A && git commit -m "wiki-sync(auto): ..." && git push`
 
 ## 트래킹 파일 스키마
 
