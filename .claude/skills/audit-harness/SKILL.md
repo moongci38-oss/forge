@@ -83,12 +83,46 @@ model: sonnet
    - 커버리지 = (보호된 이벤트 / 8) × 100
    - 기준: > 70%
 
-5. **AI Evals** (정의서 §3-5) — 실측
+5. **AI Evals & Skill Harness Coverage** (정의서 §3-5) — 실측
+
+   **5-a. 평가 인프라 존재 확인:**
    - Glob `spec-compliance-checker` 스킬 → Spec 추적성 평가
    - Glob `code-reviewer` 에이전트 → 코드 리뷰 평가
    - Glob `asset-critic` 스킬 → 에셋 품질 평가
    - Glob `qa` 스킬 → QA 루프
    - 평가 체계 수 = 위 존재 카운트
+
+   **5-b. 스킬 내부 하네스 패턴 실측 (Skill Harness Coverage):**
+
+   > 스킬이 존재한다는 것과 스킬 안에 하네스가 구현됐다는 것은 다르다. 반드시 내부를 읽어라.
+
+   실행 방법:
+   ```bash
+   bash shared/scripts/skill-harness-check.sh --json
+   ```
+   또는 스크립트 없을 시 직접 실측:
+   ```bash
+   # 전체 SKILL.md 목록 수집
+   find ~/.claude/skills/ ~/forge/.claude/skills/ -name "SKILL.md" 2>/dev/null | sort
+   # 각 파일에 하네스 패턴 grep
+   grep -lE "Agent\(|독립 Evaluator|Wave 2\.5|Evaluator subagent|PGE\b|eval-report\.md|WP_EVAL|DSR_EVAL|WR_EVAL|FD_EVAL" {SKILL.md 목록}
+   ```
+
+   하네스 PASS 기준 (하나라도 있으면 통과):
+   - `Agent(` — 독립 subagent 스폰
+   - `독립 Evaluator` / `Evaluator subagent` — 명시적 독립 평가자
+   - `Wave 2.5` / `PGE` — 파이프라인 하네스 단계
+   - `eval-report.md` / `*_EVAL` 파일 참조 — 파일 기반 평가 통신
+
+   **파이프라인 직결 스킬 (하네스 필수 — 미적용 시 CRITICAL 이슈):**
+   qa, spec-compliance-checker, visual-loop, autoplan, writing-plans,
+   frontend-design, daily-system-review, weekly-research, wiki-sync,
+   rd-plan, content-creator, asset-critic
+
+   커버리지 계산:
+   - 전체 하네스 커버리지 = 하네스 있는 스킬 수 / 전체 스킬 수 × 100
+   - 기준: ≥ 60%
+   - CRITICAL 스킬 전체 적용 여부 = 별도 이진 판정 (하나라도 없으면 CRITICAL 이슈 등록)
 
 6. **Observability** (정의서 §3-6) — 실측
    - Grep `usage-logger|security.log|usage.log` in hooks/ → 로깅 Hook
@@ -112,7 +146,20 @@ model: sonnet
   "guardrails": { "input_rail": true/false, "output_rail": true/false, "execution_rail": true/false, "dialog_rail": true/false, "retrieval_rail": true/false, "coverage_rate": 0 },
   "owasp_coverage": { "ASI01": true/false, "ASI02": true/false, "ASI05": true/false, "ASI06": true/false, "ASI07": true/false, "ASI09": true/false, "coverage_rate": 0 },
   "hooks": { "hook_count": 0, "coverage_rate": 0 },
-  "ai_evals": { "spec_compliance_checker": true/false, "code_reviewer": true/false, "asset_critic": true/false, "qa": true/false, "eval_count": 0 },
+  "ai_evals": {
+    "spec_compliance_checker": true,
+    "code_reviewer": true,
+    "asset_critic": true,
+    "qa": true,
+    "eval_count": 0,
+    "skill_harness_coverage": {
+      "total_skills": 0,
+      "harness_applied": 0,
+      "coverage_rate": 0,
+      "missing_harness": ["skill-name1"],
+      "critical_missing": ["pipeline-skill-without-harness"]
+    }
+  },
   "observability": { "logging_hook": true/false, "trace_id_rule": true/false },
   "rollback": { "three_level_defined": true/false },
   "maintenance_agents": { "agent_count": 0, "periodic_review_skill": true/false },
@@ -147,6 +194,14 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ## 가드레일 상태
 
 ## Hook 커버리지
+
+## 스킬 하네스 커버리지
+
+| 스킬 | 하네스 적용 | CRITICAL |
+|------|:----------:|:--------:|
+| ... | ✅ / ❌ | - / ⚠️ |
+
+커버리지: X% (적용 N / 전체 N)
 
 ## 이슈 목록
 ### CRITICAL
