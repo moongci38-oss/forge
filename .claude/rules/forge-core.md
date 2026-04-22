@@ -3,6 +3,8 @@
 > 점진적 로딩: Passive 요약. 상세 규칙은 해당 작업 시 Deep 로딩.
 > Deep 원본: `planning/rules-source/always/` + `shared/cross-project/`
 > 의도가 불분명하면 가장 유용한 행동을 추론하고 진행한다.
+> **Architecture Descriptor**: 레포 탐색 전 반드시 `forge/ARCHITECTURE.md`를 먼저 읽는다. 탐색 스텝 33~44% 절감 (arXiv 2604.13108).
+
 
 ---
 
@@ -85,3 +87,13 @@
 | Telegram 원격제어 | `~/.claude/rules-on-demand/telegram-remote-control.md` |
 
 Deep 원본: `planning/rules-source/{scope}/{filename}` 또는 `shared/{scope}/{filename}`
+
+
+## 컨텍스트 관리 (SWE-AGILE 패턴, arXiv 2604.11716)
+
+긴 에이전트 세션에서 토큰 낭비를 줄이는 패턴:
+
+- **슬라이딩 윈도우**: 긴 작업에서 초기 탐색 결과(파일 목록, 검색 결과)는 요약본으로 대체. 원문 전체를 컨텍스트에 유지하지 않는다.
+- **다이제스트 압축**: 완료된 서브태스크는 1-2줄 요약으로 압축. 세부 내용은 handover 파일에 기록.
+- **체크포인트**: 10+ 단계 작업 시 중간 상태를  또는 handover에 저장. 재시작 시 체크포인트부터 재개.
+- **컨텍스트 오염 방지**: 에러 메시지, 롤백된 시도, 임시 출력은 요약 후 드롭. 최종 결과만 유지.
