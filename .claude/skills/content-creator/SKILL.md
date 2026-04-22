@@ -280,3 +280,25 @@ grep -f references/brand_guidelines.md content.txt
 # Create monthly calendar
 cp assets/content_calendar_template.md this_month_calendar.md
 ```
+
+## Evaluator 단계 (독립 실행)
+
+콘텐츠 생성 완료 후 독립 Evaluator가 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  prompt="""
+당신은 독립 콘텐츠 품질 평가자입니다.
+
+평가 기준:
+- 톤앤매너 일관성 (브랜드 가이드 준수)
+- SEO 요소 완비 여부 (메타 설명, 키워드 밀도)
+- 타겟 독자 적합성
+- CTA 명확성
+
+판정: PASS(90+) / WARN(70-89) / FAIL(70 미만)
+FAIL 시 → 구체적 수정 지시 후 재생성 (최대 2회)
+"""
+)
+```

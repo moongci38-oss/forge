@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "pipeline": "weekly-research",
+  "target_date": "2026-04-20",
+  "week_start": "2026-04-14",
+  "collected_at": "2026-04-20T00:03:25.782236+00:00",
+  "stats": {
+    "tech_feeds_count": 0,
+    "github_trending_count": 0,
+    "hackernews_count": 0,
+    "total": 0
+  },
+  "items": [],
+  "claude_search_needed": [
+    "비즈니스 뉴스: SaaS/스타트업 동향, Product Hunt AI 신규 제품",
+    "인디해커/1인기업: 수익 사례, 과금 모델 변화",
+    "사업 아이템 분석: 시장 데이터, 경쟁사, Forge S1 방법론"
+  ]
+}

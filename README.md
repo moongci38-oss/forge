@@ -19,6 +19,7 @@ Forge is a unified pipeline for **solo developers and small teams** to systemati
 - **Planning** (Phase 1~4): Research, concept validation, design docs, planning packages
 - **Dev** (Phase 6~12): Spec-driven development with SDD+DDD+TDD
 - **15 specialized AI agents**, **66 skills**, **15+ slash commands**
+- **Local LLM**: Ollama + GPU (GTX 1650 Super) — gemma3:4b, qwen2.5-coder:7b, nomic-embed-text via MCP (`/ollama-gemma`, `/ollama-qwen`)
 - **PGE Harness**: Planner-Generator-Evaluator structure eliminates self-evaluation bias
 - **RAG system**: Hybrid vector+BM25 search across forge-outputs
 - **Rules-as-Code**: Compilable rule system for automated pipeline governance
@@ -288,7 +289,7 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/yt` | Analyze YouTube video(s): transcript extraction, structured summary, Notion upload |
 | `/yt-analyze` | Cross-compare multiple videos in a cluster for consensus/divergence insights |
 | `/rag-search` | Hybrid vector+BM25 semantic search across forge-outputs documents |
-| `/wiki-sync` | Karpathy 3-layer (Raw→Wiki→Meta) extraction workflow. Propose updates from Raw docs to Obsidian vault with Human-in-the-loop approval |
+| `/wiki-sync` | Karpathy 3-layer (Raw→Wiki→Meta) extraction workflow. Manual: Human-in-the-loop approval. Auto (`--auto`): scheduled CCR runs daily at midnight KST + weekly on Mondays (10 docs/run, incremental via sync-tracking.json) |
 | `/learn` | Store and retrieve cross-session learnings in learnings.jsonl |
 | `/clip` | Save and analyze links |
 | `/content-creator` | Create SEO-optimized marketing content (blog, social, content calendar, brand voice) |
@@ -362,7 +363,7 @@ Grant-writing skills run at **project scope** (not global) so each grant project
 | `/code-quality-rules` | Detect semantic code quality issues (logic, architecture, UX) that static hooks miss |
 | `/library-search` | Search Prefab Visual Library for existing assets before generating new ones |
 
-## Automation Hooks (7)
+## Automation Hooks (8)
 
 | Hook | Trigger | Role |
 |------|---------|------|
@@ -373,6 +374,7 @@ Grant-writing skills run at **project scope** (not global) so each grant project
 | `cleanup-zombie-sessions.sh` | SessionStart | Clean up zombie sessions |
 | `claude-notify.sh` | Completion event | Notify on task completion |
 | `telegram-remote-control.sh` | Telegram message | Remote session control via Telegram |
+| `permission-via-telegram.sh` | PermissionRequest | Route Claude permission prompts to Telegram inline keyboard (approve/deny) |
 
 ## Project Sync
 

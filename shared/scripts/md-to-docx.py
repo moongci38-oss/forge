@@ -38,9 +38,9 @@ FONT_FALLBACK = "Malgun Gothic"
 
 TITLE_SIZE = Pt(18)
 H1_SIZE = Pt(16)
-H2_SIZE = Pt(13)
+H2_SIZE = Pt(14)
 H3_SIZE = Pt(11)
-BODY_SIZE = Pt(11)
+BODY_SIZE = Pt(10)
 TABLE_SIZE = Pt(10)
 CAPTION_SIZE = Pt(9)
 
@@ -124,6 +124,7 @@ SPAN_OPEN_RE = re.compile(r'<span\s+style="color:\s*([^";]+)[^"]*"[^>]*>\s*$')
 SPAN_CLOSE_RE = re.compile(r'^\s*</span>\s*$')
 
 BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+BR_RE = re.compile(r"<br\s*/?\s*>", re.IGNORECASE)
 IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+)$")
 HR_RE = re.compile(r"^---+\s*$")
@@ -166,6 +167,20 @@ def add_rich_text(paragraph, text, base_font=FONT_BODY, base_size=BODY_SIZE, bas
         _add_formatted_runs(paragraph, remaining, base_font, base_size, color=base_color)
 
 
+def _add_text_with_breaks(paragraph, text, font_name, font_size, bold=False, color=None):
+    """텍스트 내 <br> 태그를 실제 줄바꿈으로 변환하며 run 추가."""
+    if not text:
+        return
+    segments = BR_RE.split(text)
+    for idx, seg in enumerate(segments):
+        if idx > 0:
+            br_run = paragraph.add_run()
+            br_run.add_break()
+        if seg:
+            run = paragraph.add_run(seg)
+            set_font(run, font_name, font_size, bold=bold, color=color)
+
+
 def _add_formatted_runs(paragraph, text, font_name, font_size, color=None, force_bold=False):
     """**bold** 마크다운과 [링크](url)를 파싱하여 run으로 추가."""
     # 링크 제거 (텍스트만 유지)
@@ -177,16 +192,13 @@ def _add_formatted_runs(paragraph, text, font_name, font_size, color=None, force
     for m in BOLD_RE.finditer(text):
         before = text[pos : m.start()]
         if before:
-            run = paragraph.add_run(before)
-            set_font(run, font_name, font_size, bold=force_bold, color=color)
+            _add_text_with_breaks(paragraph, before, font_name, font_size, bold=force_bold, color=color)
         bold_text = m.group(1)
-        run = paragraph.add_run(bold_text)
-        set_font(run, font_name, font_size, bold=True, color=color)
+        _add_text_with_breaks(paragraph, bold_text, font_name, font_size, bold=True, color=color)
         pos = m.end()
     remaining = text[pos:]
     if remaining:
-        run = paragraph.add_run(remaining)
-        set_font(run, font_name, font_size, bold=force_bold, color=color)
+        _add_text_with_breaks(paragraph, remaining, font_name, font_size, bold=force_bold, color=color)
 
 
 def add_image(doc, img_path, base_dir):
@@ -287,16 +299,13 @@ def _add_cell_rich_text(paragraph, text, font_name=FONT_TABLE, font_size=TABLE_S
         for m in BOLD_RE.finditer(part):
             before = part[pos:m.start()]
             if before:
-                run = paragraph.add_run(before)
-                set_font(run, font_name, font_size, color=current_color)
+                _add_text_with_breaks(paragraph, before, font_name, font_size, color=current_color)
             bold_text = m.group(1)
-            run = paragraph.add_run(bold_text)
-            set_font(run, font_name, font_size, bold=True, color=current_color)
+            _add_text_with_breaks(paragraph, bold_text, font_name, font_size, bold=True, color=current_color)
             pos = m.end()
         remaining = part[pos:]
         if remaining:
-            run = paragraph.add_run(remaining)
-            set_font(run, font_name, font_size, color=current_color)
+            _add_text_with_breaks(paragraph, remaining, font_name, font_size, color=current_color)
 
 
 def add_table(doc, rows):
@@ -364,6 +373,11 @@ def convert_md_to_docx(md_path, docx_path):
 
     with open(md_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
+
+    # 출처 코드 제거 (md 원본 유지, docx 출력에서만 제거)
+    import re
+    source_code_pattern = re.compile(r'\s*`\[[A-Z]\](?:\s*§[A-Za-z]+)?`|\s*`\[O\]\s*§[A-Za-z]+`|\(\[([A-Z])\]\s*§[^)]*\)')
+    lines = [source_code_pattern.sub('', line) for line in lines]
 
     doc = Document()
     set_style_defaults(doc)
