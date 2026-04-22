@@ -39,14 +39,14 @@ model: sonnet
 
 ```bash
 # 1.1 playwright 설치 확인
-command -v playwright-cli || echo "❌ playwright-cli 없음 — npm install -g @playwright/cli 필요"
+command -v playwright-cli || echo "playwright-cli 없음 — npm install -g @playwright/cli 필요"
 
 # 1.2 dev server 가동 확인
-curl -sf --max-time 3 -o /dev/null "$URL" && echo "server OK" || echo "❌ server 미가동"
+curl -sf --max-time 3 -o /dev/null "$URL" && echo "server OK" || echo "server 미가동"
 
 # 1.3 dev server 자동 기동 옵션 (package.json 감지)
-if [ -f "package.json" ] && grep -q '"dev"' package.json; then
-  echo "💡 package.json 감지 — 'npm run dev' 병행 실행 필요"
+if [ -f "package.json" ] && grep -q '"\"dev"\"'  package.json; then
+  echo "package.json 감지 — 'npm run dev' 병행 실행 필요"
 fi
 ```
 
@@ -88,18 +88,64 @@ mkdir -p /tmp/visual-loop-screenshots/
 
 출력: `/tmp/visual-loop-analysis-{viewport}.json`
 
+### Step 3.5 — 독립 Evaluator 스폰: 시각 비교 결과 종합 판정 (신규)
+
+> **핵심 원칙**: 스크린샷을 캡처하고 구현한 Generator(Lead 에이전트)가 직접 시각 결과를 평가하면
+> 자기합리화 편향이 생긴다. 독립 Evaluator subagent가 결과를 종합하여 PASS/FAIL을 판정한다.
+
+```python
+evaluator_agent = Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 Visual QA Evaluator 에이전트입니다.
+구현 에이전트(Generator)의 컨텍스트(의도, 디자인 결정 이유)를 공유받지 않습니다.
+오직 아래 파일만을 근거로 시각 품질을 판정하십시오.
+
+입력 파일 경로:
+  - ux-audit 정적 분석 결과: {ux_audit_result_path}
+  - 시각 분석 결과 (desktop): /tmp/visual-loop-analysis-desktop.json
+  - 시각 분석 결과 (tablet):  /tmp/visual-loop-analysis-tablet.json
+  - 시각 분석 결과 (mobile):  /tmp/visual-loop-analysis-mobile.json
+  - 스크린샷 (desktop): /tmp/visual-loop-screenshots/desktop.png
+  - 스크린샷 (tablet):  /tmp/visual-loop-screenshots/tablet.png
+  - 스크린샷 (mobile):  /tmp/visual-loop-screenshots/mobile.png
+
+수행할 작업:
+1. 각 JSON 파일 Read → 항목별 PASS/WARN/FAIL 수집
+2. 스크린샷 Read → 분석 결과와 육안 대조 (상충 시 시각 결과 우선)
+3. 정적 ux-audit 결과와 시각 결과 비교 → Delta 분류:
+   - 정적 PASS → 시각 WARN/FAIL: "시각 발견" (정적 분석이 놓친 이슈)
+   - 정적 FAIL → 시각 PASS: "오탐 가능" (재검토 필요)
+   - 양쪽 FAIL: "이슈 확정"
+4. 최종 PASS/FAIL 판정 (FAIL 기준: 시각 발견 2건 이상 OR P0 이슈 1건 이상)
+5. 판정 결과를 {evaluator_result_path} 에 JSON으로 Write
+
+절대 관대하게 보지 않는다:
+- "전체적으로 괜찮아 보인다" 금지 → 각 항목 개별 검증
+- Generator의 의도를 추정하여 실수를 용납하지 않는다
+"""
+)
+```
+
+**입력/출력 파일**:
+- 입력: `/tmp/visual-loop-analysis-{viewport}.json` × 3, ux-audit 결과 (있으면)
+- 출력: `/tmp/visual-loop-evaluator-result.json`
+
+Evaluator 결과가 나오면 Step 4(Delta 분석)는 해당 JSON을 기반으로 요약만 수행한다.
+
 ### Step 4 — 정적 분석과의 Delta (교차 검증)
 
-동일 PR에 대한 `/ux-audit` 결과가 이미 있으면 읽어서 비교:
+Evaluator 결과 (`/tmp/visual-loop-evaluator-result.json`) 를 읽어 Delta 요약:
 
 **Delta 판정 기준:**
 
 | 정적 결과 | 시각 결과 | 판정 | 처리 |
 |---|---|---|---|
-| PASS | PASS | ✅ 일치 | 보고만 |
-| PASS | WARN/FAIL | ⚠️ **시각 발견** | 정적 분석이 놓친 이슈 → 리포트 |
-| FAIL | PASS | 🤔 검토 필요 | 정적 오탐 가능 → 재검토 |
-| FAIL | FAIL | ✅ 일치 | 이슈 확정 |
+| PASS | PASS | 일치 | 보고만 |
+| PASS | WARN/FAIL | **시각 발견** | 정적 분석이 놓친 이슈 → 리포트 |
+| FAIL | PASS | 검토 필요 | 정적 오탐 가능 → 재검토 |
+| FAIL | FAIL | 일치 | 이슈 확정 |
 
 "시각 발견" 항목이 이 PoC의 **핵심 가치**.
 
@@ -118,6 +164,7 @@ mkdir -p /tmp/visual-loop-screenshots/
 - 정적 ux-audit: {PASS X / WARN Y / FAIL Z}
 - 시각 분석: {PASS X / WARN Y / FAIL Z}
 - **시각 발견(정적 누락):** {count}
+- **Evaluator 최종 판정**: PASS / FAIL
 
 ## 스크린샷
 ![desktop](./screenshots/desktop.png)
@@ -150,8 +197,8 @@ mkdir -p /tmp/visual-loop-screenshots/
 |---|---|
 | Playwright 실행 | 로컬 (무료) |
 | Gemini Vision API | ~$0.01~0.05 (3 스크린샷) |
-| 스킬 Agent fan-out | 6개 (playwright 3 + analyze 3) |
-| 소요 시간 | ~30~60초 |
+| 스킬 Agent fan-out | 7개 (playwright 3 + analyze 3 + evaluator 1) |
+| 소요 시간 | ~35~70초 |
 
 **비용 통제:** 매 PR 자동 호출 금지. 의심 PR만 수동 호출.
 
@@ -197,6 +244,7 @@ Boris는 "Chrome 확장 + Claude Desktop 내장 브라우저"를 추천. 우리 
 | `ECONNREFUSED localhost:3000` | Dev server 미기동 | 별도 터미널에서 `npm run dev` 후 재실행 |
 | Gemini API 429 rate limit | 과다 호출 | `--viewport=mobile` 등으로 축소, 10초 sleep 삽입 |
 | 스크린샷 빈 화면 | JS 렌더링 대기 부족 | Playwright `--wait-until networkidle` 옵션 |
+| Evaluator 스폰 실패 | Agent 도구 미허용 | `allowed-tools`에 Agent 포함 확인 (frontmatter) |
 
 ---
 

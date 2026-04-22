@@ -256,9 +256,60 @@ Lead가 5개 Teammate 결과를 종합하여 2개 문서 직접 작성:
 
 이전 날짜의 계획서가 있으면 미처리 액션을 이월한다.
 
-### Wave 3 (Notion 자동 등록 — Wave 2 완료 후)
+---
 
-2개 문서 작성 완료 후, Notion "Daily System Review" DB에 페이지를 자동 생성한다.
+### Wave 2.5 (독립 Evaluator subagent — Wave 2 완료 후, Wave 3 이전)
+
+> **핵심 원칙: Lead의 컨텍스트(의도, 가정)를 공유하지 않는 별도 에이전트가 검증한다.**
+> Wave 2 Lead 리포트 완성 직후, Wave 3(Notion 등록) 진행 전에 반드시 실행한다.
+
+```
+subagent_type: general-purpose
+model: sonnet
+```
+
+**입력 파일 (직접 Read)**:
+- `01-research/daily/{date}/ai-system-analysis.md`
+- `01-research/daily/{date}/system-improvement-plan.md`
+
+**Rubric (100점 만점)**:
+
+| 항목 | 가중치 | 불합격 기준 |
+|------|:------:|-----------|
+| 6-Tier 커버리지 | 40% | Tier 1~6 중 2개 이상 미참조 시 즉시 FAIL |
+| 인사이트 품질 | 30% | 갭 분석이 단순 나열(불릿만)이고 인과 설명 없으면 0점 |
+| 갭 정확도 | 20% | Critical/High/Medium 분류 근거가 없으면 감점 |
+| 액션 실현 가능성 | 10% | P0 항목에 담당자·예상 작업량 누락 시 감점 |
+
+**PASS 기준**: 70점 이상.
+
+**FAIL 처리**: Evaluator가 감점 항목별 위치 + 이유 + 개선 방법을 구체적으로 작성하여 Lead에 반환. Lead는 리포트 보완 재작성 후 Evaluator 재실행 (1회 한정). 2회 연속 FAIL 시 [STOP] Human 에스컬레이션.
+
+**출력**: `.claude/state/DSR_EVAL.md`
+
+```markdown
+## Daily System Review Evaluator 결과
+
+**총점**: XX/100
+**판정**: PASS / FAIL
+
+### 항목별 점수
+- 6-Tier 커버리지 (40%): XX점 — [미참조 Tier 목록]
+- 인사이트 품질 (30%): XX점 — [사유]
+- 갭 정확도 (20%): XX점 — [사유]
+- 액션 실현 가능성 (10%): XX점 — [사유]
+
+### 개선 지시 (FAIL 항목만)
+- [섹션 N] [항목]: [위치] → [이유] → [개선 방법]
+```
+
+PASS 확인 후 Wave 3(Notion 자동 등록)으로 진행한다.
+
+---
+
+### Wave 3 (Notion 자동 등록 — Wave 2.5 PASS 후)
+
+2개 문서 작성 완료 + Evaluator PASS 확인 후, Notion "Daily System Review" DB에 페이지를 자동 생성한다.
 
 **Notion DB 정보:**
 - Data Source ID: `43829f7b-8d3f-47f1-90a1-84f40d39239e`

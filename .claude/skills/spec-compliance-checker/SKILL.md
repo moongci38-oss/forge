@@ -15,6 +15,45 @@ model: sonnet
 Spec 문서와 구현 코드 간의 추적성(Traceability)을 검증하는 전문 스킬.
 Forge Dev Check 3.5에서 사용된다.
 
+## 독립 Subagent 실행 원칙 (CRITICAL)
+
+> **이 스킬은 반드시 독립 subagent로 실행한다.**
+> 구현 에이전트(Generator)가 직접 자신의 코드를 Spec에 대조하면 자기평가 편향이 발생한다.
+> 독립 컨텍스트를 가진 별도 에이전트만이 편향 없는 Traceability 감사를 수행할 수 있다.
+
+### Spec Compliance Subagent 스폰 프로토콜
+
+Check 3.5 시점에 Lead가 아래 방식으로 독립 감사 에이전트를 스폰한다.
+Check 3.6/3.7/3.8과 **병렬 스폰** 가능 (서로 독립된 검증이므로):
+
+```python
+# Check 3.5, 3.6, 3.7, 3.8을 병렬 스폰 예시
+spec_compliance_agent = Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 Spec 준수 감사 에이전트입니다.
+구현 에이전트(Generator)의 컨텍스트를 공유받지 않습니다.
+오직 Spec 문서와 코드 파일만을 직접 읽어 감사하십시오.
+
+Spec 경로: {spec_path}
+구현 완료 브랜치: {branch}
+Traceability Matrix (있으면): {matrix_path}
+
+이 스킬 파일 Read: /home/damools/forge/.claude/skills/spec-compliance-checker/SKILL.md
+Step-by-Step 절차를 따라 감사 수행 후 JSON 결과만 반환.
+결과 저장 경로: {result_path}
+"""
+)
+# 병렬 실행: check_3_6_agent, check_3_7_agent, check_3_8_agent 동시 스폰 가능
+```
+
+**파일 기반 입력**:
+- `{spec_path}`: `.specify/specs/{spec-name}.md`
+- `{matrix_path}`: `.specify/traceability/{spec-name}-matrix.json` (있으면)
+- `{branch}`: 현재 구현 브랜치명
+- `{result_path}`: `.claude/state/check-3.5-result.json`
+
 ## Evaluator 핵심 원칙: 절대 관대하게 보지 마라
 
 아래 생각이 들면 그것은 관대해지고 있다는 신호 → 더 엄격하게 본다:
