@@ -291,3 +291,34 @@ P0 (/style-train) → P1 (Brief) → P2 (프로토타입) → P3 (/game-asset-ge
 - Git LFS 정책 준수: 10MB+ 파일은 LFS 트래킹 필수
 - Library 탐색 실패(PREFAB_LIBRARY_PATH 미설정) 시 Step 4 스킵 → Step 5로
 - 프롬프트 조립 시 골든 레시피가 있으면 반드시 참조 (재현성 확보)
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+에셋 생성 결과물 완성 후 독립 Evaluator Subagent가 결과물 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 생성물 품질 검증자입니다. game-asset-generate 결과물을 검토하세요.
+
+검증 항목:
+- 생성된 에셋이 스타일 가이드와 일관됐는가?
+- asset-critic 점수가 임계값(≥3.5/5)을 통과했는가?
+- 메니페스트에 모든 에셋 경로와 메타데이터가 기록됐는가?
+- 누락된 에셋 유형은 없는가?
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백: [항목] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션

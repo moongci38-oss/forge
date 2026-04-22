@@ -129,3 +129,35 @@ upload_skill(
 - `execute_task` may take minutes — this is expected for multi-step tasks.
 - `upload_skill` requires a cloud API key; if it fails, the evolved skill is still saved locally.
 - After every OpenSpace call, **tell the user** what happened: task result, any evolved skills, and your upload decision.
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+delegate-task 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: 생성자 ≠ 평가자. 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 delegate-task 결과물의 독립 품질 검증자입니다.
+
+다음 2가지 기준으로 검증하십시오:
+
+1. **위임 타겟 명확성**: `execute_task` 호출 시 task 파라미터가 자연어로 명확히 작성됐는지 확인. 도구·환경·입출력 조건이 충분히 서술됐는지 확인. "이것 해줘"처럼 컨텍스트가 없는 task 명세는 FAIL. search_scope 등 관련 파라미터가 의도에 맞게 설정됐는지도 확인.
+
+2. **성공 기준 정의**: 위임 완료 후 사용자에게 보고된 결과에 "무엇이 완료됐는지", "evolved_skills 여부와 업로드 결정"이 포함됐는지 확인. 단순 "완료됨" 응답만 있고 결과 요약·사이드 이펙트가 없는 경우 FAIL.
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백 형식: [task 파라미터 또는 결과 보고 섹션] — [이유] → [개선 방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

@@ -81,3 +81,33 @@ PR 본문에 인라인 삽입:
 | Bundle | 245KB | 251KB | +2.4% | ✅ PASS |
 | Tests | 12.3s | 13.1s | +6.5% | ✅ PASS |
 ```
+
+---
+
+## 독립 Evaluator (하네스)
+
+benchmark 스킬 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: 생성자 ≠ 평가자. 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 benchmark 스킬 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 평가하세요:
+1. 번들 크기, 테스트 시간, API 응답 시간(또는 빌드 시간) 3개 지표가 모두 측정됐는지 확인한다. 적용 조건에 해당하는 지표가 누락됐으면 FAIL.
+2. 각 지표에 baseline(develop 브랜치) 수치 대비 % 변화량이 명시됐는지 확인한다. 절대 수치만 있고 % 변화가 없으면 FAIL.
+3. 임계값(PASS/WARN/FAIL 기준: +10%/+25%)이 결과물에 적용됐는지 확인한다. 수치가 있어도 판정 없이 끝났으면 FAIL.
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백 형식: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

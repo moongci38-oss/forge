@@ -224,3 +224,34 @@ Tier: T1
 - T3 Tier는 Soul 레이어 없이 최소 프롬프트만 조립
 - 500토큰 초과 시 자동 압축 경고 (FLUX 한계)
 - 프롬프트 전문은 prompt-log.md에 기록할 것을 권장
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+12요소 구조화 프롬프트 완성 후 독립 Evaluator Subagent가 결과물 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 생성물 품질 검증자입니다. soul-prompt-craft 결과물을 검토하세요.
+
+검증 항목:
+- 12개 슬롯이 모두 채워졌는가 (빈 슬롯 = 할루시네이션 위험)?
+- 색상이 Hex Code (#RRGGBB)로 명시됐는가?
+- 모델별 최적 포맷으로 변환됐는가 (FLUX/Gemini/Replicate)?
+- 철학메타와 의도적긴장 요소가 art-direction-brief에서 추출됐는가?
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백: [항목] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션

@@ -170,3 +170,53 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ```
 
 > Notion MCP 미연결 시 경고 출력 후 스킵 (파이프라인 중단 안 함).
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+에이전틱 감사 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: Generator(감사 수행자) ≠ Evaluator. 감사자가 자신의 감사를 평가하면 자기평가 편향이 발생한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 audit-agentic 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 검토하고 PASS 또는 FAIL을 판정하십시오.
+
+**평가 기준 (4항목 모두 충족해야 PASS):**
+
+1. **자율성 레벨(L1-L5) 실측 증거**
+   - [위치] JSON `composable_patterns` 또는 보고서 "에이전트 패턴 분류" 섹션
+   - [이유] 자율성 레벨이 주관적 판단이 아닌 실제 Grep/Glob 결과로 뒷받침되어야 함
+   - [방법] 각 패턴(Prompt Chaining/Routing/Parallelization/Orchestrator-Workers/Evaluator-Optimizer)의 True/False 근거 파일경로:라인이 존재하는지 확인
+
+2. **pass@k 지표 측정 여부**
+   - [위치] JSON `agent_evals` 섹션 또는 보고서 "Agent Evals" 항목
+   - [이유] 에이전트 평가 체계 없이 역량 감사는 근거 불충분
+   - [방법] `skill-autoresearch` 존재 여부 + `assessment.md` 확인 결과가 실제 파일 탐색(Glob)으로 측정됐는지 검증
+
+3. **MAS 토폴로지 유형 명시**
+   - [위치] JSON `multi_agent_coordination` 섹션 또는 보고서 "Multi-Agent Coordination" 항목
+   - [이유] 토폴로지 유형(Wave/Star/Pipeline 등)이 명시되어야 조율 아키텍처 판단 가능
+   - [방법] `wave_dependency`와 `conflict_prevention` 값이 구체적 파일경로 증거와 함께 제시됐는지 확인
+
+4. **개선 권고의 구체성**
+   - [위치] JSON `issues[].recommendation` 및 보고서 "권장 액션" 섹션
+   - [이유] 막연한 권고("개선 필요")는 실행 불가능
+   - [방법] 각 CRITICAL/HIGH 이슈의 `recommendation`이 "파일명 + 구체적 수정 방법"을 포함하는지 확인
+
+**판정**: PASS(기준 4항목 모두 충족) / FAIL(1항목 이상 미충족)
+**피드백 형식**: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (Notion 등록)
+- FAIL → 감사 재수행 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

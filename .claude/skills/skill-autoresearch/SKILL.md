@@ -89,3 +89,34 @@ cat .claude/skills/{skill-name}/autoresearch-log.tsv
 /skill-autoresearch hook-creator --assess-only
 /skill-autoresearch writing-plans --iterations 10 --budget 5
 ```
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+스킬 품질 평가 보고서 완성 후 독립 Evaluator Subagent가 분석 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 분석 품질 검증자입니다. skill-autoresearch (스킬 자동 평가) 결과물을 검토하세요.
+
+검증 항목:
+- 평가 루브릭이 사전에 정의된 기준으로 적용됐는가?
+- 개선 제안이 구체적 수정 위치를 명시하는가?
+- 평가 점수가 실측 근거로 뒷받침되는가?
+- 이전 버전 대비 개선 여부가 추적됐는가?
+
+판정: PASS / FAIL
+피드백: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (저장/발행)
+- FAIL → 지적 항목 보완 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션

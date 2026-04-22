@@ -168,3 +168,53 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ```
 
 > Notion MCP 미연결 시 경고 출력 후 스킵 (파이프라인 중단 안 함).
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+Human-AI 경계 감사 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: Generator(감사 수행자) ≠ Evaluator. 감사자가 자신의 감사를 평가하면 자기평가 편향이 발생한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 audit-human-ai 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 검토하고 PASS 또는 FAIL을 판정하십시오.
+
+**평가 기준 (4항목 모두 충족해야 PASS):**
+
+1. **자율성 레벨 5단계 명시**
+   - [위치] JSON `autonomy_mapping` 배열 또는 보고서 "자율성 레벨 매핑" 표
+   - [이유] L1-L5 매핑 없이는 어떤 Phase가 과도하게 자율적이거나 과도하게 제한됐는지 판단 불가
+   - [방법] 각 Phase/단계에 L1(Operator) ~ L5(Observer) 레벨이 명시되고 `rationale`이 규칙 파일 또는 pipeline.md의 실측 근거(파일경로:라인)를 포함하는지 확인
+
+2. **Override Rate > 5% 측정 여부**
+   - [위치] JSON `metrics_tracking.override_rate` 또는 보고서 "지표 추적" 섹션
+   - [이유] Override Rate는 Human-AI 경계의 실효성을 나타내는 핵심 지표
+   - [방법] `override_rate: true`이면 측정 방법(로그 경로)이 명시됐는지 확인; 런타임 데이터 필요 시 "미측정(런타임 이력 필요) — Override 로깅 메커니즘 부재" 이슈로 등록됐는지 확인
+
+3. **Rubber-Stamp Rate < 20% 확인**
+   - [위치] JSON `metrics_tracking.rubber_stamp_rate` 또는 JSON `anti_patterns` 배열의 `Rubber Stamping` 항목
+   - [이유] 형식적 승인이 20%를 넘으면 HITL 설계 자체가 무의미해짐
+   - [방법] `rubber_stamp_rate` 측정값 또는 "미측정" 명시 여부 확인; `anti_patterns`에서 `Rubber Stamping` 탐지 근거(어떤 패턴에서 감지됐는지)가 구체적으로 제시됐는지 검증
+
+4. **에스컬레이션 경로 구체적 정의**
+   - [위치] JSON `escalation_triggers` 객체 또는 보고서 "에스컬레이션 트리거 커버리지" 섹션
+   - [이유] 에스컬레이션 경로가 추상적이면 실제 상황에서 작동하지 않음
+   - [방법] `confidence`, `reversibility`, `risk_domain`, `anomaly`, `emotion` 5개 트리거 각각에 True/False 외에 실제 구현 위치(파일경로)가 명시됐는지 확인; 미구현 트리거는 이슈 목록에 등록됐는지 확인
+
+**판정**: PASS(기준 4항목 모두 충족) / FAIL(1항목 이상 미충족)
+**피드백 형식**: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (Notion 등록)
+- FAIL → 감사 재수행 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

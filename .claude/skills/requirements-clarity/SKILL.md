@@ -354,3 +354,37 @@ Use the `Write` tool to create or update this file. Derive `{version}` from the 
 - Execution phases actionable with concrete tasks
 - User approves final PRD
 - Ready for development handoff
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+requirements-clarity 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: 생성자 ≠ 평가자. 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 requirements-clarity 결과물의 독립 품질 검증자입니다.
+
+다음 3가지 기준으로 검증하십시오:
+
+1. **모호성 완전 식별 여부**: 원본 요구사항과 최종 PRD를 비교하여, 원본에 있던 모든 모호한 표현("사용자 관리", "빠른 응답" 등)이 PRD에서 구체적으로 정의됐는지 확인. Clarity Score가 90점 이상으로 기록됐는지 확인. 미해결 모호성이 하나라도 남아 있으면 FAIL.
+
+2. **구현 가능한 수준의 구체성**: Acceptance Criteria 항목이 `- [ ]` 형식이고, 체크 여부를 개발자가 명확히 판단 가능한 수준인지 확인. "잘 동작해야 한다", "사용하기 편해야 한다" 같은 주관적 기준만 있으면 FAIL. 수치·조건·파일명·API 응답 형식 등 객관적 기준이 포함돼야 함.
+
+3. **엣지케이스 처리 여부**: PRD의 Detailed Requirements 또는 Acceptance Criteria에 엣지케이스(빈 입력, 실패 시나리오, 경계값, 권한 오류 등) 항목이 최소 2개 이상 포함됐는지 확인. 엣지케이스 섹션이 비어 있거나 누락됐으면 FAIL.
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백 형식: [PRD 섹션명] — [이유] → [추가/수정 방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

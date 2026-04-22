@@ -86,3 +86,35 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 - `[신뢰도: High]` = 다중 소스에서 일관 확인
 - `[신뢰도: Medium]` = 단일 신뢰 소스
 - `[신뢰도: Low]` = AI 추정 또는 비공식 소스
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+주간 리서치 분석 3종 완성 후 독립 Evaluator Subagent가 분석 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 분석 품질 검증자입니다. weekly-analyze (주간 분석 재실행) 결과물을 검토하세요.
+
+검증 항목:
+- 기술 뉴스·비즈니스 뉴스 각 항목에 ACHCE 태그가 있는가?
+- 신뢰도 등급이 전체 항목에 표기됐는가?
+- 사업 아이템 분석에 TAM/SAM/SOM이 포함됐는가?
+- 경쟁 가설 3개가 제시됐는가?
+- Tier 1 공식 소스 최소 3개가 인용됐는가?
+
+판정: PASS / FAIL
+피드백: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (저장/발행)
+- FAIL → 지적 항목 보완 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션
