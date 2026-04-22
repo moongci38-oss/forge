@@ -18,7 +18,7 @@ Forge is a unified pipeline for **solo developers and small teams** to systemati
 
 - **Planning** (Phase 1~4): Research, concept validation, design docs, planning packages
 - **Dev** (Phase 6~12): Spec-driven development with SDD+DDD+TDD
-- **15 specialized AI agents**, **66 skills**, **15+ slash commands**
+- **31 specialized AI agents**, **66 skills**, **31 slash commands**
 - **Local LLM**: Ollama + GPU (GTX 1650 Super) — gemma3:4b, qwen2.5-coder:7b, nomic-embed-text via MCP (`/ollama-gemma`, `/ollama-qwen`)
 - **PGE Harness**: Planner-Generator-Evaluator structure eliminates self-evaluation bias
 - **RAG system**: Hybrid vector+BM25 search across forge-outputs
@@ -94,10 +94,10 @@ forge/
 │   ├── scripts/             ← Management scripts (incl. rag/ for hybrid search)
 │   └── cross-project/       ← Cross-project rules
 ├── .claude/                 ← Claude Code config (team-shared)
-│   ├── agents/              ← AI agents (15)
+│   ├── agents/              ← AI agents (31)
 │   ├── skills/              ← Skill packages (66)
-│   ├── commands/            ← Slash commands
-│   ├── hooks/               ← Security/automation hooks (7)
+│   ├── commands/            ← Slash commands (31)
+│   ├── hooks/               ← Security/automation hooks (8)
 │   └── rules/               ← Compiled rules
 ├── forge-workspace.json
 ├── .env.example
@@ -286,6 +286,7 @@ bash shared/scripts/manage-components.sh {list|enable|disable}
 | `/daily-analyze` | Re-run analysis only (skip collection) when raw-data.json already exists for the date |
 | `/weekly-research` | Weekly research pipeline: collect 3 output types in parallel via subagents |
 | `/weekly-analyze` | Re-run analysis only for weekly research when raw-data.json already exists |
+| `/article` | Deep article URL analysis: body extraction, internal link traversal, system comparison, apply-plan generation (4-Wave Agent Teams) |
 | `/yt` | Analyze YouTube video(s): transcript extraction, structured summary, Notion upload |
 | `/yt-analyze` | Cross-compare multiple videos in a cluster for consensus/divergence insights |
 | `/rag-search` | Hybrid vector+BM25 semantic search across forge-outputs documents |
