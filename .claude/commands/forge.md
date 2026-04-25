@@ -2,7 +2,7 @@
 description: Forge Dev 워크플로우 시작 — Phase 1→4 파이프라인 실행
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, WebSearch, WebFetch
 argument-hint: <작업 설명> or --size <hotfix|small|standard|multi-spec>
-model: opus
+model: sonnet
 ---
 > **⚠️ 실행 모드 확인**: 이 커맨드는 쓰기 모드에서만 정상 동작합니다. Plan mode 감지 시 즉시 [STOP] — "Escape로 plan mode 해제 후 재실행하세요. 내부 [STOP] 게이트가 승인 지점입니다."
 

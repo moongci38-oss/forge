@@ -192,3 +192,53 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ```
 
 > Notion MCP 미연결 시 경고 출력 후 스킵 (파이프라인 중단 안 함).
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+컨텍스트 감사 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: Generator(감사 수행자) ≠ Evaluator. 감사자가 자신의 감사를 평가하면 자기평가 편향이 발생한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 audit-context 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 검토하고 PASS 또는 FAIL을 판정하십시오.
+
+**평가 기준 (4항목 모두 충족해야 PASS):**
+
+1. **7-Layer 모든 층 실측 여부**
+   - [위치] JSON `system_prompt_design` ~ `structured_note_taking` 섹션 또는 보고서 "컨텍스트 구성 체크리스트" 표
+   - [이유] 한 층이라도 누락되면 전체 컨텍스트 아키텍처 평가가 불완전해짐
+   - [방법] System Instructions / Persistent Memory / Retrieved Data / Available Tools / Output Specifications / Conversation History / Structured Data 7개 레이어 각각에 True/False + 실측 근거(파일경로:라인)가 존재하는지 확인
+
+2. **RAG Faithfulness/Precision 지표 존재**
+   - [위치] JSON `rag` 섹션 또는 보고서 "RAG" 항목
+   - [이유] RAG 스크립트 존재 여부만 확인하면 품질 측정이 안 됨; Faithfulness/Precision 언급 없으면 미완
+   - [방법] `rag_scripts`, `rag_index`, `rag_skill` 외에 RAG 품질 지표(Faithfulness/Precision/Recall) 측정 방법 또는 "미측정(런타임 데이터 필요)" 명시 여부 확인
+
+3. **Context Saturation Gap(Δ) 정량화**
+   - [위치] JSON `system_prompt_design.total_bytes` 및 추정 토큰 수, 또는 보고서 "컨텍스트 구성" 섹션
+   - [이유] 토큰 포화 갭이 수치화되어야 최적화 우선순위 결정 가능
+   - [방법] `total_bytes ÷ 4`로 추정 토큰 수가 계산되고 기준값(< 12,000 토큰) 대비 갭(Δ)이 명시됐는지 확인
+
+4. **메모리 유형 분류 완성 (Token/Parametric/Latent)**
+   - [위치] JSON `short_term_memory`, `long_term_memory` 또는 보고서 "메모리 시스템 평가" 섹션
+   - [이유] 메모리 유형 분류 없이는 어떤 유형의 메모리가 누락됐는지 알 수 없음
+   - [방법] Token Memory(세션 내), Parametric Memory(파인튜닝), Latent Memory(MEMORY.md/learnings.jsonl) 3유형 각각의 현황이 명시됐는지 확인
+
+**판정**: PASS(기준 4항목 모두 충족) / FAIL(1항목 이상 미충족)
+**피드백 형식**: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (Notion 등록)
+- FAIL → 감사 재수행 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

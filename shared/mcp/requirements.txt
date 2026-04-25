@@ -1,0 +1,14 @@
+# forge-tools MCP server dependencies
+#
+# Install:
+#   pip install -r ~/forge/shared/mcp/requirements.txt
+#
+# fastmcp: FastMCP framework used by forge-tools-server.py
+#   - streamable-http transport (NOT sse) required by managed agents
+#   - 3.2.3+ mandatory for managed-agents-2026-04-01 beta compatibility
+#
+# anthropic: Python SDK used by forge-mcp-service.sh update_agents()
+#   to refresh the tunnel URL registered on each managed agent
+
+fastmcp>=3.2.3
+anthropic>=0.96.0

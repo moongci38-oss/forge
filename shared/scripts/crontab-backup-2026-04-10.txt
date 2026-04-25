@@ -1,0 +1,9 @@
+TZ=Asia/Seoul
+# Weekly Research — 매주 월요일 09:03 KST
+3 9 * * 1 /bin/bash /home/damools/forge/shared/scripts/weekly-research/run.sh >> /home/damools/forge/shared/scripts/weekly-research/logs/cron.log 2>&1
+
+# Learnings 승격 후보 리포트 — 매주 월요일 09:33 KST (weekly-research 이후)
+33 9 * * 1 /bin/bash /home/damools/forge/shared/scripts/promote-learnings/run.sh >> /home/damools/forge/shared/scripts/promote-learnings/logs/cron.log 2>&1
+
+# RAG Workspace 증분 빌드 — 4시간마다
+17 */4 * * * /bin/bash /home/damools/forge/shared/scripts/rag/workspace-build.sh >> /home/damools/.rag-workspace-index/build.log 2>&1

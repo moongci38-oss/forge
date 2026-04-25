@@ -3,6 +3,8 @@
 > 점진적 로딩: Passive 요약. 상세 규칙은 해당 작업 시 Deep 로딩.
 > Deep 원본: `planning/rules-source/always/` + `shared/cross-project/`
 > 의도가 불분명하면 가장 유용한 행동을 추론하고 진행한다.
+> **Architecture Descriptor**: 레포 탐색 전 반드시 `forge/ARCHITECTURE.md`를 먼저 읽는다. 탐색 스텝 33~44% 절감 (arXiv 2604.13108).
+
 
 ---
 
@@ -33,8 +35,8 @@
 
 ## 병렬 실행 (HIGH)
 
-- 독립 병렬 작업 → **Subagent** (기본) | 에이전트 간 소통/비교 → **Agent Teams** (특수)
-- 모델: Lead→Opus 4.6 | 구현/작성→Sonnet 4.6 | 탐색/검색→Haiku 4.5
+- 병렬 작업 → **Agent Teams** (기본) | 단순 탐색/검색/단일 파일 → **Subagent** (경량)
+- 모델: Lead→Opus 4.7 | 구현/작성→Sonnet 4.6 | 탐색/검색→Haiku 4.5
 - Worktree: 같은 파일 병렬 수정 시 `isolation: "worktree"` 사용
 
 ## PM 도구 / Notion (HIGH)
@@ -43,23 +45,23 @@
 - Human override 우선: `last_edited_by=person`이면 AI가 덮어쓰기 금지
 - 버그/기능 등록: **명시적 요청** 시에만. DB URL: `forge-workspace.json`의 `notionDBs`
 
-## 렌더링 레벨 (HIGH)
-
-- 이미지/다이어그램/PPTX/HTML 시각화 생성 전 프로젝트 style-guide의 **Rendering Level** 필드를 확인한다
-- 미지정 시 용도별 기본값 적용: 정부과제=L3, 내부 문서=L2, IR/키노트=L3~L4
-- 레벨 정의: `shared/design-tokens/rendering-levels.md`
-
 ## 커맨드 실행 모드 (HIGH)
 
 - Forge 멀티 Phase 커맨드는 **쓰기 모드에서 실행** (내부 [STOP] 게이트가 승인 지점)
 - Plan mode 감지 시 경고 출력 후 즉시 중단
 
-## 하네스 업데이트 프로토콜 (HIGH)
+## Context Compaction 트리거 (HIGH)
 
-- **동일 실수 2회 발생 시**: 즉시 forge-core.md 또는 해당 Deep 규칙 파일에 방지 규칙 추가
-- **learnings.jsonl 동일 태그 3회 이상**: forge-core.md 규칙 승격 후보로 표시 → `promote-learnings.sh` 실행
-- **Gate 결정 시**: gate-log에 "근거 (1~2줄)" 필드 필수 기록 (통과/실패 사유)
-- 하네스 변경 후 관련 스킬 프롬프트도 함께 동기화 (pipeline-prompt-sync 원칙)
+- **70% 토큰 소비 시** `/compact` 실행 권장 — 캐시 TTL(5분) 안에서 의도적 요약
+- **90% 토큰 소비 시** `/compact` 강제 권장 — 품질 저하 임계
+- 다음 Phase 진입 또는 Wave 전환 시점이 있으면 그 시점을 우선 (자연 분할점)
+- Wave 2~3 병렬 리뷰 직전에 `/compact` 수행 시 sub-agent 컨텍스트 오염 최소화
+
+## 암묵지 표면화 — Tacit Knowledge Surfacing (HIGH)
+
+- 실패 사유, 예외 패턴, 운영 뉘앙스는 코드·커밋에 드러나지 않는다. 반드시 **handover 문서**(실패한 시도와 이유), **CLAUDE.md**(scope별 규칙·제약), **memory**(세션 간 학습)에 명시적으로 기록한다.
+- "왜 이 방법을 택했고, 왜 다른 방법을 버렸는지"가 핵심 — 결과물만 남기면 다음 세션이 같은 실패를 반복한다.
+- Palantir FSR 원칙 차용: 시스템 바깥의 운영 로직(워크플로우 예외, 사용자 선호, 환경 제약)을 관찰하고 코드화한다.
 
 ---
 
@@ -85,3 +87,13 @@
 | Telegram 원격제어 | `~/.claude/rules-on-demand/telegram-remote-control.md` |
 
 Deep 원본: `planning/rules-source/{scope}/{filename}` 또는 `shared/{scope}/{filename}`
+
+
+## 컨텍스트 관리 (SWE-AGILE 패턴, arXiv 2604.11716)
+
+긴 에이전트 세션에서 토큰 낭비를 줄이는 패턴:
+
+- **슬라이딩 윈도우**: 긴 작업에서 초기 탐색 결과(파일 목록, 검색 결과)는 요약본으로 대체. 원문 전체를 컨텍스트에 유지하지 않는다.
+- **다이제스트 압축**: 완료된 서브태스크는 1-2줄 요약으로 압축. 세부 내용은 handover 파일에 기록.
+- **체크포인트**: 10+ 단계 작업 시 중간 상태를  또는 handover에 저장. 재시작 시 체크포인트부터 재개.
+- **컨텍스트 오염 방지**: 에러 메시지, 롤백된 시도, 임시 출력은 요약 후 드롭. 최종 결과만 유지.

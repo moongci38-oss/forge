@@ -1,0 +1,282 @@
+# Release + Staging
+#
+# 배포 위치: 프로젝트의 .github/workflows/release-staging.yml 에 복사하여 사용
+
+name: Release + Staging
+
+on:
+  # [한글] 수동 트리거 전용 워크플로우 — GitHub UI에서 버전을 입력하여 실행
+  # [English] Manual trigger only — run from GitHub UI with version input
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.2.0)"
+        required: true
+        default: ""
+      deploy_staging:
+        description: "Deploy to staging (requires deployCommand in release-config.json)"
+        required: false
+        default: "true"
+
+# [한글] 동시 실행 방지 — 버전별 그룹
+# [English] Prevent concurrent runs — group by version
+concurrency:
+  group: release-${{ github.event.inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Create Release Branch
+  # ─────────────────────────────────────────────
+  create-release-branch:
+    name: Create Release Branch
+    runs-on: ubuntu-latest
+    outputs:
+      release_branch: ${{ steps.push-branch.outputs.release_branch }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: develop
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Validate version
+        run: |
+          if [ -z "${VERSION}" ]; then
+            echo "VERSION input is required"
+            exit 1
+          fi
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Create release branch from develop
+        run: |
+          BRANCH="release/${VERSION}"
+          git fetch origin develop
+          git checkout -b "$BRANCH" origin/develop
+
+          # [한글] package.json 버전 업데이트
+          # [English] Bump version in package.json
+          if [ -f "package.json" ]; then
+            node -e "
+              const fs = require('fs');
+              const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+              pkg.version = '${VERSION}';
+              fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+              console.log('Version bumped to ${VERSION}');
+            "
+            git add package.json
+            git commit -m "chore: bump version to ${VERSION}" || echo "No changes to commit"
+          fi
+
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+
+      - name: Push release branch
+        id: push-branch
+        run: |
+          BRANCH="release/${VERSION}"
+          git push origin "$BRANCH"
+          echo "release_branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+          echo "Release branch ${BRANCH} created and pushed"
+
+  # ─────────────────────────────────────────────
+  # Job 2: Staging Deploy (conditional)
+  # ─────────────────────────────────────────────
+  staging-deploy:
+    name: Staging Deploy
+    runs-on: ubuntu-latest
+    needs: [create-release-branch]
+    if: github.event.inputs.deploy_staging == 'true'
+    outputs:
+      staging_deployed: ${{ steps.deploy.outputs.staging_deployed }}
+    env:
+      DEPLOY_ENV: staging
+      VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create-release-branch.outputs.release_branch }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Deploy to staging
+        id: deploy
+        run: |
+          if [ -f "release-config.json" ]; then
+            DEPLOY_CMD=$(node -e "
+              const c = require('./release-config.json');
+              console.log(c.environments?.staging?.deployCommand || '');
+            " 2>/dev/null || echo "")
+          else
+            DEPLOY_CMD=""
+            echo "release-config.json not found — skipping deploy"
+          fi
+
+          if [ -z "$DEPLOY_CMD" ]; then
+            echo "deployCommand is empty — 배포 인프라 미설정. build/test만 실행합니다."
+            echo "staging_deployed=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "Executing: $DEPLOY_CMD"
+            eval "$DEPLOY_CMD"
+            echo "staging_deployed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Staging health check
+        run: |
+          STAGING_DEPLOYED="${{ steps.deploy.outputs.staging_deployed }}"
+          if [ "${STAGING_DEPLOYED}" != "true" ]; then
+            echo "Staging deploy was skipped — skipping health check"
+            exit 0
+          fi
+
+          # [한글] 헬스 체크
+          # [English] Health check
+          HEALTH=$(node -e "
+            const c = require('./release-config.json');
+            console.log(c.environments?.staging?.healthEndpoint || '');
+          " 2>/dev/null || echo "")
+          if [ -n "$HEALTH" ]; then
+            TIMEOUT=$(node -e "
+              const c = require('./release-config.json');
+              console.log(c.environments?.staging?.healthTimeout || 120);
+            " 2>/dev/null || echo "120")
+            echo "Waiting for $HEALTH (timeout: ${TIMEOUT}s)..."
+            END=$((SECONDS + TIMEOUT))
+            while [ $SECONDS -lt $END ]; do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH" || echo "000")
+              if [ "$STATUS" = "200" ]; then
+                echo "Health check passed"
+                exit 0
+              fi
+              sleep 5
+            done
+            echo "Health check timed out"
+            exit 1
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 3: E2E (staging)
+  # ─────────────────────────────────────────────
+  e2e-staging:
+    name: E2E Staging
+    runs-on: ubuntu-latest
+    needs: [create-release-branch, staging-deploy]
+    if: always() && needs.create-release-branch.result == 'success'
+    env:
+      CI: "true"
+      VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create-release-branch.outputs.release_branch }}
+
+      - name: Check for e2e config
+        id: e2e-config
+        run: |
+          if [ ! -f ".specify/e2e-pipeline.json" ]; then
+            echo "No e2e-pipeline.json — skipping E2E"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.e2e-config.outputs.skip == 'false'
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E
+        if: steps.e2e-config.outputs.skip == 'false'
+        run: |
+          if [ -f "scripts/e2e-runner.sh" ]; then
+            bash scripts/e2e-runner.sh --env staging
+          else
+            echo "e2e-runner.sh not found — skipping"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 4: Create Release PR
+  # ─────────────────────────────────────────────
+  create-release-pr:
+    name: Create Release PR
+    runs-on: ubuntu-latest
+    needs: [create-release-branch, staging-deploy, e2e-staging]
+    if: always() && needs.create-release-branch.result == 'success'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VERSION: ${{ github.event.inputs.version }}
+      STAGING_DEPLOYED: ${{ needs.staging-deploy.outputs.staging_deployed || 'skipped' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          type gh || (apt-get update -y && apt-get install -y gh)
+
+      - name: Create release PR
+        run: |
+          BRANCH="release/${VERSION}"
+          STAGING="${STAGING_DEPLOYED:-skipped}"
+
+          STAGING_CHECK=$([ "$STAGING" = "true" ] && echo "x" || echo " ")
+
+          BODY=$(cat <<PRBODY
+## Release ${VERSION}
+
+### Pre-merge Checklist
+- [ ] Version bumped in package.json
+- [${STAGING_CHECK}] Staging deploy (${STAGING})
+- [ ] E2E staging (see workflow run)
+- [ ] CHANGELOG reviewed
+- [ ] QA sign-off
+
+> **Forge Phase 11** — Approve and merge to main to trigger Phase 7 production deploy.
+PRBODY
+)
+
+          PR_URL=$(gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "release: ${VERSION}" \
+            --body "$BODY" 2>&1 || true)
+
+          echo "Release PR created: ${PR_URL}"
+          echo ""
+          echo "**Forge Check 9.5** — [STOP] Human 승인 필요"

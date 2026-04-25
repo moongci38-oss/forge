@@ -294,3 +294,33 @@ model: sonnet
 - `node_modules/`
 - 자동 생성 파일 (`generated/`, `__generated__/`)
 - 서드파티 CSS 라이브러리 (`vendor/`)
+
+---
+
+## 독립 Evaluator (하네스)
+
+ux-audit 스킬 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: 생성자 ≠ 평가자. 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 ux-audit 스킬 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 평가하세요:
+1. 9개 항목(UX-1 Color Contrast, UX-2 Font Size, UX-3 Touch Target, UX-4 Layout Consistency, UX-5 Navigation, UX-6 3-State, UX-7 Responsive, UX-8 Accessibility, UX-9 Interaction Feedback) 모두 평가됐는지 확인한다. 하나라도 누락됐으면 FAIL.
+2. FAIL 또는 WARN 판정된 각 항목에 파일 경로+라인 등 구체적 위치 증거가 제시됐는지 확인한다. 추상적 서술("어딘가 문제")만 있으면 FAIL.
+3. FAIL 판정 항목에 구체적 수정 방법(autoFix 또는 수동 수정 지침)이 제시됐는지 확인한다. 문제 지적만 하고 방법이 없으면 FAIL.
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백 형식: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

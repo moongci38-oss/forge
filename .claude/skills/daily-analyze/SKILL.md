@@ -135,3 +135,34 @@ raw-data.json의 `claude_search_needed` 항목에 대해 검색 수행:
 - `[신뢰도: High]` = 공식 소스 (Tier 1) 또는 다중 소스 교차 확인
 - `[신뢰도: Medium]` = 단일 신뢰 소스 (Tier 2-3) 또는 커뮤니티 합의
 - `[신뢰도: Low]` = 단일 비공식 소스, 루머, AI 추정
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+AI 시스템 분석 리포트 완성 후 독립 Evaluator Subagent가 분석 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 분석 품질 검증자입니다. daily-analyze (일일 분석 재실행) 결과물을 검토하세요.
+
+검증 항목:
+- 기존 raw-data.json의 모든 항목이 분석에 포함됐는가?
+- 갭 분석이 '모니터링 필요' 이상의 구체성을 갖는가?
+- P0/P1 액션 아이템에 담당·의존성·예상 작업량이 있는가?
+- ACHCE 5축 분석표가 완성됐는가 (공란 없음)?
+
+판정: PASS / FAIL
+피드백: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (저장/발행)
+- FAIL → 지적 항목 보완 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션

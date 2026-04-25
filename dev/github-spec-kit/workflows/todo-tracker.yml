@@ -1,0 +1,104 @@
+# =============================================================================
+# Todo Tracker — Notion Tasks DB 자동 갱신 (범용)
+# =============================================================================
+#
+# [한글]
+# 기능: 브랜치 생성 시 할 일 → 진행중, PR merge 시 진행중/QA → 완료
+# 트리거:
+#   - 브랜치 생성: GitHub의 create 이벤트로 직접 감지.
+#   - PR merge: pull_request closed + merged 이벤트로 감지.
+# 매칭: 브랜치명 키워드 → Notion Tasks DB Spec 칼럼 fuzzy match
+# Notion이 유일한 Source of Truth (todo.md는 초기 등록용만)
+#
+# [English]
+# Purpose: Auto-update Notion Tasks DB on branch/PR events
+# Notion is the single source of truth for task tracking.
+# todo.md is only used for initial bulk registration (register action).
+#
+# Triggers:
+#   - Branch creation: Detected via GitHub's native create event.
+#   - PR merge: Detected via pull_request closed event with merged=true.
+#
+# 배포 위치: 프로젝트의 .github/workflows/todo-tracker.yml 에 복사하여 사용
+# 의존 스크립트:
+#   - scripts/sync-notion-tasks.py  (Notion 갱신)
+# =============================================================================
+
+name: Todo Tracker
+
+on:
+  # [한글] 브랜치 생성 이벤트 (태그 생성은 제외)
+  # [English] Branch creation event (excludes tag creation)
+  create:
+  # [한글] PR merge 감지
+  # [English] PR merge detection
+  pull_request:
+    types: [closed]
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Mark Doing (브랜치 생성 감지)
+  # ─────────────────────────────────────────────
+  mark-doing:
+    name: Mark Doing
+    runs-on: ubuntu-latest
+    # [한글] create 이벤트이고, main/develop/gh-pages가 아닌 브랜치인 경우
+    # [English] create event for non-default branches only
+    if: |
+      github.event_name == 'create' &&
+      github.ref_type == 'branch' &&
+      github.ref_name != 'main' &&
+      github.ref_name != 'develop' &&
+      github.ref_name != 'gh-pages'
+    env:
+      NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+      BRANCH_NAME: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mark task as doing in Notion
+        run: |
+          if [ -z "$NOTION_API_TOKEN" ]; then
+            echo "NOTION_API_TOKEN not set — skipping"
+            exit 0
+          fi
+          if [ -f scripts/sync-notion-tasks.py ]; then
+            python3 scripts/sync-notion-tasks.py doing "${BRANCH_NAME}"
+          else
+            echo "sync-notion-tasks.py not found — skipping"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 2: Mark Done (PR merge 감지)
+  # ─────────────────────────────────────────────
+  mark-done:
+    name: Mark Done
+    runs-on: ubuntu-latest
+    # [한글] PR이 merge된 경우 (develop 또는 main 대상)
+    # [English] PR merged into develop or main
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      (github.event.pull_request.base.ref == 'develop' || github.event.pull_request.base.ref == 'main')
+    env:
+      NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mark task as done in Notion
+        run: |
+          if [ -z "$NOTION_API_TOKEN" ]; then
+            echo "NOTION_API_TOKEN not set — skipping"
+            exit 0
+          fi
+
+          echo "Detected merged PR #${PR_NUMBER} from branch: ${SOURCE_BRANCH}"
+
+          if [ -f scripts/sync-notion-tasks.py ]; then
+            python3 scripts/sync-notion-tasks.py done "$SOURCE_BRANCH" "$PR_NUMBER" "$PR_URL"
+          else
+            echo "sync-notion-tasks.py not found — skipping"
+          fi

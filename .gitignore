@@ -21,6 +21,7 @@ secrets/
 .claude/memory/
 .claude/forge-sync-state.json
 .claude/usage.log
+.claude/agent-budget/
 .claude/scheduled_tasks.lock
 
 # === OS files ===
@@ -39,6 +40,17 @@ desktop.ini
 *.avi
 *.psd
 *.ai
+
+# === Document files (outputs → forge-outputs only, forge is public) ===
+*.docx
+*.doc
+*.hwp
+*.hwpx
+*.pptx
+*.ppt
+*.xlsx
+*.xls
+*.pdf
 
 # === Temp files ===
 *.tmp
@@ -65,3 +77,17 @@ shared/scripts/yt-analyzer/
 # === Script logs (per-user) ===
 shared/scripts/daily-review/logs/
 shared/scripts/weekly-research/logs/
+
+# === LightRAG indexes (per-user, large binary state) ===
+shared/lightrag-pilot-data/
+shared/lightrag-grants-data/
+shared/lightrag-wiki-data/
+shared/lightrag-archive-data/
+
+# Session-specific hook logs
+.claude/gate-approval.log
+.claude/override-rate.log
+.claude/security.log
+
+# CRITICAL: forge-outputs/ is sibling, never commit content under forge/forge-outputs/
+/forge-outputs/

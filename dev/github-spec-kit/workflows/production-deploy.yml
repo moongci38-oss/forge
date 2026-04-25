@@ -1,0 +1,298 @@
+# Production Deploy
+#
+# 배포 위치: 프로젝트의 .github/workflows/production-deploy.yml 에 복사하여 사용
+
+name: Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      skip_deploy:
+        description: "Set to true to build artifacts only without deploying"
+        required: false
+        default: "false"
+
+# [한글] 동시 실행 방지 — 프로덕션 배포는 직렬 실행
+# [English] Prevent concurrent runs — production deploys are serial
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Deploy to Production
+  # ─────────────────────────────────────────────
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
+      deployed: ${{ steps.deploy.outputs.deployed }}
+    env:
+      SKIP_DEPLOY: ${{ github.event.inputs.skip_deploy || 'false' }}
+      DEPLOY_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Set version
+        id: set-version
+        run: |
+          VERSION=$(node -e "
+            try {
+              const p = require('./package.json');
+              process.stdout.write(p.version || '0.0.0');
+            } catch(e) {
+              process.stdout.write('0.0.0');
+            }
+          " 2>/dev/null || echo "0.0.0")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+
+      - name: Deploy
+        id: deploy
+        run: |
+          if [ -f "release-config.json" ]; then
+            DEPLOY_CMD=$(node -e "
+              try {
+                const c = require('./release-config.json');
+                process.stdout.write(c.environments?.production?.deployCommand || '');
+              } catch(e) {
+                process.stdout.write('');
+              }
+            " 2>/dev/null || echo "")
+          else
+            DEPLOY_CMD=""
+          fi
+
+          if [ "${SKIP_DEPLOY}" = "true" ]; then
+            echo "SKIP_DEPLOY=true — build artifacts만 생성합니다."
+            echo "deployed=skipped" >> "$GITHUB_OUTPUT"
+          elif [ -z "$DEPLOY_CMD" ]; then
+            echo "deployCommand is empty — 배포 인프라 미설정. build artifacts만 생성합니다."
+            echo "deployed=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "Executing: $DEPLOY_CMD"
+            eval "$DEPLOY_CMD"
+            echo "deployed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 2: Health Check
+  # ─────────────────────────────────────────────
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: needs.deploy.outputs.deployed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run health check
+        run: |
+          if [ ! -f "release-config.json" ]; then
+            echo "No release-config.json — skipping health check"
+            exit 0
+          fi
+          HEALTH=$(node -e "
+            try {
+              const c = require('./release-config.json');
+              process.stdout.write(c.environments?.production?.healthEndpoint || '');
+            } catch(e) {
+              process.stdout.write('');
+            }
+          " 2>/dev/null || echo "")
+          if [ -z "$HEALTH" ]; then
+            echo "No healthEndpoint configured — skipping health check"
+            exit 0
+          fi
+          TIMEOUT=$(node -e "
+            try {
+              const c = require('./release-config.json');
+              process.stdout.write(String(c.environments?.production?.healthTimeout || 120));
+            } catch(e) {
+              process.stdout.write('120');
+            }
+          " 2>/dev/null || echo "120")
+          echo "Checking $HEALTH (timeout: ${TIMEOUT}s)..."
+          END=$((SECONDS + TIMEOUT))
+          while [ $SECONDS -lt $END ]; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH" 2>/dev/null || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (HTTP 200)"
+              exit 0
+            fi
+            echo "Returned $STATUS — retrying in 5s..."
+            sleep 5
+          done
+          echo "Health check timed out"
+          exit 1
+
+  # ─────────────────────────────────────────────
+  # Job 3: Smoke Test
+  # ─────────────────────────────────────────────
+  smoke-test:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    needs: [deploy, health-check]
+    if: always() && needs.deploy.result == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run smoke test
+        run: |
+          if [ ! -f "release-config.json" ]; then
+            echo "No release-config.json — skipping smoke test"
+            exit 0
+          fi
+          SMOKE=$(node -e "
+            try {
+              const c = require('./release-config.json');
+              process.stdout.write(c.environments?.production?.smokeTestURL || '');
+            } catch(e) {
+              process.stdout.write('');
+            }
+          " 2>/dev/null || echo "")
+          if [ -z "$SMOKE" ]; then
+            echo "No smokeTestURL configured — skipping smoke test"
+            exit 0
+          fi
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SMOKE" 2>/dev/null || echo "000")
+          if [ "$STATUS" = "200" ]; then
+            echo "Smoke test passed: $SMOKE → HTTP $STATUS"
+          else
+            echo "Smoke test failed: $SMOKE → HTTP $STATUS"
+            exit 1
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 4: Create GitHub Release
+  # ─────────────────────────────────────────────
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [deploy, health-check, smoke-test]
+    if: always() && needs.deploy.result == 'success'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      VERSION: ${{ needs.deploy.outputs.version }}
+      GITHUB_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create tag and release
+        run: |
+          VERSION="${VERSION:-0.0.0}"
+          TAG="v${VERSION}"
+          SHA="${GITHUB_SHA}"
+
+          # [한글] 태그 생성 (이미 존재하면 스킵)
+          # [English] Create tag (skip if already exists)
+          TAG_EXISTS=$(curl --silent \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/refs/tags/${TAG}" \
+            | python3 -c "import json,sys; d=json.load(sys.stdin); print('exists')" 2>/dev/null || true)
+
+          if [ "$TAG_EXISTS" = "exists" ]; then
+            echo "Tag ${TAG} already exists — skipping tag creation"
+          else
+            curl --silent --request POST \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "{\"ref\": \"refs/tags/${TAG}\", \"sha\": \"${SHA}\"}" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/refs"
+            echo "Tag ${TAG} created"
+          fi
+
+          # [한글] CHANGELOG 읽기 (존재하면)
+          # [English] Read CHANGELOG if exists
+          if [ -f "CHANGELOG.md" ]; then
+            BODY=$(head -30 CHANGELOG.md)
+          else
+            BODY="## Release ${VERSION}\n\nDeployed via Forge Phase 7."
+          fi
+
+          # [한글] GitHub Release 생성
+          # [English] Create GitHub Release
+          RELEASE_RESPONSE=$(curl --silent --request POST \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            --header "Content-Type: application/json" \
+            --data "$(python3 -c "
+import json, sys
+body = sys.stdin.read()
+print(json.dumps({
+  'tag_name': '${TAG}',
+  'name': 'Release ${VERSION}',
+  'body': body,
+  'draft': False,
+  'prerelease': False
+}))
+" <<< "$BODY")" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases")
+
+          RELEASE_URL=$(echo "$RELEASE_RESPONSE" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('html_url',''))" 2>/dev/null || true)
+          echo "Release created: ${RELEASE_URL}"
+          echo "Forge Phase 7 Complete — Release ${VERSION} created"
+
+  # ─────────────────────────────────────────────
+  # Job 5: Cleanup Release Branch
+  # ─────────────────────────────────────────────
+  cleanup:
+    name: Cleanup Release Branch
+    runs-on: ubuntu-latest
+    needs: [deploy, create-release]
+    if: needs.deploy.result == 'success' && needs.create-release.result == 'success'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      VERSION: ${{ needs.deploy.outputs.version }}
+    steps:
+      - name: Delete release branch
+        run: |
+          VERSION="${VERSION:-0.0.0}"
+          BRANCH="release/${VERSION}"
+          ENCODED_BRANCH=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${BRANCH}', safe=''))")
+
+          # [한글] release/{version} 브랜치 삭제
+          # [English] Delete release/{version} branch
+          HTTP_STATUS=$(curl --silent --request DELETE \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            --write-out "%{http_code}" \
+            --output /dev/null \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}")
+
+          if [ "$HTTP_STATUS" = "204" ]; then
+            echo "Branch release/${VERSION} deleted"
+          elif [ "$HTTP_STATUS" = "422" ] || [ "$HTTP_STATUS" = "404" ]; then
+            echo "Branch release/${VERSION} not found — skipping"
+          else
+            echo "Could not delete branch release/${VERSION} (HTTP ${HTTP_STATUS}) — skipping"
+          fi

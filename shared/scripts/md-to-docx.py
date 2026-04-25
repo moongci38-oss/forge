@@ -26,7 +26,6 @@ from PIL import Image as PILImage
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor, Cm, Twips
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 
 
@@ -37,13 +36,13 @@ FONT_BODY = "맑은 고딕"
 FONT_TABLE = "맑은 고딕"
 FONT_FALLBACK = "Malgun Gothic"
 
-TITLE_SIZE = Pt(18)   # HWP: HY헤드라인M 18pt
-H1_SIZE = Pt(16)      # HWP: 한양신명조 16pt (소제목)
-H2_SIZE = Pt(14)      # HWP: 한양신명조 14pt (항)
-H3_SIZE = Pt(12)      # HWP: 12pt (세부항)
-BODY_SIZE = Pt(10)    # HWP: 함초롬바탕 10pt
-TABLE_SIZE = Pt(10)   # HWP: 돋움 10pt
-CAPTION_SIZE = Pt(11) # HWP: 한양중고딕 11pt Bold
+TITLE_SIZE = Pt(18)
+H1_SIZE = Pt(16)
+H2_SIZE = Pt(14)
+H3_SIZE = Pt(11)
+BODY_SIZE = Pt(10)
+TABLE_SIZE = Pt(10)
+CAPTION_SIZE = Pt(9)
 
 
 def set_font(run, font_name=FONT_BODY, size=BODY_SIZE, bold=False, color=None):
@@ -109,8 +108,10 @@ def set_style_defaults(doc):
 COLOR_MAP = {
     "red": RGBColor(0xFF, 0x00, 0x00),
     "blue": RGBColor(0x00, 0x62, 0xB8),
+    "green": RGBColor(0x00, 0x80, 0x00),
     "#ff0000": RGBColor(0xFF, 0x00, 0x00),
     "#0062b8": RGBColor(0x00, 0x62, 0xB8),
+    "#008000": RGBColor(0x00, 0x80, 0x00),
 }
 
 # 인라인 span (한 줄 안에서 열고 닫는 경우)
@@ -123,6 +124,7 @@ SPAN_OPEN_RE = re.compile(r'<span\s+style="color:\s*([^";]+)[^"]*"[^>]*>\s*$')
 SPAN_CLOSE_RE = re.compile(r'^\s*</span>\s*$')
 
 BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+BR_RE = re.compile(r"<br\s*/?\s*>", re.IGNORECASE)
 IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+)$")
 HR_RE = re.compile(r"^---+\s*$")
@@ -165,6 +167,20 @@ def add_rich_text(paragraph, text, base_font=FONT_BODY, base_size=BODY_SIZE, bas
         _add_formatted_runs(paragraph, remaining, base_font, base_size, color=base_color)
 
 
+def _add_text_with_breaks(paragraph, text, font_name, font_size, bold=False, color=None):
+    """텍스트 내 <br> 태그를 실제 줄바꿈으로 변환하며 run 추가."""
+    if not text:
+        return
+    segments = BR_RE.split(text)
+    for idx, seg in enumerate(segments):
+        if idx > 0:
+            br_run = paragraph.add_run()
+            br_run.add_break()
+        if seg:
+            run = paragraph.add_run(seg)
+            set_font(run, font_name, font_size, bold=bold, color=color)
+
+
 def _add_formatted_runs(paragraph, text, font_name, font_size, color=None, force_bold=False):
     """**bold** 마크다운과 [링크](url)를 파싱하여 run으로 추가."""
     # 링크 제거 (텍스트만 유지)
@@ -176,39 +192,32 @@ def _add_formatted_runs(paragraph, text, font_name, font_size, color=None, force
     for m in BOLD_RE.finditer(text):
         before = text[pos : m.start()]
         if before:
-            run = paragraph.add_run(before)
-            set_font(run, font_name, font_size, bold=force_bold, color=color)
+            _add_text_with_breaks(paragraph, before, font_name, font_size, bold=force_bold, color=color)
         bold_text = m.group(1)
-        run = paragraph.add_run(bold_text)
-        set_font(run, font_name, font_size, bold=True, color=color)
+        _add_text_with_breaks(paragraph, bold_text, font_name, font_size, bold=True, color=color)
         pos = m.end()
     remaining = text[pos:]
     if remaining:
-        run = paragraph.add_run(remaining)
-        set_font(run, font_name, font_size, bold=force_bold, color=color)
-
-
-def get_content_width_inches(doc):
-    """문서 섹션의 실제 콘텐츠 폭(페이지 폭 - 좌우 여백)을 인치로 반환."""
-    section = doc.sections[0]
-    page_w = section.page_width
-    left_margin = section.left_margin
-    right_margin = section.right_margin
-    content_w = page_w - left_margin - right_margin
-    return content_w / 914400  # EMU → inches
+        _add_text_with_breaks(paragraph, remaining, font_name, font_size, bold=force_bold, color=color)
 
 
 def add_image(doc, img_path, base_dir):
     """이미지를 InlineShape로 삽입. 파일 없으면 플레이스홀더 텍스트."""
     full_path = Path(base_dir) / img_path
     if full_path.exists():
-        MAX_W = get_content_width_inches(doc)
+        MAX_W = 6.3   # inches
+        MAX_H = 6.0   # inches (이미지 아래 공백 최소화)
         try:
-            doc.add_picture(str(full_path), width=Inches(MAX_W))
+            pil_img = PILImage.open(str(full_path))
+            w_px, h_px = pil_img.size
+            h_at_max_w = h_px / w_px * MAX_W
+            if h_at_max_w > MAX_H:
+                doc.add_picture(str(full_path), height=Inches(MAX_H))
+            else:
+                doc.add_picture(str(full_path), width=Inches(MAX_W))
         except Exception:
             doc.add_picture(str(full_path), width=Inches(MAX_W))
         p = doc.paragraphs[-1]
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.paragraph_format.space_before = Pt(2)
         p.paragraph_format.space_after = Pt(2)
         p.paragraph_format.line_spacing = 1.0
@@ -266,22 +275,8 @@ def _set_cell_valign(cell, align="center"):
     va.set(qn("w:val"), align)
 
 
-def _add_cell_rich_text(paragraph, text, font_name=FONT_TABLE, font_size=TABLE_SIZE, base_dir=None):
-    """테이블 셀 내부 텍스트에서 **bold**, <span color:red>, ![img](path) 파싱."""
-    # 셀 내 이미지 처리
-    img_m = IMG_RE.search(text)
-    if img_m and base_dir:
-        full_path = Path(base_dir) / img_m.group(2)
-        if full_path.exists():
-            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            run = paragraph.add_run()
-            run.add_picture(str(full_path), width=Inches(2.8))
-            return
-        else:
-            run = paragraph.add_run(f"[이미지 없음: {img_m.group(2)}]")
-            set_font(run, font_name, font_size, color=RGBColor(0x99, 0x99, 0x99))
-            return
-
+def _add_cell_rich_text(paragraph, text, font_name=FONT_TABLE, font_size=TABLE_SIZE):
+    """테이블 셀 내부 텍스트에서 **bold**와 <span color:red> 파싱."""
     text = re.sub(r'<span\s+style="color:\s*([^";]+)[^"]*"[^>]*>', r'{{COLOR:\1}}', text)
     text = text.replace('</span>', '{{/COLOR}}')
 
@@ -304,19 +299,16 @@ def _add_cell_rich_text(paragraph, text, font_name=FONT_TABLE, font_size=TABLE_S
         for m in BOLD_RE.finditer(part):
             before = part[pos:m.start()]
             if before:
-                run = paragraph.add_run(before)
-                set_font(run, font_name, font_size, color=current_color)
+                _add_text_with_breaks(paragraph, before, font_name, font_size, color=current_color)
             bold_text = m.group(1)
-            run = paragraph.add_run(bold_text)
-            set_font(run, font_name, font_size, bold=True, color=current_color)
+            _add_text_with_breaks(paragraph, bold_text, font_name, font_size, bold=True, color=current_color)
             pos = m.end()
         remaining = part[pos:]
         if remaining:
-            run = paragraph.add_run(remaining)
-            set_font(run, font_name, font_size, color=current_color)
+            _add_text_with_breaks(paragraph, remaining, font_name, font_size, color=current_color)
 
 
-def add_table(doc, rows, base_dir=None):
+def add_table(doc, rows):
     """마크다운 파이프 테이블을 고급 스타일 docx Table로 변환."""
     if len(rows) < 2:
         return
@@ -331,20 +323,7 @@ def add_table(doc, rows, base_dir=None):
     ncols = len(headers)
     table = doc.add_table(rows=1 + len(data_rows), cols=ncols)
     table.style = "Table Grid"
-    table.autofit = False
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    # 테이블 폭을 페이지 콘텐츠 폭 100%로 고정
-    tbl = table._tbl
-    tblPr = tbl.find(qn("w:tblPr"))
-    if tblPr is None:
-        tblPr = tbl.makeelement(qn("w:tblPr"), {})
-        tbl.insert(0, tblPr)
-    tblW = tblPr.find(qn("w:tblW"))
-    if tblW is None:
-        tblW = tbl.makeelement(qn("w:tblW"), {})
-        tblPr.append(tblW)
-    tblW.set(qn("w:w"), "5000")
-    tblW.set(qn("w:type"), "pct")
+    table.autofit = True
 
     # ─── 헤더 행 ───
     for i, h in enumerate(headers):
@@ -374,7 +353,7 @@ def add_table(doc, rows, base_dir=None):
             cell.text = ""
             p = cell.paragraphs[0]
             # 리치 텍스트 파싱 (bold, 빨간색 유지)
-            _add_cell_rich_text(p, row_data[ci], base_dir=base_dir)
+            _add_cell_rich_text(p, row_data[ci])
             # 셀 패딩 + 수직 중앙
             _set_cell_padding(cell, 60, 60, 100, 100)
             _set_cell_valign(cell, "center")
@@ -386,26 +365,6 @@ def add_table(doc, rows, base_dir=None):
             # 테두리: 검정 0.5pt (디딤돌 양식)
             _set_cell_border(cell, top=(4, "000000"), bottom=(4, "000000"), left=(4, "000000"), right=(4, "000000"))
 
-    # ─── 전체 행 높이·문단 간격 통일 ───
-    for row in table.rows:
-        tr = row._tr
-        trPr = tr.find(qn("w:trPr"))
-        if trPr is None:
-            trPr = tr.makeelement(qn("w:trPr"), {})
-            tr.insert(0, trPr)
-        trHeight = trPr.find(qn("w:trHeight"))
-        if trHeight is None:
-            trHeight = tr.makeelement(qn("w:trHeight"), {})
-            trPr.append(trHeight)
-        trHeight.set(qn("w:val"), "400")  # 최소 행 높이 400 twips (~7mm)
-        trHeight.set(qn("w:hRule"), "atLeast")
-        # 셀 내 문단 간격 통일
-        for cell in row.cells:
-            for p in cell.paragraphs:
-                p.paragraph_format.space_before = Pt(1)
-                p.paragraph_format.space_after = Pt(1)
-                p.paragraph_format.line_spacing = 1.15
-
 
 def convert_md_to_docx(md_path, docx_path):
     """단일 md 파일을 docx로 변환."""
@@ -414,6 +373,11 @@ def convert_md_to_docx(md_path, docx_path):
 
     with open(md_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
+
+    # 출처 코드 제거 (md 원본 유지, docx 출력에서만 제거)
+    import re
+    source_code_pattern = re.compile(r'\s*`\[[A-Z]\](?:\s*§[A-Za-z]+)?`|\s*`\[O\]\s*§[A-Za-z]+`|\(\[([A-Z])\]\s*§[^)]*\)')
+    lines = [source_code_pattern.sub('', line) for line in lines]
 
     doc = Document()
     set_style_defaults(doc)
@@ -489,7 +453,7 @@ def convert_md_to_docx(md_path, docx_path):
         # 빈 줄 처리 — 연속 빈 줄 최대 1개만 허용
         if not line.strip():
             if in_table and table_buffer:
-                add_table(doc, table_buffer, base_dir=base_dir)
+                add_table(doc, table_buffer)
                 table_buffer = []
                 in_table = False
                 doc.add_paragraph()  # 테이블 뒤 구분 단락
@@ -509,7 +473,7 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
         elif in_table and table_buffer:
-            add_table(doc, table_buffer, base_dir=base_dir)
+            add_table(doc, table_buffer)
             table_buffer = []
             in_table = False
 
@@ -535,8 +499,9 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
 
-        # 문서 끝 메타 (*v1.3...) 스킵
-        if line.strip().startswith("*") and line.strip().endswith("*") and len(line.strip()) > 5:
+        # 문서 끝 메타 (*v1.3...) 스킵 — 이탤릭(*...*) 전용, 볼드(**...**) 제외
+        _s = line.strip()
+        if _s.startswith("*") and not _s.startswith("**") and _s.endswith("*") and not _s.endswith("**") and len(_s) > 5:
             i += 1
             continue
 
@@ -573,11 +538,9 @@ def convert_md_to_docx(md_path, docx_path):
             i += 1
             continue
 
-        # 인라인 span (span이 줄 전체를 커버하는 경우만 — 주로 파란색 작성요령)
-        # span 뒤에 텍스트가 더 있으면 일반 텍스트 처리로 fallthrough
-        line_stripped = line.strip()
-        inline_span = INLINE_SPAN_RE.match(line_stripped)
-        if inline_span and line_stripped == inline_span.group(0):
+        # 인라인 span (한 줄에 열고 닫는 경우 — 주로 파란색 작성요령)
+        inline_span = INLINE_SPAN_RE.match(line.strip())
+        if inline_span and '<span' in line and '</span>' in line:
             color = parse_color(inline_span.group(1))
             inner_text = inline_span.group(2)
             p = doc.add_paragraph()
@@ -618,72 +581,7 @@ def convert_md_to_docx(md_path, docx_path):
 
     # 남은 테이블 버퍼
     if table_buffer:
-        add_table(doc, table_buffer, base_dir=base_dir)
-
-    # ─── 후처리: 전체 정렬·간격 강제 통일 ───
-    for p in doc.paragraphs:
-        pf = p.paragraph_format
-        # 정렬: 이미지(CENTER)와 제목은 유지, 나머지 LEFT
-        if p.alignment is None:
-            style_name = p.style.name if p.style else ""
-            if "Heading" in style_name:
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-            else:
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        # 간격 통일: 미설정 문단에 기본값 적용
-        if pf.space_before is None:
-            pf.space_before = Pt(0)
-        if pf.space_after is None:
-            pf.space_after = Pt(2)
-        if pf.line_spacing is None:
-            pf.line_spacing = 1.2
-
-    # 테이블 전후 간격 추가 (문단과 테이블 사이 갭)
-    for table in doc.tables:
-        tbl = table._tbl
-        tblPr = tbl.find(qn("w:tblPr"))
-        if tblPr is None:
-            tblPr = tbl.makeelement(qn("w:tblPr"), {})
-            tbl.insert(0, tblPr)
-        # 테이블 전후 여백: 상 6pt, 하 6pt
-        for margin_tag, margin_val in [("w:tblpPr", None)]:
-            pass  # tblpPr은 floating table용이므로 skip
-        # OxmlElement로 직접 spacing 설정
-        tblCellSpacing = tblPr.find(qn("w:tblCellSpacing"))
-        # 테이블 앞뒤 빈 줄 대신 tblInd 활용 — 실제로는 전후 paragraph spacing으로 처리
-        prev = tbl.getprevious()
-        if prev is not None and prev.tag == qn("w:p"):
-            pPr = prev.find(qn("w:pPr"))
-            if pPr is not None:
-                spacing = pPr.find(qn("w:spacing"))
-                if spacing is None:
-                    spacing = prev.makeelement(qn("w:spacing"), {})
-                    pPr.append(spacing)
-                spacing.set(qn("w:after"), "120")  # 6pt = 120 twips
-        nxt = tbl.getnext()
-        if nxt is not None and nxt.tag == qn("w:p"):
-            pPr = nxt.find(qn("w:pPr"))
-            if pPr is not None:
-                spacing = pPr.find(qn("w:spacing"))
-                if spacing is None:
-                    spacing = nxt.makeelement(qn("w:spacing"), {})
-                    pPr.append(spacing)
-                spacing.set(qn("w:before"), "120")  # 6pt = 120 twips
-
-    # 테이블 내부 셀 정렬 통일
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for p in cell.paragraphs:
-                    if p.alignment is None:
-                        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-                    pf = p.paragraph_format
-                    if pf.space_before is None:
-                        pf.space_before = Pt(1)
-                    if pf.space_after is None:
-                        pf.space_after = Pt(1)
-                    if pf.line_spacing is None:
-                        pf.line_spacing = 1.15
+        add_table(doc, table_buffer)
 
     doc.save(str(docx_path))
     print(f"✅ {md_path.name} → {Path(docx_path).name}")

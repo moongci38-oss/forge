@@ -1,0 +1,11 @@
+{
+  "image": "/home/damools/forge-outputs/02-product/projects/baduki/screenshots/signal-2026-03-28-183415.jpeg",
+  "bbox": [48, 448, 263, 587],
+  "margin": 3,
+  "bot_margin": 8,
+  "expected": {
+    "alpha_coverage_min": 0.1,
+    "tags": ["icon-text", "rounded", "adjacent-ui"]
+  },
+  "_note": "manifest btn_03. 인접 UI(좌우 아이콘) 포함 위험 케이스"
+}

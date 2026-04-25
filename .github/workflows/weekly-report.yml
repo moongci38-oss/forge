@@ -1,0 +1,61 @@
+name: Weekly Research Report
+
+on:
+  schedule:
+    # 매주 일요일 23:00 KST (14:00 UTC)
+    - cron: '0 14 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-report:
+    name: Generate & Upload Weekly Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: scripts/weekly-report
+        run: npm ci
+
+      - name: Generate report
+        working-directory: scripts/weekly-report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node generate.mjs
+
+      - name: Upload to Notion
+        working-directory: scripts/weekly-report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node upload-notion.mjs
+
+      - name: Commit report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git"
+          git add 01-research/weekly/
+          if git diff --staged --quiet; then
+            echo "No new report to commit"
+          else
+            WEEK=$(date -u +%Y-W%V)
+            git commit -m "docs: ${WEEK} 주간 리서치 리포트 자동 생성"
+            git push
+          fi

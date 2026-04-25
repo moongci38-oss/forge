@@ -1,0 +1,375 @@
+# =============================================================================
+# SDD Spec Check — PR Spec 검증 워크플로우
+# SDD Spec Check — Pull Request Spec Validation Workflow
+# =============================================================================
+#
+# [한글]
+# 기능: PR이 열릴 때 해당 브랜치와 연결된 Spec 문서를 자동으로 검증한다.
+# 트리거 시점: PR이 열리거나 새 커밋이 push될 때 자동 실행.
+# 스킵 조건: docs/, hotfix/, fix/, chore/, feature/spec-* 브랜치는 검증 건너뜀.
+#
+# 실행 흐름:
+#   1. 브랜치명에서 Spec 이름 추출 (feat/user-auth → user-auth)
+#   2. .specify/specs/{name}.md 파일 존재 확인 (정확 매칭 → 퍼지 매칭)
+#   3. .specify/plans/{name}-plan.md 계획 문서 존재 확인
+#   4. Spec 파일 내 필수 섹션 검증 (요구사항, API, 테스트)
+#   5. PR에 검증 결과 코멘트 자동 작성 (기존 코멘트 있으면 업데이트)
+#   6. Spec 미발견 시 경고 코멘트 + 워크플로우 실패 처리
+#
+# Forge 파이프라인 연계:
+#   - Phase 4 (PR 생성) 이후 GitHub에서 자동 실행
+#   - Check 5 (PR Health)의 일부로서, Spec 존재 + 구조 검증
+#   - 리뷰어에게 Spec/Plan 링크 + 검증 체크리스트 제공
+#
+# 배포 위치: 프로젝트의 .github/workflows/spec-check.yml 에 복사하여 사용
+#
+# [English]
+# Purpose: Automatically validates Spec documents linked to a PR when it's opened.
+# Trigger: Fires on PR opened or new commits pushed events.
+# Skip conditions: docs/, hotfix/, fix/, chore/, feature/spec-* branches are skipped.
+#
+# Execution flow:
+#   1. Extract Spec name from branch name (feat/user-auth → user-auth)
+#   2. Check if .specify/specs/{name}.md exists (exact match → fuzzy match)
+#   3. Check if .specify/plans/{name}-plan.md plan document exists
+#   4. Validate required sections in Spec file (Requirements, API, Testing)
+#   5. Post validation result as PR comment (update existing comment if found)
+#   6. If Spec not found, post warning comment + fail the workflow
+#
+# Forge pipeline integration:
+#   - Runs automatically on GitHub after Phase 4 (PR creation)
+#   - Part of Check 5 (PR Health) — validates Spec existence + structure
+#   - Provides Spec/Plan links + review checklist for reviewers
+#
+# Deployment: Copy to .github/workflows/spec-check.yml in your project
+# =============================================================================
+
+name: SDD Spec Check
+
+on:
+  # [한글] PR 이벤트에서만 실행
+  # [English] Only runs on pull request events
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  spec-validation:
+    name: Spec Validation
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      BRANCH_NAME: ${{ github.head_ref }}
+      GITHUB_SERVER_URL: ${{ github.server_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # [한글] Step 0: 스킵 조건 확인 — 비기능 브랜치 제외
+      # [English] Step 0: Check skip conditions — exclude non-feature branches
+      - name: Check skip conditions
+        id: skip-check
+        run: |
+          if echo "$BRANCH_NAME" | grep -qE '^(docs|hotfix|fix|chore)/|^feature/spec-'; then
+            echo "Branch ${BRANCH_NAME} is excluded from spec validation — skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # [한글] Step 1: 브랜치명에서 Spec 이름 추출
+      #   feat/user-auth → user-auth, fix/login-bug → login-bug
+      #   슬래시(/) 이전의 prefix를 제거하여 Spec 파일명으로 매핑
+      # [English] Step 1: Extract Spec name from branch name
+      #   feat/user-auth → user-auth, fix/login-bug → login-bug
+      #   Strips the prefix before slash(/) to map to a Spec filename
+      - name: Extract spec name
+        id: spec-name
+        if: steps.skip-check.outputs.skip != 'true'
+        run: |
+          SPEC_NAME=$(echo "$BRANCH_NAME" | sed 's/^[^/]*\///')
+          echo "Branch: $BRANCH_NAME → Spec name: $SPEC_NAME"
+          echo "spec_name=${SPEC_NAME}" >> "$GITHUB_OUTPUT"
+
+      # [한글] Step 2: Spec 파일 존재 확인
+      #   1차: 정확한 파일명 매칭 (.specify/specs/{name}.md)
+      #   2차: 퍼지 매칭 (파일명에 Spec 이름이 포함된 파일 검색)
+      #   미발견 시: spec_exists=false → 후속 처리에서 경고 코멘트 작성
+      # [English] Step 2: Check if Spec file exists
+      #   1st: Exact filename match (.specify/specs/{name}.md)
+      #   2nd: Fuzzy match (search for files containing the Spec name)
+      #   If not found: spec_exists=false → subsequent step posts warning comment
+      - name: Check spec file existence
+        id: spec-exists
+        if: steps.skip-check.outputs.skip != 'true'
+        env:
+          SPEC_NAME: ${{ steps.spec-name.outputs.spec_name }}
+        run: |
+          SPEC_FILE=".specify/specs/${SPEC_NAME}.md"
+          SPEC_EXISTS="false"
+          FOUND_SPEC_FILE=""
+
+          # 1. Exact match / 정확 매칭
+          if [ -f "$SPEC_FILE" ]; then
+            SPEC_EXISTS="true"
+            FOUND_SPEC_FILE="$SPEC_FILE"
+            echo "Exact match found: $SPEC_FILE"
+          else
+            # 2. Fuzzy match / 퍼지 매칭 (파일명에 Spec 이름 포함)
+            SPEC_FILES=$(find .specify/specs -type f -name "*${SPEC_NAME}*.md" 2>/dev/null || true)
+            if [ -n "$SPEC_FILES" ]; then
+              FOUND_SPEC_FILE=$(echo "$SPEC_FILES" | head -n 1)
+              SPEC_EXISTS="true"
+              echo "Fuzzy match found: $FOUND_SPEC_FILE"
+            else
+              echo "Spec not found. Available specs:"
+              ls -1 .specify/specs/ 2>/dev/null || echo "No specs found"
+            fi
+          fi
+
+          echo "spec_exists=${SPEC_EXISTS}" >> "$GITHUB_OUTPUT"
+          echo "found_spec_file=${FOUND_SPEC_FILE}" >> "$GITHUB_OUTPUT"
+
+      # [한글] Step 3: Plan 문서 존재 확인
+      #   Spec이 존재할 때만 실행. Plan 파일도 정확 매칭 → 퍼지 매칭 순서로 검색.
+      #   Plan은 필수가 아니지만, 존재 여부를 PR 코멘트에 표시.
+      # [English] Step 3: Check if Plan document exists
+      #   Runs only when Spec exists. Searches Plan file with exact → fuzzy match.
+      #   Plan is not required, but its existence is reported in the PR comment.
+      - name: Check plan file existence
+        id: plan-exists
+        if: steps.skip-check.outputs.skip != 'true' && steps.spec-exists.outputs.spec_exists == 'true'
+        env:
+          SPEC_NAME: ${{ steps.spec-name.outputs.spec_name }}
+        run: |
+          PLAN_EXISTS="false"
+          FOUND_PLAN_FILE=""
+
+          PLAN_FILE=".specify/plans/${SPEC_NAME}-plan.md"
+
+          # Exact match / 정확 매칭
+          if [ -f "$PLAN_FILE" ]; then
+            PLAN_EXISTS="true"
+            FOUND_PLAN_FILE="$PLAN_FILE"
+          else
+            # Fuzzy match / 퍼지 매칭
+            PLAN_FILES=$(find .specify/plans -type f -name "*${SPEC_NAME}*.md" 2>/dev/null || true)
+            if [ -n "$PLAN_FILES" ]; then
+              FOUND_PLAN_FILE=$(echo "$PLAN_FILES" | head -n 1)
+              PLAN_EXISTS="true"
+            fi
+          fi
+          echo "Plan exists: $PLAN_EXISTS (${FOUND_PLAN_FILE:-N/A})"
+          echo "plan_exists=${PLAN_EXISTS}" >> "$GITHUB_OUTPUT"
+          echo "found_plan_file=${FOUND_PLAN_FILE}" >> "$GITHUB_OUTPUT"
+
+      # [한글] Step 4: Spec 파일 내 필수 섹션 검증
+      #   - 요구사항(Requirements) 섹션: 필수 — 없으면 최종 Step에서 경고
+      #   - API 섹션: 선택적 — 인프라/설정 Spec에는 없을 수 있음
+      #   - 테스트(Testing) 섹션: 필수 — TDD 원칙에 따라 반드시 포함
+      #   한글/영문 + 번호 prefix(## 1. 요구사항) 모두 인식
+      # [English] Step 4: Validate required sections in Spec file
+      #   - Requirements section: required — warning issued in final step if missing
+      #   - API section: optional — may not exist for infra/config specs
+      #   - Testing section: required — must be included per TDD principles
+      #   Recognizes both Korean/English headings + numbered prefixes (## 1. Requirements)
+      - name: Validate spec sections
+        id: validate-sections
+        if: steps.skip-check.outputs.skip != 'true' && steps.spec-exists.outputs.spec_exists == 'true'
+        env:
+          FOUND_SPEC_FILE: ${{ steps.spec-exists.outputs.found_spec_file }}
+        run: |
+          HAS_REQUIREMENTS="false"
+          HAS_API="false"
+          HAS_TESTING="false"
+
+          if grep -qP "## (\d+\.\s*)?(기능\s*)?요구사항|## (\d+\.\s*)?Requirements" "$FOUND_SPEC_FILE" 2>/dev/null; then
+            HAS_REQUIREMENTS="true"
+          fi
+          if grep -qP "## (\d+\.\s*)?API|## (\d+\.\s*)?Endpoints" "$FOUND_SPEC_FILE" 2>/dev/null; then
+            HAS_API="true"
+          fi
+          if grep -qP "## (\d+\.\s*)?(테스트|Testing)" "$FOUND_SPEC_FILE" 2>/dev/null; then
+            HAS_TESTING="true"
+          fi
+          echo "Validation — requirements:${HAS_REQUIREMENTS} api:${HAS_API} testing:${HAS_TESTING}"
+          echo "has_requirements=${HAS_REQUIREMENTS}" >> "$GITHUB_OUTPUT"
+          echo "has_api=${HAS_API}" >> "$GITHUB_OUTPUT"
+          echo "has_testing=${HAS_TESTING}" >> "$GITHUB_OUTPUT"
+
+      # [한글] Step 5: Spec 검증 결과를 PR 코멘트로 작성
+      #   - 관련 문서(Spec, Plan) 링크
+      #   - 섹션 검증 결과 체크리스트
+      #   - 리뷰어용 수동 체크리스트
+      #   기존 봇 코멘트가 있으면 업데이트 (marker 기반 중복 방지)
+      # [English] Step 5: Post Spec validation result as PR comment
+      #   - Links to related documents (Spec, Plan)
+      #   - Section validation result checklist
+      #   - Manual review checklist for reviewers
+      #   Updates existing bot comment if found (marker-based deduplication)
+      - name: Post spec check comment
+        if: steps.skip-check.outputs.skip != 'true' && steps.spec-exists.outputs.spec_exists == 'true'
+        env:
+          FOUND_SPEC_FILE: ${{ steps.spec-exists.outputs.found_spec_file }}
+          FOUND_PLAN_FILE: ${{ steps.plan-exists.outputs.found_plan_file }}
+          PLAN_EXISTS: ${{ steps.plan-exists.outputs.plan_exists }}
+          HAS_REQUIREMENTS: ${{ steps.validate-sections.outputs.has_requirements }}
+          HAS_API: ${{ steps.validate-sections.outputs.has_api }}
+          HAS_TESTING: ${{ steps.validate-sections.outputs.has_testing }}
+        run: |
+          MARKER="## SDD Spec Check"
+
+          SPEC_LINK="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${BRANCH_NAME}/${FOUND_SPEC_FILE}"
+
+          if [ "$PLAN_EXISTS" = "true" ]; then
+            PLAN_LINK="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${BRANCH_NAME}/${FOUND_PLAN_FILE}"
+            PLAN_LINE="- **Plan**: [\`${FOUND_PLAN_FILE}\`](${PLAN_LINK})"
+          else
+            PLAN_LINE="- **Plan**: Not found"
+          fi
+
+          REQ_CHECK=$([ "$HAS_REQUIREMENTS" = "true" ] && echo "- [x] Requirements section found" || echo "- [ ] Requirements section missing")
+          API_CHECK=$([ "$HAS_API" = "true" ] && echo "- [x] API section found" || echo "- [ ] No API section (optional for infra/config specs)")
+          TEST_CHECK=$([ "$HAS_TESTING" = "true" ] && echo "- [x] Testing section found" || echo "- [ ] Testing section missing")
+          PLAN_CHECK=$([ "$PLAN_EXISTS" = "true" ] && echo "- [x] Plan document exists" || echo "- [ ] Plan document missing")
+
+          BODY=$(cat <<COMMENTBODY
+${MARKER}
+
+### Related Documents
+- **Spec**: [\`${FOUND_SPEC_FILE}\`](${SPEC_LINK})
+${PLAN_LINE}
+
+### Spec Validation
+${REQ_CHECK}
+${API_CHECK}
+${TEST_CHECK}
+${PLAN_CHECK}
+
+### Review Checklist
+- [ ] All spec requirements implemented
+- [ ] Tests cover spec scenarios
+- [ ] Plan document updated
+- [ ] Documentation updated
+COMMENTBODY
+)
+
+          # [한글] 기존 봇 코멘트 찾아서 업데이트 (marker 기반 중복 방지)
+          # [English] Find existing bot comment and update (marker-based dedup)
+          COMMENTS=$(curl --silent \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments")
+
+          EXISTING_COMMENT_ID=$(echo "$COMMENTS" | python3 -c "
+import json, sys
+comments = json.load(sys.stdin)
+for c in comments:
+    if '## SDD Spec Check' in c.get('body',''):
+        print(c['id'])
+        break
+" 2>/dev/null || true)
+
+          BODY_JSON=$(python3 -c "import json, sys; print(json.dumps({'body': sys.stdin.read()}))" <<< "$BODY")
+
+          if [ -n "$EXISTING_COMMENT_ID" ]; then
+            curl --silent --request PATCH \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "$BODY_JSON" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING_COMMENT_ID}"
+            echo "Updated existing PR comment (id: ${EXISTING_COMMENT_ID})"
+          else
+            curl --silent --request POST \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "$BODY_JSON" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
+            echo "Posted new PR comment"
+          fi
+
+      # [한글] Step 6: Spec 미발견 시 경고 코멘트 + 필요 액션 안내
+      #   브랜치명과 기대되는 Spec 경로를 알려주고, 생성 또는 브랜치명 수정을 안내
+      # [English] Step 6: Post warning comment when Spec not found + action guidance
+      #   Shows branch name and expected Spec path, guides to create file or fix branch name
+      - name: Post spec not found warning
+        if: steps.skip-check.outputs.skip != 'true' && steps.spec-exists.outputs.spec_exists == 'false'
+        env:
+          SPEC_NAME: ${{ steps.spec-name.outputs.spec_name }}
+        run: |
+          MARKER_NOT_FOUND="## Spec File Not Found"
+
+          BODY=$(cat <<WARNINGBODY
+${MARKER_NOT_FOUND}
+
+Branch: \`${BRANCH_NAME}\`
+Expected spec: \`.specify/specs/${SPEC_NAME}.md\`
+
+### Action Required
+1. Create the spec file: \`.specify/specs/${SPEC_NAME}.md\`
+2. Or update your branch name to match an existing spec
+
+### Available Specs
+Check \`.specify/specs/\` directory for existing specs.
+WARNINGBODY
+)
+
+          COMMENTS=$(curl --silent \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments")
+
+          EXISTING_COMMENT_ID=$(echo "$COMMENTS" | python3 -c "
+import json, sys
+comments = json.load(sys.stdin)
+for c in comments:
+    body = c.get('body','')
+    if '## Spec File Not Found' in body or '## SDD Spec Check' in body:
+        print(c['id'])
+        break
+" 2>/dev/null || true)
+
+          BODY_JSON=$(python3 -c "import json, sys; print(json.dumps({'body': sys.stdin.read()}))" <<< "$BODY")
+
+          if [ -n "$EXISTING_COMMENT_ID" ]; then
+            curl --silent --request PATCH \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "$BODY_JSON" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING_COMMENT_ID}"
+          else
+            curl --silent --request POST \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Content-Type: application/json" \
+              --data "$BODY_JSON" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
+          fi
+
+      # [한글] Step 7: 최종 상태 판정
+      #   Spec 미발견 → exit 1 (워크플로우 실패 → PR에 빨간 체크 표시)
+      #   Requirements 섹션 누락 → 경고만 (실패는 아님)
+      # [English] Step 7: Final status check
+      #   Spec not found → exit 1 (workflow fails → red check on PR)
+      #   Requirements section missing → warning only (not a failure)
+      - name: Final status check
+        if: steps.skip-check.outputs.skip != 'true'
+        env:
+          SPEC_EXISTS: ${{ steps.spec-exists.outputs.spec_exists }}
+          HAS_REQUIREMENTS: ${{ steps.validate-sections.outputs.has_requirements }}
+        run: |
+          if [ "${SPEC_EXISTS}" = "false" ]; then
+            echo "Spec file not found - please create it or fix branch name"
+            exit 1
+          fi
+
+          if [ "${HAS_REQUIREMENTS}" = "false" ]; then
+            echo "Warning: Spec file missing requirements section"
+          fi
+
+          echo "Spec check passed"

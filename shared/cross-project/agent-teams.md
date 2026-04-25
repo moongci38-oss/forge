@@ -12,18 +12,19 @@ enforcement: rigid
 
 # 병렬 실행 규칙
 
-> Subagent(Agent 도구)가 기본 병렬 실행 도구. Agent Teams는 에이전트 간 소통이 필요한 특수 케이스 전용.
+> Agent Teams가 기본 병렬 실행 도구. 공유 태스크 리스트 + 피어 메시징으로 조율.
+> Subagent는 단순 탐색/검색, 단일 파일 작업 등 격리된 소규모 작업 전용.
 
 ---
 
 ## 핵심 원칙
 
-병렬 처리가 가능한 작업은 **Subagent 사용을 우선 검토**한다.
+병렬 처리가 가능한 작업은 **Agent Teams 사용을 우선 검토**한다.
 
 실행 계획 수립 시 가장 먼저 아래를 판단한다:
 1. 이 작업을 독립적인 서브태스크 2개 이상으로 나눌 수 있는가?
-2. 그렇다면 → **Subagent 병렬 스폰** (기본)
-3. 에이전트 간 소통/비교/실시간 모니터링이 필요한가? → **Agent Teams** (특수)
+2. 그렇다면 → **Agent Teams 스폰** (기본) — 공유 태스크 리스트 + 피어 메시징 활용
+3. 단순 탐색/검색/단일 파일만 수정하는 소규모 작업인가? → **Subagent** (경량)
 4. 그렇지 않다면 → 단일 순차 실행
 5. 스폰 전 재확인: 의존성 없는 태스크만 동시 스폰 (Wave 기반 -- 선행 완료 후 다음 Wave 스폰)
 
@@ -33,7 +34,8 @@ enforcement: rigid
 
 | 상황 | 선택 | 이유 |
 |------|------|------|
-| 독립 서브태스크 2개 이상 | **Subagent** (기본) | 컨텍스트 격리, tmux 불필요, resume 가능 |
+| 독립 서브태스크 2개 이상 | **Agent Teams** (기본) | 공유 태스크 리스트, 피어 메시징, 의존성 자동 추적 |
+| 단순 탐색/검색/단일 파일 | **Subagent** (경량) | 오버헤드 최소화, tmux 불필요 |
 | 단일 순차 작업 | 순차 Subagent 또는 직접 실행 | 팀 불필요 |
 | 에이전트 간 비교/토론 필요 | **Agent Teams** (Competing Hypotheses) | 에이전트 간 소통 필수 |
 | 실시간 모니터링 + 롤백 | **Agent Teams** (Watchdog) | 에이전트 간 실시간 통신 필수 |
@@ -61,8 +63,8 @@ claude  # 환경변수 자동 적용
 
 | 패턴 | 기본 도구 | 사용 시점 | 예시 |
 |------|:--------:|----------|------|
-| **Fan-out/Fan-in** | **Subagent** | 독립적 병렬 작업 | 멀티 프로젝트 분석, 다국어 처리 |
-| **Pipeline** | 순차 Subagent / 직접 | 순차 의존성 | 리서치→기획→마케팅→콘텐츠 |
+| **Fan-out/Fan-in** | **Agent Teams** | 독립적 병렬 작업 | 멀티 프로젝트 분석, 다국어 처리 |
+| **Pipeline** | **Agent Teams** / 순차 | 순차 의존성 (자동 차단 해제 활용) | 리서치→기획→마케팅→콘텐츠 |
 | **Competing Hypotheses** | **Agent Teams** | 에이전트 간 비교/토론 | 전략 A/B/C 비교, 성능 최적화 |
 | **Watchdog** | **Agent Teams** | 안전성 중요 변경 | 대규모 배포, 운영 변경 |
 
@@ -155,31 +157,58 @@ Lead (오케스트레이터)    → Opus 4.6   — 계획·판단·종합
 
 ## Do
 
-- 병렬 처리 가능한 작업은 Subagent 사용을 우선 검토한다
+- 병렬 처리가 가능한 작업은 Agent Teams 사용을 우선 검토한다 (기본)
+- 단순 탐색/검색/단일 파일 수정은 Subagent를 사용한다 (경량)
 - 태스크 시작 전 파일 소유권을 반드시 선언한다
 - 의존성 없는 태스크만 동시 스폰한다 (Wave 기반)
 - 모델 계층화를 적용한다 (Opus/Sonnet/Haiku)
-- 에이전트 간 소통이 필요한 경우에만 Agent Teams를 사용한다
+- Agent Teams 최적 규모: 3-5명 팀원 (비용 선형, 효과 초과)
 
 ## Don't
 
 - 파일 소유권 선언 없이 병렬 작업을 시작하지 않는다
 - 의존성 있는 태스크를 동시 스폰하지 않는다
-- 공유 파일(CLAUDE.md, settings.*)을 Subagent이 수정하지 않는다
-- 독립 병렬 작업에 Agent Teams를 사용하지 않는다 (Subagent 사용)
+- 공유 파일(CLAUDE.md, settings.*)을 팀원이 수정하지 않는다 (Lead만 수정)
+- 단순 검색/탐색에 Agent Teams를 사용하지 않는다 (Subagent 사용)
 
 ## AI 행동 규칙
 
 1. 실행 계획 수립 시 병렬 분해 가능성을 가장 먼저 판단한다
-2. 독립 병렬 작업은 Subagent로 스폰한다 (기본)
-3. Competing Hypotheses, Watchdog 패턴만 Agent Teams로 스폰한다
+2. 병렬 작업은 Agent Teams로 스폰한다 (기본) — 공유 태스크 리스트 + 피어 메시징 활용
+3. 단순 탐색/검색/단일 파일 작업만 Subagent로 스폰한다 (경량)
 4. 스폰 전 파일 소유권을 선언하고, 의존성 없는 태스크만 동시 스폰한다
 5. 모델 계층화를 적용한다 (Lead→Opus, 구현→Sonnet, 탐색→Haiku)
+
+## 토큰 예산 & 자동 Kill
+
+에이전트 폭주 방지를 위한 자동 예산 관리. Hook: `agent-token-budget.sh` (PostToolUse)
+
+### 도구 호출 예산 (세션별)
+
+| 에이전트 역할 | 도구 호출 상한 | 85% 경고 |
+|-------------|:------------:|:-------:|
+| 탐색/검색 (Grep, Glob, Read, WebFetch) | 100 | 85 |
+| 문서 작성 (Write, Edit) | 400 | 340 |
+| 리드/오케스트레이터 (Agent, Task*) | 600 | 510 |
+| 기본 | 300 | 255 |
+
+### 자동 Kill 기준
+
+- **동일 오류 3회 반복** → 경고 + usage.log에 `agent_kill` 이벤트 기록
+- **예산 초과** → 경고 + usage.log에 `budget_exceeded` 이벤트 기록
+- **세션 종료 시** → `cleanup-agent-budget.sh`가 세션 요약 기록 + 임시 파일 정리
+
+### 모니터링
+
+- 카운트 파일: `.claude/agent-budget/{session}.count`
+- 에러 파일: `.claude/agent-budget/{session}.errors`
+- 요약 로그: `.claude/usage.log` (`session_budget_summary` 이벤트)
 
 ## Iron Laws
 
 - **PARALLEL-IRON-1**: 파일 소유권 미선언 상태로 병렬 작업을 시작하지 않는다
 - **PARALLEL-IRON-2**: 의존성 있는 태스크를 동시 스폰하지 않는다
+- **PARALLEL-IRON-3**: 동일 오류 3회 반복 시 현재 접근을 중단하고 전략을 변경한다
 
 ## Rationalization Table
 
@@ -187,10 +216,10 @@ Lead (오케스트레이터)    → Opus 4.6   — 계획·판단·종합
 |-------------------|---------------|
 | "간단한 작업이라 소유권 선언 없이 해도 충돌 안 날 것" | 간단한 작업에서도 동일 파일 동시 편집 충돌이 발생한다. 선언은 5초, 충돌 복구는 30분이다 |
 | "이 두 태스크는 거의 독립적이니 같이 돌려도 될 것" | "거의" 독립적은 독립적이 아니다. 의존성이 0%일 때만 동시 스폰한다 |
-| "Agent Teams가 더 강력하니까 기본으로 쓰자" | Agent Teams는 tmux 필수, 세션 재개 불가, VS Code 미지원. 독립 병렬은 Subagent가 우위다 |
+| "Subagent가 간편하니까 기본으로 쓰자" | Subagent는 에이전트 간 소통/의존성 추적 불가. 병렬 작업은 Agent Teams의 공유 태스크 리스트가 우위다 |
 
 ## Red Flags
 
 - "파일 하나만 수정하는 거라..." → STOP. 파일 소유권을 선언한다
 - "선행 작업이 금방 끝나니까 같이 시작해도..." → STOP. Wave 기반으로 선행 완료 후 다음 스폰한다
-- "Agent Teams로 하면 더 좋을 것 같은데..." → STOP. 에이전트 간 소통이 필요한가? 아니면 Subagent가 기본이다
+- "Subagent로 하면 더 간편한데..." → STOP. 2개 이상 병렬 태스크면 Agent Teams가 기본이다. Subagent는 단순 탐색/검색 전용

@@ -23,6 +23,10 @@ $ARGUMENTS
    - `agent-meeting-template.md` 형식으로 비교표 작성 (최소 5개 비교 항목)
    - 최적안 선택 + 선택 근거 기록
    - PRD 최상단에 "에이전트 회의 결과" 섹션 포함
+5.5. **[MANDATORY — 건너뛰기 금지] /autoplan 3관점 리뷰**: Competing Hypotheses 완료 직후 반드시 실행.
+   - CEO(비즈니스) → Design(UX) → Engineering(기술) 순서로 기획서 검토
+   - BLOCK 항목 2개 이상 → **[STOP]** Human 에스컬레이션. 해소 전 다음 단계 금지.
+   - BLOCK 없음 → 어노테이션 기록 후 단계 6으로 진행
 6. **PRD 작성**: 명확도 90점 이상 달성 후 최적안 기반 완전한 PRD 생성
 7. **RICE 평가**: Reach, Impact, Confidence, Effort 점수 산정
 8. **PPT 변환**: `/pptx` 스킬로 PRD → .pptx 파일 생성 (S3 필수 산출물)

@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
   },
   "hooks": {
     "SessionStart": [
@@ -28,6 +29,26 @@
             "type": "command",
             "command": "bash .claude/hooks/auto-forge-sync.sh",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/100-line-rule.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/reset-code-lines.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/filter-log-output.sh",
+            "timeout": 5
           }
         ]
       },
@@ -41,8 +62,18 @@
           },
           {
             "type": "command",
+            "command": "bash .claude/hooks/agent-token-budget.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
             "command": "bash .claude/hooks/validate-output.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "OWASP_MODE=post bash .claude/hooks/owasp-asi-04-06-08-10.sh",
+            "timeout": 3
           }
         ]
       }
@@ -65,6 +96,16 @@
             "type": "command",
             "command": "bash .claude/hooks/cleanup-plans.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/cleanup-agent-budget.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/track-override-rate.sh",
+            "timeout": 5
           }
         ]
       }
@@ -76,6 +117,11 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/claude-notify.sh complete '에이전트 완료'",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/track-override-rate.sh",
             "timeout": 5
           }
         ]
@@ -93,6 +139,18 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/gate-approval-tracker.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
@@ -101,6 +159,21 @@
             "type": "command",
             "command": "bash .claude/hooks/block-sensitive-files.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/detect-injection.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/detect-injection.sh",
+            "timeout": 3
           }
         ]
       },
@@ -131,6 +204,26 @@
             "type": "command",
             "command": "bash .claude/hooks/detect-injection.sh",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-supply-chain.sh",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "OWASP_MODE=pre bash .claude/hooks/owasp-asi-04-06-08-10.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OWASP_MODE=pre bash .claude/hooks/owasp-asi-04-06-08-10.sh",
+            "timeout": 3
           }
         ]
       }
@@ -138,15 +231,12 @@
   },
   "enabledPlugins": {
     "productivity@knowledge-work-plugins": false,
-    "product-management@knowledge-work-plugins": true,
-    "marketing@knowledge-work-plugins": true,
+    "product-management@knowledge-work-plugins": false,
+    "marketing@knowledge-work-plugins": false,
     "enterprise-search@knowledge-work-plugins": false,
-    "data@knowledge-work-plugins": true,
+    "data@knowledge-work-plugins": false,
     "sales@knowledge-work-plugins": false,
     "customer-support@knowledge-work-plugins": false,
-    "playground@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "playground@claude-plugins-official": true
   }
 }

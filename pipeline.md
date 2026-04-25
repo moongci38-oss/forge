@@ -154,7 +154,7 @@ Phase 2 디렉션 5축 요약 프롬프트 주입 (~5줄)
 2. 에이전트 2~3명 병렬 스폰 → 독립 기획서 초안
 3. **디렉션 탈락 필터**: Don't 태그 위반 초안 → 비교에서 제외
 4. Competing Hypotheses: 생존 초안 비교표 + 선택 근거
-5. **`/autoplan` 3관점 순차 리뷰** (Competing Hypotheses 직후 자동 트리거):
+5. **`/autoplan` 3관점 순차 리뷰** [MANDATORY — Competing Hypotheses 직후 반드시 실행. 건너뛰기 금지]:
 
    | 순서 | 리뷰어 | 검토 항목 |
    |:----:|--------|----------|
@@ -535,11 +535,33 @@ PR 생성 전 `/benchmark` 자동 실행 (develop baseline vs feature 브랜치 
    - ✅ PASS → 완료. `forge-pm-updater`로 Notion + development-plan.md 상태 갱신
    - ❌ FAIL → **[STOP]** Human이 `/forge-rollback` 실행:
 
-     | 레벨 | 방법 | 기준 |
-     |------|------|------|
-     | L1 Quick Revert | `git revert` | < 30분 |
-     | L2 Release Revert | 이전 릴리스 태그로 재배포 | < 2시간 |
-     | L3 Hotfix Forward | `hotfix/*` → Hotfix 플로우 재진입 | > 2시간 |
+     | 레벨 | 방법 | 기준 | MTTR |
+     |------|------|------|------|
+     | L1 Quick Revert | `git revert` | 단일 커밋 원인 + 데이터 마이그레이션 없음 | < 30분 |
+     | L2 Release Revert | 이전 릴리스 태그로 재배포 | 복합 원인 or DB 스키마 안전 롤백 가능 | < 2시간 |
+     | L3 Hotfix Forward | `hotfix/*` → Hotfix 플로우 재진입 | DB 스키마 롤백 불가 or 외부 의존성 회귀 | > 2시간 |
+
+   **L1 Quick Revert 절차**:
+   1. `git log --oneline main~5..main`으로 원인 커밋 SHA 확정
+   2. `git revert <sha> --no-edit`으로 revert 커밋 생성 (develop 브랜치에서)
+   3. develop → staging → main 순서로 PR 생성 (Iron Law MERGE-IRON-2)
+   4. CI PASS 후 main merge → `production-deploy.yml` 재실행
+   5. Health check 통과 확인, gate-log.md에 L1 rollback 기록
+
+   **L2 Release Revert 절차**:
+   1. 직전 정상 릴리스 태그 확인: `git tag -l 'v*' --sort=-v:refname | head -2`
+   2. `git checkout -b release/<prev-version>-rollback <prev-tag>`
+   3. 배포 스크립트 재실행: `bash scripts/deploy-runner.sh --env production --tag <prev-version>`
+   4. DB 마이그레이션 역방향 실행 필요 시 `npm run db:migrate:down` (롤백 가능 확인 후)
+   5. 사용자 영향도 평가 → canary 15분 모니터링 → gate-log.md 기록
+
+   **L3 Hotfix Forward 절차**:
+   1. `main`에서 직접 `git checkout -b hotfix/<issue-id>` (Iron Law MERGE-IRON-2 예외)
+   2. `/investigate` 스킬로 근본 원인 분석 (Check 6-INV)
+   3. 최소 수정 + 테스트 추가 → PR `hotfix/* → main`
+   4. 긴급 리뷰(Human 1명) + CI PASS → squash merge
+   5. `main → develop` back-merge로 hotfix 동기화
+   6. post-mortem 문서 생성: `forge-outputs/10-operations/post-mortems/<date>-<issue>.md`
 
    ─── Check 10: production-deploy.yml 자동 ───
 
@@ -631,6 +653,11 @@ PR 생성 전 `/benchmark` 자동 실행 (develop baseline vs feature 브랜치 
 
 ### PM
 - **PM-IRON-1**: Human 수동 변경한 Notion 상태 덮어쓰기 금지
+
+### Git / Merge
+- **MERGE-IRON-1**: `autoMerge=true`는 `feature/*` → `develop` 병합에만 허용. `release/*` → `main`, `staging` → `main`, hotfix → `main` 병합은 Human 승인 필수 (Phase 11/Check 9.5 [STOP] 게이트 우회 금지)
+- **MERGE-IRON-2**: develop → staging → main 순서 불변. `feature/*`는 develop 기준 분기, `hotfix/*`만 예외적으로 main 기준 분기 허용
+- **MERGE-IRON-3**: main 직접 커밋/force push 금지, `--no-verify` 우회 금지
 
 ## 산출물 저장 경로 요약
 

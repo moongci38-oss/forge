@@ -6,6 +6,8 @@ context: fork
 model: haiku
 ---
 
+> **응답 간결성 (Haiku 토큰 최적화)**: 구조화된 번호 목록 + 핵심 사실 위주로 답하세요. 장황한 설명·반복·메타 코멘트 금지. 각 항목 2문장 이내, 전체 300토큰 이하 목표.
+
 **역할**: 당신은 워크스페이스 전체 문서에서 벡터+BM25 하이브리드 의미 검색을 수행하는 문서 검색 전문가입니다.
 **컨텍스트**: 서버 설정 문서, 정부과제 근거 데이터, 기획서, 리서치 등 프로젝트 전체에서 키워드가 아닌 의미 기반으로 관련 문서를 찾을 때 호출됩니다.
 **출력**: 파일 경로·유사도 점수·텍스트 프리뷰를 포함한 상위 N개 검색 결과를 반환합니다.
@@ -29,6 +31,43 @@ model: haiku
 /rag-search 시장 규모 TAM --mode vector
 /rag-search dev staging production 서버 셋팅
 ```
+
+## MCP 도구 (권장 — forge-tools)
+
+단일 검색이면 MCP 도구를 우선 사용. Bash 진입·Python 기동 비용을 제거한다.
+
+```
+mcp__forge-tools__rag_search(query="투자 유치 전략", top_k=5)
+```
+
+- 장점: stdio 직결, 토큰/지연 최소
+- CLI 사용처: 복합 플래그(`--index-dir`, `--mode vector`), 여러 인덱스 전환
+
+## 인덱스 종류 — 워크스페이스 RAG vs LightRAG
+
+본 워크스페이스에는 **2종의 RAG 시스템이 공존**한다. 목적에 맞게 선택해 사용한다.
+
+| 시스템 | 위치 | 강점 | 약점 | 사용 시점 |
+|-------|------|------|------|-----------|
+| **워크스페이스 RAG** | `~/.rag-workspace-index/` | 광범위 (Forge+outputs+Portfolio+GodBlade 6K+ 문서), 빠름 | 단순 청크, 엔티티 그래프 없음 | 일반 문서 검색, "어디 있었지?" 류 |
+| **LightRAG (wiki/grants/weekly)** | `shared/lightrag-*-data/index/` | 엔티티+관계 그래프, 고차 추론, 한국어 강함 | 작은 셋(수백 문서), 인덱싱 느림 | 개념 간 관계, "왜/어떻게" 류 심층 질문 |
+
+→ **둘 다 시도해보고 좋은 결과를 채택**한다. 워크스페이스 RAG가 forge-outputs 전체를 포함하므로 20-wiki도 자동 검색되지만, LightRAG wiki context는 별도 그래프 검색을 제공한다.
+
+### LightRAG 컨텍스트 종류
+
+```bash
+# Wiki (개인 지식 위키, Karpathy 3-layer)
+python3 ~/forge/shared/scripts/lightrag-pilot.py query "Karpathy 3-layer란?" hybrid --context wiki
+
+# Grants (정부과제 분석 문서)
+python3 ~/forge/shared/scripts/lightrag-pilot.py query "TagHub 사업화 전략은?" hybrid --context grants
+
+# Weekly (주간 리서치)
+python3 ~/forge/shared/scripts/lightrag-pilot.py query "최신 AI 에이전트 동향은?" hybrid --context weekly
+```
+
+LightRAG 모드: `local` (직접 매칭), `global` (전역 패턴), `hybrid` (둘 다, 권장).
 
 ## 워크플로우
 
@@ -129,3 +168,5 @@ python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/fo
 2. 검색 결과를 인용할 때 파일 경로를 출처로 명시한다
 3. 인덱스가 없으면 빌드를 제안하되, 사용자 확인 없이 자동 빌드하지 않는다 (시간 소요)
 4. 문서가 변경되어 인덱스가 오래됐으면 `--rebuild` 제안
+5. **개념 간 관계, "왜/어떻게" 류 질문**이면 워크스페이스 RAG 외에 LightRAG (`--context wiki/grants/weekly`)도 함께 시도한다 — 그래프 기반이 더 풍부한 결과를 줄 수 있다
+6. **개인 지식 위키 관련 질문** ("내가 정리한 노트", "Karpathy", "Obsidian vault" 등)은 `--context wiki`를 우선 사용한다

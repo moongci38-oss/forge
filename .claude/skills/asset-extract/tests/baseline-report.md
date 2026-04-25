@@ -1,0 +1,87 @@
+# asset-extract v5 Baseline Report
+
+> 2026-04-12 | baduki signal-2026-03-28-183415.jpeg 6 케이스 시각 검증
+
+## 정량 결과 (현재 메트릭)
+
+| 케이스 | 결과 | 출력 | α커버 | 시각 판정 |
+|---|---|---|---|---|
+| baduki_low_baduk (로우바둑이 사다리꼴) | PASS | 235x62 | 0.87 | ✅ 정확 |
+| baduki_btn_02_left_tab | PASS | 194x34 | 1.00 | ❌ 빈 진청색 띠만 |
+| baduki_btn_03_attendance | PASS | 241x142 | 0.86 | ❌ 환영 배너 + 하단 네비 통째로 |
+| baduki_btn_04_video | PASS | 261x83 | 0.92 | ❌ 거의 빈 진청 + 잔재 |
+| baduki_btn_05_settings | PASS | 242x82 | 1.00 | ❌ 완전히 빈 진청 |
+| baduki_btn_06_right | PASS | 234x83 | 1.00 | △ 여러 아이콘 함께 |
+
+**6/6 정량 PASS, 1/6 시각 PASS** — 1건만 의도한 결과.
+
+## 핵심 발견: 거짓 PASS
+
+현재 메트릭(`size_range`, `alpha_coverage_min`)은 "에러 없이 트림된 PNG가 나왔다"만 확인할 뿐, **출력이 의도한 객체인지** 검증하지 못한다.
+
+- α커버 1.00은 사다리꼴 안이 꽉 찼다는 뜻 → 직사각형 fitting으로 degenerate된 경우 항상 1.00
+- size 범위는 입력 bbox 크기로 추정되므로 SAM이 영역 일부만 잡아도 통과 가능
+
+**Step 3 이전에 메트릭 강화가 선행돼야 함.**
+
+## 한계 패턴 분류
+
+### A. WRONG_OBJECT (3건: btn_02, btn_04, btn_05)
+SAM이 의도한 UI(아이콘+텍스트)가 아니라 배경의 짙은 그라데이션 영역을 잡음. 다크 베이스가 배경과 동일색이면 SAM이 어떤 객체도 인식하지 못하고 가장 큰 그라데이션 컨투어를 반환.
+
+→ **인수인계 한계 #1의 새로운 변종**: 단순히 하단 경계를 못 찾는 게 아니라, **객체 자체를 못 찾음**.
+
+### B. ADJACENT_UI (2건: btn_03, btn_06)
+입력 bbox가 의도한 객체보다 크면 인접 UI가 통째로 포함됨. v5 파이프라인은 사다리꼴 1개 가정이라 다중 객체 분리 불가.
+
+→ **인수인계 한계 #2 확인**.
+
+### C. TRAPEZOID_OK (1건: low_baduk)
+사다리꼴 + 명확한 다크 베이스 + 인접 UI 없음 → v5가 잘 작동하는 유일한 조건.
+
+## v5 적용 가능 범위 (현재 데이터 기준)
+
+| 조건 | 적용 가능 |
+|---|---|
+| 사다리꼴 형태 | ✅ |
+| 다크 베이스 ≠ 배경색 | ✅ |
+| 인접 UI 없음 | ✅ |
+| 충분히 타이트한 bbox | ✅ |
+| 위 4개 중 하나라도 빠지면 | ❌ (대체로 거짓 PASS) |
+
+베스트 케이스는 잘 되지만 **일반화 안 됨**. 1개 케이스로 검증한 인수인계 시점의 인상보다 실제 적용 범위가 좁음.
+
+## Step 3 권장 수정 (우선순위)
+
+### P0 — 메트릭 강화 (선결조건)
+거짓 PASS 차단 없이 어떤 코드 수정도 의미 없음.
+
+1. **Golden image perceptual diff**: 검증된 출력을 `tests/golden/{case}.png`에 저장, 신규 실행 결과와 perceptual hash(`imagehash` 라이브러리) 비교
+2. **시각 확인 단계 강제**: `--all` 실행 후 `report.md`에 모든 출력 PNG 경로 + base64 썸네일 inline 삽입 → 사람/AI가 빠르게 검토
+
+### P1 — 후보 A/B/C 중 데이터에 근거한 선택
+- 한계 #1 (WRONG_OBJECT): bot-margin 자동 추정으로는 해결 안 됨. **SAM 입력 시 prompt 추가**(bbox 중심점을 positive prompt로 명시) 필요. 이는 rembg에서 어렵고 SAM2 직접 호출이 필요할 수 있음.
+- 한계 #2 (ADJACENT_UI): 사용자가 정확한 bbox를 주는 게 가장 효과적. 자동 margin 축소는 효과 미지수.
+- **결론**: 현재 v5는 "사다리꼴 단일 버튼" 전용 도구로 명시하고, 그 외 케이스는 별도 파이프라인이 필요할 가능성이 높음.
+
+### P2 — Non-trapezoid 케이스용 대체 경로
+직사각형/카드/아이콘 추출은 v5 사다리꼴 fitting을 우회하는 별도 모드가 필요. SKILL.md에 "어떤 입력에 v5가 적합한지" 명시.
+
+## 다음 액션 (사용자 결정 필요)
+
+1. **메트릭 강화부터 진행**(권장) — golden + perceptual hash 도입
+2. 사용자가 더 다양한 UI 스크린샷 제공 → fixture 확장 후 재평가
+3. v5의 적용 범위를 "사다리꼴 전용"으로 축소 명시 + 별도 직사각형 모드 추가 설계
+
+## 2026-04-12 추가 케이스
+
+### casino_chip_100 — non-trapezoid (원형 칩)
+
+- **이미지**: `forge-outputs/02-product/projects/baduki/screenshots/casino-gambling-concept_1/Nut_June_04.jpg`
+- **bbox**: `[1878, 1925, 2070, 2098]` (4167x4167 원본, 100 칩 위치)
+- **결과**: REVIEW — 출력은 보라색 평행사변형 조각 (원형 칩이 4점 사다리꼴 강제 fitting으로 왜곡됨)
+- **분류**: `WRONG_OBJECT` + `non-trapezoid` 복합. SAM이 칩 본체 대신 배경 그라데이션을 캡처한 것으로 추정됨
+- **해결 방향**: roadmap 후보 C(`--shape rect/contour` 모드) + 후보 D(SAM positive prompt) 둘 다 필요. 현 v5로는 추출 불가
+- **golden**: 미생성 (잘못된 결과를 기준으로 굳히면 안 됨)
+
+비-사다리꼴 케이스 첫 fixture로 등록 → 후보 C 구현 트리거 데이터.

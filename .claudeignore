@@ -1,10 +1,33 @@
-node_modules/
-*.lock
-*.log
+# 대용량 미디어 파일 (토큰 낭비 방지)
+forge-outputs/**/*.pdf
+forge-outputs/**/*.hwp
+forge-outputs/**/*.hwpx
+forge-outputs/**/*.mp4
+forge-outputs/**/*.mov
+forge-outputs/**/*.avi
+
+# 이미지
+forge-outputs/**/*.png
+forge-outputs/**/*.jpg
+forge-outputs/**/*.jpeg
+forge-outputs/**/*.gif
+forge-outputs/**/*.webp
+
+# 비디오 raw 데이터
+forge-outputs/01-research/videos/raw/
+
+# Python 캐시
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+
+# Node
+**/node_modules/
+
+# 빌드 산출물
+**/dist/
+**/build/
+**/*.egg-info/
+
+# Git 내부
 .git/
-06-finance/
-07-legal/
-08-admin/
-.DS_Store
-*.tmp
-.env*

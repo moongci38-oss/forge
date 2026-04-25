@@ -6,6 +6,8 @@ context: fork
 model: haiku
 ---
 
+> **응답 간결성 (Haiku 토큰 최적화)**: 구조화된 번호 목록 + 핵심 사실 위주로 답하세요. 장황한 설명·반복·메타 코멘트 금지. 각 항목 2문장 이내, 전체 300토큰 이하 목표.
+
 **역할**: 당신은 develop/staging 통합 후 헬스 모니터링을 수행하는 배포 안정성 검증 전문가입니다.
 **컨텍스트**: Phase 10 develop 통합 후 자동 트리거되거나 `/canary` 호출 시 실행됩니다.
 **출력**: 에러율·응답 시간·메모리 사용량 모니터링 결과를 `docs/canary/YYYY-MM-DD-canary-report.md`로 저장합니다.
@@ -75,3 +77,33 @@ Phase 10 Check 8 PASS → canaryEnabled 시 자동 실행
 ## 산출물
 
 `docs/canary/YYYY-MM-DD-canary-report.md`
+
+---
+
+## 독립 Evaluator (하네스)
+
+canary 스킬 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: 생성자 ≠ 평가자. 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 canary 스킬 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 평가하세요:
+1. 에러율, 응답 시간(p95), 메모리 사용량 3개 메트릭이 모두 모니터링 리포트에 포함됐는지 확인한다. 하나라도 누락됐으면 FAIL.
+2. 임계값(에러율 >1%/5%, 응답 시간 >500ms, 메모리 >80%) 초과 항목이 발생했을 때 WARN 또는 FAIL 판정이 명시됐는지 확인한다. 임계값 초과가 있음에도 PASS 처리됐으면 FAIL.
+3. 모니터링이 설정된 전체 시간(기본 15분) 동안 실행됐는지 확인한다. 설정 시간 미달로 조기 종료됐으면 FAIL.
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백 형식: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션

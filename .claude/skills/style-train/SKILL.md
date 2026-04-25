@@ -71,3 +71,34 @@ P0 (/style-train) → P1 (Art Direction Brief) → P2 (프로토타입) → P3 (
 - LoRA 학습은 Replicate 종량제 과금 ($0.5-2/학습)
 - 학습 시간: 15-30분 (이미지 수/해상도에 따라)
 - 학습 결과가 불만족스러우면 이미지 교체 후 재학습 (재과금)
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+스타일 가이드 또는 LoRA 모델 완성 후 독립 Evaluator Subagent가 결과물 품질을 검증한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 독립 생성물 품질 검증자입니다. style-train 결과물을 검토하세요.
+
+검증 항목:
+- style-guide.md의 색상 팔레트가 Hex Code로 정의됐는가?
+- 스타일 추출에 사용된 에셋 수가 5개 이상인가?
+- 생성물이 원본 에셋과 스타일 일관성을 유지하는가?
+- LoRA 학습 완료 시 모델 ID가 기록됐는가?
+
+판정: PASS(기준 충족) / FAIL(재작업 필요)
+피드백: [항목] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속
+- FAIL → 재작업 후 Evaluator 재실행 (1회 한도)
+- 2회 연속 FAIL → [STOP] Human 에스컬레이션

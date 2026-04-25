@@ -96,7 +96,7 @@ node ~/.claude/scripts/forge-sync.mjs sync --target <project-name> --include-rec
 | Dev Rules | `.claude/rules/forge-*.md` | 워크플로, 세션, 테스트, 성능 등 14개 |
 | 공통 Rules | `.claude/rules/` | frontend-standards, plan-mode, pr-code-review-gate |
 | Templates | `.specify/templates/` | Spec/Plan/Task/Walkthrough 템플릿 |
-| GitLab Spec Kit | `.gitlab/` + `scripts/` | CI 워크플로, 이슈/PR 템플릿 |
+| GitHub Spec Kit | `.github/` + `scripts/` | CI 워크플로, 이슈/PR 템플릿 |
 | Hooks (recommended) | `.claude/hooks/` | 보안 체크, JSON 무결성 |
 
 ### Windows(NTFS) 프로젝트 대응

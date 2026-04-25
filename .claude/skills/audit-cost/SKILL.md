@@ -169,3 +169,53 @@ Subagent 결과를 기반으로 Lead가 보고서를 작성한다.
 ```
 
 > Notion MCP 미연결 시 경고 출력 후 스킵 (파이프라인 중단 안 함).
+
+
+---
+
+## 독립 Evaluator (하네스)
+
+비용 감사 결과물 완성 후 독립 Evaluator Subagent가 품질을 2차 검증한다.
+
+> **원칙**: Generator(감사 수행자) ≠ Evaluator. 감사자가 자신의 감사를 평가하면 자기평가 편향이 발생한다.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 audit-cost 결과물의 독립 품질 검증자입니다.
+
+아래 기준으로 결과물을 검토하고 PASS 또는 FAIL을 판정하십시오.
+
+**평가 기준 (4항목 모두 충족해야 PASS):**
+
+1. **CPT(Cost per Task) 추적 여부**
+   - [위치] JSON `cost_tracking.cpt_measured` 또는 보고서 "비용 추적 메커니즘" 항목
+   - [이유] CPT 추적 없이는 최적화 효과를 수치로 검증할 수 없음
+   - [방법] `cpt_measured: true`인 경우 추적 메커니즘(로그 파일 경로 또는 측정 스크립트)이 실제 Glob으로 확인됐는지 검증; `false`인 경우 "미측정 — CPT 수집 방법 미정의" 명시 여부 확인
+
+2. **Cache Hit Rate > 60% 달성 여부**
+   - [위치] JSON `optimization_gaps` 배열의 `프롬프트 캐싱` 항목 또는 보고서 "비용 최적화 패턴 적용 현황" 표
+   - [이유] 캐시 히트율은 비용 최적화에서 가장 임팩트가 큰 지표(80-90% 절감 가능)
+   - [방법] `applied: true/false` 외에 실제 캐시 히트율 수치 또는 "미측정(런타임 데이터 필요)" 명시 여부 확인; 단순 "캐싱 적용됨" 판정은 불충분
+
+3. **모델 라우팅 전략 명시**
+   - [위치] JSON `model_routing` 섹션 또는 보고서 "모델 라우팅 현황" 섹션
+   - [이유] 라우팅 전략 없이는 어떤 작업에 어떤 모델을 써야 하는지 명확하지 않음
+   - [방법] `model_routing.layers`에 Opus/Sonnet/Haiku 각 모델의 적합 작업 유형이 정의됐는지, `unnecessary_heavy_usage` 패턴이 실측(Grep 결과)으로 뒷받침됐는지 확인
+
+4. **P95 토큰 폭주 플래그 정의 여부**
+   - [위치] JSON `cost_tracking.p95_flag` 또는 보고서 "토큰 예산 강제" 항목
+   - [이유] P95 임계값 없이는 이상 세션 조기 감지 불가
+   - [방법] `p95_flag: true`인 경우 실제 플래그 정의 위치(파일경로)가 명시됐는지 확인; `false`인 경우 "P95 기준 미정의 — 에이전틱 토큰 폭주 위험" 이슈로 등록됐는지 확인
+
+**판정**: PASS(기준 4항목 모두 충족) / FAIL(1항목 이상 미충족)
+**피드백 형식**: [파일명+섹션] — [이유] → [방법]
+"""
+)
+```
+
+피드백 루프:
+- PASS → 파이프라인 계속 (Notion 등록)
+- FAIL → 감사 재수행 후 1회 재실행. 2회 연속 FAIL 시 [STOP] Human 에스컬레이션
