@@ -129,4 +129,5 @@ if [ "${1:-}" = "--watch" ]; then
 else
   sync_once
   echo "[wiki-sync] OK $(date '+%Y-%m-%d %H:%M:%S')"
+  bash "$(dirname "$0")/tg-send.sh" "✅ *Wiki-sync 완료* ($(date '+%Y-%m-%d %H:%M KST'))" 2>/dev/null || true
 fi
