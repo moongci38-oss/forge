@@ -49,4 +49,11 @@ EXIT_CODE=${PIPESTATUS[0]}
 echo "Exit code: $EXIT_CODE" | tee -a "$LOG_FILE"
 echo "Finished: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
+# Telegram 완료 알림
+if [ "$EXIT_CODE" -eq 0 ]; then
+  bash "$SCRIPT_DIR/../tg-send.sh" "✅ *Daily Review 완료* ($TARGET_DATE)\n로그: \`$(basename "$LOG_FILE")\`" 2>/dev/null || true
+else
+  bash "$SCRIPT_DIR/../tg-send.sh" "❌ *Daily Review 실패* ($TARGET_DATE)\nExit: $EXIT_CODE\n로그: \`$(basename "$LOG_FILE")\`" 2>/dev/null || true
+fi
+
 exit "$EXIT_CODE"
