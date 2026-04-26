@@ -1,0 +1,182 @@
+# Forge Skill Bundles — semi-JIT Loading Map
+#
+# 태스크 유형별 스킬 조합 정의.
+# 오케스트레이터/라우터가 이 파일 읽어 필요 스킬만 로드.
+# 순서 = 권장 실행 순서. parallel: true 항목은 병렬 가능.
+
+bundles:
+
+  # ── Research (기사/영상/주제 조사) ─────────────────────────────
+  research:
+    description: "URL·영상·주제 심층 리서치 → 분석 → 저장"
+    triggers:
+      - "기사 분석"
+      - "유튜브 분석"
+      - "리서치"
+      - "조사해"
+    skills:
+      - name: article
+        note: "URL → 기사 추출 + 분석 + GTC + 계획서"
+      - name: yt
+        note: "YouTube URL → 영상 분석"
+      - name: yt-analyze
+        note: "yt 이후 심층 분석 (--deep)"
+      - name: wiki-sync
+        note: "분석 결과 → Obsidian vault 동기화"
+        optional: true
+    agents:
+      - article-analyst
+      - yt-video-analyst
+      - fact-checker
+
+  # ── Forge Dev (코드 구현 파이프라인) ───────────────────────────
+  forge-dev:
+    description: "기능 구현 전체 파이프라인 (Phase 1-12)"
+    triggers:
+      - "구현해"
+      - "개발해"
+      - "버그 수정"
+      - "리팩토링"
+    skills:
+      - name: concise-planning
+        note: "Phase 1: 계획 수립"
+      - name: requirements-clarity
+        note: "Phase 1.5: 요구사항 명확화 (모호하면)"
+        optional: true
+      - name: spec-compliance-checker
+        note: "Check 3.5: Spec ↔ 구현 추적성"
+        parallel: true
+      - name: qa
+        note: "Check 3.5: 테스트 시나리오"
+        parallel: true
+      - name: forge-check-ui
+        note: "Check 3.6: UI/UX 검수"
+        optional: true
+      - name: canary
+        note: "Phase 10: 배포 후 헬스 모니터링"
+    agents:
+      - trine-pm-updater
+      - performance-checker
+      - test-quality-checker
+      - ui-quality-checker
+
+  # ── Game Asset (게임 에셋 생성) ─────────────────────────────────
+  game-asset:
+    description: "게임 에셋 생성 파이프라인 (P0→P4)"
+    triggers:
+      - "에셋 생성"
+      - "스프라이트"
+      - "아이템 이미지"
+      - "게임 이미지"
+    skills:
+      - name: style-forge
+        note: "P0: 스타일 정의 (DESIGN.md 생성/확인)"
+      - name: game-asset-generate
+        note: "P2-P3: 에셋 생성"
+      - name: asset-critic
+        note: "P4: 품질 검증"
+      - name: asset-extract
+        note: "P4: 레퍼런스 추출"
+        optional: true
+    ref: "/mnt/e/new_workspace/god_Sword/docs/DESIGN.md"
+
+  # ── Planning (기획/전략) ────────────────────────────────────────
+  planning:
+    description: "기획서 작성 + 전략 수립"
+    triggers:
+      - "기획해"
+      - "계획 세워"
+      - "전략"
+      - "PRD"
+    skills:
+      - name: autoplan
+        note: "CEO→Design→Engineering 관점 기획서"
+      - name: pre-mortem
+        note: "실패 시나리오 예측"
+        optional: true
+      - name: concise-planning
+        note: "원자적 태스크 분해"
+      - name: writing-plans
+        note: "Spec → 구현 계획서"
+        optional: true
+    agents:
+      - cto-advisor
+
+  # ── Audit (시스템 감사) ─────────────────────────────────────────
+  audit:
+    description: "하네스/컨텍스트/비용/에이전틱 전방위 감사"
+    triggers:
+      - "감사"
+      - "audit"
+      - "점검해"
+      - "하네스 확인"
+    skills:
+      - name: audit-harness
+        note: "하네스 4축 감사 (메인)"
+      - name: audit-context
+        parallel: true
+        note: "컨텍스트 축 성숙도"
+      - name: audit-agentic
+        parallel: true
+        note: "에이전틱 패턴 감사"
+      - name: audit-cost
+        parallel: true
+        note: "비용 효율 감사"
+      - name: audit-human-ai
+        parallel: true
+        note: "Human-AI 경계 감사"
+      - name: system-audit
+        note: "5축 통합 감사 (ACHCE)"
+        optional: true
+    agents:
+      - axis-harness
+      - axis-context
+
+  # ── Weekly/Daily Review ─────────────────────────────────────────
+  review:
+    description: "일간/주간 시스템 리뷰"
+    triggers:
+      - "daily review"
+      - "weekly review"
+      - "데일리"
+      - "위클리"
+    skills:
+      - name: daily-system-review
+        note: "일간: 시스템 상태 + 학습"
+      - name: weekly-research
+        note: "주간: 트렌드 리서치"
+      - name: weekly-analyze
+        note: "주간 분석 (JSON → 인사이트)"
+      - name: daily-analyze
+        note: "일간 분석"
+    agents:
+      - daily-system-analyst
+      - weekly-research-analyst
+
+  # ── UI/UX Design ────────────────────────────────────────────────
+  ui-design:
+    description: "UI/UX 설계 + 구현 + 검수"
+    triggers:
+      - "UI 만들어"
+      - "화면 설계"
+      - "디자인"
+      - "컴포넌트"
+    skills:
+      - name: frontend-design
+        note: "프로덕션 수준 UI 생성"
+      - name: design-critique
+        note: "디자인 비평"
+        optional: true
+      - name: ux-audit
+        note: "9항목 UX 감사"
+      - name: visual-loop
+        note: "변경 후 자동 시각 검증 루프"
+    agents:
+      - ui-quality-checker
+
+# ── 로딩 규칙 ───────────────────────────────────────────────────────
+loading_rules:
+  - "optional: true 항목은 명시적 요청 시만 로드"
+  - "parallel: true 항목은 단일 Agent() 호출로 동시 실행"
+  - "triggers 키워드 매칭은 forge-router가 담당"
+  - "이 파일 경로: ~/forge/.claude/skill-bundles.yml"
