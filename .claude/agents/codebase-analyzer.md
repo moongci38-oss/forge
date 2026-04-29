@@ -41,11 +41,12 @@ Phase 1.5 Q&A와 Phase 2 Spec 작성의 참고 자료를 제공한다.
 `{PROJECT_ROOT}/.claude/reference/codebase-analysis.md` 존재 여부 + 소스 변경 여부를 확인한다.
 
 1. 파일 존재 시:
-   - Read → **분석 일시** (YYYY-MM-DD) 추출
-   - `git log --since="{분석 일시}" --oneline -- .` 실행 → 커밋 수 확인
+   - Read → `분석 일시:` 줄에서 **YYYY-MM-DD** 부분만 추출 (시간 무시)
+   - `git -C "{PROJECT_ROOT}" log --since="{YYYY-MM-DD}T00:00:00+09:00" --oneline -- .` 실행
+   - **git 실패** (not a git repo / permission error): "git 사용 불가 — 재분석 권장" → Step 1 진행
    - **커밋 없음**: "소스 변경 없음 — 재사용 안전" → Human 선택 (재사용/재분석)
    - **커밋 N개**: "분석 이후 N개 커밋 존재 — 재분석 권장" → Human 선택
-   - 재사용 선택 → Step 1~4 스킵
+   - 재사용 선택 → Step 1~4 스킵 (단, 파일 > 300줄 시 첫 150줄만 Read로 요약 참조)
    - 재분석 선택 → Step 1 진행
 2. 없음 → Step 1 바로 진행
 
