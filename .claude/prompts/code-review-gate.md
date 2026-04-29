@@ -22,8 +22,8 @@
 |-----------|----------|
 | 아키텍처 적절성 | 레이어 분리, 의존성 방향 |
 | 네이밍 의미 적절성 | 함수/변수명이 역할을 정확히 반영 |
-| 에러 핸들링 충분성 | try-catch 누락, 에러 무시 |
-| 성능 안티패턴 | N+1 쿼리, 불필요한 리렌더, 메모리 누수 |
+| 에러 핸들링 충분성 | try-catch 누락, 에러 전파 없이 무시 (보안 취약점 제외 → 섹션 4) |
+| 성능 안티패턴 | N+1 쿼리, 불필요한 리렌더 (메모리 누수 → 섹션 5) |
 
 ### 3. 복잡도 지표
 
@@ -40,10 +40,10 @@
 | 취약점 | 검사 포인트 |
 |--------|-----------|
 | **Injection** (SQL/Command/LDAP/XSS) | 외부 입력이 쿼리·명령·HTML에 직접 삽입되는 경로 |
-| **Broken Access Control** | API 엔드포인트에서 소유권 검증(ownership check) 누락 |
+| **Broken Access Control** | API 엔드포인트 소유권 검증 누락, IDOR (URL 파라미터로 타인 리소스 직접 접근) |
 | **인증·인가 우회** | JWT 알고리즘 none 허용, 세션 고정, 권한 검사 순서 오류 |
 | **Cryptographic Failure** | 평문 비밀번호/토큰 저장, MD5/SHA1 사용, 하드코딩 secret |
-| **Security Misconfiguration** | 디버그 모드 ON, 스택 트레이스 노출, CORS wildcard |
+| **Security Misconfiguration** | 디버그 모드 ON, CORS wildcard, 불필요한 포트/서비스 노출 |
 | **Supply Chain** | 신규 의존성 추가 시 출처·버전 고정 여부, typosquatting 유사 패키지명 |
 | **민감 데이터 로그 노출** | password/token/PII가 로그·응답에 포함되는 경로 |
 | **Mishandling Exceptional Conditions** (OWASP 2025 신규) | panic/crash 유발 입력, 오버플로우, 예외 무시 후 상태 오염 |
@@ -62,7 +62,6 @@
 
 | 검사 항목 | 판단 기준 |
 |-----------|----------|
-| **직접 객체 참조** | URL 파라미터로 타인 리소스 접근 가능 여부 |
 | **비즈니스 룰 우회** | 할인·포인트·한도 로직을 API 직접 호출로 우회 가능한지 |
 | **요청 한도** | rate limit·결제·발송 횟수 제한 없는 반복 가능 경로 |
 | **멱등성** | POST 중복 호출 시 중복 처리(결제·발송 이중 실행) 여부 |
