@@ -173,6 +173,14 @@ FAIL 시 피드백: [위치] — [이유] → [방법]
   Skill: inspection-checklist
   Input: Spec 경로 + QA 보고서 경로
   ```
-  - inspection-checklist PASS → Human 전달 (PR 생성 승인)
+  - inspection-checklist PASS → `gh pr create` 자동 실행
+    ```bash
+    gh pr create \
+      --title "{Spec 제목} — {feature/fix 타입}" \
+      --body "$(cat {QA_REPORT_PATH})" \
+      --base develop \
+      --head $(git branch --show-current)
+    ```
+    PR URL 사용자에게 반환 후 종료
   - inspection-checklist FAIL → 해당 Check 항목 수정 후 재실행
 - **FAIL** → QA 보고서 수정 후 1회 재평가. 재FAIL 시 [STOP] Human 에스컬레이션

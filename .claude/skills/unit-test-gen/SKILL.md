@@ -1,6 +1,6 @@
 ---
 name: unit-test-gen
-description: 소스 코드에서 유닛 테스트를 자동 생성한다. 함수/클래스/메서드를 분석해 Jest(TS/JS), pytest(Python), NUnit/xUnit(C#), JUnit(Java) 테스트 파일을 생성. 테스트 없는 파일 발견 시 자동 제안. /qa 또는 SDD 구현 완료 후 테스트 미존재 시 자동 트리거. 직접 호출: /unit-test-gen <file-or-dir>
+description: 소스 코드에서 유닛 테스트를 자동 생성한다. 함수/클래스/메서드를 분석해 Jest(TS/JS), pytest(Python), NUnit/xUnit(C#), JUnit(Java) 테스트 파일을 생성. 뮤테이션 테스팅 점수를 품질 지표로 활용. 테스트 없는 파일 발견 시 자동 제안. /qa 또는 SDD 구현 완료 후 테스트 미존재 시 자동 트리거. 직접 호출: /unit-test-gen <file-or-dir>
 user-invocable: true
 context: fork
 model: sonnet
@@ -17,6 +17,24 @@ model: sonnet
 ```
 
 단일 파일, 디렉토리, 또는 Glob 패턴 지원.
+
+## 품질 지표: 커버리지 vs 뮤테이션 점수
+
+> **커버리지는 허영 지표다.** 100% 커버리지이면서 뮤테이션 점수 4%인 테스트 스위트가 실제로 존재한다.
+> 이 스킬은 뮤테이션 생존 케이스(live mutant)를 기반으로 테스트를 강화한다.
+
+| 지표 | 역할 |
+|------|------|
+| Line/Branch Coverage | 최소 기준 (실행 여부만 검증) |
+| **Mutation Score** | 실질 품질 지표 (버그 감지 능력 측정) |
+
+**뮤테이션 점수 기준값:**
+
+| 경로 유형 | 권장 뮤테이션 점수 |
+|---------|---------------|
+| 크리티컬 경로 (결제/인증/잠금) | 70%+ |
+| 일반 비즈니스 로직 | 50%+ |
+| 실험적/유틸 함수 | 30%+ |
 
 ## 실행 흐름
 
@@ -45,6 +63,7 @@ model: sonnet
 - 의존성 (import 목록 → mock 대상 식별)
 - 에러 throw 경로
 - 경계값 (null/undefined 처리, 최대/최소값)
+- **크리티컬 경로 여부** (결제/인증/권한/데이터 무결성 관련 함수 → 뮤테이션 강화 대상)
 
 ### Step 4: 테스트 생성
 
@@ -67,6 +86,29 @@ model: sonnet
 | `tests/` | pytest 프로젝트 |
 
 기존 파일 있으면 **덮어쓰기 금지** → 갭 항목만 append.
+
+### Step 6: 뮤테이션 테스팅 (크리티컬 경로 한정)
+
+크리티컬 경로 함수가 포함된 경우:
+
+1. 뮤테이션 도구 감지:
+   - JS/TS: `stryker` (`package.json`에 `@stryker-mutator/*` 존재 시)
+   - Python: `mutmut` (`pip show mutmut` 성공 시)
+   - 미설치 시 → Step 6 스킵, "뮤테이션 도구 미설치 — 선택적 설치 권장" 안내만
+
+2. 뮤테이션 실행 (대상 파일만, 전체 스위트 아님):
+   ```bash
+   # Stryker
+   npx stryker run --files {source-file},{test-file}
+
+   # mutmut
+   mutmut run --paths-to-mutate {source-file}
+   ```
+
+3. 생존 뮤턴트(live mutant) 확인:
+   - 생존 뮤턴트 = 기존 테스트가 잡지 못한 버그 시뮬레이션
+   - 생존 뮤턴트 목록을 추출하여 추가 테스트 케이스 자동 생성
+   - 뮤테이션 점수 기준 미달 시 WARN 반환
 
 ## 출력 예시 (Jest/TypeScript)
 
@@ -97,5 +139,6 @@ SDD Phase 3 구현 완료 또는 `/qa` 실행 시:
 ## 종료 조건
 
 - 테스트 파일 생성 + 테스트 실행 PASS → 완료
+- 뮤테이션 점수 기준 미달 → WARN + 생존 뮤턴트 기반 추가 케이스 제안
 - 테스트 실행 FAIL → 실패 케이스 수정 1회 시도 후 보고
 - 프레임워크 감지 불가 → "테스트 프레임워크 미감지 — package.json 또는 requirements.txt 확인" 출력
