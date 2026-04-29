@@ -62,6 +62,28 @@ Glob으로 `*.md` 파일 목록을 얻고, 다음 조건으로 필터링:
 - `CLAUDE.md`, `README.md`는 제외 (코드 컨텍스트 파일 — SKILL.md는 포함)
 - `sync-tracking.json`의 `ingested` 배열에 없는 항목만 후보로 남긴다.
 
+**INCLUDE_OVERRIDE 적용 예시** (필터 판단 기준):
+```
+# 제외 대상 (EXCLUDE_DIRS .claude 해당)
+pingame-server/.claude/CLAUDE.md              → SKIP
+pingame-server/.claude/rules/some-rule.md     → SKIP
+
+# 포함 대상 (INCLUDE_OVERRIDE .claude/reference 예외)
+pingame-server/.claude/reference/codebase-analysis.md  → INCLUDE ✅
+baduki-client/.claude/reference/codebase-analysis.md   → INCLUDE ✅
+```
+
+**INCLUDE_OVERRIDE 적용 예시** (필터 판단 기준):
+```
+# 제외 대상 (EXCLUDE_DIRS .claude 해당)
+pingame-server/.claude/CLAUDE.md              → SKIP
+pingame-server/.claude/rules/some-rule.md     → SKIP
+
+# 포함 대상 (INCLUDE_OVERRIDE .claude/reference 예외)
+pingame-server/.claude/reference/codebase-analysis.md  → INCLUDE ✅
+baduki-client/.claude/reference/codebase-analysis.md   → INCLUDE ✅
+```
+
 한 회 처리량은 **10개**로 제한.
 
 ### Step 2 — Read: Raw 문서 핵심 추출
