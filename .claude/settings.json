@@ -34,6 +34,11 @@
             "type": "command",
             "command": "bash .claude/hooks/100-line-rule.sh",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-edit-lint.sh",
+            "timeout": 30
           }
         ]
       },
@@ -49,6 +54,11 @@
             "type": "command",
             "command": "bash .claude/hooks/filter-log-output.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-pr-telegram.sh",
+            "timeout": 15
           }
         ]
       },
@@ -214,6 +224,11 @@
             "type": "command",
             "command": "OWASP_MODE=pre bash .claude/hooks/owasp-asi-04-06-08-10.sh",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-commit-test.sh",
+            "timeout": 120
           }
         ]
       },

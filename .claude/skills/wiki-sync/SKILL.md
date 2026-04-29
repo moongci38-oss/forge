@@ -30,15 +30,61 @@ TRACKING=~/forge-outputs/20-wiki/_meta/sync-tracking.json
 
 # 1.2 Raw 후보 디렉토리 (최근 30일 우선)
 RAW_DIRS=(
-  ~/forge-outputs/01-research/videos/analyses
-  ~/forge-outputs/01-research/daily
-  ~/forge-outputs/01-research/weekly
-  ~/forge-outputs/01-research/projects
-  ~/forge-outputs/01-research/articles
+  ~/forge-outputs
+  ~/.claude/skills
+  ~/forge/.claude/skills
+  ~/forge/.claude/agents
+)
+
+# 1.3 제외 경로 패턴 (소스코드·리소스·설정 파일 제외)
+EXCLUDE_DIRS=(
+  20-wiki
+  .claude
+  node_modules
+  agent-server
+  bot
+  .git
+  dist
+  build
+  assets
+  images
+)
+
+# .claude/reference/ 는 EXCLUDE_DIRS 예외 — 프로젝트별 L4 분석 자료 (SDD/PGE 참조)
+# 필터링 시: EXCLUDE_DIRS 해당 경로라도 ".claude/reference" 포함 시 포함 유지
+INCLUDE_OVERRIDE_PATTERNS=(
+  .claude/reference
 )
 ```
 
-Glob으로 `*.md` 파일 목록을 얻고, `sync-tracking.json`의 `ingested` 배열에 없는 항목만 후보로 남긴다. 한 회 처리량은 **10개**로 제한.
+Glob으로 `*.md` 파일 목록을 얻고, 다음 조건으로 필터링:
+- `EXCLUDE_DIRS` 내 디렉토리 경로가 포함된 파일 제외 (`.claude/`, `node_modules/` 등) — 단, `INCLUDE_OVERRIDE_PATTERNS`(`.claude/reference`)에 해당하는 경로는 예외로 포함
+- `CLAUDE.md`, `README.md`는 제외 (코드 컨텍스트 파일 — SKILL.md는 포함)
+- `sync-tracking.json`의 `ingested` 배열에 없는 항목만 후보로 남긴다.
+
+**INCLUDE_OVERRIDE 적용 예시** (필터 판단 기준):
+```
+# 제외 대상 (EXCLUDE_DIRS .claude 해당)
+pingame-server/.claude/CLAUDE.md              → SKIP
+pingame-server/.claude/rules/some-rule.md     → SKIP
+
+# 포함 대상 (INCLUDE_OVERRIDE .claude/reference 예외)
+pingame-server/.claude/reference/codebase-analysis.md  → INCLUDE ✅
+baduki-client/.claude/reference/codebase-analysis.md   → INCLUDE ✅
+```
+
+**INCLUDE_OVERRIDE 적용 예시** (필터 판단 기준):
+```
+# 제외 대상 (EXCLUDE_DIRS .claude 해당)
+pingame-server/.claude/CLAUDE.md              → SKIP
+pingame-server/.claude/rules/some-rule.md     → SKIP
+
+# 포함 대상 (INCLUDE_OVERRIDE .claude/reference 예외)
+pingame-server/.claude/reference/codebase-analysis.md  → INCLUDE ✅
+baduki-client/.claude/reference/codebase-analysis.md   → INCLUDE ✅
+```
+
+한 회 처리량은 **10개**로 제한.
 
 ### Step 2 — Read: Raw 문서 핵심 추출
 

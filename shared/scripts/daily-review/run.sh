@@ -49,4 +49,7 @@ EXIT_CODE=${PIPESTATUS[0]}
 echo "Exit code: $EXIT_CODE" | tee -a "$LOG_FILE"
 echo "Finished: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" | tee -a "$LOG_FILE"
 
+# Telegram 리포트 전송
+bash "$SCRIPT_DIR/../tg-report-daily.sh" "$TARGET_DATE" "$EXIT_CODE" 2>/dev/null || true
+
 exit "$EXIT_CODE"

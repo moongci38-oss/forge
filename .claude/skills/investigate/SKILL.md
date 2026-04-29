@@ -29,9 +29,28 @@ model: sonnet
 
 ## 4단계 프로세스
 
+### Stage 0: RAG 선검색 + 소스 변경 감지
+
+이슈 키워드(에러 메시지 + 모듈명 + 증상)로 forge-outputs를 먼저 검색한다.
+
+1. 키워드 추출 → `rag-search` 스킬 호출
+   - **rag-search 결과 없음 (cold-start 가능성)**: Glob `forge-outputs/01-research/bugs/**/*.md` + `forge-outputs/docs/reviews/**/*.md` 직접 탐색 → 파일명에 키워드 포함 시 Read
+2. 유사 이슈 리포트 발견 시:
+   - 해당 파일 Read → 다음 추출:
+     - **리포트 작성일**: 파일명 또는 front matter `date:` 또는 `# ... YYYY-MM-DD` 패턴에서 **YYYY-MM-DD** 추출
+     - **관련 파일 목록**: 리포트 내 backtick 코드블록 또는 `## 근본 원인` / `## 수정 파일` 섹션에서 `.ts`/`.js`/`.py`/`.cs`/`.go` 경로 Grep
+   - 관련 파일 목록 없으면 프로젝트 루트 전체(`-- .`)로 대체
+   - `git -C "{프로젝트 루트}" log --since="{YYYY-MM-DD}T00:00:00+09:00" --oneline -- {관련 파일들}` 실행
+   - **git 실패** (not a git repo / permission error): "git 사용 불가 — 기존 해결책 참고 후 Stage 1 진행"
+   - **커밋 없음**: "소스 변경 없음 — 기존 해결책 유효" → 제시 후 Human 확인
+   - **커밋 N개**: "관련 소스 N개 커밋 변경 — 기존 해결책 참고만, 재조사 권장" → Stage 1 진행
+3. 없음 → "기존 케이스 없음" 출력 후 Stage 1 진행
+
 ### Stage 1: 조사 (Investigate)
 
 증상을 정확히 기록하고, 재현 조건을 특정한다.
+
+**시작 전**: `.claude/reference/codebase-analysis.md` 존재 시 Read → 아키텍처·의존성 그래프 파악 후 영향 범위 추론에 활용
 
 ```markdown
 ## 증상
@@ -55,6 +74,13 @@ model: sonnet
 - 관련 파일 Grep/Read
 - git log로 최근 변경 확인
 - 재현 시도
+
+**과거 버그 자동 검색 (필수)**: Stage 1 시작 시 rag-search로 유사 버그 확인.
+```
+rag-search("{project} {증상 키워드}")
+→ forge-outputs/01-research/bugs/ 에서 유사 과거 버그 검색
+→ 관련 결과 있으면 Stage 1 보고서에 "관련 과거 버그" 섹션 추가
+```
 
 ### Stage 2: 분석 (Analyze)
 
@@ -179,3 +205,42 @@ Advisor 응답 받아 Stage 3 진행 순서 결정.
 4. **Stage 4에서 재현 테스트를 먼저 작성하고 FAIL을 확인한 후에만 Stage 5 수정으로 넘어간다** (Prove-It 원칙)
 5. 수정 후 재현 테스트 PASS + 기존 테스트 전체 PASS 확인
 6. 해결된 패턴을 /learn에 저장 제안
+7. Stage 5 완료 후 반드시 Stage 6 실행 — bug log 자동 저장
+### Stage 6: 버그 로그 저장 (Save)
+
+Stage 5 수정 완료 후 **반드시** bug log를 forge-outputs에 저장한다.
+
+저장 경로: `forge-outputs/01-research/bugs/{project}/{YYYY-MM-DD}-{slug}.md`
+
+- `{project}`: 현재 작업 디렉토리에서 추론 (godblade, portfolio, pingame-server 등)
+- `{slug}`: 증상 요약 kebab-case (예: `session-not-persisted-after-login`)
+
+```markdown
+---
+project: {project}
+date: {YYYY-MM-DD}
+severity: P0/P1/P2
+status: fixed
+tags: [관련 키워드]
+---
+
+## 증상
+[Stage 1의 증상 요약]
+
+## 근본 원인
+[Stage 5의 근본 원인 1문장]
+
+## 수정 내용
+- 파일: ...
+- 변경: ...
+
+## 재발 방지
+[Stage 5의 재발 방지 내용]
+
+## 관련 버그
+[rag-search에서 발견된 연관 버그 링크, 없으면 "없음"]
+```
+
+> **rag-search 자동 인덱싱**: 저장 즉시 `forge-outputs/01-research/bugs/`가 rag-search 범위에 포함되어
+> 다음 `/investigate` 호출 시 Stage 1에서 이 버그가 참조됨.
+
