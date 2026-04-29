@@ -35,8 +35,12 @@ model: sonnet
 
 1. 키워드 추출 → `rag-search` 스킬 호출
 2. 유사 이슈 리포트 발견 시:
-   - 해당 파일 Read → **리포트 작성일** + 관련 파일 목록 추출
-   - `git log --since="{리포트 작성일}" --oneline -- {관련 파일들}` 실행
+   - 해당 파일 Read → 다음 추출:
+     - **리포트 작성일**: 파일명 또는 front matter `date:` 또는 `# ... YYYY-MM-DD` 패턴에서 **YYYY-MM-DD** 추출
+     - **관련 파일 목록**: 리포트 내 backtick 코드블록 또는 `## 근본 원인` / `## 수정 파일` 섹션에서 `.ts`/`.js`/`.py`/`.cs`/`.go` 경로 Grep
+   - 관련 파일 목록 없으면 프로젝트 루트 전체(`-- .`)로 대체
+   - `git -C "{프로젝트 루트}" log --since="{YYYY-MM-DD}T00:00:00+09:00" --oneline -- {관련 파일들}` 실행
+   - **git 실패** (not a git repo / permission error): "git 사용 불가 — 기존 해결책 참고 후 Stage 1 진행"
    - **커밋 없음**: "소스 변경 없음 — 기존 해결책 유효" → 제시 후 Human 확인
    - **커밋 N개**: "관련 소스 N개 커밋 변경 — 기존 해결책 참고만, 재조사 권장" → Stage 1 진행
 3. 없음 → "기존 케이스 없음" 출력 후 Stage 1 진행
