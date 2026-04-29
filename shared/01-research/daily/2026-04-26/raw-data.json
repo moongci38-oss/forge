@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "pipeline": "daily-review",
+  "target_date": "2026-04-26",
+  "collected_at": "2026-04-26T20:04:45.660531+00:00",
+  "stats": {
+    "tier1_count": 0,
+    "tier2_releases_count": 0,
+    "tier2_trending_count": 0,
+    "tier5_count": 0,
+    "total": 0
+  },
+  "items": [],
+  "claude_search_needed": [
+    "Tier 3: HN, Reddit (r/MachineLearning, r/LocalLLaMA, r/ClaudeAI), Dev.to, Twitter/X",
+    "Tier 4: YouTube (Fireship, AI Jason, Matt Wolfe, Yannic Kilcher) 최신 업로드",
+    "Tier 6: TechCrunch AI, VentureBeat, Product Hunt AI, a16z AI Blog"
+  ]
+}

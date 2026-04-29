@@ -1,3 +1,28 @@
+---
+project: "{프로젝트명}"
+generated_at: "{YYYY-MM-DD}"
+version: "1.0"
+palette:
+  primary: "#______"
+  secondary: "#______"
+  accent: "#______"
+  background: "#______"
+  surface: "#______"
+  text_primary: "#______"
+  text_secondary: "#______"
+  error: "#______"
+  success: "#______"
+art_style:
+  tone: []          # flat, minimal, vibrant, dark, ...
+  character: []     # chibi, semi-realistic, ...
+  background: []    # painted, gradient, geometric, ...
+  icon: []          # outlined, filled, duotone, ...
+  ui: []            # rounded, sharp, glassmorphism, ...
+lora_model: ""      # Replicate model ID or "untrained"
+lora_trigger: ""
+asset_path: ""
+---
+
 # 스타일 가이드 — {프로젝트명}
 
 > 프로젝트의 시각적 일관성을 보장하는 기준 문서. AI 이미지 생성 시 이 가이드를 참조하여 프롬프트를 구성한다.
