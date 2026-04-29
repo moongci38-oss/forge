@@ -34,6 +34,7 @@ model: sonnet
 이슈 키워드(에러 메시지 + 모듈명 + 증상)로 forge-outputs를 먼저 검색한다.
 
 1. 키워드 추출 → `rag-search` 스킬 호출
+   - **rag-search 결과 없음 (cold-start 가능성)**: Glob `forge-outputs/01-research/bugs/**/*.md` + `forge-outputs/docs/reviews/**/*.md` 직접 탐색 → 파일명에 키워드 포함 시 Read
 2. 유사 이슈 리포트 발견 시:
    - 해당 파일 Read → 다음 추출:
      - **리포트 작성일**: 파일명 또는 front matter `date:` 또는 `# ... YYYY-MM-DD` 패턴에서 **YYYY-MM-DD** 추출
