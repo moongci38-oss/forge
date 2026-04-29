@@ -14,48 +14,6 @@ model: sonnet
 
 Phase 8 구현 완료 후 Spec 기반 기능별 시나리오 검증을 자동 실행한다.
 
-## 독립 Subagent 실행 원칙 (CRITICAL)
-
-> **이 스킬은 반드시 독립 subagent로 실행한다.**
-> Lead 에이전트(구현 에이전트)가 직접 이 스킬을 수행하면 자기평가 편향이 발생한다.
-> Generator의 컨텍스트(의도, 가정, 시도 경위)를 공유하지 않는 별도 에이전트만이
-> 편향 없는 품질 판정을 내릴 수 있다.
-
-### QA Subagent 스폰 프로토콜
-
-PGE Phase 3 또는 Phase 8 Check 6.7 이후 Lead가 아래 방식으로 독립 QA 에이전트를 스폰한다:
-
-```python
-Agent(
-  subagent_type="general-purpose",
-  model="sonnet",
-  prompt="""
-당신은 독립 QA 에이전트입니다.
-Generator(구현 에이전트)의 컨텍스트(의도, 시도, 가정)를 공유받지 않습니다.
-오직 아래 파일만을 근거로 검증을 수행하십시오.
-
-Spec 파일 경로: {spec_path}
-변경된 파일 목록:
-{changed_files}
-
-QA 스킬 절차: /home/damools/forge/.claude/skills/qa/SKILL.md 를 Read하여 따름.
-
-실행 순서:
-1. SKILL.md Read → 워크플로우 숙지
-2. Spec Read → FR/NFR 목록 추출
-3. 변경 파일 Read → 구현 내용 파악 (Generator 의도 추정 금지)
-4. 시나리오 생성 + 실행 (Cycle 1)
-5. FAIL 항목 수정 + 재검증 (Cycle 2, 필요 시)
-6. 결과를 {qa_result_path} 에 Write
-"""
-)
-```
-
-**파일 기반 입력 (독립 컨텍스트 원칙)**:
-- Spec: `.specify/specs/{spec-name}.md` 또는 `.claude/state/PGE_SPEC.md`
-- 변경 파일 목록: Lead가 명시적으로 전달 (Generator의 의도 설명 포함 금지)
-- 결과 출력: `.claude/state/PGE_QA_RESULT.md`
-
 ## 핵심 원칙
 
 > **Spec에 명시된 모든 FR은 최소 1개 시나리오로 검증한다.**
@@ -84,7 +42,7 @@ Phase 8 Check 6.7 PASS → 자동 실행
 4. 시나리오 실행:
    - **API/로직**: `verify.sh` 실행
    - **UI/Web**: `playwright-parallel-test` 스킬로 실제 브라우저 테스트 (사람이 클릭하듯 검증)
-   - **게임 (GodBlade)**: Unity 빌드 후 플레이테스트 시나리오 수동 실행
+   - **게임 (GodBlade)**: `/game-qa` 스킬 호출 (3계층 독립 검증: 파라미터 대조 + 런타임 캡처 + Human 보고)
 5. 결과 기록: PASS/FAIL + 이슈 상세
 
 ### Cycle 2: 수정 + 재검증
@@ -179,3 +137,42 @@ Phase 8 Check 6.7 PASS → 자동 실행
 ## Hotfix 면제
 
 작업 규모가 Hotfix인 경우 /qa는 자동 스킵된다.
+
+
+---
+
+## 독립 Evaluator (Wave 2.5 — Agent Teams 하네스)
+
+> QA 보고서 완성 후, Human 전달 전에 반드시 실행한다.
+> **Generator(QA Lead) ≠ Evaluator** 원칙 — 자기평가 편향 방지.
+
+```python
+Agent(
+  subagent_type="general-purpose",
+  model="sonnet",
+  prompt="""
+당신은 QA 보고서의 품질을 독립적으로 평가하는 Evaluator입니다.
+Generator(QA Lead)의 의도나 과정을 모른 채 결과물만 평가합니다.
+
+평가 대상: docs/qa/YYYY-MM-DD-{spec-name}-qa-report.md
+
+평가 기준:
+- 모든 FR에 최소 1개 시나리오가 대응되는가?
+- FAIL 항목에 위치+이유+방법 3요소가 포함되었는가?
+- AI 슬롭(관대한 평가, 두루뭉술한 피드백) 없는가?
+- Rubric 점수 근거가 구체적인가?
+
+판정: PASS / FAIL
+FAIL 시 피드백: [위치] — [이유] → [방법]
+"""
+)
+```
+
+- **PASS** → `inspection-checklist` 스킬 자동 호출 (PR 생성 전 최종 검수)
+  ```
+  Skill: inspection-checklist
+  Input: Spec 경로 + QA 보고서 경로
+  ```
+  - inspection-checklist PASS → Human 전달 (PR 생성 승인)
+  - inspection-checklist FAIL → 해당 Check 항목 수정 후 재실행
+- **FAIL** → QA 보고서 수정 후 1회 재평가. 재FAIL 시 [STOP] Human 에스컬레이션
