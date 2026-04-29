@@ -1,0 +1,14 @@
+{
+  "name": "forge-skills-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server exposing Forge skills as tools for IDE/external access",
+  "main": "server.mjs",
+  "bin": {
+    "forge-skills-mcp": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{}}}' | node server.mjs"
+  }
+}

@@ -41,7 +41,7 @@ fi
 # Step 2: Claude Code CLI로 분석 실행
 echo "--- Step 2: Claude 분석 ---" | tee -a "$LOG_FILE"
 "$HOME/.local/bin/claude" -p "/weekly-research $TARGET_DATE" \
-  --allowedTools "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,mcp__brave-search__brave_web_search,mcp__notion__notion-search,mcp__notion__notion-create-pages,mcp__notion__notion-update-page" \
+  --allowedTools "Agent,WebSearch,WebFetch,Write,Read,Glob,Grep,Bash,mcp__brave-search__brave_web_search,mcp__tavily__tavily_search,mcp__tavily__tavily_crawl,mcp__tavily__tavily_extract,mcp__exa__exa_search,mcp__notion__notion-search,mcp__notion__notion-create-pages,mcp__notion__notion-update-page" \
   2>&1 | tee -a "$LOG_FILE"
 
 EXIT_CODE=${PIPESTATUS[0]}
