@@ -24,6 +24,7 @@
 | 버그 수정 | `/pge` 하네스 |
 | 복잡한 기획서·다단계 생성 | PGE 또는 Agent Teams |
 | 산출물 품질 검증 | Evaluator subagent |
+| 복잡 구현 결과 검증 | Evaluator 서브에이전트 | 결과 요약만 메인에 반환 |
 | 대용량 출력 발생 | subagent 격리 (메인 컨텍스트 보호) |
 | 독립 병렬 작업 2~3개 | Agent Teams 단일 메시지 스폰 |
 
