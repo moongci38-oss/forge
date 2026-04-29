@@ -66,7 +66,7 @@ model: opus
    - **Unity 클라이언트 작업 시 추가 Read**:
      - `{project_root}/.claude/reference/key-file-map.md` — 기능별 파일 위치 + 쌍 수정 패턴
      - `{project_root}/.claude/reference/code-snippets.md` — DOTween/UI/이벤트 표준 패턴
-     - `{project_root}/.claude/reference/codebase-analysis.md` — 아키텍처/의존성 분석 (존재 시, codebase-analyzer 산출물)
+   - `{project_root}/.claude/reference/codebase-analysis.md` — 아키텍처/의존성 분석 (존재 시, 서버/앱 공통)
    - **웹/앱 UI 작업 시 추가 Read**:
      - `~/forge/shared/design-tokens/design-rules.md` — 레이아웃 4타입, 금지사항 7개, 카드/간격 원칙
      - `~/forge/shared/design-tokens/instagram-default.json` — 색상/타이포/스페이싱 토큰
