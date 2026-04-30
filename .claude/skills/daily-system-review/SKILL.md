@@ -67,6 +67,7 @@ Recent commits: !git log --oneline -5
 | CrewAI Releases | 멀티에이전트 프레임워크 |
 | Vercel AI SDK Releases | 프론트엔드 AI 통합 |
 | AutoGen/Semantic Kernel | Microsoft 에이전트 프레임워크 |
+| VILA-Lab/Dive-into-Claude-Code | Claude Code 운영 프레임워크·test-time compute 연구 추적 |
 
 ### Tier 3: 개발자 커뮤니티
 
@@ -265,7 +266,6 @@ Lead가 5개 Teammate 결과를 종합하여 2개 문서 직접 작성:
 
 ```
 subagent_type: general-purpose
-model: sonnet
 ```
 
 **입력 파일 (직접 Read)**:
@@ -334,7 +334,7 @@ PASS 확인 후 Wave 3(Notion 자동 등록)으로 진행한다.
       "리포트 경로": "01-research/daily/{date}/ai-system-analysis.md",
       "적용계획 경로": "01-research/daily/{date}/system-improvement-plan.md"
     },
-    "content": "{리포트 Executive Summary}\n\n## 갭 분석 요약\n{Critical/High/Medium 갭 항목 1줄씩}\n\n## P0 액션 아이템\n{P0 항목 목록}\n\n## 추천 시청/읽기\n{Top 3 추천 항목}"
+    "content": "{ai-system-analysis.md 전체 내용}\n\n---\n\n{system-improvement-plan.md 전체 내용}"
   }]
 }
 ```
@@ -348,6 +348,25 @@ PASS 확인 후 Wave 3(Notion 자동 등록)으로 진행한다.
 **실패 처리:**
 - Notion MCP 미연결 시 경고 출력 후 스킵 (리포트 파일은 이미 저장됨)
 - 페이지 생성 실패 시 에러 로그 출력 후 스킵 (파이프라인 중단 안 함)
+
+
+### Wave 4 (대화창 전체 출력 — Wave 3 완료 후)
+
+두 산출물 파일을 Read하여 전체 내용을 대화창에 출력한다.
+
+```
+Read("01-research/daily/{date}/ai-system-analysis.md") → 전체 내용 출력
+Read("01-research/daily/{date}/system-improvement-plan.md") → 전체 내용 출력
+```
+
+출력 형식:
+```
+===== AI 시스템 분석 리포트 ({date}) =====
+{ai-system-analysis.md 전체 내용}
+
+===== 시스템 개선 계획서 ({date}) =====
+{system-improvement-plan.md 전체 내용}
+```
 
 ## 신뢰도 등급
 

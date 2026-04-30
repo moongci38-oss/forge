@@ -125,4 +125,36 @@ for pattern in "${WARN_PATTERNS[@]}"; do
   fi
 done
 
+
+# GRAY_ZONE patterns — ambiguous language, escalate to LLM when Ollama available
+GRAY_ZONE_PATTERNS=(
+  "act as if you"
+  "pretend to be"
+  "roleplay as"
+  "assume the role of"
+  "imagine you are a"
+  "you have no restrictions"
+  "you can do anything"
+  "DEVELOPER MODE"
+  "unrestricted mode"
+  "no limitations"
+)
+
+LLM_HOOK="${HOME}/.claude/hooks/llm-injection-check.py"
+for pattern in "${GRAY_ZONE_PATTERNS[@]}"; do
+  if echo "$INPUT" | grep -qi "$pattern"; then
+    echo "{\"ts\":\"$TS\",\"event\":\"gray_zone_suspect\",\"tool\":\"$TOOL_NAME\",\"pattern\":\"$pattern\"}" >> "$LOG_FILE"
+    # Escalate to LLM check if available (graceful degradation if Ollama down)
+    if [ -x "$LLM_HOOK" ]; then
+      echo "$INPUT" | timeout 7 python3 "$LLM_HOOK"
+      LLM_EXIT=$?
+      if [ "$LLM_EXIT" -eq 2 ]; then
+        echo "{\"ts\":\"$TS\",\"event\":\"llm_blocked\",\"tool\":\"$TOOL_NAME\",\"pattern\":\"$pattern\"}" >> "$LOG_FILE"
+        exit 2
+      fi
+    fi
+    break  # only run LLM check once even if multiple patterns match
+  fi
+done
+
 exit 0

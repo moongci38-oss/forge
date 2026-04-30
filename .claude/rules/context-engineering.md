@@ -1,27 +1,20 @@
 # 컨텍스트 & 하네스 엔지니어링 규칙
+<!-- Ratchet origin: 각 섹션 규칙이 막는 과거 실패 기록. -->
 
 ## CLAUDE.md 작성 강제
+<!-- Failure: CLAUDE.md 없이 프로젝트 작업 진입 → 프로젝트 지침 미로드, 규칙 위반 반복. -->
 
 - 새 프로젝트·작업 폴더 진입 시 CLAUDE.md 없으면 **생성 필수**
 - 최소 섹션: 목적 / 반드시 지킬 규칙 / 참조 파일
 - 하위 `.claude/CLAUDE.md` — scope 전용 컨텍스트. 상위 cascade 상속.
 - CLAUDE.md 없는 `.claude/` 작업은 무결성 보장 불가 — 반드시 선행 생성
 
-## .claude/ 폴더 작업 강제
-
-| 작업 | 강제 도구 | 직접 작성 |
-|------|-----------|----------|
-| 에이전트 생성 | `subagent-creator` 스킬 | 금지 |
-| 스킬 생성 | `skill-creator` 스킬 | 금지 |
-| rules/*.md | frontmatter(`name/description/type`) | 필수 |
-| hooks/*.sh | 파일 상단에 트리거 이벤트·matcher 명시 | 필수 |
-| agents/*.md | frontmatter(`name/description/tools/model`) | 필수 |
-
 ## 하네스 패턴 강제
+<!-- Failure: 복잡 작업을 하네스 없이 직접 구현 → 품질 검증 누락, 컨텍스트 오염. -->
 
 | 상황 | 패턴 |
 |------|------|
-| 버그 수정 | `/pge` 하네스 |
+| 버그 수정 | `/investigate` 먼저 → 원인 특정 후 직접 수정 or `/pge` |
 | 복잡한 기획서·다단계 생성 | PGE 또는 Agent Teams |
 | 산출물 품질 검증 | Evaluator subagent |
 | 복잡 구현 결과 검증 | Evaluator 서브에이전트 | 결과 요약만 메인에 반환 |
@@ -50,19 +43,17 @@
 
 ## On-demand 패턴 (cascade 최소화 — P52-D)
 
-**`rules/`** = 모든 세션 자동 cascade. 사용 빈도 **High** (모든 세션 필수)만 위치.
-**`rules-on-demand/`** = 자동 cascade 차단. 사용 빈도 **Low/Medium** (작업 트리거 시) 위치.
+**`rules/`** = 모든 세션 필수(High)만. **`rules-on-demand/`** = Low/Medium 빈도. 1회용 → 미생성.
 
-분류 결정 트리:
-- 모든 세션에서 적용? → `rules/`
-- 특정 작업 트리거 시만? → `rules-on-demand/`
-- 1회용·디버그용? → 미생성
+신규 `.md` 추가 시 cascade 영향 자가 검토. 의심 시 `rules-on-demand/` 우선.
 
-신규 `.md` 추가 시 **cascade 영향 자가 검토 의무**. 의심 시 `rules-on-demand/` 우선.
+Agent 사용 정책 전문 → `rules-on-demand/subagent-policy.md`
+`.claude/` 파일 생성 규칙 → `rules-on-demand/claude-folder-authoring.md`
 
 CLAUDE.md 200줄 초과 시 → 인덱스만 유지 + 상세 룰 = `rules*/` 분리 (CLAUDE.md cascade는 모든 세션 강제).
 
 ## 단순 검색 = subagent 위임 (CRITICAL)
+<!-- Failure: 메인 컨텍스트에서 다중 grep/find 실행 → 30K+ 토큰 컨텍스트 오염, 나중 품질 급락. -->
 
 **Grep·Glob·find·다중 Read 등 단순 탐색 작업 = subagent 사용 의무.**
 
@@ -72,14 +63,15 @@ CLAUDE.md 200줄 초과 시 → 인덱스만 유지 + 상세 룰 = `rules*/` 분
 - **예외**: 정확한 단일 파일·심볼 (정확 path 알 때) → 직접 Read/grep
 - **선례**: Explore agent 1개 audit = 메인 윈도우 ~3K, 직접 했으면 ~30K+ 오염
 
-## 측정 하네스 (P52-D)
+## 측정 하네스
 
-| 도구 | 역할 |
-|---|---|
-| `~/.claude/hooks/session-context-budget.sh` | SessionStart 자동 측정 + 35K 임계값 stderr 경고 |
-| `~/.claude/scripts/audit-context-cascade.sh` | 수동 audit, 매트릭스 + 정리 권장 + `~/.claude/cache/` 보고서 |
+`bash ~/.claude/scripts/audit-context-cascade.sh [project_path]` — 수동 cascade audit.
 
-수동 호출: `bash ~/.claude/scripts/audit-context-cascade.sh [project_path]`
+## Subagent 제약 (공식 Claude Code)
+
+- **subagent 내부에서 추가 subagent 스폰 금지** — Claude Code 단일 레벨 제약 (공식)
+- Orchestrator → Subagent 단방향만 허용. Subagent → Subagent 체인 불가
+- 위반 시 silently fail 또는 에러 발생 — 설계 시 반드시 준수
 
 ## 메모리 카논
 

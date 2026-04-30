@@ -6,20 +6,18 @@ context: fork
 model: haiku
 ---
 
-> **응답 간결성 (Haiku 토큰 최적화)**: 구조화된 번호 목록 + 핵심 사실 위주로 답하세요. 장황한 설명·반복·메타 코멘트 금지. 각 항목 2문장 이내, 전체 300토큰 이하 목표.
-
 **역할**: 당신은 워크스페이스 전체 문서에서 벡터+BM25 하이브리드 의미 검색을 수행하는 문서 검색 전문가입니다.
-**컨텍스트**: 서버 설정 문서, 정부과제 근거 데이터, 기획서, 리서치 등 프로젝트 전체에서 키워드가 아닌 의미 기반으로 관련 문서를 찾을 때 호출됩니다.
+**컨텍스트**: 사용자가 키워드가 아닌 의미 기반으로 정부과제 근거, 기획서, 리서치 자료 등 특정 구절을 찾을 때 호출됩니다.
 **출력**: 파일 경로·유사도 점수·텍스트 프리뷰를 포함한 상위 N개 검색 결과를 반환합니다.
 
 # RAG Search — 의미 기반 문서 검색
 
-워크스페이스 전체(Forge + forge-outputs + Portfolio + GodBlade) 문서에서 벡터(의미) + BM25(키워드) 하이브리드 검색을 수행한다.
+forge-outputs/ 문서에서 벡터(의미) + BM25(키워드) 하이브리드 검색을 수행한다.
 
 ## 언제 사용하나
 
-- "이 설정 문서가 어디 있었지?" 할 때
 - 정부과제 본문 작성 시 근거 데이터를 찾을 때
+- "이 수치가 어느 문서에 있었지?" 할 때
 - 키워드가 정확히 기억나지 않지만 주제로 찾고 싶을 때
 - Grep으로 안 찾아지는 동의어/유사 표현 검색
 
@@ -29,70 +27,44 @@ model: haiku
 /rag-search 투자 유치 전략
 /rag-search TagHub 기술 차별점 --top-k 10
 /rag-search 시장 규모 TAM --mode vector
-/rag-search dev staging production 서버 셋팅
+
+# reasoning_context 포함 (AgentIR 패턴) — 현재 추론 단계를 쿼리에 명시
+/rag-search [보안 취약점 분석 중] JWT 토큰 검증 방법
+/rag-search [GodBlade 가챠 시스템 설계 중] 확률 설정 선례
 ```
 
-## MCP 도구 (권장 — forge-tools)
-
-단일 검색이면 MCP 도구를 우선 사용. Bash 진입·Python 기동 비용을 제거한다.
-
-```
-mcp__forge-tools__rag_search(query="투자 유치 전략", top_k=5)
-```
-
-- 장점: stdio 직결, 토큰/지연 최소
-- CLI 사용처: 복합 플래그(`--index-dir`, `--mode vector`), 여러 인덱스 전환
-
-## 인덱스 종류 — 워크스페이스 RAG vs LightRAG
-
-본 워크스페이스에는 **2종의 RAG 시스템이 공존**한다. 목적에 맞게 선택해 사용한다.
-
-| 시스템 | 위치 | 강점 | 약점 | 사용 시점 |
-|-------|------|------|------|-----------|
-| **워크스페이스 RAG** | `~/.rag-workspace-index/` | 광범위 (Forge+outputs+Portfolio+GodBlade 6K+ 문서), 빠름 | 단순 청크, 엔티티 그래프 없음 | 일반 문서 검색, "어디 있었지?" 류 |
-| **LightRAG (wiki/grants/weekly)** | `shared/lightrag-*-data/index/` | 엔티티+관계 그래프, 고차 추론, 한국어 강함 | 작은 셋(수백 문서), 인덱싱 느림 | 개념 간 관계, "왜/어떻게" 류 심층 질문 |
-
-→ **둘 다 시도해보고 좋은 결과를 채택**한다. 워크스페이스 RAG가 forge-outputs 전체를 포함하므로 20-wiki도 자동 검색되지만, LightRAG wiki context는 별도 그래프 검색을 제공한다.
-
-### LightRAG 컨텍스트 종류
-
-```bash
-# Wiki (개인 지식 위키, Karpathy 3-layer)
-python3 ~/forge/shared/scripts/lightrag-pilot.py query "Karpathy 3-layer란?" hybrid --context wiki
-
-# Grants (정부과제 분석 문서)
-python3 ~/forge/shared/scripts/lightrag-pilot.py query "TagHub 사업화 전략은?" hybrid --context grants
-
-# Weekly (주간 리서치)
-python3 ~/forge/shared/scripts/lightrag-pilot.py query "최신 AI 에이전트 동향은?" hybrid --context weekly
-```
-
-LightRAG 모드: `local` (직접 매칭), `global` (전역 패턴), `hybrid` (둘 다, 권장).
+**reasoning_context 파라미터 (선택)**:
+`[현재 추론 단계]` 형식으로 쿼리 앞에 붙이면 관련 문서 리트리브 정확도 향상.
+오케스트레이터는 현재 작업 컨텍스트(CoT 요약)를 대괄호에 담아 전달한다.
 
 ## 워크플로우
 
 ### Step 1: 인덱스 확인
 
-```bash
-# 워크스페이스 인덱스 확인
-ls ~/.rag-workspace-index/meta.json
+인덱스가 없으면 빌드를 먼저 제안한다:
 
-# 없으면 최초 빌드 제안 (시간 소요 — 사용자 확인 후)
-bash ${FORGE_ROOT:-~/forge}/shared/scripts/rag/workspace-build.sh --rebuild
+```bash
+# 인덱스 존재 확인
+ls {target_dir}/.rag-index/meta.json
+
+# 없으면 빌드
+python3 ~/forge/shared/scripts/rag/index.py {target_dir}
 ```
 
 인덱스 위치:
-- **워크스페이스 통합** (기본): `~/.rag-workspace-index/` — Forge + forge-outputs + Portfolio + GodBlade
-- **정부과제 전용**: `$FORGE_OUTPUTS/09-grants/.rag-index/`
+- **전체**: `~/forge-outputs/.rag-index/` (통합 인덱스 — 기본)
+- **정부과제**: `~/forge-outputs/09-grants/.rag-index/` (과제 전용)
+
+다른 폴더: `python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/01-research/`
 
 ### Step 2: 검색 실행
 
 ```bash
-# 워크스페이스 전체 검색 (기본 — ~/.rag-workspace-index 자동 사용)
-python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/search.py "{검색어}" --top-k {N} --mode {hybrid|vector|bm25}
+# 전체 forge-outputs 검색 (기본)
+python3 ~/forge/shared/scripts/rag/search.py "{검색어}" --top-k {N} --mode {hybrid|vector|bm25} --index-dir ~/forge-outputs/.rag-index
 
 # 정부과제만 검색
-python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/search.py "{검색어}" --index-dir ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants/.rag-index
+python3 ~/forge/shared/scripts/rag/search.py "{검색어}" --index-dir ~/forge-outputs/09-grants/.rag-index
 ```
 
 파라미터:
@@ -113,35 +85,31 @@ python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/search.py "{검색어}" --inde
 
 ## 인덱스 관리
 
-### 워크스페이스 빌드 (권장)
+### 빌드
 
 ```bash
-# 최초 빌드 (Forge + forge-outputs + Portfolio + GodBlade 전체)
-bash ${FORGE_ROOT:-~/forge}/shared/scripts/rag/workspace-build.sh --rebuild
+# 최초 빌드
+python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/09-grants
 
-# 증분 빌드 (새 파일만 추가 — cron이 4시간마다 자동 실행)
-bash ${FORGE_ROOT:-~/forge}/shared/scripts/rag/workspace-build.sh
-
-# 인덱스 정보
-cat ~/.rag-workspace-index/meta.json
+# 문서 추가/변경 후 재빌드
+python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/09-grants --rebuild
 ```
 
-### 단일 폴더 빌드
+### 인덱스 정보
 
 ```bash
-# 정부과제 전용 인덱스
-python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants
-
-# 증분 업데이트
-python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/forge-outputs}/09-grants --incremental
+cat ~/forge-outputs/09-grants/.rag-index/meta.json
 ```
 
-### workspace.json 설정
+### 다른 폴더 인덱싱
 
-인덱싱 대상 프로젝트는 `${FORGE_ROOT:-~/forge}/shared/scripts/rag/workspace.json`에서 관리:
-- 새 프로젝트 추가 시 `sources` 배열에 항목 추가
-- `exclude_dirs`: 프로젝트별 제외 폴더
-- 소스코드(.ts/.js/.cs/.py 등)는 화이트리스트(.md/.txt/.json/.docx/.pdf/.yaml)로 자동 제외
+```bash
+# 리서치 폴더
+python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs/01-research
+
+# 전체 forge-outputs
+python3 ~/forge/shared/scripts/rag/index.py ~/forge-outputs
+```
 
 ## 기술 구성
 
@@ -158,7 +126,7 @@ python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/fo
 ## 환경 요구사항
 
 - Python 3.10+
-- 패키지: `pip install -r ${FORGE_ROOT:-~/forge}/shared/scripts/rag/requirements.txt`
+- 패키지: `pip install -r ~/forge/shared/scripts/rag/requirements.txt`
 - 추가: `pip install llama-index-embeddings-huggingface sentence-transformers docx2txt`
 - (선택) OPENAI_API_KEY — 있으면 text-embedding-3-small 사용, 없으면 로컬 모델
 
@@ -168,5 +136,4 @@ python3 ${FORGE_ROOT:-~/forge}/shared/scripts/rag/index.py ${FORGE_OUTPUTS:-~/fo
 2. 검색 결과를 인용할 때 파일 경로를 출처로 명시한다
 3. 인덱스가 없으면 빌드를 제안하되, 사용자 확인 없이 자동 빌드하지 않는다 (시간 소요)
 4. 문서가 변경되어 인덱스가 오래됐으면 `--rebuild` 제안
-5. **개념 간 관계, "왜/어떻게" 류 질문**이면 워크스페이스 RAG 외에 LightRAG (`--context wiki/grants/weekly`)도 함께 시도한다 — 그래프 기반이 더 풍부한 결과를 줄 수 있다
-6. **개인 지식 위키 관련 질문** ("내가 정리한 노트", "Karpathy", "Obsidian vault" 등)은 `--context wiki`를 우선 사용한다
+5. reasoning_context 있으면 쿼리 앞에 `[컨텍스트]` 형식으로 포함 — 검색 정확도 향상
