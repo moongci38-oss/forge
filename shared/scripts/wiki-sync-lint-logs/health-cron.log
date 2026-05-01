@@ -1,0 +1,6 @@
+wiki-health-lint:
+  Broken refs: 0
+  Orphans: 0
+  Stale stubs: 0
+  Growth-heavy: 1
+  Dangling Raw: 0

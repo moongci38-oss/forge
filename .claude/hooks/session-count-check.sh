@@ -16,5 +16,9 @@ ACTIVE=$(find "$SESSION_DIR" -mmin -120 -type f 2>/dev/null | wc -l)
 find "$SESSION_DIR" -mmin +240 -type f -delete 2>/dev/null
 
 if [ "$ACTIVE" -ge 3 ]; then
-  echo "⚠️ 멀티세션 감지: ${ACTIVE}개 활성 세션. 컨텍스트 혼동 주의 — 작업 시작 시 현재 목표를 명확히 선언하세요."
+  if [ "${TELEGRAM_SESSION}" = "1" ]; then
+    echo "🤖 Telegram 세션 (chat_id: ${TELEGRAM_CHAT_ID:-unknown}) — 활성 세션 ${ACTIVE}개"
+  else
+    echo "⚠️ 멀티세션 감지: ${ACTIVE}개 활성 세션. 컨텍스트 혼동 주의 — 작업 시작 시 현재 목표를 명확히 선언하세요."
+  fi
 fi

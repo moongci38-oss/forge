@@ -15,7 +15,21 @@ import urllib.request
 import urllib.error
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "gemma3:1b"
+PREFERRED_MODELS = ["gemma3:latest", "gemma3:4b", "gemma3:1b", "llama3.2:latest", "mistral:latest"]
+
+def get_model():
+    try:
+        import urllib.request, json
+        r = urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+        available = [m["name"] for m in json.loads(r.read()).get("models", [])]
+        for pref in PREFERRED_MODELS:
+            base = pref.split(":")[0]
+            match = next((a for a in available if a.startswith(base)), None)
+            if match:
+                return match
+        return available[0] if available else "gemma3:1b"
+    except Exception:
+        return "gemma3:1b"
 TIMEOUT = 5  # seconds — hook must be fast
 
 def check_ollama_available():
@@ -43,7 +57,7 @@ Text to analyze:
 Respond ONLY with JSON: {{"verdict": "injection" or "safe", "confidence": 0.0-1.0, "reason": "brief"}}"""
 
     payload = json.dumps({
-        "model": MODEL,
+        "model": get_model(),
         "prompt": prompt,
         "stream": False,
         "options": {"temperature": 0, "num_predict": 100}
