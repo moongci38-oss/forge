@@ -16,13 +16,12 @@ CHAT_ID="${OWNER_CHAT_ID:-}"
 tg_send() {
   curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
     -d "chat_id=${CHAT_ID}" \
-    -d "parse_mode=Markdown" \
     --data-urlencode "text=$1" > /dev/null 2>&1
 }
 
 # 실패 시 간단 알림만
 if [ "$EXIT_CODE" -ne 0 ]; then
-  tg_send "❌ *Daily Review 실패* ($TARGET_DATE) — Exit: $EXIT_CODE"
+  tg_send "❌ Daily Review 실패 ($TARGET_DATE) — Exit: $EXIT_CODE"
   exit 0
 fi
 
@@ -30,34 +29,51 @@ fi
 REPORT=$(find "$HOME/forge-outputs" -path "*/daily/$TARGET_DATE/ai-system-analysis.md" 2>/dev/null | head -1)
 
 if [ -z "$REPORT" ]; then
-  tg_send "✅ *Daily Review 완료* ($TARGET_DATE)\n⚠️ 리포트 파일 미생성"
+  tg_send "✅ Daily Review 완료 ($TARGET_DATE)
+⚠️ 리포트 파일 미생성"
   exit 0
 fi
 
-# Executive Summary 추출 (## Executive Summary ~ 다음 --- 전까지)
-EXEC=$(awk '/^## Executive Summary/,/^---/' "$REPORT" | grep -v "^##\|^---" | head -6 | sed 's/^[0-9]\+\. /• /')
+# Executive Summary 추출
+EXEC=$(awk '/^## Executive Summary/,/^---/' "$REPORT" | sed '1d;$d' | sed '/^$/d' | head -1)
 
-# Critical/High 항목 추출
-CRITICAL=$(grep -A2 "^### Critical\|^#### C-[0-9]:\|^#### H-[0-9]:" "$REPORT" | grep "^\*\*C-\|^\*\*H-\|^- 조치:" | head -8 | sed 's/^\*\*//' | sed 's/\*\*//')
+# Critical/High/P0 액션 추출 (여러 형식 지원)
+CRITICAL=$(awk '/^### Critical|^## .*P0/,/^### High|^## .*P1/' "$REPORT" | grep -E "^\*\*\[GAP-C|^- \[C|^- P0-" | head -3 | sed "s/^\*\*\[//;s/\]\*\*/: /;s/^- //")
+if [ -z "$CRITICAL" ]; then
+  CRITICAL=$(awk '/^### Critical|^## .*P0/,/^### High|^## .*P1/' "$REPORT" | grep -v "^###\|^##\|^---" | grep -E "^\-|^•" | head -3)
+fi
 
-# 메시지 1: Summary
-tg_send "📊 *Daily Review — $TARGET_DATE*
+# 평가 스코어 추출 (여러 형식 지원)
+SCORE=$(grep -m1 -E '평가:|^평가 ' "$REPORT" | head -1)
 
-*Executive Summary*
+# 주요 갭/액션 추출
+SUMMARY=$(awk '/^##.*갭 분석|^## 4./,/^##/' "$REPORT" | grep "^\*\*\[GAP-" | head -2 | sed "s/^\*\*\[//;s/\]\*\*/: /;s/ — / → /")
+
+# 통합 메시지
+MSG="📊 Daily Review — $TARGET_DATE
+
+── Executive Summary ──
 $EXEC"
 
-# 메시지 2: P0 액션 (Critical 있을 때만)
+if [ -n "$SCORE" ]; then
+  MSG="$MSG
+
+── 평가 ──
+$SCORE"
+fi
+
 if [ -n "$CRITICAL" ]; then
-  P0_MSG=$(awk '/^### Critical/,/^### High/' "$REPORT" | grep -v "^### \|^---" | head -20 | sed 's/^\*\*C-[0-9]: /🚨 */' | sed 's/^- 배경:/배경:/' | sed 's/^- 위험:/⚠️ /' | sed 's/^- 조치:/→ /')
-  tg_send "🚨 *P0 즉시 조치*
+  MSG="$MSG
 
-$P0_MSG"
+── Critical 즉시 대응 ──
+$(echo "$CRITICAL" | sed 's/^/• /')"
 fi
 
-# 메시지 3: High + Medium 요약
-HIGH_MED=$(awk '/^### High/,/^### Low/' "$REPORT" | grep "^\*\*H-\|^\*\*M-\|^- 조치:" | head -10 | sed 's/^\*\*[HM]-[0-9]: /• /' | sed 's/\*\*$//' | sed 's/^- 조치:/  →/')
-if [ -n "$HIGH_MED" ]; then
-  tg_send "⚠️ *High/Medium 항목*
+if [ -n "$SUMMARY" ]; then
+  MSG="$MSG
 
-$HIGH_MED"
+── 주요 갭 분석 ──
+$(echo "$SUMMARY" | sed 's/^/• /')"
 fi
+
+tg_send "$MSG"

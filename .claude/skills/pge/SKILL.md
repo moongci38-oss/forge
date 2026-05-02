@@ -101,6 +101,7 @@ model: sonnet
    - `{project_root}/.claude/rules/verification-integration.md` — Check 3 기준 숙지 (구현 후 무엇이 검증되는지)
    - `{project_root}/.claude/rules/forge-walkthrough.md` — 구현 완료 후 Walkthrough 작성 기준
    - 영상 레퍼런스 태스크인 경우: `{project_root}/.claude/rules/video-reference-workflow.md` (**링크된 reference 파일도 Read**)
+   - **API 클라이언트 생성 태스크인 경우** (NestJS/Express/TypeScript SDK): 스킬 참조 — `~/forge/.claude/skills/claude-api/SKILL.md` 또는 `/claude-api` 호출로 최신 SDK 패턴 + Prompt Caching + Breaking Changes 학습
 2. `{project_root}/.claude/state/PGE_SPEC.md` 읽기
 3. **Unity .cs 수정이 포함된 경우 필수**: `{project_root}/.claude/state/current-analysis.md` **Read** → Planner가 수행한 Step 0~4 분석 결과 숙지 후 구현
 4. PGE_SPEC.md의 "## 참조 컨텍스트" 섹션에 명시된 reference 파일들을 직접 Read
