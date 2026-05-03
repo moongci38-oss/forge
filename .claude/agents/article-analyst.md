@@ -58,6 +58,9 @@ model: sonnet
 
 기사 본문 전체를 분석하여 필수 7개 섹션을 도출한다.
 
+**프롬프트 캐싱**: JSON body가 대형 기사인 경우 (body > 3000자, 약 750+ tokens) `cache_control: ephemeral` 적용.
+복수 기사 분석 5분 내 반복 시 캐시 히트 가능. — 참조: `~/forge/.claude/rules/prompt-caching-rules.md`
+
 - 30KB+ 본문은 섹션별로 분석 (본문을 문단 단위로 끊어서 순차 처리)
 - 카테고리 판정은 본문 + 제목 + 태그 종합
 - 핵심 포인트는 본문 순서 유지 (재정렬 금지)
