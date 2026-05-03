@@ -547,3 +547,12 @@
 {"ts": "2026-04-22T00:00:00Z", "content": "~/.claude/settings.json의 PermissionRequest hook은 ALL 세션에 전역 적용됨. 멀티세션 환경에서 ExitPlanMode 같은 일반 작업도 전부 Telegram으로 승인 요청 발생. 해결: ExitPlanMode를 allow 목록에 추가.", "tags": ["permission-hook", "multi-session", "exitplanmode", "telegram-noise"], "project": "telegram-workspace"}
 {"ts": "2026-04-22T00:00:00Z", "content": "CCR 트리거의 cron 시간은 UTC 기준. 한국(KST=UTC+9) 자정은 UTC 15:00. 사용자가 '자정'이라고 하면 0 15 * * *로 설정해야 함.", "tags": ["ccr", "cron", "timezone", "kst", "utc"], "project": "forge"}
 {"ts": "2026-04-22T00:00:00Z", "content": "forge/ARCHITECTURE.md (Architecture Descriptor) 생성 시 탐색 효율이 33~44% 향상됨 (arXiv 2604.13108). 레포 구조 지도로 에이전트가 파일 열기 전 참조. forge-core.md에 읽기 의무 추가.", "tags": ["architecture-descriptor", "efficiency", "arxiv", "forge-core"], "project": "forge"}
+{"timestamp":"2026-05-03T00:21:52Z","pattern":"session_activity","solution":"session=unknown duration=5min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:23:19Z","pattern":"session_activity","solution":"session=unknown duration=7min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:23:40Z","pattern":"session_activity","solution":"session=unknown duration=7min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:24:21Z","pattern":"session_activity","solution":"session=unknown duration=8min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:24:49Z","pattern":"session_activity","solution":"session=unknown duration=8min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:26:17Z","pattern":"session_activity","solution":"session=unknown duration=10min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:26:49Z","pattern":"session_activity","solution":"session=unknown duration=10min events=2 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:27:10Z","pattern":"session_activity","solution":"session=unknown duration=11min events=4 top_tools=[Bash]","project":"forge","type":"session_summary"}
+{"timestamp":"2026-05-03T00:27:30Z","pattern":"session_activity","solution":"session=unknown duration=11min events=6 top_tools=[Bash]","project":"forge","type":"session_summary"}
