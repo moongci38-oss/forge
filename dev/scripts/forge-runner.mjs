@@ -638,7 +638,7 @@ Compare all 3 drafts and create the definitive ${docTypeLabel}.
    ${fm.product}/${projectName}/${datePrefix}-s3-${projectType === 'game' ? 'gdd' : 'prd'}.md
 
 The final document must be comprehensive, production-ready, and stronger than any single draft.`,
-    model: 'claude-opus-4-6',
+    model: 'claude-opus-4-7',
     tools: ['Read', 'Write', 'Glob', 'Grep'],
     maxTurns: 25,
     budgetUsd: totalBudget * 0.10,
@@ -828,7 +828,7 @@ Create all 7 required S4 deliverables as initial drafts.
 - Include Forge Dev session roadmap in development plan (sessions mapped to specs)
 - If S3 includes admin features, create admin variants too
 - Use RICE/ICE scoring for prioritization in roadmap`,
-    model: 'claude-sonnet-4-6',
+    model: 'claude-opus-4-7',
     tools: ['Read', 'Write', 'Glob', 'Grep'],
     maxTurns: 40,
     budgetUsd: totalBudget * 0.15,
@@ -855,7 +855,7 @@ Verify that all S3 requirements are covered in S4 deliverables.
 
 ## Output
 Write verification report to ${productDir}/${datePrefix}-s4-wave2-verification.md`,
-    model: 'claude-sonnet-4-6',
+    model: 'claude-opus-4-7',
     tools: ['Read', 'Write', 'Edit', 'Glob', 'Grep'],
     maxTurns: 20,
     budgetUsd: totalBudget * 0.05,
@@ -889,7 +889,7 @@ For each issue found:
 - Location: Which S4 doc and section
 - Issue description
 - Recommendation`,
-      model: 'claude-sonnet-4-6',
+      model: 'claude-opus-4-7',
       tools: ['Read', 'Write', 'Glob', 'Grep'],
       maxTurns: 15,
       budgetUsd: totalBudget * 0.05,
@@ -921,7 +921,7 @@ For each issue found:
 - Location: Which section
 - Issue description
 - Recommendation`,
-      model: 'claude-sonnet-4-6',
+      model: 'claude-opus-4-7',
       tools: ['Read', 'Write', 'Glob', 'Grep'],
       maxTurns: 15,
       budgetUsd: totalBudget * 0.05,
@@ -957,7 +957,7 @@ Apply review feedback to finalize S4 documents.
 ## Output
 Update the S4 documents in place (Edit tool).
 Write a final summary to ${productDir}/${datePrefix}-s4-wave4-final-summary.md`,
-    model: 'claude-sonnet-4-6',
+    model: 'claude-opus-4-7',
     tools: ['Read', 'Write', 'Edit', 'Glob', 'Grep'],
     maxTurns: 25,
     budgetUsd: totalBudget * 0.05,
