@@ -53,7 +53,10 @@ run_tests() {
       fi
       ;;
     pytest)
-      out=$(cd "$root" && python -m pytest --tb=short -q 2>&1) || rc=$?
+      PYTEST_BIN=$(command -v python3 2>/dev/null || command -v python 2>/dev/null || echo "")
+      if [[ -z "$PYTEST_BIN" ]]; then exit 0; fi
+      if ! "$PYTEST_BIN" -m pytest --version >/dev/null 2>&1; then exit 0; fi
+      out=$(cd "$root" && "$PYTEST_BIN" -m pytest --tb=short -q 2>&1) || rc=$?
       ;;
     dotnet)
       out=$(cd "$root" && dotnet test --no-build --verbosity minimal 2>&1) || rc=$?

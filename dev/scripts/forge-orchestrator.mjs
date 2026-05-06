@@ -375,7 +375,7 @@ Read S4 documents from docs/planning/active/forge/ for reference:
 - s4-uiux-spec.md
 
 Write the spec file to .specify/specs/${sessionName}.md`,
-    model: 'claude-opus-4-6',
+    model: 'claude-opus-4-7',
     tools: ['Read', 'Write', 'Glob', 'Grep'],
     maxTurns: 25,
     budgetUsd: 1.0,
@@ -487,7 +487,7 @@ ${isHotfix ? '' : `- Write unit tests for all new functions
 `}
 ## After Implementation
 Run the project's verify/build/test commands to ensure everything passes.`,
-      model: isHotfix ? 'claude-sonnet-4-6' : 'claude-opus-4-6',
+      model: isHotfix ? 'claude-sonnet-4-6' : 'claude-opus-4-7',
       tools: ['Read', 'Write', 'Edit', 'Glob', 'Grep', 'Bash'],
       maxTurns: isHotfix ? 25 : 50,
       budgetUsd: isHotfix ? totalBudget * 0.3 : totalBudget * 0.4,

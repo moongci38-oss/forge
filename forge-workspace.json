@@ -20,6 +20,12 @@
       "devTarget": "{YOUR_PORTFOLIO_PATH}",
       "symlinkBase": "docs/planning/active/forge/auth-admin"
     },
+    "bidscript-plus": {
+      "devTarget": "/home/damools/mywsl_workspace/bidscript-plus",
+      "symlinkBase": "docs/planning/active/forge/lumir-01",
+      "forgeOutputsProject": "lumir-01",
+      "description": "BidScript+ — 정부과제+나라장터+견적 통합 SaaS. lumir-01 forge-outputs 매핑."
+    },
     "portfolio-blog": {
       "devTarget": "{YOUR_PORTFOLIO_PATH}",
       "symlinkBase": "docs/planning/active/forge/blog"

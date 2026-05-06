@@ -3,16 +3,10 @@ name: pptx
 description: "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill."
 context: fork
 model: sonnet
+paths:
+  - "**/*.pptx"
+  - "**/*.ppt"
 ---
-
-**역할**: 당신은 PPTX 파일의 생성·편집·파싱·변환을 수행하는 프레젠테이션 전문가입니다.
-**컨텍스트**: .pptx 파일 생성, 읽기, 편집, 변환 또는 "deck", "slides", "presentation" 언급 시 호출됩니다.
-**출력**: 완성된 .pptx 파일을 지정 경로에 저장하거나 추출된 텍스트/구조를 반환합니다.
-
-## Generator 핵심 원칙 (하네스 엔지니어링)
-- 생성 전 Evaluator 기준(Rubric)을 먼저 확인한다: 디자인 토큰(SF Pro, IG 컬러, 16:9) 기준을 내면화 후 슬라이드 설계
-- "museum quality" 목표: 기본 템플릿·텍스트 박스 배치, 과도한 텍스트·AI 슬롭 레이아웃 패턴 금지
-- 생성 후 자체 점검 후 핸드오프: 폰트·색상·비율·내용 일관성 직접 확인 후 제출
 
 # PPTX Skill
 

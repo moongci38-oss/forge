@@ -77,10 +77,38 @@ Session   Spec      Implement  PR+Merge  Develop    Release    Production
 
 ---
 
-## Phase 2: Concept
+## Phase 2 진입 결정 게이트 (Phase 1 → 2 vs 1 → 3)
+
+Phase 1 완료 후 Phase 3 진입 전에 다음 결정을 수행한다.
+
+**결정 룰**: PRD 작성 의도에 5 요소 (페르소나·가치제안·Moat·가격·위험) 모두 포함되는가?
+
+| 답 | 행동 | gate-log |
+|----|------|---------|
+| **Y** (PRD 흡수 가능) | Phase 2 skip → Phase 3 직행 | `s2: skipped`, `directionSkipped: true`, `absorbed_into: prd`, `reason: <요약>` |
+| **N** (5 요소 中 일부 미정) | Phase 2 진행 (아래 §Phase 2 흐름) | `s2: in_progress` |
+| 모호 | Human 결정 [STOP] | - |
+
+**Y 케이스 적합 조건**:
+- 1인/소규모 즉시 출시 프로젝트 (시장 검증보다 dogfood 우선)
+- 도메인 명확 + 페르소나 검증됨 (사용자 본인 또는 직접 인터뷰 완료)
+- 외부 투자/협업 자료 불필요
+
+**N 케이스 적합 조건**:
+- 신규 B2C 게임 (시장 검증 부족)
+- 외부 투자 유치 예정 (린 캔버스 = 표준)
+- 비즈니스 모델 미정 (수익 경로 결정 필요)
+- 경쟁 치열 (포지셔닝 명확화 필수)
+
+스킵 케이스에서도 Phase 3 에이전트 회의 입력 = Phase 1 리서치 + PRD 작성 시 5 요소 명시 (디렉션 5축 X, 직접 흡수).
+
+---
+
+## Phase 2: Concept (Optional)
 
 > 방법론: Pretotyping + Mom Test + Lean Validation + OKR
 > Check 2: STOP (비전/타겟/차별점 + 기획 디렉션 5축 Human 승인)
+> **진입 조건**: 위 §Phase 2 진입 결정 게이트에서 **N** 또는 **모호 후 Human 진행 결정** 시만 실행. Y 케이스는 본 섹션 전체 skip.
 
 1. `/lean-canvas` → Lean Canvas 작성 (9블록)
 2. TAM/SAM/SOM 추정 — TAM < $1M 시 Kill 신호

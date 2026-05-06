@@ -58,6 +58,10 @@ subagent_type: general-purpose
 model: opus
 ```
 
+**프롬프트 캐싱**: Planner prompt > 500 tokens이면 `cache_control: long` 적용 (1시간 TTL).
+Reference 파일 임베드 시 동일한 Rules 로딩 패턴 재사용하므로 캐시 히트율 높음.
+— 참조: `~/forge/.claude/rules/prompt-caching-rules.md`
+
 1. **Rules 로딩** (subagent는 main session rules 미상속 — 직접 Read 필수):
    - `{project_root}/.claude/rules/system-analysis-cycle.md` — 기존 시스템 분석→사용→반영→재사용 원칙
    - `{project_root}/.claude/rules/pre-modification-analysis.md` — 수정 전 의존성 분석 4단계 + 파일별 애니메이션 방식
@@ -101,6 +105,7 @@ model: sonnet
    - `{project_root}/.claude/rules/verification-integration.md` — Check 3 기준 숙지 (구현 후 무엇이 검증되는지)
    - `{project_root}/.claude/rules/forge-walkthrough.md` — 구현 완료 후 Walkthrough 작성 기준
    - 영상 레퍼런스 태스크인 경우: `{project_root}/.claude/rules/video-reference-workflow.md` (**링크된 reference 파일도 Read**)
+   - **API 클라이언트 생성 태스크인 경우** (NestJS/Express/TypeScript SDK): 스킬 참조 — `~/forge/.claude/skills/claude-api/SKILL.md` 또는 `/claude-api` 호출로 최신 SDK 패턴 + Prompt Caching + Breaking Changes 학습
 2. `{project_root}/.claude/state/PGE_SPEC.md` 읽기
 3. **Unity .cs 수정이 포함된 경우 필수**: `{project_root}/.claude/state/current-analysis.md` **Read** → Planner가 수행한 Step 0~4 분석 결과 숙지 후 구현
 4. PGE_SPEC.md의 "## 참조 컨텍스트" 섹션에 명시된 reference 파일들을 직접 Read

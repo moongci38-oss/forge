@@ -27,6 +27,14 @@ FORGE_OUTPUTS = Path(os.environ.get("FORGE_OUTPUTS", HOME / "forge-outputs"))
 FORGE_ROOT = Path(os.environ.get("FORGE_ROOT", HOME / "forge"))
 FORGE_MCP_TOKEN = os.environ.get("FORGE_MCP_TOKEN", "")
 
+# telegram-workspace .env 로드 (env에 없을 때 fallback)
+_TG_ENV = HOME / "forge-outputs/11-platform/telegram-workspace/.env"
+if _TG_ENV.exists() and not os.environ.get("FORGE_AGENT_SERVER_BOT_TOKEN"):
+    for _line in _TG_ENV.read_text().splitlines():
+        if "=" in _line and not _line.startswith("#"):
+            _k, _, _v = _line.partition("=")
+            os.environ.setdefault(_k.strip(), _v.strip())
+
 # 실행 허용 스크립트 화이트리스트
 ALLOWED_SCRIPTS = {
     "forge-codebase-health.sh": FORGE_ROOT / "shared/scripts/forge-codebase-health.sh",
@@ -173,7 +181,7 @@ def git_commit(project: str, message: str, files: Optional[list[str]] = None) ->
         subprocess.run(["git", "add", "-A"], cwd=cwd, check=True, timeout=30)
 
     # Commit
-    full_message = f"{message}\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+    full_message = f"{message}\n\nCo-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
     result = subprocess.run(
         ["git", "commit", "-m", full_message],
         cwd=cwd, capture_output=True, text=True, timeout=60
@@ -375,8 +383,8 @@ def telegram_notify(message: str, chat_id: str = "") -> str:
         message: 전송할 메시지
         chat_id: Telegram chat ID (기본: 환경변수 TELEGRAM_CHAT_ID)
     """
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    cid = chat_id or os.environ.get("TELEGRAM_CHAT_ID", "")
+    token = os.environ.get("FORGE_AGENT_SERVER_BOT_TOKEN") or os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    cid = chat_id or os.environ.get("FORGE_AGENT_SERVER_BOT_CHAT_ID") or os.environ.get("TELEGRAM_CHAT_ID", "")
 
     if not token or not cid:
         return "TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID 환경변수 미설정 — 알림 스킵"

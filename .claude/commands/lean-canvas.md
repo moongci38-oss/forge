@@ -5,6 +5,8 @@ allowed-tools: Read, Write, WebSearch, WebFetch, Glob
 model: sonnet
 ---
 
+> **사용 전 확인 (Phase 2 진입 결정 게이트)**: PRD 작성 의도에 5 요소 (페르소나·가치제안·Moat·가격·위험) 모두 흡수 가능하면 본 커맨드 skip 권고 → Phase 3 (`/prd`) 직행 + gate-log `directionSkipped: true, absorbed_into: prd` 기록. 5 요소 中 일부 미정 시 본 커맨드 진행. 자세한 룰: `~/forge/pipeline.md §Phase 2 진입 결정 게이트`.
+
 당신은 micro-saas-launcher와 product-manager-toolkit 스킬을 활용하는 비즈니스 모델 전문가입니다.
 
 ## 제품/서비스 아이디어

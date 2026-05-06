@@ -17,26 +17,57 @@ CHAT_ID="${OWNER_CHAT_ID:-}"
 tg_send() {
   curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
     -d "chat_id=${CHAT_ID}" \
-    -d "parse_mode=Markdown" \
     --data-urlencode "text=$1" > /dev/null 2>&1
 }
 
 if [ "$EXIT_CODE" -ne 0 ]; then
-  tg_send "❌ *Weekly Research 실패* ($WEEK) — Exit: $EXIT_CODE"
+  tg_send "❌ Weekly Research 실패 ($WEEK) — Exit: $EXIT_CODE"
   exit 0
 fi
 
-# 리포트 파일 탐색
-REPORT=$(find "$HOME/forge-outputs" -path "*/weekly/$TARGET_DATE/*.md" ! -name "index.json" 2>/dev/null | head -1)
+# 주간 리포트 파일 탐색 (tech-trends, biz-trends 중 하나)
+REPORT=$(find "$HOME/forge-outputs" -path "*/weekly/$TARGET_DATE/*.md" \
+  \( -name "tech-trends.md" -o -name "biz-trends.md" \) 2>/dev/null | head -1)
 
 if [ -z "$REPORT" ]; then
-  tg_send "✅ *Weekly Research 완료* ($WEEK)\n⚠️ 리포트 파일 미생성"
+  tg_send "✅ Weekly Research 완료 ($WEEK)
+⚠️ 리포트 파일 미생성"
   exit 0
 fi
 
-# 파일 상위 60줄 요약 전송
-CONTENT=$(head -60 "$REPORT" | grep -v "^---$" | head -40)
+# 제목 추출
+TITLE=$(head -1 "$REPORT" | sed 's/^# //')
 
-tg_send "📈 *Weekly Research — $WEEK*
+# Executive Summary/Overview 추출 (첫 번째 주요 섹션 앞까지)
+SUMMARY=$(awk '/^##.*카테고리|^##.*트렌드|^## 1\./,/^##/' "$REPORT" | \
+  grep -E "^\*\*핵심|^\*\*Forge|^-" | head -6 | sed 's/^\*\*//;s/\*\*$//')
 
-$CONTENT"
+# Top 3 주요 뉴스/카테고리 추출
+TOP=$(awk '/^### [0-9]/{n++} n<=3' "$REPORT" | grep -E "^### " | sed 's/^### //;s/ \*\*\[신뢰도.*//;s/ — .*//')
+
+# 통합 메시지
+MSG="📈 Weekly Research — $WEEK
+
+── $TITLE ──
+
+── 주요 영역 ──
+$(echo "$TOP" | head -3 | sed 's/^/• /')"
+
+INSIGHTS=$(grep -A1 "^**Forge 적용 인사이트:**" "$REPORT" | grep "^-" | head -3 | sed 's/^- /• /')
+if [ -n "$INSIGHTS" ]; then
+  MSG="$MSG
+
+── Forge 인사이트 ──
+$INSIGHTS"
+fi
+
+RECS=$(awk '/^## .*추천|^## 주요 시사/' "$REPORT" | \
+  grep -E "^### |^- " | head -5 | sed 's/^### //;s/^- /• /')
+if [ -n "$RECS" ]; then
+  MSG="$MSG
+
+── 주요 액션 아이템 ──
+$RECS"
+fi
+
+tg_send "$MSG"

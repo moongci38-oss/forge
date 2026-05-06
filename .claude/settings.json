@@ -252,6 +252,11 @@
     "data@knowledge-work-plugins": false,
     "sales@knowledge-work-plugins": false,
     "customer-support@knowledge-work-plugins": false,
-    "playground@claude-plugins-official": true
+    "playground@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "legal@knowledge-work-plugins": true,
+    "finance@knowledge-work-plugins": true,
+    "exa@claude-plugins-official": true
   }
 }
