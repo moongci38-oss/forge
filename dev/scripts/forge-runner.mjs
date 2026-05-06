@@ -209,9 +209,10 @@ async function runAgent({ prompt, model = 'claude-sonnet-4-6', tools, maxTurns =
     settingSources: ["project"],
   };
 
-  // P2-d: Opus 모델에 adaptive thinking 자동 적용
+  // P2-d: Opus 모델에 adaptive thinking + effort 자동 적용
   if (model.includes('opus')) {
     options.thinking = { type: "adaptive" };
+    options.output_config = { effort: "xhigh" };
   }
 
   // P2-c: 구조화된 출력 (옵션)

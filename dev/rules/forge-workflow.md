@@ -30,6 +30,23 @@ enforcement: rigid
 | 11 | 구6 | 릴리스 + 스테이징 | release/* + Release PR | **[STOP]** Release PR Human 승인 | L2 |
 | 12 | 구7 | 프로덕션 배포 + 롤백 | GitLab Release + Health Check | **[AUTO-PASS]** 성공 시 / **[STOP]** 실패 시 | L3 |
 
+## Phase 7/8 Entry Gate (Spec 검증) — Spec-First 강제
+
+**Phase 8 (구현) 진입 전 필수 검증**:
+
+1. `.specify/specs/SPEC-*.md` 또는 `.specify/specs/*.spec.md` 1개 이상 존재 확인 (Bash: `ls .specify/specs/ 2>/dev/null | wc -l`)
+2. 비어있으면 **[STOP]** — Phase 7 (Spec 작성) 우선 진행:
+   - **forge-outputs Phase 4 기획 패키지 존재 시**: `/sdd --bulk` 호출 권고 (forge-context 자동 분석 → 그룹별 Spec 일괄 생성)
+   - **단일 기능 추가 시**: `/sdd <기능 설명>` 호출
+   - **forge-context 부재 + 단일 기능 X**: 기획서·세부계획서 작성부터 (Forge Planning Phase 1-4)
+3. INDEX.md 무결성 (선택, Bulk 모드 사용 시): `.specify/specs/INDEX.md` 존재 + Spec 등록됨
+
+**예외 (Implicit Entry — 위 §3-Signal Detection)**:
+- Hotfix 경량 프로세스: Phase 1(경량) → Phase 3 직행. Spec 검증 X (긴급 fix 우선).
+- 코드 설명/분석만 요청: Forge Dev 비적용. Spec 검증 X.
+
+**위반 시 영향**: Spec 없이 구현 진입 → Phase 3.5 spec-compliance-checker 0 매칭 → PR 머지 차단. 사전 차단이 효율적.
+
 > **자율성 레벨**: L2=Human 승인 후 실행, L3=AI 제안+Human 확인, L4=AI 자율 실행+사후 보고, L5=완전 자동화.
 > Phase 12 배포 전: 비가역적 행동(DB 마이그레이션, 프로덕션 데이터 변경)이 포함된 경우 반드시 L2로 강등하여 Human 명시 승인을 받는다.
 

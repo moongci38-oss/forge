@@ -1,17 +1,31 @@
 ---
-title: "S2 컨셉 확정"
+title: "S2 컨셉 확정 (Optional)"
 id: forge-s2-concept
 impact: HIGH
 scope: [forge]
-tags: [pipeline, concept, s2, go-no-go]
+tags: [pipeline, concept, s2, go-no-go, optional]
 requires: [forge-structure]
 section: forge-pipeline
 audience: all
-impactDescription: "Go/No-Go 미수행 시 Kill Criteria 해당 프로젝트 진행 → 리소스 낭비. 비전/타겟 미승인 상태로 기획 시작"
-enforcement: rigid
+impactDescription: "Phase 2 진입 결정 게이트 미수행 + 잘못된 진입 시 → PRD 흡수 가능한 정보를 중복 작성하여 리소스 낭비. 진입 결정 후 Phase 2 진행 시 Go/No-Go 미수행은 Kill Criteria 프로젝트 진행 위험"
+enforcement: conditional
 ---
 
-# S2 컨셉 확정
+# S2 컨셉 확정 (Optional)
+
+> **진입 조건**: 본 문서의 §Skip 조건 미충족 (Phase 2 진입 결정 게이트 = N 또는 모호 후 Human 진행 결정) 시만 실행. 5 요소 PRD 흡수 가능 케이스는 skip 후 Phase 3 직행.
+
+## Skip 조건 (Phase 2 진입 결정 게이트)
+
+다음 조건 모두 충족 시 Phase 2 skip 가능 (gate-log: `s2: skipped`, `directionSkipped: true`, `absorbed_into: prd`):
+
+1. PRD에서 페르소나 (P1-PN) 명시 예정
+2. 가치 제안 정량화 (시간/비용 절감 수치) 가능
+3. Moat 1개 이상 명시 가능
+4. 가격 모델 결정됨
+5. 위험 + 완화 인식됨
+
+위 조건 1개라도 X → 본 문서의 §S2 흐름 진행 (아래).
 
 ## S2. Concept (컨셉 확정)
 

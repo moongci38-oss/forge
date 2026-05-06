@@ -34,6 +34,12 @@
       "scope": "all",
       "description": "Python FastAPI 백엔드 프로젝트",
       "workspace": "wsl"
+    },
+    "bidscript-plus": {
+      "path": "/home/damools/mywsl_workspace/bidscript-plus",
+      "scope": "all",
+      "description": "BidScript+ — 정부과제+나라장터+견적 통합 SaaS",
+      "workspace": "wsl"
     }
   }
 }

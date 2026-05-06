@@ -36,6 +36,15 @@
       "path": "/mnt/e/new_workspace/god_Sword/src/docs",
       "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".hwp"],
       "note": "GodBlade src/docs (이미지 제외)"
+    },
+    {
+      "path": "~/mywsl_workspace/bidscript-plus",
+      "exclude_dirs": [
+        ".git", "node_modules", ".next", "dist", "out", "build",
+        ".turbo", "coverage", ".jest-cache"
+      ],
+      "include_exts": [".md", ".txt", ".json", ".yaml", ".yml", ".toml", ".xml", ".docx", ".pdf", ".pptx", ".xlsx", ".hwp"],
+      "note": "BidScript+ 코드 repo 문서만 (lumir-01 매핑, 이미지 제외)"
     }
   ]
 }
